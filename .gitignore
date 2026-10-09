@@ -3,6 +3,7 @@ __pycache__/
 *.pyc
 *.log
 .venv-greco/
+.venv/
 external/
 models/
 outputs/

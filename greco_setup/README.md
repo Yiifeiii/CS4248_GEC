@@ -61,6 +61,22 @@ Sentence proposals are converted with Python's token-level `SequenceMatcher`. Th
 
 Multiple BART/T5 hypotheses are supported by adding more proposal objects. The `system` and `rank` fields are descriptive metadata; this version does not add voting/agreement weights or GECToR-specific behavior.
 
+## From system output files
+
+`greco_setup/prepare.py` builds the input JSON from prediction files, so nobody writes edits by hand. Each system writes a plain text file with **k consecutive lines per source sentence**, best hypothesis first: k = 1 for GECToR (`gector.py predict` output), k = 5 for BART/T5 top-5. Line counts must be an exact multiple of the source file's, and hypotheses must use the source's tokenization (`apple .`, not `apple.`), otherwise every token difference becomes a spurious edit.
+
+```bash
+python3 -m greco_setup.prepare build --source data/dev.src \
+  --system gector=gector/outputs/dev.pred \
+  --system bart=outputs/bart/dev.top5 \
+  --system t5=outputs/t5/dev.top5 \
+  --k 3 --output outputs/greco/dev.input.json
+python -m greco_setup.combine --input outputs/greco/dev.input.json --output outputs/greco/dev.output.json --device cuda
+python3 -m greco_setup.prepare collect --input outputs/greco/dev.output.json --output outputs/greco/dev.pred
+```
+
+`--k` keeps only the top-k hypotheses per system (the k = 1, 3, 5 ablation) and leaves 1-best systems unchanged. Empty hypotheses are skipped. `collect` writes one best sentence per line, aligned with the source, ready for ERRANT or the M² scorer.
+
 ## Search and output
 
 For each pooled edit, search considers skipping it or adding it to a compatible state. GRECO scores the resulting sentences against the original source; the highest-scoring `--beam-size` states survive (default 16). Scoring is batched with `--batch-size` (default 8) and cached per sentence. The unchanged sentence starts in the beam and is eligible for selection, but can be pruned like other states. Equal scores favor fewer edits.
