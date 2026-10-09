@@ -1,0 +1,80 @@
+# Manual GRECO combination
+
+This standalone entry point accepts manual BART/T5 proposals. Neither generator needs to be installed. It pools their edits, searches compatible combinations, uses the official GRECO model to score each beam expansion, and returns the best surviving sentence.
+
+## Try candidate generation now
+
+From the repository root, using Python 3 (no third-party dependencies):
+
+```bash
+python3 -m greco_setup.combine --input greco_setup/examples/manual.json --dry-run
+```
+
+The first example includes these combinations:
+
+```text
+She go to school yesterday .
+She went to school yesterday .
+She go to the school yesterday .
+She went to the school yesterday .
+```
+
+Dry-run mode enumerates combinations, sets scores and `best_sentence` to null, and does not pretend to run GRECO. It fails if more than `--max-candidates` combinations are generated (default 4096).
+
+## Install the real scorer
+
+Use a separate **Python 3.10** environment. The official dependency versions date from 2022 and do not support the Python 3.14 interpreter found in this checkout. A Linux machine with a CUDA GPU is recommended for DeBERTa-v3-large; CPU inference is supported but resource intensive. Installation also downloads the large GRECO checkpoint and, on first scoring, the DeBERTa backbone/tokenizer. Allow several GB of disk and memory.
+
+```bash
+python3.10 -m venv .venv-greco
+source .venv-greco/bin/activate
+bash greco_setup/setup.sh
+python -m greco_setup.combine \
+  --input greco_setup/examples/manual.json \
+  --output outputs/greco/manual-results.json \
+  --device cpu
+```
+
+For a compatible CUDA installation, use `--device cuda`. Match the PyTorch installation to the host CUDA environment. The setup script uses `pip install -r` on the upstream requirements, pins the upstream Git revision, and stores code and weights in ignored directories. It does not install BART/T5 or alter dataset files.
+
+The real scorer setup and pretrained inference have not been validated on the local Python 3.14 environment. Core edit combination and CLI behavior are covered by the tests below. If dependencies are already installed elsewhere, pass `--greco-repo /path/to/greco --checkpoint /path/to/checkpoint.bin`.
+
+## Provide manual input
+
+The input is one JSON object or a list of objects, each with `source` and a nonempty `proposals` list. Use tokenized text consistently (including punctuation). Each proposal contains either a corrected `sentence` or an explicit `edits` list, plus optional metadata such as `system` and `rank`.
+
+```json
+{
+  "source": "He eat apple .",
+  "proposals": [
+    {"system": "bart", "rank": 1, "sentence": "He eats apple ."},
+    {"system": "t5", "rank": 1, "edits": [
+      {"start": 2, "end": 2, "replacement": "an"}
+    ]}
+  ]
+}
+```
+
+Offsets refer to the **original source tokens**, starting at zero, with an exclusive end. Equal start/end means insertion; an empty replacement means deletion. Conflicting edits within one proposal are rejected. Conflicting alternatives from different proposals remain in the pool but cannot be applied together. Insertions on a replacement boundary are allowed; insertions strictly inside a replaced span are rejected.
+
+Sentence proposals are converted with Python's token-level `SequenceMatcher`. This is a simple alignment for manual development, **not ERRANT linguistic edit extraction**. Adjacent differences may form a single edit; use explicit offsets when you need precise pooling boundaries. Later, the generators can produce this same input schema, ideally with ERRANT-derived edits.
+
+Multiple BART/T5 hypotheses are supported by adding more proposal objects. The `system` and `rank` fields are descriptive metadata; this version does not add voting/agreement weights or GECToR-specific behavior.
+
+## Search and output
+
+For each pooled edit, search considers skipping it or adding it to a compatible state. GRECO scores the resulting sentences against the original source; the highest-scoring `--beam-size` states survive (default 16). Scoring is batched with `--batch-size` (default 8) and cached per sentence. The unchanged sentence starts in the beam and is eligible for selection, but can be pruned like other states. Equal scores favor fewer edits.
+
+The output contains `best_sentence`, pooled edits, and the surviving candidates with raw GRECO quality scores and selected edits. These scores are quality estimates, not measured F₀.₅ values. Beam search is approximate: it returns the best surviving candidate, not a guarantee of the global optimum. This is our own search wrapper over the official scoring API, not a reproduction of GRECO's full published combination configuration (which can include edit scores and voting).
+
+```bash
+python3 -m unittest discover -s tests -v
+```
+
+## Sources
+
+- [Official GRECO code](https://github.com/nusnlp/greco), pinned to `8e509aaacf4e5ec3276d3427371471fd82a7f58b`; the adapter uses `models.GRECO.score(source, hypotheses)` and loads the released state dictionary strictly.
+- [Released checkpoint](https://huggingface.co/nusnlp/GRECO).
+- Qorib & Ng (2023), [System Combination via Quality Estimation for Grammatical Error Correction](https://aclanthology.org/2023.emnlp-main.785/).
+
+Upstream GRECO code has its own GPL license in `external/greco/LICENSE.txt`.

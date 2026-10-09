@@ -4,7 +4,9 @@ This project investigates whether combining alternative corrections from multipl
 
 ## Current status
 
-The repository currently contains datasets, prepared source/target sentence pairs, an M2-to-parallel conversion script, an error statistics script, and the bundled NUS M² scorer. Model fine-tuning, hypothesis generation, edit pooling, GRECO integration, and the proposed ablations are planned work; their implementations are not yet present.
+A standalone [manual GRECO combination workflow](greco_setup/README.md) accepts manually entered BART/T5 sentences or edits. It includes conflict-aware beam search, an adapter for the official GRECO scorer, examples, and setup instructions. Candidate generation can be tested without model dependencies; pretrained inference requires a separate Python 3.10 environment and downloaded weights.
+
+The repository also contains datasets, prepared source/target sentence pairs, an M2-to-parallel conversion script, an error statistics script, and the bundled NUS M² scorer. BART/T5 fine-tuning and automatic hypothesis generation, agreement features, and the proposed ablations remain planned work.
 
 ## Repository structure
 
@@ -145,8 +147,8 @@ The group will implement fine-tuning, n-best generation, edit pooling, agreement
 
 | Responsibility | Allocation |
 | --- | --- |
-| Fine-tune baseline models and lead comparative evaluation | One member |
-| Implement and test enhancements and ablations | Three members |
+| Fine-tune baseline models and lead comparative evaluation | Haleema |
+| Implement and test enhancements and ablations | Raeeda, Yifei |
 | Lead report writing and consolidate results | One member |
 | Contribute report sections and the final presentation | All members |
 
