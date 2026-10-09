@@ -6,10 +6,10 @@ source line holding its unique candidates ranked by model log-probability.
 import argparse
 import json
 import os
+import time
 
 import torch
 from safetensors import safe_open
-from tqdm import tqdm
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
 from transformers.utils import cached_file
 
@@ -124,7 +124,7 @@ def main(args):
     if args.num_return > args.num_beams:
         raise ValueError("--num_return cannot exceed --num_beams")
 
-    device = pick_device()
+    device = pick_device() if args.device == "auto" else torch.device(args.device)
     tokenizer = AutoTokenizer.from_pretrained(args.model)
     model = load_model(args.model).to(device).eval()
     if device.type == "cuda":
@@ -150,10 +150,48 @@ def main(args):
             skipped_long += 1
         else:
             todo.append(i)
-    todo.sort(key=lambda i: lengths[i])
+    # Longest first: memory problems show up at once and the time estimate
+    # only gets better as the run goes on.
+    todo.sort(key=lambda i: lengths[i], reverse=True)
 
-    for start in tqdm(range(0, len(todo), args.batch_size), disable=args.output is None):
-        idx = todo[start:start + args.batch_size]
+    # Finished sentences are appended to <output>.partial so a run can be
+    # watched (line count) and resumed after an interruption.
+    partial = None
+    if args.output is not None:
+        os.makedirs(os.path.dirname(os.path.abspath(args.output)), exist_ok=True)
+        partial_path = args.output + ".partial"
+        signature = {k: v for k, v in vars(args).items()
+                     if k not in ("output", "batch_size", "max_batch_tokens", "device", "k")}
+        if os.path.exists(partial_path):
+            with open(partial_path, encoding="utf-8") as f:
+                saved = json.loads(f.readline())
+                if saved != signature:
+                    raise SystemExit(f"{partial_path} was made with different settings; "
+                                     f"delete it to start again")
+                for line in f:
+                    row = json.loads(line)
+                    results[row["id"]] = row["cands"]
+            todo = [i for i in todo if results[i] is None]
+            partial = open(partial_path, "a", encoding="utf-8")
+        else:
+            partial = open(partial_path, "w", encoding="utf-8")
+            partial.write(json.dumps(signature) + "\n")
+
+    total = len(sources)
+    done = total - len(todo)
+    if partial is not None:
+        print(f"{done}/{total} sentences already done, decoding {len(todo)} on {device.type}",
+              flush=True)
+    tokens_left = sum(lengths[i] for i in todo)
+    tokens_done = 0
+    started = last_report = time.time()
+
+    pos = 0
+    while pos < len(todo):
+        # The first sentence is the longest in the batch; shrink the batch for long ones.
+        size = max(1, min(args.batch_size, args.max_batch_tokens // lengths[todo[pos]]))
+        idx = todo[pos:pos + size]
+        pos += size
         batch = [sources[i] for i in idx]
         enc = tokenizer(batch, return_tensors="pt", padding=True).to(device)
         max_new = max(lengths[i] for i in idx) + 20
@@ -167,6 +205,22 @@ def main(args):
             sl = slice(j * n, (j + 1) * n)
             cands = build_candidates(sources[i], texts[sl], sum_lps[sl], avg_lps[sl])
             results[i] = cands or fallback(sources[i])
+            if partial is not None:
+                partial.write(json.dumps({"id": i, "cands": results[i]}, ensure_ascii=False) + "\n")
+        if device.type == "mps":
+            torch.mps.empty_cache()
+
+        if partial is not None:
+            partial.flush()
+            done += len(idx)
+            tokens_done += sum(lengths[i] for i in idx)
+            now = time.time()
+            if now - last_report >= args.report_every or pos >= len(todo):
+                last_report = now
+                eta = (now - started) / tokens_done * (tokens_left - tokens_done)
+                print(f"{done}/{total} sentences ({done / total:.0%}), "
+                      f"{(now - started) / 60:.1f} min elapsed, about {eta / 60:.1f} min left",
+                      flush=True)
 
     if skipped_long:
         print(f"[warning] {skipped_long} sources exceeded --max_source_tokens "
@@ -181,13 +235,15 @@ def main(args):
                 print(f"{c['rank']:>3}  {score:>7}  {c['text']} {same}")
         return
 
-    os.makedirs(os.path.dirname(os.path.abspath(args.output)), exist_ok=True)
     with open(args.output, "w", encoding="utf-8") as out:
         header = {"header": True, "num_sources": len(sources), **vars(args)}
         out.write(json.dumps(header) + "\n")
         for i, (src, cands) in enumerate(zip(sources, results)):
             out.write(json.dumps({"id": i, "src": src, "cands": cands},
                                  ensure_ascii=False) + "\n")
+    partial.close()
+    os.remove(partial_path)
+    print(f"wrote {args.output}", flush=True)
 
 
 if __name__ == "__main__":
@@ -205,7 +261,12 @@ if __name__ == "__main__":
     parser.add_argument("--diversity_penalty", type=float, default=0.5, help="diverse mode only")
     parser.add_argument("--length_penalty", type=float, default=1.0)
     parser.add_argument("--no_repeat_ngram_size", type=int, default=0)
-    parser.add_argument("--batch_size", type=int, default=16)
+    parser.add_argument("--batch_size", type=int, default=16, help="maximum sentences per batch")
+    parser.add_argument("--max_batch_tokens", type=int, default=400,
+                        help="batch size is reduced so batch_size x longest source stays under this")
+    parser.add_argument("--device", choices=["auto", "cuda", "mps", "cpu"], default="auto")
+    parser.add_argument("--report_every", type=float, default=30,
+                        help="seconds between progress lines")
     parser.add_argument("--max_source_tokens", type=int, default=256)
     parser.add_argument("--limit", type=int, default=None, help="only decode the first N lines")
     args = parser.parse_args()

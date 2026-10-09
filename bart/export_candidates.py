@@ -3,7 +3,8 @@
 Writes <out_dir>/texts/rank1.txt ... rankK.txt (one sentence per source line;
 this folder is what GRECO's rerank.py reads) and, with --m2,
 <out_dir>/m2/<name>-1.m2 ... for GRECO's run_combination.py, where each rank
-acts as one system.
+acts as one system. With --proposals it also writes <out_dir>/proposals.json
+in the input schema of greco_setup/combine.py.
 """
 import argparse
 import json
@@ -51,6 +52,17 @@ def main(args):
     print(f"wrote {args.k} rank files for {len(rows)} sources to {texts_dir} "
           f"({padded} slots padded with {args.pad})")
 
+    if args.proposals:
+        # Input schema of greco_setup/combine.py.
+        records = [{"source": " ".join(row["src"].split()),
+                    "proposals": [{"system": args.name.lower(), "rank": c["rank"],
+                                   "sentence": c["text"]} for c in row["cands"][:args.k]]}
+                   for row in rows if row["cands"]]
+        path = os.path.join(args.out_dir, "proposals.json")
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(records, f, ensure_ascii=False, indent=1)
+        print(f"wrote {path}")
+
     if args.m2:
         m2_dir = os.path.join(args.out_dir, "m2")
         os.makedirs(m2_dir, exist_ok=True)
@@ -70,5 +82,7 @@ if __name__ == "__main__":
     parser.add_argument("--pad", choices=["top1", "source"], default="top1",
                         help="filler when a sentence has fewer than k unique candidates")
     parser.add_argument("--m2", action="store_true", help="also write one ERRANT M2 file per rank")
+    parser.add_argument("--proposals", action="store_true",
+                        help="also write proposals.json for greco_setup/combine.py")
     parser.add_argument("--name", default="BART", help="system name prefix for the M2 files")
     main(parser.parse_args())
