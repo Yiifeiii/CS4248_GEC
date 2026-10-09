@@ -1,5 +1,8 @@
 .DS_Store
+__pycache__/
+*.pyc
+*.log
+.venv-greco/
+external/
 models/
 outputs/
-*.log
-__pycache__/
