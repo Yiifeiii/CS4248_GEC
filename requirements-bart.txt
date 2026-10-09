@@ -1,0 +1,6 @@
+torch>=2.2
+# Pinned: diverse (group) beam search is built into generate() in this release.
+transformers==4.46.3
+sentencepiece
+tqdm
+errant==3.0.0
