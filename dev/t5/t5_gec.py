@@ -1,6 +1,6 @@
 import torch
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
-from load import tok, model, device
+from load_t5 import tok, model, device
 
 # Prefix tells T5 the task to conduct - grammar: implies grammatical error correction 
 def top_k(sentence, k=5, prefix="grammar: "):
@@ -26,5 +26,3 @@ def top_k(sentence, k=5, prefix="grammar: "):
     texts = tok.batch_decode(out.sequences, skip_special_tokens=True)
     return list(zip(texts, out.sequences_scores.tolist()))
 
-for text, score in top_k("She go to school yesterday and buyed a apple."):
-    print(f"{score:.3f}  {text}")
