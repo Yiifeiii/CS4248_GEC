@@ -1,0 +1,16 @@
+[
+  {
+    "source": "She go to school yesterday .",
+    "proposals": [
+      {"system": "bart", "sentence": "She went to school yesterday ."},
+      {"system": "t5", "sentence": "She go to the school yesterday ."}
+    ]
+  },
+  {
+    "source": "He eat apple .",
+    "proposals": [
+      {"system": "bart", "edits": [{"start": 1, "end": 2, "replacement": "eats"}]},
+      {"system": "t5", "edits": [{"start": 2, "end": 2, "replacement": "an"}]}
+    ]
+  }
+]
