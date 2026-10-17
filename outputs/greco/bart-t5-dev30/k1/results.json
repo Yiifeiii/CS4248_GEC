@@ -1,0 +1,2121 @@
+[
+  {
+    "source": "It 's difficult answer at the question \" what are you going to do in the future ? \" if the only one who has to know it is in two minds .",
+    "scorer": "greco",
+    "best_sentence": "It 's difficult to answer the question \" what are you going to do in the future ? \" if the only one who has to know it is in two minds .",
+    "pooled_edits": [
+      {
+        "start": 3,
+        "end": 3,
+        "replacement": [
+          "to"
+        ]
+      },
+      {
+        "start": 4,
+        "end": 5,
+        "replacement": []
+      }
+    ],
+    "candidates": [
+      {
+        "sentence": "It 's difficult to answer the question \" what are you going to do in the future ? \" if the only one who has to know it is in two minds .",
+        "score": 0.9955816864967346,
+        "edits": [
+          {
+            "start": 3,
+            "end": 3,
+            "replacement": [
+              "to"
+            ]
+          },
+          {
+            "start": 4,
+            "end": 5,
+            "replacement": []
+          }
+        ]
+      },
+      {
+        "sentence": "It 's difficult to answer at the question \" what are you going to do in the future ? \" if the only one who has to know it is in two minds .",
+        "score": 0.9525312781333923,
+        "edits": [
+          {
+            "start": 3,
+            "end": 3,
+            "replacement": [
+              "to"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "It 's difficult answer the question \" what are you going to do in the future ? \" if the only one who has to know it is in two minds .",
+        "score": 0.9192390441894531,
+        "edits": [
+          {
+            "start": 4,
+            "end": 5,
+            "replacement": []
+          }
+        ]
+      },
+      {
+        "sentence": "It 's difficult answer at the question \" what are you going to do in the future ? \" if the only one who has to know it is in two minds .",
+        "score": 0.6714091897010803,
+        "edits": []
+      }
+    ]
+  },
+  {
+    "source": "When I was younger I used to say that I wanted to be a teacher , a saleswoman and even a butcher .. I do n't know why .",
+    "scorer": "greco",
+    "best_sentence": "When I was younger , I used to say that I wanted to be a teacher , a saleswoman and even a butcher .. I do n't know why .",
+    "pooled_edits": [
+      {
+        "start": 4,
+        "end": 4,
+        "replacement": [
+          ","
+        ]
+      }
+    ],
+    "candidates": [
+      {
+        "sentence": "When I was younger , I used to say that I wanted to be a teacher , a saleswoman and even a butcher .. I do n't know why .",
+        "score": 0.9621469974517822,
+        "edits": [
+          {
+            "start": 4,
+            "end": 4,
+            "replacement": [
+              ","
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "When I was younger I used to say that I wanted to be a teacher , a saleswoman and even a butcher .. I do n't know why .",
+        "score": 0.9530237317085266,
+        "edits": []
+      }
+    ]
+  },
+  {
+    "source": "I would like to study Psychology because one day I would open my own psychology office and help people .",
+    "scorer": "greco",
+    "best_sentence": "I would like to study Psychology because one day I would open my own psychology office and help people .",
+    "pooled_edits": [],
+    "candidates": [
+      {
+        "sentence": "I would like to study Psychology because one day I would open my own psychology office and help people .",
+        "score": 0.607943594455719,
+        "edits": []
+      }
+    ]
+  },
+  {
+    "source": "It 's difficult because I 'll have to study hard and a lot , but I think that if you like a subject , you 'll study it easier .",
+    "scorer": "greco",
+    "best_sentence": "It 's difficult because I 'll have to study hard and a lot , but I think that if you like a subject , you 'll study it easier .",
+    "pooled_edits": [],
+    "candidates": [
+      {
+        "sentence": "It 's difficult because I 'll have to study hard and a lot , but I think that if you like a subject , you 'll study it easier .",
+        "score": 0.9506453275680542,
+        "edits": []
+      }
+    ]
+  },
+  {
+    "source": "Maybe I 'll change my mind , maybe not .",
+    "scorer": "greco",
+    "best_sentence": "Maybe I 'll change my mind , maybe not .",
+    "pooled_edits": [],
+    "candidates": [
+      {
+        "sentence": "Maybe I 'll change my mind , maybe not .",
+        "score": 0.5648712515830994,
+        "edits": []
+      }
+    ]
+  },
+  {
+    "source": "I think that the public transport will always be in the future .",
+    "scorer": "greco",
+    "best_sentence": "I think that public transport will always be in the future .",
+    "pooled_edits": [
+      {
+        "start": 3,
+        "end": 4,
+        "replacement": []
+      }
+    ],
+    "candidates": [
+      {
+        "sentence": "I think that public transport will always be in the future .",
+        "score": 0.928148627281189,
+        "edits": [
+          {
+            "start": 3,
+            "end": 4,
+            "replacement": []
+          }
+        ]
+      },
+      {
+        "sentence": "I think that the public transport will always be in the future .",
+        "score": 0.4315088093280792,
+        "edits": []
+      }
+    ]
+  },
+  {
+    "source": "The rich people will buy a car but the poor people always need to use a bus or taxi .",
+    "scorer": "greco",
+    "best_sentence": "The rich people will buy a car , but the poor people always need to use a bus or taxi .",
+    "pooled_edits": [
+      {
+        "start": 7,
+        "end": 7,
+        "replacement": [
+          ","
+        ]
+      }
+    ],
+    "candidates": [
+      {
+        "sentence": "The rich people will buy a car , but the poor people always need to use a bus or taxi .",
+        "score": 0.9281565546989441,
+        "edits": [
+          {
+            "start": 7,
+            "end": 7,
+            "replacement": [
+              ","
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "The rich people will buy a car but the poor people always need to use a bus or taxi .",
+        "score": 0.7551679611206055,
+        "edits": []
+      }
+    ]
+  },
+  {
+    "source": "I consider that is more convenient to drive a car because you carry on more things in your own car than travelling by car .",
+    "scorer": "greco",
+    "best_sentence": "I consider that it is more convenient to drive a car because you carry on more things in your own car than travelling by car .",
+    "pooled_edits": [
+      {
+        "start": 3,
+        "end": 3,
+        "replacement": [
+          "it"
+        ]
+      }
+    ],
+    "candidates": [
+      {
+        "sentence": "I consider that it is more convenient to drive a car because you carry on more things in your own car than travelling by car .",
+        "score": 0.7429118156433105,
+        "edits": [
+          {
+            "start": 3,
+            "end": 3,
+            "replacement": [
+              "it"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "I consider that is more convenient to drive a car because you carry on more things in your own car than travelling by car .",
+        "score": 0.5607661604881287,
+        "edits": []
+      }
+    ]
+  },
+  {
+    "source": "Also , you 'll meet friendly people who usually ask to you something to be friends and change your telephone number .",
+    "scorer": "greco",
+    "best_sentence": "Also , you 'll meet friendly people who usually ask you something to be friends and change your telephone number .",
+    "pooled_edits": [
+      {
+        "start": 10,
+        "end": 11,
+        "replacement": []
+      }
+    ],
+    "candidates": [
+      {
+        "sentence": "Also , you 'll meet friendly people who usually ask you something to be friends and change your telephone number .",
+        "score": 0.9799890518188477,
+        "edits": [
+          {
+            "start": 10,
+            "end": 11,
+            "replacement": []
+          }
+        ]
+      },
+      {
+        "sentence": "Also , you 'll meet friendly people who usually ask to you something to be friends and change your telephone number .",
+        "score": 0.8409696221351624,
+        "edits": []
+      }
+    ]
+  },
+  {
+    "source": "In my experience when I did n't have a car I used to use the bus to go to the school and go back to my house .",
+    "scorer": "greco",
+    "best_sentence": "In my experience , when I did n't have a car , I used to use the bus to go to school and go back to my house .",
+    "pooled_edits": [
+      {
+        "start": 3,
+        "end": 3,
+        "replacement": [
+          ","
+        ]
+      },
+      {
+        "start": 10,
+        "end": 10,
+        "replacement": [
+          ","
+        ]
+      },
+      {
+        "start": 19,
+        "end": 20,
+        "replacement": []
+      }
+    ],
+    "candidates": [
+      {
+        "sentence": "In my experience , when I did n't have a car , I used to use the bus to go to school and go back to my house .",
+        "score": 0.9821011424064636,
+        "edits": [
+          {
+            "start": 3,
+            "end": 3,
+            "replacement": [
+              ","
+            ]
+          },
+          {
+            "start": 10,
+            "end": 10,
+            "replacement": [
+              ","
+            ]
+          },
+          {
+            "start": 19,
+            "end": 20,
+            "replacement": []
+          }
+        ]
+      },
+      {
+        "sentence": "In my experience , when I did n't have a car , I used to use the bus to go to the school and go back to my house .",
+        "score": 0.9713951945304871,
+        "edits": [
+          {
+            "start": 3,
+            "end": 3,
+            "replacement": [
+              ","
+            ]
+          },
+          {
+            "start": 10,
+            "end": 10,
+            "replacement": [
+              ","
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "In my experience , when I did n't have a car I used to use the bus to go to school and go back to my house .",
+        "score": 0.9686105847358704,
+        "edits": [
+          {
+            "start": 3,
+            "end": 3,
+            "replacement": [
+              ","
+            ]
+          },
+          {
+            "start": 19,
+            "end": 20,
+            "replacement": []
+          }
+        ]
+      },
+      {
+        "sentence": "In my experience , when I did n't have a car I used to use the bus to go to the school and go back to my house .",
+        "score": 0.956457793712616,
+        "edits": [
+          {
+            "start": 3,
+            "end": 3,
+            "replacement": [
+              ","
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "In my experience when I did n't have a car , I used to use the bus to go to school and go back to my house .",
+        "score": 0.9228424429893494,
+        "edits": [
+          {
+            "start": 10,
+            "end": 10,
+            "replacement": [
+              ","
+            ]
+          },
+          {
+            "start": 19,
+            "end": 20,
+            "replacement": []
+          }
+        ]
+      },
+      {
+        "sentence": "In my experience when I did n't have a car I used to use the bus to go to school and go back to my house .",
+        "score": 0.8245469331741333,
+        "edits": [
+          {
+            "start": 19,
+            "end": 20,
+            "replacement": []
+          }
+        ]
+      },
+      {
+        "sentence": "In my experience when I did n't have a car , I used to use the bus to go to the school and go back to my house .",
+        "score": 0.7491211891174316,
+        "edits": [
+          {
+            "start": 10,
+            "end": 10,
+            "replacement": [
+              ","
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "In my experience when I did n't have a car I used to use the bus to go to the school and go back to my house .",
+        "score": 0.5019584894180298,
+        "edits": []
+      }
+    ]
+  },
+  {
+    "source": "In my opinion , the car is n't necessary when you have crashed in the street , in that moment you realized the importance of a public transport .",
+    "scorer": "greco",
+    "best_sentence": "In my opinion , the car is n't necessary when you have crashed in the street , in that moment you realized the importance of public transport .",
+    "pooled_edits": [
+      {
+        "start": 25,
+        "end": 26,
+        "replacement": []
+      }
+    ],
+    "candidates": [
+      {
+        "sentence": "In my opinion , the car is n't necessary when you have crashed in the street , in that moment you realized the importance of public transport .",
+        "score": 0.3659778833389282,
+        "edits": [
+          {
+            "start": 25,
+            "end": 26,
+            "replacement": []
+          }
+        ]
+      },
+      {
+        "sentence": "In my opinion , the car is n't necessary when you have crashed in the street , in that moment you realized the importance of a public transport .",
+        "score": 0.22670026123523712,
+        "edits": []
+      }
+    ]
+  },
+  {
+    "source": "In India we have various types of Public transport , like Cycle , Bike , Car , Train & Flight .",
+    "scorer": "greco",
+    "best_sentence": "In India we have various types of public transport , like cycle , bike , car , train & flight .",
+    "pooled_edits": [
+      {
+        "start": 7,
+        "end": 8,
+        "replacement": [
+          "public"
+        ]
+      },
+      {
+        "start": 11,
+        "end": 12,
+        "replacement": [
+          "cycle"
+        ]
+      },
+      {
+        "start": 13,
+        "end": 14,
+        "replacement": [
+          "bike"
+        ]
+      },
+      {
+        "start": 15,
+        "end": 16,
+        "replacement": [
+          "car"
+        ]
+      },
+      {
+        "start": 17,
+        "end": 18,
+        "replacement": [
+          "train"
+        ]
+      },
+      {
+        "start": 19,
+        "end": 20,
+        "replacement": [
+          "flight"
+        ]
+      }
+    ],
+    "candidates": [
+      {
+        "sentence": "In India we have various types of public transport , like cycle , bike , car , train & flight .",
+        "score": 0.961222231388092,
+        "edits": [
+          {
+            "start": 7,
+            "end": 8,
+            "replacement": [
+              "public"
+            ]
+          },
+          {
+            "start": 11,
+            "end": 12,
+            "replacement": [
+              "cycle"
+            ]
+          },
+          {
+            "start": 13,
+            "end": 14,
+            "replacement": [
+              "bike"
+            ]
+          },
+          {
+            "start": 15,
+            "end": 16,
+            "replacement": [
+              "car"
+            ]
+          },
+          {
+            "start": 17,
+            "end": 18,
+            "replacement": [
+              "train"
+            ]
+          },
+          {
+            "start": 19,
+            "end": 20,
+            "replacement": [
+              "flight"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "In India we have various types of Public transport , like cycle , bike , car , train & flight .",
+        "score": 0.920139491558075,
+        "edits": [
+          {
+            "start": 11,
+            "end": 12,
+            "replacement": [
+              "cycle"
+            ]
+          },
+          {
+            "start": 13,
+            "end": 14,
+            "replacement": [
+              "bike"
+            ]
+          },
+          {
+            "start": 15,
+            "end": 16,
+            "replacement": [
+              "car"
+            ]
+          },
+          {
+            "start": 17,
+            "end": 18,
+            "replacement": [
+              "train"
+            ]
+          },
+          {
+            "start": 19,
+            "end": 20,
+            "replacement": [
+              "flight"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "In India we have various types of public transport , like cycle , Bike , car , train & flight .",
+        "score": 0.9182844758033752,
+        "edits": [
+          {
+            "start": 7,
+            "end": 8,
+            "replacement": [
+              "public"
+            ]
+          },
+          {
+            "start": 11,
+            "end": 12,
+            "replacement": [
+              "cycle"
+            ]
+          },
+          {
+            "start": 15,
+            "end": 16,
+            "replacement": [
+              "car"
+            ]
+          },
+          {
+            "start": 17,
+            "end": 18,
+            "replacement": [
+              "train"
+            ]
+          },
+          {
+            "start": 19,
+            "end": 20,
+            "replacement": [
+              "flight"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "In India we have various types of public transport , like Cycle , bike , car , train & flight .",
+        "score": 0.9172208905220032,
+        "edits": [
+          {
+            "start": 7,
+            "end": 8,
+            "replacement": [
+              "public"
+            ]
+          },
+          {
+            "start": 13,
+            "end": 14,
+            "replacement": [
+              "bike"
+            ]
+          },
+          {
+            "start": 15,
+            "end": 16,
+            "replacement": [
+              "car"
+            ]
+          },
+          {
+            "start": 17,
+            "end": 18,
+            "replacement": [
+              "train"
+            ]
+          },
+          {
+            "start": 19,
+            "end": 20,
+            "replacement": [
+              "flight"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "In India we have various types of public transport , like cycle , bike , Car , train & flight .",
+        "score": 0.9103142619132996,
+        "edits": [
+          {
+            "start": 7,
+            "end": 8,
+            "replacement": [
+              "public"
+            ]
+          },
+          {
+            "start": 11,
+            "end": 12,
+            "replacement": [
+              "cycle"
+            ]
+          },
+          {
+            "start": 13,
+            "end": 14,
+            "replacement": [
+              "bike"
+            ]
+          },
+          {
+            "start": 17,
+            "end": 18,
+            "replacement": [
+              "train"
+            ]
+          },
+          {
+            "start": 19,
+            "end": 20,
+            "replacement": [
+              "flight"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "In India we have various types of public transport , like cycle , bike , car , Train & flight .",
+        "score": 0.9077459573745728,
+        "edits": [
+          {
+            "start": 7,
+            "end": 8,
+            "replacement": [
+              "public"
+            ]
+          },
+          {
+            "start": 11,
+            "end": 12,
+            "replacement": [
+              "cycle"
+            ]
+          },
+          {
+            "start": 13,
+            "end": 14,
+            "replacement": [
+              "bike"
+            ]
+          },
+          {
+            "start": 15,
+            "end": 16,
+            "replacement": [
+              "car"
+            ]
+          },
+          {
+            "start": 19,
+            "end": 20,
+            "replacement": [
+              "flight"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "In India we have various types of public transport , like cycle , bike , car , train & Flight .",
+        "score": 0.8874892592430115,
+        "edits": [
+          {
+            "start": 7,
+            "end": 8,
+            "replacement": [
+              "public"
+            ]
+          },
+          {
+            "start": 11,
+            "end": 12,
+            "replacement": [
+              "cycle"
+            ]
+          },
+          {
+            "start": 13,
+            "end": 14,
+            "replacement": [
+              "bike"
+            ]
+          },
+          {
+            "start": 15,
+            "end": 16,
+            "replacement": [
+              "car"
+            ]
+          },
+          {
+            "start": 17,
+            "end": 18,
+            "replacement": [
+              "train"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "In India we have various types of public transport , like Cycle , Bike , car , train & flight .",
+        "score": 0.8517746329307556,
+        "edits": [
+          {
+            "start": 7,
+            "end": 8,
+            "replacement": [
+              "public"
+            ]
+          },
+          {
+            "start": 15,
+            "end": 16,
+            "replacement": [
+              "car"
+            ]
+          },
+          {
+            "start": 17,
+            "end": 18,
+            "replacement": [
+              "train"
+            ]
+          },
+          {
+            "start": 19,
+            "end": 20,
+            "replacement": [
+              "flight"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "In India we have various types of public transport , like cycle , Bike , Car , train & flight .",
+        "score": 0.7967613339424133,
+        "edits": [
+          {
+            "start": 7,
+            "end": 8,
+            "replacement": [
+              "public"
+            ]
+          },
+          {
+            "start": 11,
+            "end": 12,
+            "replacement": [
+              "cycle"
+            ]
+          },
+          {
+            "start": 17,
+            "end": 18,
+            "replacement": [
+              "train"
+            ]
+          },
+          {
+            "start": 19,
+            "end": 20,
+            "replacement": [
+              "flight"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "In India we have various types of Public transport , like cycle , bike , Car , train & flight .",
+        "score": 0.7790811061859131,
+        "edits": [
+          {
+            "start": 11,
+            "end": 12,
+            "replacement": [
+              "cycle"
+            ]
+          },
+          {
+            "start": 13,
+            "end": 14,
+            "replacement": [
+              "bike"
+            ]
+          },
+          {
+            "start": 17,
+            "end": 18,
+            "replacement": [
+              "train"
+            ]
+          },
+          {
+            "start": 19,
+            "end": 20,
+            "replacement": [
+              "flight"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "In India we have various types of Public transport , like cycle , bike , car , Train & flight .",
+        "score": 0.7620225548744202,
+        "edits": [
+          {
+            "start": 11,
+            "end": 12,
+            "replacement": [
+              "cycle"
+            ]
+          },
+          {
+            "start": 13,
+            "end": 14,
+            "replacement": [
+              "bike"
+            ]
+          },
+          {
+            "start": 15,
+            "end": 16,
+            "replacement": [
+              "car"
+            ]
+          },
+          {
+            "start": 19,
+            "end": 20,
+            "replacement": [
+              "flight"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "In India we have various types of Public transport , like cycle , bike , car , train & Flight .",
+        "score": 0.753142774105072,
+        "edits": [
+          {
+            "start": 11,
+            "end": 12,
+            "replacement": [
+              "cycle"
+            ]
+          },
+          {
+            "start": 13,
+            "end": 14,
+            "replacement": [
+              "bike"
+            ]
+          },
+          {
+            "start": 15,
+            "end": 16,
+            "replacement": [
+              "car"
+            ]
+          },
+          {
+            "start": 17,
+            "end": 18,
+            "replacement": [
+              "train"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "In India we have various types of Public transport , like Cycle , bike , car , train & flight .",
+        "score": 0.751599133014679,
+        "edits": [
+          {
+            "start": 13,
+            "end": 14,
+            "replacement": [
+              "bike"
+            ]
+          },
+          {
+            "start": 15,
+            "end": 16,
+            "replacement": [
+              "car"
+            ]
+          },
+          {
+            "start": 17,
+            "end": 18,
+            "replacement": [
+              "train"
+            ]
+          },
+          {
+            "start": 19,
+            "end": 20,
+            "replacement": [
+              "flight"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "In India we have various types of Public transport , like Cycle , Bike , car , train & flight .",
+        "score": 0.7494038343429565,
+        "edits": [
+          {
+            "start": 15,
+            "end": 16,
+            "replacement": [
+              "car"
+            ]
+          },
+          {
+            "start": 17,
+            "end": 18,
+            "replacement": [
+              "train"
+            ]
+          },
+          {
+            "start": 19,
+            "end": 20,
+            "replacement": [
+              "flight"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "In India we have various types of Public transport , like cycle , Bike , car , train & flight .",
+        "score": 0.7466499209403992,
+        "edits": [
+          {
+            "start": 11,
+            "end": 12,
+            "replacement": [
+              "cycle"
+            ]
+          },
+          {
+            "start": 15,
+            "end": 16,
+            "replacement": [
+              "car"
+            ]
+          },
+          {
+            "start": 17,
+            "end": 18,
+            "replacement": [
+              "train"
+            ]
+          },
+          {
+            "start": 19,
+            "end": 20,
+            "replacement": [
+              "flight"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "In India we have various types of public transport , like cycle , Bike , car , Train & flight .",
+        "score": 0.7299169898033142,
+        "edits": [
+          {
+            "start": 7,
+            "end": 8,
+            "replacement": [
+              "public"
+            ]
+          },
+          {
+            "start": 11,
+            "end": 12,
+            "replacement": [
+              "cycle"
+            ]
+          },
+          {
+            "start": 15,
+            "end": 16,
+            "replacement": [
+              "car"
+            ]
+          },
+          {
+            "start": 19,
+            "end": 20,
+            "replacement": [
+              "flight"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "source": "Depending on the distance and duration to the desired place , mode of transport is chosen accordingly .",
+    "scorer": "greco",
+    "best_sentence": "Depending on the distance and duration to the desired place , mode of transport is chosen accordingly .",
+    "pooled_edits": [],
+    "candidates": [
+      {
+        "sentence": "Depending on the distance and duration to the desired place , mode of transport is chosen accordingly .",
+        "score": 0.9770775437355042,
+        "edits": []
+      }
+    ]
+  },
+  {
+    "source": "But Generally speaking , travelling by car is much more fun when compared with other modes of transport .",
+    "scorer": "greco",
+    "best_sentence": "But generally speaking , travelling by car is much more fun when compared with other modes of transport .",
+    "pooled_edits": [
+      {
+        "start": 1,
+        "end": 2,
+        "replacement": [
+          "generally"
+        ]
+      }
+    ],
+    "candidates": [
+      {
+        "sentence": "But generally speaking , travelling by car is much more fun when compared with other modes of transport .",
+        "score": 0.8285309672355652,
+        "edits": [
+          {
+            "start": 1,
+            "end": 2,
+            "replacement": [
+              "generally"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "But Generally speaking , travelling by car is much more fun when compared with other modes of transport .",
+        "score": 0.5739937424659729,
+        "edits": []
+      }
+    ]
+  },
+  {
+    "source": "This reminds me of a trip that I have recently been to and the place is Agra .",
+    "scorer": "greco",
+    "best_sentence": "This reminds me of a trip that I have recently been to and the place is Agra .",
+    "pooled_edits": [],
+    "candidates": [
+      {
+        "sentence": "This reminds me of a trip that I have recently been to and the place is Agra .",
+        "score": 0.5441976189613342,
+        "edits": []
+      }
+    ]
+  },
+  {
+    "source": "It takes around 6 hours by National highway to go from Delhi to Agra .",
+    "scorer": "greco",
+    "best_sentence": "It takes around 6 hours by National Highway to go from Delhi to Agra .",
+    "pooled_edits": [
+      {
+        "start": 7,
+        "end": 8,
+        "replacement": [
+          "Highway"
+        ]
+      }
+    ],
+    "candidates": [
+      {
+        "sentence": "It takes around 6 hours by National Highway to go from Delhi to Agra .",
+        "score": 0.7206381559371948,
+        "edits": [
+          {
+            "start": 7,
+            "end": 8,
+            "replacement": [
+              "Highway"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "It takes around 6 hours by National highway to go from Delhi to Agra .",
+        "score": 0.6630404591560364,
+        "edits": []
+      }
+    ]
+  },
+  {
+    "source": "We have stopped at hotels for having food and just in case if any of us feels hungry , we have purchased some snacks just before the trip .",
+    "scorer": "greco",
+    "best_sentence": "We have stopped at hotels to have food and just in case any of us feels hungry , we have purchased some snacks just before the trip .",
+    "pooled_edits": [
+      {
+        "start": 5,
+        "end": 7,
+        "replacement": [
+          "to",
+          "have"
+        ]
+      },
+      {
+        "start": 6,
+        "end": 7,
+        "replacement": []
+      },
+      {
+        "start": 12,
+        "end": 13,
+        "replacement": []
+      }
+    ],
+    "candidates": [
+      {
+        "sentence": "We have stopped at hotels to have food and just in case any of us feels hungry , we have purchased some snacks just before the trip .",
+        "score": 0.9443529844284058,
+        "edits": [
+          {
+            "start": 5,
+            "end": 7,
+            "replacement": [
+              "to",
+              "have"
+            ]
+          },
+          {
+            "start": 12,
+            "end": 13,
+            "replacement": []
+          }
+        ]
+      },
+      {
+        "sentence": "We have stopped at hotels to have food and just in case if any of us feels hungry , we have purchased some snacks just before the trip .",
+        "score": 0.9278252720832825,
+        "edits": [
+          {
+            "start": 5,
+            "end": 7,
+            "replacement": [
+              "to",
+              "have"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "We have stopped at hotels for food and just in case any of us feels hungry , we have purchased some snacks just before the trip .",
+        "score": 0.7134535908699036,
+        "edits": [
+          {
+            "start": 6,
+            "end": 7,
+            "replacement": []
+          },
+          {
+            "start": 12,
+            "end": 13,
+            "replacement": []
+          }
+        ]
+      },
+      {
+        "sentence": "We have stopped at hotels for having food and just in case any of us feels hungry , we have purchased some snacks just before the trip .",
+        "score": 0.5777512788772583,
+        "edits": [
+          {
+            "start": 12,
+            "end": 13,
+            "replacement": []
+          }
+        ]
+      },
+      {
+        "sentence": "We have stopped at hotels for food and just in case if any of us feels hungry , we have purchased some snacks just before the trip .",
+        "score": 0.3512667715549469,
+        "edits": [
+          {
+            "start": 6,
+            "end": 7,
+            "replacement": []
+          }
+        ]
+      },
+      {
+        "sentence": "We have stopped at hotels for having food and just in case if any of us feels hungry , we have purchased some snacks just before the trip .",
+        "score": 0.27569249272346497,
+        "edits": []
+      }
+    ]
+  },
+  {
+    "source": "Since , we have the option to wait anytime we want to when we travel by car ( which is impossible when travelling by train & Flight ) .",
+    "scorer": "greco",
+    "best_sentence": "Since , we have the option to wait anytime we want to when we travel by car ( which is impossible when travelling by train & flight ) .",
+    "pooled_edits": [
+      {
+        "start": 1,
+        "end": 2,
+        "replacement": []
+      },
+      {
+        "start": 26,
+        "end": 27,
+        "replacement": [
+          "flight"
+        ]
+      }
+    ],
+    "candidates": [
+      {
+        "sentence": "Since , we have the option to wait anytime we want to when we travel by car ( which is impossible when travelling by train & flight ) .",
+        "score": 0.9433928728103638,
+        "edits": [
+          {
+            "start": 26,
+            "end": 27,
+            "replacement": [
+              "flight"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "Since we have the option to wait anytime we want to when we travel by car ( which is impossible when travelling by train & flight ) .",
+        "score": 0.8364148736000061,
+        "edits": [
+          {
+            "start": 1,
+            "end": 2,
+            "replacement": []
+          },
+          {
+            "start": 26,
+            "end": 27,
+            "replacement": [
+              "flight"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "Since we have the option to wait anytime we want to when we travel by car ( which is impossible when travelling by train & Flight ) .",
+        "score": 0.44786980748176575,
+        "edits": [
+          {
+            "start": 1,
+            "end": 2,
+            "replacement": []
+          }
+        ]
+      },
+      {
+        "sentence": "Since , we have the option to wait anytime we want to when we travel by car ( which is impossible when travelling by train & Flight ) .",
+        "score": 0.40454497933387756,
+        "edits": []
+      }
+    ]
+  },
+  {
+    "source": "In addition to it , we can also take a comfortable short nap on the back seat and wake up fresh .",
+    "scorer": "greco",
+    "best_sentence": "In addition to that , we can also take a comfortable short nap on the back seat and wake up fresh .",
+    "pooled_edits": [
+      {
+        "start": 3,
+        "end": 4,
+        "replacement": [
+          "that"
+        ]
+      },
+      {
+        "start": 13,
+        "end": 14,
+        "replacement": [
+          "in"
+        ]
+      }
+    ],
+    "candidates": [
+      {
+        "sentence": "In addition to that , we can also take a comfortable short nap on the back seat and wake up fresh .",
+        "score": 0.9662305116653442,
+        "edits": [
+          {
+            "start": 3,
+            "end": 4,
+            "replacement": [
+              "that"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "In addition to that , we can also take a comfortable short nap in the back seat and wake up fresh .",
+        "score": 0.6284064054489136,
+        "edits": [
+          {
+            "start": 3,
+            "end": 4,
+            "replacement": [
+              "that"
+            ]
+          },
+          {
+            "start": 13,
+            "end": 14,
+            "replacement": [
+              "in"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "In addition to it , we can also take a comfortable short nap on the back seat and wake up fresh .",
+        "score": 0.47708654403686523,
+        "edits": []
+      },
+      {
+        "sentence": "In addition to it , we can also take a comfortable short nap in the back seat and wake up fresh .",
+        "score": 0.2892424762248993,
+        "edits": [
+          {
+            "start": 13,
+            "end": 14,
+            "replacement": [
+              "in"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "source": "Due to the above mentioned reasons , I am going to conclude that travelling by car is much more convenient .",
+    "scorer": "greco",
+    "best_sentence": "Due to the above mentioned reasons , I am going to conclude that travelling by car is much more convenient .",
+    "pooled_edits": [],
+    "candidates": [
+      {
+        "sentence": "Due to the above mentioned reasons , I am going to conclude that travelling by car is much more convenient .",
+        "score": 0.5874655842781067,
+        "edits": []
+      }
+    ]
+  },
+  {
+    "source": "My name is Sarah .",
+    "scorer": "greco",
+    "best_sentence": "My name is Sarah .",
+    "pooled_edits": [],
+    "candidates": [
+      {
+        "sentence": "My name is Sarah .",
+        "score": 0.5162591338157654,
+        "edits": []
+      }
+    ]
+  },
+  {
+    "source": "I am 17 years old .",
+    "scorer": "greco",
+    "best_sentence": "I am 17 years old .",
+    "pooled_edits": [],
+    "candidates": [
+      {
+        "sentence": "I am 17 years old .",
+        "score": 0.28220218420028687,
+        "edits": []
+      }
+    ]
+  },
+  {
+    "source": "I am looking forward to join you in this year summer camps .",
+    "scorer": "greco",
+    "best_sentence": "I am looking forward to joining you in this year 's summer camps .",
+    "pooled_edits": [
+      {
+        "start": 5,
+        "end": 6,
+        "replacement": [
+          "joining"
+        ]
+      },
+      {
+        "start": 10,
+        "end": 10,
+        "replacement": [
+          "'s"
+        ]
+      }
+    ],
+    "candidates": [
+      {
+        "sentence": "I am looking forward to joining you in this year 's summer camps .",
+        "score": 0.974306583404541,
+        "edits": [
+          {
+            "start": 5,
+            "end": 6,
+            "replacement": [
+              "joining"
+            ]
+          },
+          {
+            "start": 10,
+            "end": 10,
+            "replacement": [
+              "'s"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "I am looking forward to join you in this year 's summer camps .",
+        "score": 0.9265701770782471,
+        "edits": [
+          {
+            "start": 10,
+            "end": 10,
+            "replacement": [
+              "'s"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "I am looking forward to joining you in this year summer camps .",
+        "score": 0.8914177417755127,
+        "edits": [
+          {
+            "start": 5,
+            "end": 6,
+            "replacement": [
+              "joining"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "I am looking forward to join you in this year summer camps .",
+        "score": 0.18376904726028442,
+        "edits": []
+      }
+    ]
+  },
+  {
+    "source": "I love children , and I enjoy looking after them . also , I organized many sports activities before in my school .",
+    "scorer": "greco",
+    "best_sentence": "I love children , and I enjoy looking after them . Also , I organized many sports activities before in my school .",
+    "pooled_edits": [
+      {
+        "start": 3,
+        "end": 4,
+        "replacement": []
+      },
+      {
+        "start": 11,
+        "end": 12,
+        "replacement": [
+          "Also"
+        ]
+      }
+    ],
+    "candidates": [
+      {
+        "sentence": "I love children , and I enjoy looking after them . Also , I organized many sports activities before in my school .",
+        "score": 0.933935821056366,
+        "edits": [
+          {
+            "start": 11,
+            "end": 12,
+            "replacement": [
+              "Also"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "I love children and I enjoy looking after them . Also , I organized many sports activities before in my school .",
+        "score": 0.7787203788757324,
+        "edits": [
+          {
+            "start": 3,
+            "end": 4,
+            "replacement": []
+          },
+          {
+            "start": 11,
+            "end": 12,
+            "replacement": [
+              "Also"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "I love children , and I enjoy looking after them . also , I organized many sports activities before in my school .",
+        "score": 0.5952882766723633,
+        "edits": []
+      },
+      {
+        "sentence": "I love children and I enjoy looking after them . also , I organized many sports activities before in my school .",
+        "score": 0.4108112156391144,
+        "edits": [
+          {
+            "start": 3,
+            "end": 4,
+            "replacement": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "source": "In addition to that , i enjoy cooking .",
+    "scorer": "greco",
+    "best_sentence": "In addition to that , I enjoy cooking .",
+    "pooled_edits": [
+      {
+        "start": 5,
+        "end": 6,
+        "replacement": [
+          "I"
+        ]
+      }
+    ],
+    "candidates": [
+      {
+        "sentence": "In addition to that , I enjoy cooking .",
+        "score": 0.9845331907272339,
+        "edits": [
+          {
+            "start": 5,
+            "end": 6,
+            "replacement": [
+              "I"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "In addition to that , i enjoy cooking .",
+        "score": 0.3584563732147217,
+        "edits": []
+      }
+    ]
+  },
+  {
+    "source": "My family think that my cook is amazing .",
+    "scorer": "greco",
+    "best_sentence": "My family think that my cooking is amazing .",
+    "pooled_edits": [
+      {
+        "start": 2,
+        "end": 3,
+        "replacement": [
+          "thinks"
+        ]
+      },
+      {
+        "start": 5,
+        "end": 6,
+        "replacement": [
+          "cooking"
+        ]
+      }
+    ],
+    "candidates": [
+      {
+        "sentence": "My family think that my cooking is amazing .",
+        "score": 0.9942718744277954,
+        "edits": [
+          {
+            "start": 5,
+            "end": 6,
+            "replacement": [
+              "cooking"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "My family think that my cook is amazing .",
+        "score": 0.705505907535553,
+        "edits": []
+      },
+      {
+        "sentence": "My family thinks that my cooking is amazing .",
+        "score": 0.5909596681594849,
+        "edits": [
+          {
+            "start": 2,
+            "end": 3,
+            "replacement": [
+              "thinks"
+            ]
+          },
+          {
+            "start": 5,
+            "end": 6,
+            "replacement": [
+              "cooking"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "My family thinks that my cook is amazing .",
+        "score": 0.2898382544517517,
+        "edits": [
+          {
+            "start": 2,
+            "end": 3,
+            "replacement": [
+              "thinks"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "source": "I hope that you give my the chance to join you .",
+    "scorer": "greco",
+    "best_sentence": "I hope that you give me the chance to join you .",
+    "pooled_edits": [
+      {
+        "start": 5,
+        "end": 6,
+        "replacement": [
+          "me"
+        ]
+      }
+    ],
+    "candidates": [
+      {
+        "sentence": "I hope that you give me the chance to join you .",
+        "score": 0.973046600818634,
+        "edits": [
+          {
+            "start": 5,
+            "end": 6,
+            "replacement": [
+              "me"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "I hope that you give my the chance to join you .",
+        "score": 0.598922610282898,
+        "edits": []
+      }
+    ]
+  },
+  {
+    "source": "Thanks",
+    "scorer": "greco",
+    "best_sentence": "Thanks",
+    "pooled_edits": [
+      {
+        "start": 1,
+        "end": 1,
+        "replacement": [
+          "."
+        ]
+      },
+      {
+        "start": 1,
+        "end": 1,
+        "replacement": [
+          "for",
+          "your",
+          "kind",
+          "words",
+          "."
+        ]
+      }
+    ],
+    "candidates": [
+      {
+        "sentence": "Thanks",
+        "score": 0.788021445274353,
+        "edits": []
+      },
+      {
+        "sentence": "Thanks for your kind words .",
+        "score": 0.07086055725812912,
+        "edits": [
+          {
+            "start": 1,
+            "end": 1,
+            "replacement": [
+              "for",
+              "your",
+              "kind",
+              "words",
+              "."
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "Thanks .",
+        "score": 0.013357584364712238,
+        "edits": [
+          {
+            "start": 1,
+            "end": 1,
+            "replacement": [
+              "."
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "source": "My favourite sport is volleyball because I love plays with my friends .",
+    "scorer": "greco",
+    "best_sentence": "My favourite sport is volleyball because I love playing with my friends .",
+    "pooled_edits": [
+      {
+        "start": 8,
+        "end": 9,
+        "replacement": [
+          "playing"
+        ]
+      }
+    ],
+    "candidates": [
+      {
+        "sentence": "My favourite sport is volleyball because I love playing with my friends .",
+        "score": 0.8390562534332275,
+        "edits": [
+          {
+            "start": 8,
+            "end": 9,
+            "replacement": [
+              "playing"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "My favourite sport is volleyball because I love plays with my friends .",
+        "score": 0.4561603367328644,
+        "edits": []
+      }
+    ]
+  },
+  {
+    "source": "Volleyball is a sport play every place , when I travel on the beach I like plays with my sister in the sand and after we are going to the sea .",
+    "scorer": "greco",
+    "best_sentence": "Volleyball is a sport played in every place . When I travel on the beach I like plays with my sister in the sand and after we are going to the sea .",
+    "pooled_edits": [
+      {
+        "start": 4,
+        "end": 5,
+        "replacement": [
+          "played",
+          "in"
+        ]
+      },
+      {
+        "start": 7,
+        "end": 9,
+        "replacement": [
+          ".",
+          "When"
+        ]
+      },
+      {
+        "start": 16,
+        "end": 17,
+        "replacement": [
+          "playing"
+        ]
+      },
+      {
+        "start": 16,
+        "end": 17,
+        "replacement": [
+          "to",
+          "play"
+        ]
+      }
+    ],
+    "candidates": [
+      {
+        "sentence": "Volleyball is a sport played in every place . When I travel on the beach I like plays with my sister in the sand and after we are going to the sea .",
+        "score": 0.23129156231880188,
+        "edits": [
+          {
+            "start": 4,
+            "end": 5,
+            "replacement": [
+              "played",
+              "in"
+            ]
+          },
+          {
+            "start": 7,
+            "end": 9,
+            "replacement": [
+              ".",
+              "When"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "Volleyball is a sport played in every place . When I travel on the beach I like to play with my sister in the sand and after we are going to the sea .",
+        "score": 0.22976525127887726,
+        "edits": [
+          {
+            "start": 4,
+            "end": 5,
+            "replacement": [
+              "played",
+              "in"
+            ]
+          },
+          {
+            "start": 7,
+            "end": 9,
+            "replacement": [
+              ".",
+              "When"
+            ]
+          },
+          {
+            "start": 16,
+            "end": 17,
+            "replacement": [
+              "to",
+              "play"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "Volleyball is a sport played in every place . When I travel on the beach I like playing with my sister in the sand and after we are going to the sea .",
+        "score": 0.22452911734580994,
+        "edits": [
+          {
+            "start": 4,
+            "end": 5,
+            "replacement": [
+              "played",
+              "in"
+            ]
+          },
+          {
+            "start": 7,
+            "end": 9,
+            "replacement": [
+              ".",
+              "When"
+            ]
+          },
+          {
+            "start": 16,
+            "end": 17,
+            "replacement": [
+              "playing"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "Volleyball is a sport play every place . When I travel on the beach I like to play with my sister in the sand and after we are going to the sea .",
+        "score": 0.15389224886894226,
+        "edits": [
+          {
+            "start": 7,
+            "end": 9,
+            "replacement": [
+              ".",
+              "When"
+            ]
+          },
+          {
+            "start": 16,
+            "end": 17,
+            "replacement": [
+              "to",
+              "play"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "Volleyball is a sport play every place . When I travel on the beach I like playing with my sister in the sand and after we are going to the sea .",
+        "score": 0.14530938863754272,
+        "edits": [
+          {
+            "start": 7,
+            "end": 9,
+            "replacement": [
+              ".",
+              "When"
+            ]
+          },
+          {
+            "start": 16,
+            "end": 17,
+            "replacement": [
+              "playing"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "Volleyball is a sport play every place . When I travel on the beach I like plays with my sister in the sand and after we are going to the sea .",
+        "score": 0.1167665421962738,
+        "edits": [
+          {
+            "start": 7,
+            "end": 9,
+            "replacement": [
+              ".",
+              "When"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "Volleyball is a sport played in every place , when I travel on the beach I like to play with my sister in the sand and after we are going to the sea .",
+        "score": 0.11292082071304321,
+        "edits": [
+          {
+            "start": 4,
+            "end": 5,
+            "replacement": [
+              "played",
+              "in"
+            ]
+          },
+          {
+            "start": 16,
+            "end": 17,
+            "replacement": [
+              "to",
+              "play"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "Volleyball is a sport played in every place , when I travel on the beach I like playing with my sister in the sand and after we are going to the sea .",
+        "score": 0.1070704534649849,
+        "edits": [
+          {
+            "start": 4,
+            "end": 5,
+            "replacement": [
+              "played",
+              "in"
+            ]
+          },
+          {
+            "start": 16,
+            "end": 17,
+            "replacement": [
+              "playing"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "Volleyball is a sport played in every place , when I travel on the beach I like plays with my sister in the sand and after we are going to the sea .",
+        "score": 0.08617579191923141,
+        "edits": [
+          {
+            "start": 4,
+            "end": 5,
+            "replacement": [
+              "played",
+              "in"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "Volleyball is a sport play every place , when I travel on the beach I like to play with my sister in the sand and after we are going to the sea .",
+        "score": 0.06708448380231857,
+        "edits": [
+          {
+            "start": 16,
+            "end": 17,
+            "replacement": [
+              "to",
+              "play"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "Volleyball is a sport play every place , when I travel on the beach I like playing with my sister in the sand and after we are going to the sea .",
+        "score": 0.06432648003101349,
+        "edits": [
+          {
+            "start": 16,
+            "end": 17,
+            "replacement": [
+              "playing"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "Volleyball is a sport play every place , when I travel on the beach I like plays with my sister in the sand and after we are going to the sea .",
+        "score": 0.04917951673269272,
+        "edits": []
+      }
+    ]
+  }
+]

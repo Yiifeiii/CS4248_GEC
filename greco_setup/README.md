@@ -37,6 +37,8 @@ python -m greco_setup.combine \
 
 For a compatible CUDA installation, use `--device cuda`. Match the PyTorch installation to the host CUDA environment. The setup script uses `pip install -r` on the upstream requirements, pins the upstream Git revision, and stores code and weights in ignored directories. It does not install BART/T5 or alter dataset files.
 
+If the checkpoint download is interrupted, rerun `bash greco_setup/setup.sh` in the same environment. The download resumes from `models/greco/checkpoint.bin.partial`; keep that file. The script renames it to `checkpoint.bin` only after curl completes successfully.
+
 The real scorer setup and pretrained inference have not been validated on the local Python 3.14 environment. Core edit combination and CLI behavior are covered by the tests below. If dependencies are already installed elsewhere, pass `--greco-repo /path/to/greco --checkpoint /path/to/checkpoint.bin`.
 
 ## Provide manual input
@@ -94,3 +96,20 @@ python3 -m unittest discover -s tests -v
 - Qorib & Ng (2023), [System Combination via Quality Estimation for Grammatical Error Correction](https://aclanthology.org/2023.emnlp-main.785/).
 
 Upstream GRECO code has its own GPL license in `external/greco/LICENSE.txt`.
+
+## BART/T5 dev30 pilot
+
+Run `python -m greco_setup.run_pilot` in the GRECO environment from the repo root.
+This combines the saved BART beam and T5 predictions for the first 30 W&I+LOCNESS
+development sentences at k=1, 3, and 5. Each run uses the same beam size (16),
+batch size (8), and CPU scorer. GECToR and gold evaluation are excluded.
+
+Outputs go to `outputs/greco/bart-t5-dev30/`: `manifest.json` records settings,
+and each `k1/`, `k3/`, `k5/` folder contains `input.json`, `results.json`, and
+`greco.pred`. Basic punctuation/contraction spacing is normalized before the
+token-level edit alignment; this is not ERRANT alignment. Raw GRECO scores are
+quality estimates, not F0.5 measurements.
+
+Commit the runner, documentation, and pilot outputs for reproducibility.
+The output directory is not ignored by Git; prediction files, input records,
+full results, and the manifest can be versioned together.

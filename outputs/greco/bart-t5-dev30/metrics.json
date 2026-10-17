@@ -1,0 +1,43 @@
+{
+  "metric": "NUS M2 corpus-level F0.5 (not ERRANT)",
+  "sentences": 30,
+  "scale": "percent",
+  "beta": 0.5,
+  "max_unchanged_words": 2,
+  "gold_source": "https://www.cl.cam.ac.uk/research/nl/bea2019st/data/wi+locness_v2.1.bea19.tar.gz",
+  "gold_subset_sha256": "25860c08deb726360a3bd8d790ff24a41d9ebd9732dd491838e9ec2d5b6e6c8d",
+  "scorer_compatibility": "lib2to3 syntax conversion and removal of Python 2 text decode calls; original algorithm unchanged",
+  "baselines": "Same normalized top-1 proposals supplied to GRECO",
+  "results": [
+    {
+      "system": "bart top-1",
+      "precision": 67.86,
+      "recall": 25.330000000000002,
+      "f0_5": 50.8
+    },
+    {
+      "system": "t5 top-1",
+      "precision": 57.14,
+      "recall": 21.33,
+      "f0_5": 42.78
+    },
+    {
+      "system": "GRECO k=1",
+      "precision": 75.0,
+      "recall": 32.0,
+      "f0_5": 59.11
+    },
+    {
+      "system": "GRECO k=3",
+      "precision": 67.44,
+      "recall": 38.67,
+      "f0_5": 58.699999999999996
+    },
+    {
+      "system": "GRECO k=5",
+      "precision": 67.39,
+      "recall": 41.33,
+      "f0_5": 59.85
+    }
+  ]
+}
