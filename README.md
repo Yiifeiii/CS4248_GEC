@@ -22,6 +22,12 @@ The repository also contains datasets, prepared source/target sentence pairs, an
 | `error_type_stats.py` | Count sentences and edits by error type for selected corpora |
 | `error_type_counts.csv` | Existing error-type counts by corpus |
 | `m2scorer/` | Bundled NUS MaxMatch scorer, supporting scripts, examples, and license |
+| `bart/` | BART n-best generation, export to the shared output format, n-best statistics |
+| `t5/` | T5 top-k generation and retokenization of its output |
+| `gector/` | Grammarly's pretrained GECToR ([setup and usage](gector/README.md)) |
+| `greco_setup/` | GRECO edit combination ([setup and usage](greco_setup/README.md)) |
+| `outputs/` | System predictions in the shared format, see [Outputs](#outputs) |
+| `tests/` | Unit tests for the GRECO combination code |
 
 ## Data and formats
 
@@ -44,6 +50,24 @@ A 1 2|||R:VERB:SVA|||goes|||REQUIRED|||-NONE-|||0
 ```
 
 This edit replaces token 1 (`go`) with `goes`. The end offset is exclusive, and the final field identifies the annotator.
+
+### Outputs
+
+Every system writes its predictions to `outputs/<system>/<split>.tgt` in one shared format, which [GRECO combination](greco_setup/README.md#from-system-output-files) reads directly:
+
+- **k consecutive lines per source sentence**, best hypothesis first: lines k·(i−1)+1 … k·i belong to source line i. GECToR has k = 1, so its file is aligned line by line with the source like `data/dev.tgt`.
+- **Tokenized like the source** (`It 's`, `do n't`, `minds .`). T5 produces ordinary text, so `t5/retokenize.py` splits it with spaCy before writing.
+
+| File | System | k | Lines |
+| --- | --- | ---: | ---: |
+| `outputs/dev30.src` | First 30 sentences of `data/dev.src` | | 30 |
+| `outputs/gector/dev30.tgt` | GECToR | 1 | 30 |
+| `outputs/gector/dev.tgt` | GECToR, full dev set | 1 | 4,384 |
+| `outputs/bart/dev30.beam.tgt` | BART, beam search | 5 | 150 |
+| `outputs/bart/dev30.diverse.tgt` | BART, diverse beam search | 5 | 150 |
+| `outputs/t5/dev30.tgt` | T5, beam search | 5 | 150 |
+
+`outputs/bart/*.nbest.jsonl` keep BART's raw n-best lists with model scores, from which `bart/export_candidates.py` writes the `.tgt` files and `bart/nbest_stats.py` computes statistics. GRECO results go to `outputs/greco/`.
 
 ### Retrieve M2 annotations
 

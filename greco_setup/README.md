@@ -63,16 +63,16 @@ Multiple BART/T5 hypotheses are supported by adding more proposal objects. The `
 
 ## From system output files
 
-`greco_setup/prepare.py` builds the input JSON from prediction files, so nobody writes edits by hand. Each system writes a plain text file with **k consecutive lines per source sentence**, best hypothesis first: k = 1 for GECToR (`gector.py predict` output), k = 5 for BART/T5 top-5. Line counts must be an exact multiple of the source file's, and hypotheses must use the source's tokenization (`apple .`, not `apple.`), otherwise every token difference becomes a spurious edit.
+`greco_setup/prepare.py` builds the input JSON from prediction files, so nobody writes edits by hand. Every system writes `outputs/<system>/<split>.tgt` in the shared format described in the [main README](../README.md#outputs): **k consecutive lines per source sentence**, best hypothesis first, k = 1 for GECToR and k = 5 for BART/T5. Line counts must be an exact multiple of the source file's, and hypotheses must use the source's tokenization (`apple .`, not `apple.`), otherwise every token difference becomes a spurious edit.
 
 ```bash
-python3 -m greco_setup.prepare build --source data/dev.src \
-  --system gector=gector/outputs/dev.pred \
-  --system bart=outputs/bart/dev.top5 \
-  --system t5=outputs/t5/dev.top5 \
-  --k 3 --output outputs/greco/dev.input.json
-python -m greco_setup.combine --input outputs/greco/dev.input.json --output outputs/greco/dev.output.json --device cuda
-python3 -m greco_setup.prepare collect --input outputs/greco/dev.output.json --output outputs/greco/dev.pred
+python3 -m greco_setup.prepare build --source outputs/dev30.src \
+  --system gector=outputs/gector/dev30.tgt \
+  --system bart=outputs/bart/dev30.beam.tgt \
+  --system t5=outputs/t5/dev30.tgt \
+  --k 3 --output outputs/greco/dev30.input.json
+python -m greco_setup.combine --input outputs/greco/dev30.input.json --output outputs/greco/dev30.output.json --device cuda
+python3 -m greco_setup.prepare collect --input outputs/greco/dev30.output.json --output outputs/greco/dev30.tgt
 ```
 
 `--k` keeps only the top-k hypotheses per system (the k = 1, 3, 5 ablation) and leaves 1-best systems unchanged. Empty hypotheses are skipped. `collect` writes one best sentence per line, aligned with the source, ready for ERRANT or the M² scorer.

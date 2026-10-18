@@ -1,12 +1,13 @@
 from pathlib import Path
 from itertools import islice
 
+from retokenize import retokenize
 from t5_gec import top_k
 
-# Repo root (dev/t5/dev_run.py -> CS4248_GEC/)
-ROOT = Path(__file__).resolve().parents[2]
+# Repo root (t5/dev_run.py -> CS4248_GEC/)
+ROOT = Path(__file__).resolve().parents[1]
 DEV_SRC = ROOT / "data" / "dev.src"
-OUT_DIR = ROOT / "output" / "t5" / "dev30"
+OUT_PATH = ROOT / "outputs" / "t5" / "dev30.tgt"
 N = 30
 
 
@@ -17,18 +18,18 @@ def load_sentences(path=DEV_SRC, n=N):
 
 
 if __name__ == "__main__":
-    OUT_DIR.mkdir(parents=True, exist_ok=True)
-    out_path = OUT_DIR / "t5.tgt"
+    OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
 
-    with open(out_path, "w", encoding="utf-8") as out:
+    with open(OUT_PATH, "w", encoding="utf-8") as out:
         for i, sentence in enumerate(load_sentences(), 1):
             candidates = top_k(sentence)
             print(f"[{i}] {sentence}")
             for text, score in candidates:
                 print(f"    {score:.3f}  {text}")
             print()
-            # Write all k candidates (best first), one per line: lines 5(i-1)+1 .. 5i belong to sentence i
+            # Write all k candidates (best first), one per line: lines 5(i-1)+1 .. 5i belong to sentence i.
+            # Split them into tokens like the source ("It's" -> "It 's") so GRECO sees only real edits.
             for text, _ in candidates:
-                out.write(text + "\n")
+                out.write(retokenize(text) + "\n")
 
-    print(f"Wrote top-5 corrections for {N} sentences to {out_path}")
+    print(f"Wrote top-5 corrections for {N} sentences to {OUT_PATH}")

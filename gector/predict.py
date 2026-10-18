@@ -3,7 +3,7 @@
 Run from the repository root with the gector/.venv environment (see gector/README.md):
 
     gector/.venv/bin/python gector/predict.py \
-        --input data/dev.src --output gector/outputs/dev.pred
+        --input data/dev.src --output outputs/gector/dev.tgt
 
 The official checkpoint was trained with AllenNLP 0.8.4 / Python 3.7. We load it
 with gotutiyan/gector, a PyTorch port that renames the official parameters and

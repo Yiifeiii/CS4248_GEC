@@ -1,0 +1,1802 @@
+[
+  {
+    "source": "It 's difficult answer at the question \" what are you going to do in the future ? \" if the only one who has to know it is in two minds .",
+    "proposals": [
+      {
+        "system": "gector",
+        "rank": 1,
+        "sentence": "It 's difficult to answer the question \" what are you going to do in the future ? \" if the only one who has to know it is in two minds ."
+      },
+      {
+        "system": "bart",
+        "rank": 1,
+        "sentence": "It 's difficult to answer the question \" what are you going to do in the future ? \" if the only one who has to know it is in two minds ."
+      },
+      {
+        "system": "bart",
+        "rank": 2,
+        "sentence": "It 's difficult answer to the question \" what are you going to do in the future ? \" if the only one who has to know it is in two minds ."
+      },
+      {
+        "system": "bart",
+        "rank": 3,
+        "sentence": "It 's difficult to answer the question \" what are you going to do in the future ? \" if the only one who has to know is in two minds ."
+      },
+      {
+        "system": "bart",
+        "rank": 4,
+        "sentence": "It 's difficult answer to the question \" what are you going to do in the future ? \" if the only one who has to know is in two minds ."
+      },
+      {
+        "system": "bart",
+        "rank": 5,
+        "sentence": "It 's a difficult answer to the question \" what are you going to do in the future ? \" if the only one who has to know it is in two minds ."
+      },
+      {
+        "system": "t5",
+        "rank": 1,
+        "sentence": "It 's difficult to answer the question \" what are you going to do in the future ? \" if the only one who has to know it is in two minds ."
+      },
+      {
+        "system": "t5",
+        "rank": 2,
+        "sentence": "It 's difficult to answer the question \" what are you going to do in the future ? \" if the only one who has to know it is in two minds ."
+      },
+      {
+        "system": "t5",
+        "rank": 3,
+        "sentence": "It 's difficult to answer the question \" what are you going to do in the future ? \" if the only one who has to know it is in two minds ."
+      },
+      {
+        "system": "t5",
+        "rank": 4,
+        "sentence": "It 's difficult to answer the question \" What are you going to do in the future ? \" if the only one who has to know it is in two minds ."
+      },
+      {
+        "system": "t5",
+        "rank": 5,
+        "sentence": "It 's difficult to answer the question \" what are you going to do in the future ? \" if the only one who has to know it is in two minds ."
+      }
+    ]
+  },
+  {
+    "source": "When I was younger I used to say that I wanted to be a teacher , a saleswoman and even a butcher .. I do n't know why .",
+    "proposals": [
+      {
+        "system": "gector",
+        "rank": 1,
+        "sentence": "When I was younger I used to say that I wanted to be a teacher , a saleswoman and even a butcher .. I do n't know why ."
+      },
+      {
+        "system": "bart",
+        "rank": 1,
+        "sentence": "When I was younger I used to say that I wanted to be a teacher , a saleswoman and even a butcher .. I do n't know why ."
+      },
+      {
+        "system": "bart",
+        "rank": 2,
+        "sentence": "When I was younger , I used to say that I wanted to be a teacher , a saleswoman and even a butcher .. I do n't know why ."
+      },
+      {
+        "system": "bart",
+        "rank": 3,
+        "sentence": "When I was younger I used to say that I wanted to be a teacher , a saleswoman and even a butcher . I do n't know why ."
+      },
+      {
+        "system": "bart",
+        "rank": 4,
+        "sentence": "When I was younger , I used to say that I wanted to be a teacher , a saleswoman and even a butcher . I do n't know why ."
+      },
+      {
+        "system": "bart",
+        "rank": 5,
+        "sentence": "When I was younger I used to say that I wanted to be a teacher , a saleswoman , and even a butcher .. I do n't know why ."
+      },
+      {
+        "system": "t5",
+        "rank": 1,
+        "sentence": "When I was younger , I used to say that I wanted to be a teacher , a saleswoman and even a butcher .. I do n't know why ."
+      },
+      {
+        "system": "t5",
+        "rank": 2,
+        "sentence": "When I was younger , I used to say that I wanted to be a teacher , a saleswoman and even a butcher .. I do n't know why ."
+      },
+      {
+        "system": "t5",
+        "rank": 3,
+        "sentence": "When I was younger , I used to say that I wanted to be a teacher , a saleswoman , and even a butcher .. I do n't know why ."
+      },
+      {
+        "system": "t5",
+        "rank": 4,
+        "sentence": "When I was younger I used to say that I wanted to be a teacher , a saleswoman and even a butcher .. I do n't know why ."
+      },
+      {
+        "system": "t5",
+        "rank": 5,
+        "sentence": "When I was younger , I used to say that I wanted to be a teacher , a saleswoman , and even a butcher . I do n't know why ."
+      }
+    ]
+  },
+  {
+    "source": "I would like to study Psychology because one day I would open my own psychology office and help people .",
+    "proposals": [
+      {
+        "system": "gector",
+        "rank": 1,
+        "sentence": "I would like to study Psychology because one day I would open my own psychology office and help people ."
+      },
+      {
+        "system": "bart",
+        "rank": 1,
+        "sentence": "I would like to study Psychology because one day I would open my own psychology office and help people ."
+      },
+      {
+        "system": "bart",
+        "rank": 2,
+        "sentence": "I would like to study Psychology because one day I will open my own psychology office and help people ."
+      },
+      {
+        "system": "bart",
+        "rank": 3,
+        "sentence": "I would like to study psychology because one day I would open my own psychology office and help people ."
+      },
+      {
+        "system": "bart",
+        "rank": 4,
+        "sentence": "I would like to study psychology because one day I will open my own psychology office and help people ."
+      },
+      {
+        "system": "bart",
+        "rank": 5,
+        "sentence": "I would like to study Psychology , because one day I would open my own psychology office and help people ."
+      },
+      {
+        "system": "t5",
+        "rank": 1,
+        "sentence": "I would like to study Psychology because one day I would open my own psychology office and help people ."
+      },
+      {
+        "system": "t5",
+        "rank": 2,
+        "sentence": "I would like to study psychology because one day I would open my own psychology office and help people ."
+      },
+      {
+        "system": "t5",
+        "rank": 3,
+        "sentence": "I would like to study Psychology because one day I would open my own psychology office and help people ."
+      },
+      {
+        "system": "t5",
+        "rank": 4,
+        "sentence": "I would like to study Psychology , because one day I would open my own psychology office and help people ."
+      },
+      {
+        "system": "t5",
+        "rank": 5,
+        "sentence": "I would like to study Psychology because one day I would open my own psychology office to help people ."
+      }
+    ]
+  },
+  {
+    "source": "It 's difficult because I 'll have to study hard and a lot , but I think that if you like a subject , you 'll study it easier .",
+    "proposals": [
+      {
+        "system": "gector",
+        "rank": 1,
+        "sentence": "It 's difficult because I 'll have to study hard and a lot , but I think that if you like a subject , you 'll study it easier ."
+      },
+      {
+        "system": "bart",
+        "rank": 1,
+        "sentence": "It 's difficult because I 'll have to study hard and a lot , but I think that if you like a subject , you 'll study it easier ."
+      },
+      {
+        "system": "bart",
+        "rank": 2,
+        "sentence": "It 's difficult because I have to study hard and a lot , but I think that if you like a subject , you 'll study it easier ."
+      },
+      {
+        "system": "bart",
+        "rank": 3,
+        "sentence": "It 's difficult because I 'll have to study hard and a lot , but I think that if you like a subject , you 'll study easier ."
+      },
+      {
+        "system": "bart",
+        "rank": 4,
+        "sentence": "It 's difficult because I 'll have to study hard and a lot , but I think that if you like the subject , you 'll study it easier ."
+      },
+      {
+        "system": "bart",
+        "rank": 5,
+        "sentence": "It 's difficult , because I 'll have to study hard and a lot , but I think that if you like a subject , you 'll study it easier ."
+      },
+      {
+        "system": "t5",
+        "rank": 1,
+        "sentence": "It 's difficult because I 'll have to study hard and a lot , but I think that if you like a subject , you 'll study it easier ."
+      },
+      {
+        "system": "t5",
+        "rank": 2,
+        "sentence": "It 's difficult because I will have to study hard and a lot , but I think that if you like a subject , you 'll study it easier ."
+      },
+      {
+        "system": "t5",
+        "rank": 3,
+        "sentence": "It 's difficult because I will have to study hard and a lot , but I think that if you like a subject , you will study it easier ."
+      },
+      {
+        "system": "t5",
+        "rank": 4,
+        "sentence": "It 's difficult because I 'll have to study hard and a lot , but I think that if you like a subject , you will study it easier ."
+      },
+      {
+        "system": "t5",
+        "rank": 5,
+        "sentence": "It 's difficult because I 'll have to study hard and a lot , but I think that if you like a subject , you 'll study it easier ."
+      }
+    ]
+  },
+  {
+    "source": "Maybe I 'll change my mind , maybe not .",
+    "proposals": [
+      {
+        "system": "gector",
+        "rank": 1,
+        "sentence": "Maybe I 'll change my mind , maybe not ."
+      },
+      {
+        "system": "bart",
+        "rank": 1,
+        "sentence": "Maybe I 'll change my mind , maybe not ."
+      },
+      {
+        "system": "bart",
+        "rank": 2,
+        "sentence": "Maybe I 'll change my mind . Maybe not ."
+      },
+      {
+        "system": "bart",
+        "rank": 3,
+        "sentence": "Maybe I 'll change my mind , or maybe not ."
+      },
+      {
+        "system": "bart",
+        "rank": 4,
+        "sentence": "Maybe I 'll change my mind , but maybe not ."
+      },
+      {
+        "system": "bart",
+        "rank": 5,
+        "sentence": "Maybe I 'll change my mind ; maybe not ."
+      },
+      {
+        "system": "t5",
+        "rank": 1,
+        "sentence": "Maybe I 'll change my mind , maybe not ."
+      },
+      {
+        "system": "t5",
+        "rank": 2,
+        "sentence": "Maybe I 'll change my mind , maybe not ."
+      },
+      {
+        "system": "t5",
+        "rank": 3,
+        "sentence": "Maybe I will change my mind , maybe not ."
+      },
+      {
+        "system": "t5",
+        "rank": 4,
+        "sentence": "Maybe I 'll change my mind , maybe not ."
+      },
+      {
+        "system": "t5",
+        "rank": 5,
+        "sentence": "Maybe I 'll change my mind , maybe not ."
+      }
+    ]
+  },
+  {
+    "source": "I think that the public transport will always be in the future .",
+    "proposals": [
+      {
+        "system": "gector",
+        "rank": 1,
+        "sentence": "I think that public transport will always be in the future ."
+      },
+      {
+        "system": "bart",
+        "rank": 1,
+        "sentence": "I think that public transport will always be in the future ."
+      },
+      {
+        "system": "bart",
+        "rank": 2,
+        "sentence": "I think that public transport will always be there in the future ."
+      },
+      {
+        "system": "bart",
+        "rank": 3,
+        "sentence": "I think that public transport will always be important in the future ."
+      },
+      {
+        "system": "bart",
+        "rank": 4,
+        "sentence": "I think that public transport will always be available in the future ."
+      },
+      {
+        "system": "bart",
+        "rank": 5,
+        "sentence": "I think that public transport will always be a part of the future ."
+      },
+      {
+        "system": "t5",
+        "rank": 1,
+        "sentence": "I think that public transport will always be in the future ."
+      },
+      {
+        "system": "t5",
+        "rank": 2,
+        "sentence": "I think that the public transport will always be in the future ."
+      },
+      {
+        "system": "t5",
+        "rank": 3,
+        "sentence": "I think that public transportation will always be in the future ."
+      },
+      {
+        "system": "t5",
+        "rank": 4,
+        "sentence": "I think that the public transportation will always be in the future ."
+      },
+      {
+        "system": "t5",
+        "rank": 5,
+        "sentence": "I think that public transport will always be in the future ."
+      }
+    ]
+  },
+  {
+    "source": "The rich people will buy a car but the poor people always need to use a bus or taxi .",
+    "proposals": [
+      {
+        "system": "gector",
+        "rank": 1,
+        "sentence": "The rich people will buy a car , but the poor people always need to use a bus or taxi ."
+      },
+      {
+        "system": "bart",
+        "rank": 1,
+        "sentence": "The rich people will buy a car but the poor people always need to use a bus or taxi ."
+      },
+      {
+        "system": "bart",
+        "rank": 2,
+        "sentence": "rich people will buy a car but poor people always need to use a bus or taxi ."
+      },
+      {
+        "system": "bart",
+        "rank": 3,
+        "sentence": "rich people will buy a car , but poor people always need to use a bus or taxi ."
+      },
+      {
+        "system": "bart",
+        "rank": 4,
+        "sentence": "The rich people will buy a car but poor people always need to use a bus or taxi ."
+      },
+      {
+        "system": "bart",
+        "rank": 5,
+        "sentence": "rich people will buy a car but the poor people always need to use a bus or taxi ."
+      },
+      {
+        "system": "t5",
+        "rank": 1,
+        "sentence": "The rich people will buy a car , but the poor people always need to use a bus or taxi ."
+      },
+      {
+        "system": "t5",
+        "rank": 2,
+        "sentence": "The rich people will buy a car but the poor people always need to use a bus or taxi ."
+      },
+      {
+        "system": "t5",
+        "rank": 3,
+        "sentence": "The rich people will buy a car , but the poor people always need to use a bus or taxi ."
+      },
+      {
+        "system": "t5",
+        "rank": 4,
+        "sentence": "The rich people will buy a car but the poor people always need to use a bus or taxi ."
+      },
+      {
+        "system": "t5",
+        "rank": 5,
+        "sentence": "The rich will buy a car , but the poor will always need to use a bus or taxi ."
+      }
+    ]
+  },
+  {
+    "source": "I consider that is more convenient to drive a car because you carry on more things in your own car than travelling by car .",
+    "proposals": [
+      {
+        "system": "gector",
+        "rank": 1,
+        "sentence": "I consider that it is more convenient to drive a car because you carry on more things in your own car than travelling by car ."
+      },
+      {
+        "system": "bart",
+        "rank": 1,
+        "sentence": "I consider that it is more convenient to drive a car because you carry on more things in your own car than travelling by car ."
+      },
+      {
+        "system": "bart",
+        "rank": 2,
+        "sentence": "I consider it more convenient to drive a car because you carry on more things in your own car than travelling by car ."
+      },
+      {
+        "system": "bart",
+        "rank": 3,
+        "sentence": "I think that it is more convenient to drive a car because you carry on more things in your own car than travelling by car ."
+      },
+      {
+        "system": "bart",
+        "rank": 4,
+        "sentence": "I think it is more convenient to drive a car because you carry on more things in your own car than travelling by car ."
+      },
+      {
+        "system": "bart",
+        "rank": 5,
+        "sentence": "I consider it to be more convenient to drive a car because you carry on more things in your own car than travelling by car ."
+      },
+      {
+        "system": "t5",
+        "rank": 1,
+        "sentence": "I consider that it is more convenient to drive a car because you carry on more things in your own car than travelling by car ."
+      },
+      {
+        "system": "t5",
+        "rank": 2,
+        "sentence": "I consider that it is more convenient to drive a car because you carry on more things in your own car than traveling by car ."
+      },
+      {
+        "system": "t5",
+        "rank": 3,
+        "sentence": "I consider that is more convenient to drive a car because you carry on more things in your own car than travelling by car ."
+      },
+      {
+        "system": "t5",
+        "rank": 4,
+        "sentence": "I consider that it is more convenient to drive a car because you carry more things in your own car than travelling by car ."
+      },
+      {
+        "system": "t5",
+        "rank": 5,
+        "sentence": "I consider it more convenient to drive a car because you carry on more things in your own car than travelling by car ."
+      }
+    ]
+  },
+  {
+    "source": "Also , you 'll meet friendly people who usually ask to you something to be friends and change your telephone number .",
+    "proposals": [
+      {
+        "system": "gector",
+        "rank": 1,
+        "sentence": "Also , you 'll meet friendly people who usually ask you something to be friends and change your telephone number ."
+      },
+      {
+        "system": "bart",
+        "rank": 1,
+        "sentence": "Also , you 'll meet friendly people who usually ask you something to be friends and change your telephone number ."
+      },
+      {
+        "system": "bart",
+        "rank": 2,
+        "sentence": "Also , you 'll meet friendly people who usually ask you something to be friends with and change your telephone number ."
+      },
+      {
+        "system": "bart",
+        "rank": 3,
+        "sentence": "Also , you 'll meet friendly people who usually ask to you something to be friends and change your telephone number ."
+      },
+      {
+        "system": "bart",
+        "rank": 4,
+        "sentence": "Also , you 'll meet friendly people who usually ask you to be friends and change your telephone number ."
+      },
+      {
+        "system": "bart",
+        "rank": 5,
+        "sentence": "Also , you 'll meet friendly people who usually ask to be friends and change your telephone number ."
+      },
+      {
+        "system": "t5",
+        "rank": 1,
+        "sentence": "Also , you 'll meet friendly people who usually ask you something to be friends and change your telephone number ."
+      },
+      {
+        "system": "t5",
+        "rank": 2,
+        "sentence": "Also , you 'll meet friendly people who usually ask you something to be friends and change your telephone number ."
+      },
+      {
+        "system": "t5",
+        "rank": 3,
+        "sentence": "Also , you 'll meet friendly people who usually ask to you something to be friends and change your telephone number ."
+      },
+      {
+        "system": "t5",
+        "rank": 4,
+        "sentence": "Also , you 'll meet friendly people who usually ask you something to be friends and change your telephone number ."
+      },
+      {
+        "system": "t5",
+        "rank": 5,
+        "sentence": "Also , you 'll meet friendly people who usually ask you something to be friends and change your telephone number ."
+      }
+    ]
+  },
+  {
+    "source": "In my experience when I did n't have a car I used to use the bus to go to the school and go back to my house .",
+    "proposals": [
+      {
+        "system": "gector",
+        "rank": 1,
+        "sentence": "In my experience when I did n't have a car , I used to use the bus to go to school and go back to my house ."
+      },
+      {
+        "system": "bart",
+        "rank": 1,
+        "sentence": "In my experience when I did n't have a car I used to use the bus to go to school and go back to my house ."
+      },
+      {
+        "system": "bart",
+        "rank": 2,
+        "sentence": "In my experience when I did n't have a car , I used to use the bus to go to school and go back to my house ."
+      },
+      {
+        "system": "bart",
+        "rank": 3,
+        "sentence": "In my experience , when I did n't have a car , I used to use the bus to go to school and go back to my house ."
+      },
+      {
+        "system": "bart",
+        "rank": 4,
+        "sentence": "In my experience , when I did n't have a car I used to use the bus to go to school and go back to my house ."
+      },
+      {
+        "system": "bart",
+        "rank": 5,
+        "sentence": "In my experience when I did n't have a car , I used to use the bus to go to the school and go back to my house ."
+      },
+      {
+        "system": "t5",
+        "rank": 1,
+        "sentence": "In my experience , when I did n't have a car , I used to use the bus to go to school and go back to my house ."
+      },
+      {
+        "system": "t5",
+        "rank": 2,
+        "sentence": "In my experience , when I did n't have a car , I used to use the bus to go to the school and go back to my house ."
+      },
+      {
+        "system": "t5",
+        "rank": 3,
+        "sentence": "In my experience , when I did n't have a car , I used to use the bus to go to school and back to my house ."
+      },
+      {
+        "system": "t5",
+        "rank": 4,
+        "sentence": "In my experience , when I did n't have a car , I used to use the bus to go to school and return to my house ."
+      },
+      {
+        "system": "t5",
+        "rank": 5,
+        "sentence": "In my experience , when I did n't have a car I used to use the bus to go to school and go back to my house ."
+      }
+    ]
+  },
+  {
+    "source": "In my opinion , the car is n't necessary when you have crashed in the street , in that moment you realized the importance of a public transport .",
+    "proposals": [
+      {
+        "system": "gector",
+        "rank": 1,
+        "sentence": "In my opinion , a car is n't necessary when you have crashed in the street , in that moment you realize the importance of public transport ."
+      },
+      {
+        "system": "bart",
+        "rank": 1,
+        "sentence": "In my opinion , the car is n't necessary when you have crashed in the street , in that moment you realized the importance of public transport ."
+      },
+      {
+        "system": "bart",
+        "rank": 2,
+        "sentence": "In my opinion , the car is n't necessary when you have crashed in the street , in that moment you realize the importance of public transport ."
+      },
+      {
+        "system": "bart",
+        "rank": 3,
+        "sentence": "In my opinion , the car is n't necessary when you have crashed in the street . In that moment you realized the importance of public transport ."
+      },
+      {
+        "system": "bart",
+        "rank": 4,
+        "sentence": "In my opinion , the car is n't necessary when you have crashed in the street , at that moment you realized the importance of public transport ."
+      },
+      {
+        "system": "bart",
+        "rank": 5,
+        "sentence": "In my opinion , a car is n't necessary when you have crashed in the street , in that moment you realized the importance of public transport ."
+      },
+      {
+        "system": "t5",
+        "rank": 1,
+        "sentence": "In my opinion , the car is n't necessary when you have crashed in the street , in that moment you realized the importance of a public transport ."
+      },
+      {
+        "system": "t5",
+        "rank": 2,
+        "sentence": "In my opinion , the car is n't necessary when you have crashed in the street , in that moment you realized the importance of a public transport ."
+      },
+      {
+        "system": "t5",
+        "rank": 3,
+        "sentence": "In my opinion , the car is n't necessary when you have crashed in the street , in that moment you realized the importance of public transport ."
+      },
+      {
+        "system": "t5",
+        "rank": 4,
+        "sentence": "In my opinion , the car is n't necessary when you have crashed in the street , in that moment you realized the importance of a public transport ."
+      },
+      {
+        "system": "t5",
+        "rank": 5,
+        "sentence": "In my opinion , the car is n't necessary when you have crashed in the street , in that moment you realized the importance of a public transport ."
+      }
+    ]
+  },
+  {
+    "source": "In India we have various types of Public transport , like Cycle , Bike , Car , Train & Flight .",
+    "proposals": [
+      {
+        "system": "gector",
+        "rank": 1,
+        "sentence": "In India we have various types of public transport , like cycles , bikes , cars , trains & flights ."
+      },
+      {
+        "system": "bart",
+        "rank": 1,
+        "sentence": "In India we have various types of public transport , like Cycle , Bike , Car , Train & Flight ."
+      },
+      {
+        "system": "bart",
+        "rank": 2,
+        "sentence": "In India we have various types of public transport , like cycle , bike , car , train & flight ."
+      },
+      {
+        "system": "bart",
+        "rank": 3,
+        "sentence": "In India we have various types of public transport , like cycle , bike , Car , Train & Flight ."
+      },
+      {
+        "system": "bart",
+        "rank": 4,
+        "sentence": "In India we have various types of public transport , like cycle , bike , car , Train & Flight ."
+      },
+      {
+        "system": "bart",
+        "rank": 5,
+        "sentence": "In India we have various types of public transport , like bicycles , bikes , cars , trains & flights ."
+      },
+      {
+        "system": "t5",
+        "rank": 1,
+        "sentence": "In India we have various types of public transport , like cycle , bike , car , train & flight ."
+      },
+      {
+        "system": "t5",
+        "rank": 2,
+        "sentence": "In India we have various types of public transport , like cycle , bike , car , train & flight ."
+      },
+      {
+        "system": "t5",
+        "rank": 3,
+        "sentence": "In India , we have various types of public transport , like cycle , bike , car , train & flight ."
+      },
+      {
+        "system": "t5",
+        "rank": 4,
+        "sentence": "In India , we have various types of public transport , like cycle , bike , car , train & flight ."
+      },
+      {
+        "system": "t5",
+        "rank": 5,
+        "sentence": "In India we have various types of public transport , like cycle , bike , car , train & flight ."
+      }
+    ]
+  },
+  {
+    "source": "Depending on the distance and duration to the desired place , mode of transport is chosen accordingly .",
+    "proposals": [
+      {
+        "system": "gector",
+        "rank": 1,
+        "sentence": "Depending on the distance and duration to the desired place , mode of transport is chosen accordingly ."
+      },
+      {
+        "system": "bart",
+        "rank": 1,
+        "sentence": "Depending on the distance and duration to the desired place , mode of transport is chosen accordingly ."
+      },
+      {
+        "system": "bart",
+        "rank": 2,
+        "sentence": "Depending on the distance and duration to the desired place , the mode of transport is chosen accordingly ."
+      },
+      {
+        "system": "bart",
+        "rank": 3,
+        "sentence": "Depending on the distance and duration to the desired place , modes of transport are chosen accordingly ."
+      },
+      {
+        "system": "bart",
+        "rank": 4,
+        "sentence": "Depending on the distance and duration to the desired place , a mode of transport is chosen accordingly ."
+      },
+      {
+        "system": "bart",
+        "rank": 5,
+        "sentence": "Depending on the distance and duration of the trip , mode of transport is chosen accordingly ."
+      },
+      {
+        "system": "t5",
+        "rank": 1,
+        "sentence": "Depending on the distance and duration to the desired place , mode of transport is chosen accordingly ."
+      },
+      {
+        "system": "t5",
+        "rank": 2,
+        "sentence": "Depending on the distance and duration to the desired place , the mode of transport is chosen accordingly ."
+      },
+      {
+        "system": "t5",
+        "rank": 3,
+        "sentence": "Depending on the distance and duration to the desired place , mode of transportation is chosen accordingly ."
+      },
+      {
+        "system": "t5",
+        "rank": 4,
+        "sentence": "Depending on the distance and duration to the desired place , a mode of transport is chosen accordingly ."
+      },
+      {
+        "system": "t5",
+        "rank": 5,
+        "sentence": "Depending on the distance and duration to the desired place , the mode of transportation is chosen accordingly ."
+      }
+    ]
+  },
+  {
+    "source": "But Generally speaking , travelling by car is much more fun when compared with other modes of transport .",
+    "proposals": [
+      {
+        "system": "gector",
+        "rank": 1,
+        "sentence": "But generally speaking , travelling by car is much more fun when compared with other modes of transport ."
+      },
+      {
+        "system": "bart",
+        "rank": 1,
+        "sentence": "But Generally speaking , travelling by car is much more fun when compared with other modes of transport ."
+      },
+      {
+        "system": "bart",
+        "rank": 2,
+        "sentence": "But Generally speaking , travelling by car is much more fun when compared to other modes of transport ."
+      },
+      {
+        "system": "bart",
+        "rank": 3,
+        "sentence": "But generally speaking , travelling by car is much more fun when compared with other modes of transport ."
+      },
+      {
+        "system": "bart",
+        "rank": 4,
+        "sentence": "But generally speaking , travelling by car is much more fun when compared to other modes of transport ."
+      },
+      {
+        "system": "bart",
+        "rank": 5,
+        "sentence": "However , Generally speaking , travelling by car is much more fun when compared with other modes of transport ."
+      },
+      {
+        "system": "t5",
+        "rank": 1,
+        "sentence": "But generally speaking , travelling by car is much more fun when compared with other modes of transport ."
+      },
+      {
+        "system": "t5",
+        "rank": 2,
+        "sentence": "But generally speaking , traveling by car is much more fun when compared with other modes of transport ."
+      },
+      {
+        "system": "t5",
+        "rank": 3,
+        "sentence": "But generally speaking , travelling by car is much more fun when compared to other modes of transport ."
+      },
+      {
+        "system": "t5",
+        "rank": 4,
+        "sentence": "But generally speaking , traveling by car is much more fun when compared to other modes of transport ."
+      },
+      {
+        "system": "t5",
+        "rank": 5,
+        "sentence": "But generally speaking , travelling by car is much more fun when compared with other modes of transport ."
+      }
+    ]
+  },
+  {
+    "source": "This reminds me of a trip that I have recently been to and the place is Agra .",
+    "proposals": [
+      {
+        "system": "gector",
+        "rank": 1,
+        "sentence": "This reminds me of a trip that I have recently been to and the place is Agra ."
+      },
+      {
+        "system": "bart",
+        "rank": 1,
+        "sentence": "This reminds me of a trip that I have recently been to and the place is Agra ."
+      },
+      {
+        "system": "bart",
+        "rank": 2,
+        "sentence": "This reminds me of a trip that I have recently been on and the place is Agra ."
+      },
+      {
+        "system": "bart",
+        "rank": 3,
+        "sentence": "This reminds me of a trip that I have recently been to and the place was Agra ."
+      },
+      {
+        "system": "bart",
+        "rank": 4,
+        "sentence": "This reminds me of a trip that I have recently been on and the place was Agra ."
+      },
+      {
+        "system": "bart",
+        "rank": 5,
+        "sentence": "This reminds me of a trip that I had recently been to and the place was Agra ."
+      },
+      {
+        "system": "t5",
+        "rank": 1,
+        "sentence": "This reminds me of a trip that I have recently been to and the place is Agra ."
+      },
+      {
+        "system": "t5",
+        "rank": 2,
+        "sentence": "This reminds me of a trip that I have recently been to and the place is Agra ."
+      },
+      {
+        "system": "t5",
+        "rank": 3,
+        "sentence": "This reminds me of a trip that I have recently been to , and the place is Agra ."
+      },
+      {
+        "system": "t5",
+        "rank": 4,
+        "sentence": "This reminds me of a trip that I have recently been to , and the place is Agra ."
+      },
+      {
+        "system": "t5",
+        "rank": 5,
+        "sentence": "This reminds me of a trip that I have recently been on and the place is Agra ."
+      }
+    ]
+  },
+  {
+    "source": "It takes around 6 hours by National highway to go from Delhi to Agra .",
+    "proposals": [
+      {
+        "system": "gector",
+        "rank": 1,
+        "sentence": "It takes around 6 hours by National highway to go from Delhi to Agra ."
+      },
+      {
+        "system": "bart",
+        "rank": 1,
+        "sentence": "It takes around 6 hours by National highway to go from Delhi to Agra ."
+      },
+      {
+        "system": "bart",
+        "rank": 2,
+        "sentence": "It takes around 6 hours by National highway to get from Delhi to Agra ."
+      },
+      {
+        "system": "bart",
+        "rank": 3,
+        "sentence": "It takes around 6 hours by national highway to go from Delhi to Agra ."
+      },
+      {
+        "system": "bart",
+        "rank": 4,
+        "sentence": "It takes around 6 hours by National Highway to go from Delhi to Agra ."
+      },
+      {
+        "system": "bart",
+        "rank": 5,
+        "sentence": "It takes around 6 hours on the National highway to go from Delhi to Agra ."
+      },
+      {
+        "system": "t5",
+        "rank": 1,
+        "sentence": "It takes around 6 hours by National Highway to go from Delhi to Agra ."
+      },
+      {
+        "system": "t5",
+        "rank": 2,
+        "sentence": "It takes around 6 hours by National highway to go from Delhi to Agra ."
+      },
+      {
+        "system": "t5",
+        "rank": 3,
+        "sentence": "It takes around 6 hours by national highway to go from Delhi to Agra ."
+      },
+      {
+        "system": "t5",
+        "rank": 4,
+        "sentence": "It takes around 6 hours on the National Highway to go from Delhi to Agra ."
+      },
+      {
+        "system": "t5",
+        "rank": 5,
+        "sentence": "It takes around 6 hours by National Highway to go from Delhi to Agra ."
+      }
+    ]
+  },
+  {
+    "source": "We have stopped at hotels for having food and just in case if any of us feels hungry , we have purchased some snacks just before the trip .",
+    "proposals": [
+      {
+        "system": "gector",
+        "rank": 1,
+        "sentence": "We have stopped at hotels to have food and , just in case if any of us feels hungry , we have purchased some snacks just before the trip ."
+      },
+      {
+        "system": "bart",
+        "rank": 1,
+        "sentence": "We have stopped at hotels to have food and just in case any of us feels hungry , we have purchased some snacks just before the trip ."
+      },
+      {
+        "system": "bart",
+        "rank": 2,
+        "sentence": "We have stopped at hotels to have food and just in case any of us feel hungry , we have purchased some snacks just before the trip ."
+      },
+      {
+        "system": "bart",
+        "rank": 3,
+        "sentence": "We have stopped at hotels for food and just in case any of us feels hungry , we have purchased some snacks just before the trip ."
+      },
+      {
+        "system": "bart",
+        "rank": 4,
+        "sentence": "We have stopped at hotels for food and just in case any of us feel hungry , we have purchased some snacks just before the trip ."
+      },
+      {
+        "system": "bart",
+        "rank": 5,
+        "sentence": "We stopped at hotels to have food and just in case any of us felt hungry , we purchased some snacks just before the trip ."
+      },
+      {
+        "system": "t5",
+        "rank": 1,
+        "sentence": "We have stopped at hotels for food and just in case any of us feels hungry , we have purchased some snacks just before the trip ."
+      },
+      {
+        "system": "t5",
+        "rank": 2,
+        "sentence": "We have stopped at hotels for having food and just in case any of us feels hungry , we have purchased some snacks just before the trip ."
+      },
+      {
+        "system": "t5",
+        "rank": 3,
+        "sentence": "We have stopped at hotels for food and just in case any of us felt hungry , we have purchased some snacks just before the trip ."
+      },
+      {
+        "system": "t5",
+        "rank": 4,
+        "sentence": "We have stopped at hotels for food and just in case if any of us feels hungry , we have purchased some snacks just before the trip ."
+      },
+      {
+        "system": "t5",
+        "rank": 5,
+        "sentence": "We have stopped at hotels for having food and just in case any of us felt hungry , we have purchased some snacks just before the trip ."
+      }
+    ]
+  },
+  {
+    "source": "Since , we have the option to wait anytime we want to when we travel by car ( which is impossible when travelling by train & Flight ) .",
+    "proposals": [
+      {
+        "system": "gector",
+        "rank": 1,
+        "sentence": "Since , we have the option to wait anytime we want to when we travel by car ( which is impossible when travelling by train & flight ) ."
+      },
+      {
+        "system": "bart",
+        "rank": 1,
+        "sentence": "Since we have the option to wait anytime we want to when we travel by car ( which is impossible when travelling by train & flight ) ."
+      },
+      {
+        "system": "bart",
+        "rank": 2,
+        "sentence": "Since , we have the option to wait anytime we want when we travel by car ( which is impossible when travelling by train & flight ) ."
+      },
+      {
+        "system": "bart",
+        "rank": 3,
+        "sentence": "Since we have the option to wait anytime we want when we travel by car ( which is impossible when travelling by train & flight ) ."
+      },
+      {
+        "system": "bart",
+        "rank": 4,
+        "sentence": "Since we have the option to wait anytime we want to when we travel by car ( which is impossible when travelling by train & Flight ) ."
+      },
+      {
+        "system": "bart",
+        "rank": 5,
+        "sentence": "Since , we have the option to wait anytime we want when we travel by car ( which is impossible when travelling by train & Flight ) ."
+      },
+      {
+        "system": "t5",
+        "rank": 1,
+        "sentence": "Since we have the option to wait anytime we want to when we travel by car ( which is impossible when travelling by train & flight ) ."
+      },
+      {
+        "system": "t5",
+        "rank": 2,
+        "sentence": "Since we have the option to wait whenever we want to when we travel by car ( which is impossible when travelling by train & flight ) ."
+      },
+      {
+        "system": "t5",
+        "rank": 3,
+        "sentence": "Since we have the option to wait anytime we want to when we travel by car ( which is impossible when travelling by train & Flight ) ."
+      },
+      {
+        "system": "t5",
+        "rank": 4,
+        "sentence": "Since we have the option to wait whenever we want to when we travel by car ( which is impossible when travelling by train & Flight ) ."
+      },
+      {
+        "system": "t5",
+        "rank": 5,
+        "sentence": "Since , we have the option to wait anytime we want to when we travel by car ( which is impossible when travelling by train & flight ) ."
+      }
+    ]
+  },
+  {
+    "source": "In addition to it , we can also take a comfortable short nap on the back seat and wake up fresh .",
+    "proposals": [
+      {
+        "system": "gector",
+        "rank": 1,
+        "sentence": "In addition to that , we can also take a comfortable short nap on the back seat and wake up fresh ."
+      },
+      {
+        "system": "bart",
+        "rank": 1,
+        "sentence": "In addition to that , we can also take a comfortable short nap in the back seat and wake up fresh ."
+      },
+      {
+        "system": "bart",
+        "rank": 2,
+        "sentence": "In addition to it , we can also take a comfortable short nap in the back seat and wake up fresh ."
+      },
+      {
+        "system": "bart",
+        "rank": 3,
+        "sentence": "In addition to that , we can also take a comfortable short nap on the back seat and wake up fresh ."
+      },
+      {
+        "system": "bart",
+        "rank": 4,
+        "sentence": "In addition to this , we can also take a comfortable short nap in the back seat and wake up fresh ."
+      },
+      {
+        "system": "bart",
+        "rank": 5,
+        "sentence": "In addition to it , we can also take a comfortable short nap on the back seat and wake up fresh ."
+      },
+      {
+        "system": "t5",
+        "rank": 1,
+        "sentence": "In addition to it , we can also take a comfortable short nap on the back seat and wake up fresh ."
+      },
+      {
+        "system": "t5",
+        "rank": 2,
+        "sentence": "In addition , we can also take a comfortable short nap on the back seat and wake up fresh ."
+      },
+      {
+        "system": "t5",
+        "rank": 3,
+        "sentence": "In addition to it , we can also take a comfortable short nap on the back seat and wake up fresh ."
+      },
+      {
+        "system": "t5",
+        "rank": 4,
+        "sentence": "In addition to it , we can also take a comfortable short nap on the back seat and wake up fresh ."
+      },
+      {
+        "system": "t5",
+        "rank": 5,
+        "sentence": "In addition to it we can also take a comfortable short nap on the back seat and wake up fresh ."
+      }
+    ]
+  },
+  {
+    "source": "Due to the above mentioned reasons , I am going to conclude that travelling by car is much more convenient .",
+    "proposals": [
+      {
+        "system": "gector",
+        "rank": 1,
+        "sentence": "Due For the above mentioned reasons , I am going to conclude that travelling by car is much more convenient ."
+      },
+      {
+        "system": "bart",
+        "rank": 1,
+        "sentence": "Due to the above mentioned reasons , I am going to conclude that travelling by car is much more convenient ."
+      },
+      {
+        "system": "bart",
+        "rank": 2,
+        "sentence": "For the above mentioned reasons , I am going to conclude that travelling by car is much more convenient ."
+      },
+      {
+        "system": "bart",
+        "rank": 3,
+        "sentence": "Because of the above mentioned reasons , I am going to conclude that travelling by car is much more convenient ."
+      },
+      {
+        "system": "bart",
+        "rank": 4,
+        "sentence": "Due to the above mentioned reasons , I am going to conclude that traveling by car is much more convenient ."
+      },
+      {
+        "system": "bart",
+        "rank": 5,
+        "sentence": "due to the above mentioned reasons , I am going to conclude that travelling by car is much more convenient ."
+      },
+      {
+        "system": "t5",
+        "rank": 1,
+        "sentence": "Due to the above mentioned reasons , I am going to conclude that travelling by car is much more convenient ."
+      },
+      {
+        "system": "t5",
+        "rank": 2,
+        "sentence": "Due to the above mentioned reasons , I am going to conclude that traveling by car is much more convenient ."
+      },
+      {
+        "system": "t5",
+        "rank": 3,
+        "sentence": "Due to the above mentioned reasons , I am going to conclude that travelling by car is much more convenient ."
+      },
+      {
+        "system": "t5",
+        "rank": 4,
+        "sentence": "Due to the above mentioned reasons , I am going to conclude that traveling by car is much more convenient ."
+      },
+      {
+        "system": "t5",
+        "rank": 5,
+        "sentence": "Due to the above mentioned reasons , I am going to conclude that travelling by car is much more convenient ."
+      }
+    ]
+  },
+  {
+    "source": "My name is Sarah .",
+    "proposals": [
+      {
+        "system": "gector",
+        "rank": 1,
+        "sentence": "My name is Sarah ."
+      },
+      {
+        "system": "bart",
+        "rank": 1,
+        "sentence": "My name is Sarah ."
+      },
+      {
+        "system": "bart",
+        "rank": 2,
+        "sentence": "My name is Sarah ,"
+      },
+      {
+        "system": "bart",
+        "rank": 3,
+        "sentence": "My name isSarah ."
+      },
+      {
+        "system": "bart",
+        "rank": 4,
+        "sentence": "My name 's Sarah ."
+      },
+      {
+        "system": "bart",
+        "rank": 5,
+        "sentence": "My name is Sarah , and"
+      },
+      {
+        "system": "t5",
+        "rank": 1,
+        "sentence": "My name is Sarah ."
+      },
+      {
+        "system": "t5",
+        "rank": 2,
+        "sentence": "My name is Sarah ."
+      },
+      {
+        "system": "t5",
+        "rank": 3,
+        "sentence": "My name is Sarah !"
+      },
+      {
+        "system": "t5",
+        "rank": 4,
+        "sentence": "My name is Sarah and I am a nurse ."
+      },
+      {
+        "system": "t5",
+        "rank": 5,
+        "sentence": "My name is Sarah and I am a doctor ."
+      }
+    ]
+  },
+  {
+    "source": "I am 17 years old .",
+    "proposals": [
+      {
+        "system": "gector",
+        "rank": 1,
+        "sentence": "I am 17 years old ."
+      },
+      {
+        "system": "bart",
+        "rank": 1,
+        "sentence": "I am 17 years old ."
+      },
+      {
+        "system": "bart",
+        "rank": 2,
+        "sentence": "I am 17 years old ,"
+      },
+      {
+        "system": "bart",
+        "rank": 3,
+        "sentence": "I 'm 17 years old ."
+      },
+      {
+        "system": "bart",
+        "rank": 4,
+        "sentence": "I am 17 years old now ."
+      },
+      {
+        "system": "bart",
+        "rank": 5,
+        "sentence": "I am 17 years old"
+      },
+      {
+        "system": "t5",
+        "rank": 1,
+        "sentence": "I am 17 years old ."
+      },
+      {
+        "system": "t5",
+        "rank": 2,
+        "sentence": "I am 17 years old ."
+      },
+      {
+        "system": "t5",
+        "rank": 3,
+        "sentence": "I 'm 17 years old ."
+      },
+      {
+        "system": "t5",
+        "rank": 4,
+        "sentence": "I am 17 years old !"
+      },
+      {
+        "system": "t5",
+        "rank": 5,
+        "sentence": "I am seventeen years old ."
+      }
+    ]
+  },
+  {
+    "source": "I am looking forward to join you in this year summer camps .",
+    "proposals": [
+      {
+        "system": "gector",
+        "rank": 1,
+        "sentence": "I am looking forward to joining you in this year 's summer camps ."
+      },
+      {
+        "system": "bart",
+        "rank": 1,
+        "sentence": "I am looking forward to joining you in this year 's summer camps ."
+      },
+      {
+        "system": "bart",
+        "rank": 2,
+        "sentence": "I am looking forward to joining you at this year 's summer camps ."
+      },
+      {
+        "system": "bart",
+        "rank": 3,
+        "sentence": "I am looking forward to joining you for this year 's summer camps ."
+      },
+      {
+        "system": "bart",
+        "rank": 4,
+        "sentence": "I am looking forward to joining you in the summer camps this year ."
+      },
+      {
+        "system": "bart",
+        "rank": 5,
+        "sentence": "I am looking forward to join you in this year 's summer camps ."
+      },
+      {
+        "system": "t5",
+        "rank": 1,
+        "sentence": "I am looking forward to join you in this year 's summer camps ."
+      },
+      {
+        "system": "t5",
+        "rank": 2,
+        "sentence": "I am looking forward to joining you in this year 's summer camps ."
+      },
+      {
+        "system": "t5",
+        "rank": 3,
+        "sentence": "I am looking forward to join you in this year 's summer camps ."
+      },
+      {
+        "system": "t5",
+        "rank": 4,
+        "sentence": "I am looking forward to join you in this year summer camps ."
+      },
+      {
+        "system": "t5",
+        "rank": 5,
+        "sentence": "I am looking forward to joining you in this year 's summer camps ."
+      }
+    ]
+  },
+  {
+    "source": "I love children , and I enjoy looking after them . also , I organized many sports activities before in my school .",
+    "proposals": [
+      {
+        "system": "gector",
+        "rank": 1,
+        "sentence": "I love children , and I enjoy looking after them . Also , I organized many sports activities before in my school ."
+      },
+      {
+        "system": "bart",
+        "rank": 1,
+        "sentence": "I love children , and I enjoy looking after them . Also , I organized many sports activities before in my school ."
+      },
+      {
+        "system": "bart",
+        "rank": 2,
+        "sentence": "I love children , and I enjoy looking after them . also , I organized many sports activities before in my school ."
+      },
+      {
+        "system": "bart",
+        "rank": 3,
+        "sentence": "I love children , and I enjoy looking after them . I also organized many sports activities before in my school ."
+      },
+      {
+        "system": "bart",
+        "rank": 4,
+        "sentence": "I love children , and I enjoy looking after them . Also , I organized many sports activities in my school ."
+      },
+      {
+        "system": "bart",
+        "rank": 5,
+        "sentence": "I love children and I enjoy looking after them . Also , I organized many sports activities before in my school ."
+      },
+      {
+        "system": "t5",
+        "rank": 1,
+        "sentence": "I love children and I enjoy looking after them . also , I organized many sports activities before in my school ."
+      },
+      {
+        "system": "t5",
+        "rank": 2,
+        "sentence": "I love children and I enjoy looking after them . Also , I organized many sports activities before in my school ."
+      },
+      {
+        "system": "t5",
+        "rank": 3,
+        "sentence": "I love children , and I enjoy looking after them . Also , I organized many sports activities before in my school ."
+      },
+      {
+        "system": "t5",
+        "rank": 4,
+        "sentence": "I love children , and I enjoy looking after them . also , I organized many sports activities before in my school ."
+      },
+      {
+        "system": "t5",
+        "rank": 5,
+        "sentence": "I love children and I enjoy looking after them . also , I organized many sports activities before in my school ."
+      }
+    ]
+  },
+  {
+    "source": "In addition to that , i enjoy cooking .",
+    "proposals": [
+      {
+        "system": "gector",
+        "rank": 1,
+        "sentence": "In addition to that , I enjoy cooking ."
+      },
+      {
+        "system": "bart",
+        "rank": 1,
+        "sentence": "In addition to that , I enjoy cooking ."
+      },
+      {
+        "system": "bart",
+        "rank": 2,
+        "sentence": "In addition , I enjoy cooking ."
+      },
+      {
+        "system": "bart",
+        "rank": 3,
+        "sentence": "In addition to that , I enjoyed cooking ."
+      },
+      {
+        "system": "bart",
+        "rank": 4,
+        "sentence": "In addition to this , I enjoy cooking ."
+      },
+      {
+        "system": "bart",
+        "rank": 5,
+        "sentence": "In addition to that , I like cooking ."
+      },
+      {
+        "system": "t5",
+        "rank": 1,
+        "sentence": "In addition to that , I enjoy cooking ."
+      },
+      {
+        "system": "t5",
+        "rank": 2,
+        "sentence": "In addition to that , I enjoy cooking ."
+      },
+      {
+        "system": "t5",
+        "rank": 3,
+        "sentence": "In addition , I enjoy cooking ."
+      },
+      {
+        "system": "t5",
+        "rank": 4,
+        "sentence": "In addition to that , I enjoy cooking ."
+      },
+      {
+        "system": "t5",
+        "rank": 5,
+        "sentence": "In addition to that I enjoy cooking ."
+      }
+    ]
+  },
+  {
+    "source": "My family think that my cook is amazing .",
+    "proposals": [
+      {
+        "system": "gector",
+        "rank": 1,
+        "sentence": "My family think that my cooking is amazing ."
+      },
+      {
+        "system": "bart",
+        "rank": 1,
+        "sentence": "My family thinks that my cooking is amazing ."
+      },
+      {
+        "system": "bart",
+        "rank": 2,
+        "sentence": "My family think that my cooking is amazing ."
+      },
+      {
+        "system": "bart",
+        "rank": 3,
+        "sentence": "My family thinks that my cook is amazing ."
+      },
+      {
+        "system": "bart",
+        "rank": 4,
+        "sentence": "My family think that my cook is amazing ."
+      },
+      {
+        "system": "bart",
+        "rank": 5,
+        "sentence": "My family thinks my cooking is amazing ."
+      },
+      {
+        "system": "t5",
+        "rank": 1,
+        "sentence": "My family thinks that my cook is amazing ."
+      },
+      {
+        "system": "t5",
+        "rank": 2,
+        "sentence": "My family think that my cook is amazing ."
+      },
+      {
+        "system": "t5",
+        "rank": 3,
+        "sentence": "My family thinks that my cook is amazing !"
+      },
+      {
+        "system": "t5",
+        "rank": 4,
+        "sentence": "My family thinks that my cooking is amazing ."
+      },
+      {
+        "system": "t5",
+        "rank": 5,
+        "sentence": "My family thinks that my chef is amazing ."
+      }
+    ]
+  },
+  {
+    "source": "I hope that you give my the chance to join you .",
+    "proposals": [
+      {
+        "system": "gector",
+        "rank": 1,
+        "sentence": "I hope that you give me the chance to join you ."
+      },
+      {
+        "system": "bart",
+        "rank": 1,
+        "sentence": "I hope that you give me the chance to join you ."
+      },
+      {
+        "system": "bart",
+        "rank": 2,
+        "sentence": "I hope that you will give me the chance to join you ."
+      },
+      {
+        "system": "bart",
+        "rank": 3,
+        "sentence": "I hope that you can give me the chance to join you ."
+      },
+      {
+        "system": "bart",
+        "rank": 4,
+        "sentence": "I hope that you give me a chance to join you ."
+      },
+      {
+        "system": "bart",
+        "rank": 5,
+        "sentence": "I hope that you gave me the chance to join you ."
+      },
+      {
+        "system": "t5",
+        "rank": 1,
+        "sentence": "I hope that you give me the chance to join you ."
+      },
+      {
+        "system": "t5",
+        "rank": 2,
+        "sentence": "I hope that you give me the chance to join you ."
+      },
+      {
+        "system": "t5",
+        "rank": 3,
+        "sentence": "I hope that you give me a chance to join you ."
+      },
+      {
+        "system": "t5",
+        "rank": 4,
+        "sentence": "I hope that you give my chance to join you ."
+      },
+      {
+        "system": "t5",
+        "rank": 5,
+        "sentence": "I hope that you give me the chance to join you !"
+      }
+    ]
+  },
+  {
+    "source": "Thanks",
+    "proposals": [
+      {
+        "system": "gector",
+        "rank": 1,
+        "sentence": "Thanks"
+      },
+      {
+        "system": "bart",
+        "rank": 1,
+        "sentence": "Thanks ."
+      },
+      {
+        "system": "bart",
+        "rank": 2,
+        "sentence": "Thanks"
+      },
+      {
+        "system": "bart",
+        "rank": 3,
+        "sentence": "Thanks !"
+      },
+      {
+        "system": "bart",
+        "rank": 4,
+        "sentence": "Thank you ."
+      },
+      {
+        "system": "bart",
+        "rank": 5,
+        "sentence": "Thank you"
+      },
+      {
+        "system": "t5",
+        "rank": 1,
+        "sentence": "Thanks for your kind words ."
+      },
+      {
+        "system": "t5",
+        "rank": 2,
+        "sentence": "Thanks for the comment ."
+      },
+      {
+        "system": "t5",
+        "rank": 3,
+        "sentence": "Thanks for your comment ."
+      },
+      {
+        "system": "t5",
+        "rank": 4,
+        "sentence": "Thanks for your time ."
+      },
+      {
+        "system": "t5",
+        "rank": 5,
+        "sentence": "Thanks for your kind words !"
+      }
+    ]
+  },
+  {
+    "source": "My favourite sport is volleyball because I love plays with my friends .",
+    "proposals": [
+      {
+        "system": "gector",
+        "rank": 1,
+        "sentence": "My favourite sport is volleyball because I love to play with my friends ."
+      },
+      {
+        "system": "bart",
+        "rank": 1,
+        "sentence": "My favourite sport is volleyball because I love playing with my friends ."
+      },
+      {
+        "system": "bart",
+        "rank": 2,
+        "sentence": "My favourite sport is volleyball because I love to play with my friends ."
+      },
+      {
+        "system": "bart",
+        "rank": 3,
+        "sentence": "My favourite sport is volleyball because I love to play it with my friends ."
+      },
+      {
+        "system": "bart",
+        "rank": 4,
+        "sentence": "My favourite sport is volleyball because I love playing it with my friends ."
+      },
+      {
+        "system": "bart",
+        "rank": 5,
+        "sentence": "My favourite sport is volleyball , because I love playing with my friends ."
+      },
+      {
+        "system": "t5",
+        "rank": 1,
+        "sentence": "My favourite sport is volleyball because I love playing with my friends ."
+      },
+      {
+        "system": "t5",
+        "rank": 2,
+        "sentence": "My favourite sport is volleyball because I love plays with my friends ."
+      },
+      {
+        "system": "t5",
+        "rank": 3,
+        "sentence": "My favourite sport is volleyball , because I love playing with my friends ."
+      },
+      {
+        "system": "t5",
+        "rank": 4,
+        "sentence": "My favourite sport is volleyball because I love playing with my friends ."
+      },
+      {
+        "system": "t5",
+        "rank": 5,
+        "sentence": "My favourite sport is volleyball because I love to play with my friends ."
+      }
+    ]
+  },
+  {
+    "source": "Volleyball is a sport play every place , when I travel on the beach I like plays with my sister in the sand and after we are going to the sea .",
+    "proposals": [
+      {
+        "system": "gector",
+        "rank": 1,
+        "sentence": "Volleyball is a sport played every place . When I travel on the beach I like play with my sister in the sand and after we go to the sea ."
+      },
+      {
+        "system": "bart",
+        "rank": 1,
+        "sentence": "Volleyball is a sport played in every place . When I travel on the beach I like to play with my sister in the sand and after we are going to the sea ."
+      },
+      {
+        "system": "bart",
+        "rank": 2,
+        "sentence": "Volleyball is a sport played in every place . When I travel on the beach I like to play with my sister in the sand and after we go to the sea ."
+      },
+      {
+        "system": "bart",
+        "rank": 3,
+        "sentence": "Volleyball is a sport played in every place . When I travel on the beach I like playing with my sister in the sand and after we are going to the sea ."
+      },
+      {
+        "system": "bart",
+        "rank": 4,
+        "sentence": "Volleyball is a sport played in every place , when I travel on the beach I like to play with my sister in the sand and after we are going to the sea ."
+      },
+      {
+        "system": "bart",
+        "rank": 5,
+        "sentence": "Volleyball is a sport played every place . When I travel on the beach I like to play with my sister in the sand and after we are going to the sea ."
+      },
+      {
+        "system": "t5",
+        "rank": 1,
+        "sentence": "Volleyball is a sport play every place , when I travel on the beach I like playing with my sister in the sand and after we are going to the sea ."
+      },
+      {
+        "system": "t5",
+        "rank": 2,
+        "sentence": "Volleyball is a sport that I play every place , when I travel on the beach I like playing with my sister in the sand and after we are going to the sea ."
+      },
+      {
+        "system": "t5",
+        "rank": 3,
+        "sentence": "Volleyball is a sport play every place , when I travel on the beach I like playing with my sister in the sand and after we are going to the sea ."
+      },
+      {
+        "system": "t5",
+        "rank": 4,
+        "sentence": "Volleyball is a sport that I play every place , when I travel on the beach I like playing with my sister in the sand and after we are going to the sea ."
+      },
+      {
+        "system": "t5",
+        "rank": 5,
+        "sentence": "Volleyball is a sport that I play every place . When I travel on the beach I like playing with my sister in the sand and after we are going to the sea ."
+      }
+    ]
+  }
+]

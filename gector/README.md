@@ -10,7 +10,8 @@ Corrects sentences with Grammarly's official pretrained GECToR, RoBERTa encoder 
 | `models/roberta_1_gectorv2.th` | Official weights (490 MB) | no |
 | `models/output_vocabulary/` | Official tag vocabulary (5,000 tags) and detection tags | no |
 | `models/verb-form-vocab.txt` | Verb forms used by `$TRANSFORM_VERB_*` tags | no |
-| `outputs/` | Corrected sentences and ERRANT files | no |
+
+Corrected sentences go to `outputs/gector/` at the repository root, with the other systems.
 
 ## Install
 
@@ -25,9 +26,10 @@ PYTHON=python3.12 bash gector/setup.sh
 From the repository root:
 
 ```bash
-gector/.venv/bin/python gector/predict.py --input data/dev.src --output gector/outputs/dev.pred
-gector/.venv/bin/python gector/predict.py --input data/test.conll14.src --output gector/outputs/conll14.pred
-gector/.venv/bin/python gector/predict.py --input data/test.bea19.src --output gector/outputs/bea19.pred
+gector/.venv/bin/python gector/predict.py --input data/dev.src --output outputs/gector/dev.tgt
+gector/.venv/bin/python gector/predict.py --input outputs/dev30.src --output outputs/gector/dev30.tgt
+gector/.venv/bin/python gector/predict.py --input data/test.conll14.src --output outputs/gector/conll14.tgt
+gector/.venv/bin/python gector/predict.py --input data/test.bea19.src --output outputs/gector/bea19.tgt
 ```
 
 Defaults are Grammarly's recommended inference settings for this model: `--keep_confidence 0.2` (bias towards `$KEEP`, so fewer but more precise edits) and `--min_error_prob 0.5` (skip edits and sentences the detector is unsure about), with up to 5 correction rounds (`--n_iteration`). The device is picked automatically (CUDA, then Apple MPS, then CPU). Sentences longer than 80 subwords are tagged up to that point and the rest is copied unchanged. The full dev set takes about 5 minutes on an Apple M-series GPU.
@@ -38,9 +40,9 @@ This folder deliberately has no `__init__.py`: as a plain directory it never sha
 
 ## Results
 
-ERRANT on the W&I+LOCNESS dev set (`gector/outputs/dev.pred`):
+ERRANT on the W&I+LOCNESS dev set:
 
-| Sentences | Precision | Recall | F₀.₅ |
-| --- | ---: | ---: | ---: |
-| All 4,384 | 63.8 | 35.0 | 54.8 |
-| First 30 (`dev30.pred`) | 71.4 | 34.3 | 58.7 |
+| Sentences | Output | Precision | Recall | F₀.₅ |
+| --- | --- | ---: | ---: | ---: |
+| All 4,384 | `outputs/gector/dev.tgt` | 63.8 | 35.0 | 54.8 |
+| First 30 | `outputs/gector/dev30.tgt` | 71.4 | 34.3 | 58.7 |

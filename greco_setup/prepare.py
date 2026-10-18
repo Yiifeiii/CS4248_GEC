@@ -3,21 +3,22 @@
 build    source file + one prediction file per system  ->  combine.py input JSON
 collect  combine.py output JSON                         ->  one best sentence per line
 
-A prediction file is plain text with k consecutive lines per source sentence,
-best hypothesis first (k = 1 for GECToR, k = 5 for BART/T5 top-5). k is inferred
-from the line count. All files must use the same tokenization as the source.
+A prediction file (outputs/<system>/<split>.tgt) is plain text with k consecutive
+lines per source sentence, best hypothesis first (k = 1 for GECToR, k = 5 for
+BART/T5 top-5). k is inferred from the line count. All files must use the same
+tokenization as the source.
 
-    python -m greco_setup.prepare build --source data/dev.src \
-        --system gector=gector/outputs/dev.pred \
-        --system bart=outputs/bart/dev.top5 \
-        --system t5=outputs/t5/dev.top5 \
-        --k 3 --output outputs/greco/dev.input.json
+    python -m greco_setup.prepare build --source outputs/dev30.src \
+        --system gector=outputs/gector/dev30.tgt \
+        --system bart=outputs/bart/dev30.beam.tgt \
+        --system t5=outputs/t5/dev30.tgt \
+        --k 3 --output outputs/greco/dev30.input.json
 
-    python -m greco_setup.combine --input outputs/greco/dev.input.json \
-        --output outputs/greco/dev.output.json --device cuda
+    python -m greco_setup.combine --input outputs/greco/dev30.input.json \
+        --output outputs/greco/dev30.output.json --device cuda
 
-    python -m greco_setup.prepare collect --input outputs/greco/dev.output.json \
-        --output outputs/greco/dev.pred
+    python -m greco_setup.prepare collect --input outputs/greco/dev30.output.json \
+        --output outputs/greco/dev30.tgt
 """
 
 import argparse

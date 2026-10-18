@@ -11,7 +11,7 @@ class PrepareTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             top2 = Path(tmp, "bart.top2")
             top2.write_text("He eats apple .\nHe eat an apple .\nI am fine .\nI am fine .\n")
-            one = Path(tmp, "gector.pred")
+            one = Path(tmp, "gector.tgt")
             one.write_text("He eats an apple .\n\n")
             sources = ["He eat apple .", "I is fine ."]
             systems = [read_system(f"bart={top2}", 2), read_system(f"gector={one}", 2)]
