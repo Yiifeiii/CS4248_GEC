@@ -30,23 +30,29 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output-dir', type=Path,
                         help='default: outputs/greco/bart-t5-dev30 (or bart-t5-gector-dev30)')
+    parser.add_argument('--sentences', type=int, default=30,
+                        help='number of initial development sentences (30 or 80)')
     parser.add_argument('--with-gector', action='store_true', help='add GECToR 1-best proposals')
     parser.add_argument('--beam-size', type=int, default=16)
     parser.add_argument('--batch-size', type=int, default=8)
     args = parser.parse_args()
     systems = ['bart', 't5'] + (['gector'] if args.with_gector else [])
+    if args.sentences not in (30, 80):
+        raise ValueError('--sentences must be 30 or 80')
+    suffix = f'dev{args.sentences}'
     if args.output_dir is None:
-        args.output_dir = Path('outputs/greco/' + '-'.join(systems) + '-dev30')
-    sources = Path('data/dev.src').read_text(encoding='utf-8').splitlines()[:30]
-    paths = {'bart': 'outputs/bart/dev30.beam.tgt', 't5': 'outputs/t5/dev30.tgt',
-             'gector': 'outputs/gector/dev30.tgt'}
+        args.output_dir = Path('outputs/greco/' + '-'.join(systems) + '-' + suffix)
+    sources = Path('data/dev.src').read_text(encoding='utf-8').splitlines()[:args.sentences]
+    paths = {'bart': f'outputs/bart/{suffix}.beam.tgt', 't5': f'outputs/t5/{suffix}.tgt',
+             'gector': f'outputs/gector/{suffix}.tgt'}
     preds = {s: Path(paths[s]).read_text(encoding='utf-8').splitlines() for s in systems}
-    expected = {'bart': 150, 't5': 150, 'gector': 30}
-    if len(sources) != 30 or any(len(preds[s]) != expected[s] for s in systems):
-        raise ValueError('Expected 5 BART/T5 lines and 1 GECToR line for each of the first 30 dev sentences')
+    expected = {'bart': 5 * args.sentences, 't5': 5 * args.sentences,
+                'gector': args.sentences}
+    if len(sources) != args.sentences or any(len(preds[s]) != expected[s] for s in systems):
+        raise ValueError(f'Expected 5 BART/T5 lines and 1 GECToR line for each of the first {args.sentences} dev sentences')
     args.output_dir.mkdir(parents=True, exist_ok=True)
     manifest = {
-        'source': 'data/dev.src', 'sentence_range': [1, 30],
+        'source': 'data/dev.src', 'sentence_range': [1, args.sentences],
         **{s: paths[s] for s in systems}, 'systems': systems,
         'k': [1, 3, 5], 'beam_size': args.beam_size, 'batch_size': args.batch_size,
         'device': 'cpu', 'normalization': 'Basic punctuation and contraction spacing; preserves punctuation runs',
@@ -73,7 +79,7 @@ def main():
         for i, record in enumerate(records, 1):
             results.append(combine(*read_record(record), scorer=scorer,
                                    beam_size=args.beam_size, batch_size=args.batch_size))
-            print(f'k={k}: {i}/30', flush=True)
+            print(f'k={k}: {i}/{args.sentences}', flush=True)
         folder = args.output_dir / f'k{k}'
         (folder / 'results.json').write_text(json.dumps(results, indent=2, ensure_ascii=False) + '\n')
         (folder / 'greco.pred').write_text('\n'.join(r['best_sentence'] for r in results) + '\n')
