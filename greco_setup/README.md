@@ -97,18 +97,33 @@ python3 -m unittest discover -s tests -v
 
 Upstream GRECO code has its own GPL license in `external/greco/LICENSE.txt`.
 
-## BART/T5 dev30 pilot
+## BART/T5/GECToR dev30 pilot
 
 Run `python -m greco_setup.run_pilot` in the GRECO environment from the repo root.
-This combines the saved BART beam and T5 predictions for the first 30 W&I+LOCNESS
-development sentences at k=1, 3, and 5. Each run uses the same beam size (16),
-batch size (8), and CPU scorer. GECToR and gold evaluation are excluded.
+This combines the saved BART beam (`outputs/bart/dev30.beam.tgt`) and T5
+(`outputs/t5/dev30.tgt`) predictions for the first 30 W&I+LOCNESS development
+sentences at k=1, 3, and 5. Add `--with-gector` to also pool GECToR's 1-best
+correction (`outputs/gector/dev30.tgt`) at every k. Each run uses the same beam
+size (16), batch size (8), and CPU scorer. Gold evaluation is a separate step.
 
-Outputs go to `outputs/greco/bart-t5-dev30/`: `manifest.json` records settings,
+Outputs go to `outputs/greco/bart-t5-dev30/` (or `bart-t5-gector-dev30/` with
+`--with-gector`): `manifest.json` records settings,
 and each `k1/`, `k3/`, `k5/` folder contains `input.json`, `results.json`, and
 `greco.pred`. Basic punctuation/contraction spacing is normalized before the
 token-level edit alignment; this is not ERRANT alignment. Raw GRECO scores are
 quality estimates, not F0.5 measurements.
+
+Score a pilot with the M² scorer under Python 3.10, passing its folder. The
+folder needs the 30 gold records, which the BART/T5 pilot already has:
+
+```bash
+cp outputs/greco/bart-t5-dev30/gold.m2 outputs/greco/bart-t5-gector-dev30/
+python -m greco_setup.evaluate_pilot --output-dir outputs/greco/bart-t5-gector-dev30
+```
+
+The existing `bart-t5-dev30` results were produced before the outputs were
+unified. Rerunning reproduces the BART input exactly; 2 of 150 T5 lines differ
+because spaCy now separates a `?"` the old normalization left joined.
 
 Commit the runner, documentation, and pilot outputs for reproducibility.
 The output directory is not ignored by Git; prediction files, input records,

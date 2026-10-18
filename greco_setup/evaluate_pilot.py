@@ -1,10 +1,11 @@
 """Evaluate the saved dev30 pilot with the bundled NUS M2 scorer.
 
 Run under Python 3.10 (lib2to3 is required):
-    python -m greco_setup.evaluate_pilot
-Requires outputs/greco/bart-t5-dev30/gold.m2 with the matching 30 gold records.
+    python -m greco_setup.evaluate_pilot [--output-dir outputs/greco/bart-t5-gector-dev30]
+Requires <output-dir>/gold.m2 with the matching 30 gold records.
 """
 
+import argparse
 import csv
 import hashlib
 import json
@@ -17,13 +18,15 @@ from lib2to3.refactor import RefactoringTool, get_fixers_from_package
 
 
 def main():
-    root = Path('outputs/greco/bart-t5-dev30')
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--output-dir', type=Path, default=Path('outputs/greco/bart-t5-dev30'))
+    root = parser.parse_args().output_dir
     gold = root / 'gold.m2'
     sources = Path('data/dev.src').read_text().splitlines()[:30]
     assert [line[2:] for line in gold.read_text().splitlines() if line.startswith('S ')] == sources
     inputs = json.loads((root / 'k1/input.json').read_text())
     systems = {}
-    for system in ('bart', 't5'):
+    for system in json.loads((root / 'manifest.json').read_text())['systems']:
         path = root / f'{system}.top1.pred'
         sentences = [next(p['sentence'] for p in r['proposals'] if p['system'] == system) for r in inputs]
         path.write_text('\n'.join(sentences) + '\n')
