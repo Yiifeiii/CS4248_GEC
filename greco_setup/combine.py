@@ -84,6 +84,16 @@ def read_record(record):
     return source, sorted(pool)
 
 
+def attention_mask_patched(repo):
+    """True if upstream GRECO.score() passes the attention mask (greco-attention-mask.patch).
+
+    Without it, padded positions are attended to and a candidate's score depends on
+    the other candidates in its batch.
+    """
+    source = (Path(repo) / "models.py").read_text(encoding="utf-8")
+    return "attention_mask=texts['attention_mask']" in source
+
+
 class GrecoScorer:
     """Load the upstream class and released state dict, without copying its code."""
 
@@ -91,6 +101,8 @@ class GrecoScorer:
         repo, checkpoint = Path(repo).resolve(), Path(checkpoint).resolve()
         if not (repo / "models.py").is_file() or not checkpoint.is_file():
             raise ValueError("GRECO source/checkpoint missing; follow greco_setup/README.md")
+        if not attention_mask_patched(repo):
+            raise ValueError("GRECO models.py lacks the attention-mask fix; rerun greco_setup/setup.sh")
         import torch
         spec = importlib.util.spec_from_file_location("cs4248_upstream_greco", repo / "models.py")
         module = importlib.util.module_from_spec(spec)

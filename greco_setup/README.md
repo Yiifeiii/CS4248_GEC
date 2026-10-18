@@ -132,10 +132,10 @@ Results for BART + T5 + GECToR (`bart-t5-gector-dev30`, 73 gold edits):
 | GECToR | 71.4 | 34.2 | 58.7 | 59.4 | |
 | GRECO k=1 | 67.6 | 34.2 | 56.6 | 60.5 | 30 (41%) |
 | GRECO k=3 | 62.2 | 38.4 | 55.3 | 58.7 | 39 (53%) |
-| GRECO k=5 | 61.2 | 41.1 | 55.8 | 59.9 | 45 (62%) |
+| GRECO k=5 | 57.7 | 41.1 | 53.4 | 58.2 | 45 (62%) |
 
-Recall rises with k, but precision falls about as much, so F0.5 does not improve
-on these 30 sentences.
+Recall rises with k, but precision falls more, so F0.5 does not improve on these
+30 sentences. All GRECO results here use the attention-mask fix (see below).
 
 ### Official GRECO with voting
 
@@ -149,14 +149,24 @@ with `vote_coef` 0.4 (the paper's value) and 0 as a control. Results are in
 
 | k | Inputs | Vote 0.4: ERRANT P / R / F0.5 | M² F0.5 | Vote 0: ERRANT P / R / F0.5 | M² F0.5 |
 | --- | ---: | --- | ---: | --- | ---: |
-| 1 | 3 | 68.4 / 35.6 / 57.8 | 61.6 | 68.4 / 35.6 / 57.8 | 61.6 |
-| 3 | 7 | 68.3 / 38.4 / 59.1 | 63.8 | 61.4 / 37.0 / 54.2 | 58.7 |
-| 5 | 11 | 62.2 / 38.4 / 55.3 | 59.8 | 61.2 / 41.1 / 55.8 | 59.9 |
+| 1 | 3 | 67.6 / 34.2 / 56.6 | 60.5 | 67.6 / 34.2 / 56.6 | 60.5 |
+| 3 | 7 | 70.0 / 38.4 / 60.1 | 64.9 | 61.4 / 37.0 / 54.2 | 58.7 |
+| 5 | 11 | 55.1 / 37.0 / 50.2 | 55.1 | 57.7 / 41.1 / 53.4 | 58.2 |
 
-Voting keeps precision at k=3 and gives the best F0.5 so far, but not at k=5:
+Voting raises precision and F0.5 at k=3 (the best result so far), but not at k=5:
 votes are counted per hypothesis, so BART's and T5's near-duplicate beams cast five
 votes each while GECToR casts one. The vote-0 control matches `combine.py`'s outputs on
-29 of 30 sentences at k=1 and k=3, and all 30 at k=5.
+all 30 sentences at k=1 and 29 of 30 at k=3 and k=5.
+
+### Attention-mask fix
+
+Upstream `GRECO.score()` tokenizes candidates with padding but calls the model
+without `attention_mask`, so padding is attended to and a candidate's score depends
+on the other candidates in its batch (up to 0.08 on dev30, enough to reorder them).
+`setup.sh` applies `greco-attention-mask.patch`; `combine.py` and
+`run_official_vote.sh` refuse to run without it, and
+`tests/test_greco_attention_mask.py` checks scores are batch-independent. The
+`bart-t5-dev30` pilot predates the fix and has not been rerun.
 
 The existing `bart-t5-dev30` results were produced before the outputs were
 unified. Rerunning reproduces the BART input exactly; 2 of 150 T5 lines differ

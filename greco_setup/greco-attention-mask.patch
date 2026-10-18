@@ -1,0 +1,14 @@
+diff --git a/models.py b/models.py
+index 9d8be77..6dbd058 100644
+--- a/models.py
++++ b/models.py
+@@ -316,7 +316,8 @@ class GRECO(nn.Module):
+                         return_tensors="pt")
+         
+         with torch.no_grad():
+-            output = self.__call__(texts['input_ids'].to(self.device))
++            output = self.__call__(texts['input_ids'].to(self.device),
++                                   attention_mask=texts['attention_mask'].to(self.device))
+             word_logits = output[1].squeeze(-1)
+             gap_logits = output[2]
+             if gap_logits is not None:

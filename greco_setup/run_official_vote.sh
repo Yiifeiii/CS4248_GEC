@@ -4,6 +4,8 @@
 # Each ranked hypothesis is one input, as in the official code: 3, 7 or 11 inputs.
 # Run from the repo root with the GRECO environment active.
 set -euo pipefail
+grep -q "attention_mask=texts\['attention_mask'\]" external/greco/models.py || {
+    echo "GRECO models.py lacks the attention-mask fix; rerun greco_setup/setup.sh" >&2; exit 1; }
 dir=$PWD/outputs/greco/bart-t5-gector-dev30-vote
 cd external/greco
 for vote in 0.4 0; do

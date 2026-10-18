@@ -51,7 +51,7 @@
       },
       {
         "sentence": "It 's difficult answer the question \" what are you going to do in the future ? \" if the only one who has to know it is in two minds .",
-        "score": 0.9192391633987427,
+        "score": 0.9246669411659241,
         "edits": [
           {
             "start": 4,
@@ -62,7 +62,7 @@
       },
       {
         "sentence": "It 's difficult answer at the question \" what are you going to do in the future ? \" if the only one who has to know it is in two minds .",
-        "score": 0.6714093089103699,
+        "score": 0.6708928942680359,
         "edits": []
       }
     ]
@@ -96,7 +96,7 @@
       },
       {
         "sentence": "When I was younger I used to say that I wanted to be a teacher , a saleswoman and even a butcher .. I do n't know why .",
-        "score": 0.9530239105224609,
+        "score": 0.9513720273971558,
         "edits": []
       }
     ]
@@ -154,7 +154,7 @@
     "candidates": [
       {
         "sentence": "I think that public transport will always be in the future .",
-        "score": 0.9281485676765442,
+        "score": 0.9502431154251099,
         "edits": [
           {
             "start": 3,
@@ -199,7 +199,7 @@
       },
       {
         "sentence": "The rich people will buy a car but the poor people always need to use a bus or taxi .",
-        "score": 0.7551681399345398,
+        "score": 0.7397895455360413,
         "edits": []
       }
     ]
@@ -233,7 +233,7 @@
       },
       {
         "sentence": "I consider that is more convenient to drive a car because you carry on more things in your own car than travelling by car .",
-        "score": 0.5607659816741943,
+        "score": 0.5472347140312195,
         "edits": []
       }
     ]
@@ -252,7 +252,7 @@
     "candidates": [
       {
         "sentence": "Also , you 'll meet friendly people who usually ask you something to be friends and change your telephone number .",
-        "score": 0.9799891710281372,
+        "score": 0.9723490476608276,
         "edits": [
           {
             "start": 10,
@@ -320,6 +320,24 @@
         ]
       },
       {
+        "sentence": "In my experience , when I did n't have a car I used to use the bus to go to school and go back to my house .",
+        "score": 0.9724165201187134,
+        "edits": [
+          {
+            "start": 3,
+            "end": 3,
+            "replacement": [
+              ","
+            ]
+          },
+          {
+            "start": 19,
+            "end": 20,
+            "replacement": []
+          }
+        ]
+      },
+      {
         "sentence": "In my experience , when I did n't have a car , I used to use the bus to go to the school and go back to my house .",
         "score": 0.9713951945304871,
         "edits": [
@@ -340,24 +358,6 @@
         ]
       },
       {
-        "sentence": "In my experience , when I did n't have a car I used to use the bus to go to school and go back to my house .",
-        "score": 0.9686107039451599,
-        "edits": [
-          {
-            "start": 3,
-            "end": 3,
-            "replacement": [
-              ","
-            ]
-          },
-          {
-            "start": 19,
-            "end": 20,
-            "replacement": []
-          }
-        ]
-      },
-      {
         "sentence": "In my experience , when I did n't have a car I used to use the bus to go to the school and go back to my house .",
         "score": 0.956457793712616,
         "edits": [
@@ -372,7 +372,7 @@
       },
       {
         "sentence": "In my experience when I did n't have a car , I used to use the bus to go to school and go back to my house .",
-        "score": 0.9228421449661255,
+        "score": 0.9302046298980713,
         "edits": [
           {
             "start": 10,
@@ -389,19 +389,8 @@
         ]
       },
       {
-        "sentence": "In my experience when I did n't have a car I used to use the bus to go to school and go back to my house .",
-        "score": 0.8245471715927124,
-        "edits": [
-          {
-            "start": 19,
-            "end": 20,
-            "replacement": []
-          }
-        ]
-      },
-      {
         "sentence": "In my experience when I did n't have a car , I used to use the bus to go to the school and go back to my house .",
-        "score": 0.7491214275360107,
+        "score": 0.896618127822876,
         "edits": [
           {
             "start": 10,
@@ -413,8 +402,19 @@
         ]
       },
       {
+        "sentence": "In my experience when I did n't have a car I used to use the bus to go to school and go back to my house .",
+        "score": 0.8248879909515381,
+        "edits": [
+          {
+            "start": 19,
+            "end": 20,
+            "replacement": []
+          }
+        ]
+      },
+      {
         "sentence": "In my experience when I did n't have a car I used to use the bus to go to the school and go back to my house .",
-        "score": 0.501958429813385,
+        "score": 0.5235671997070312,
         "edits": []
       }
     ]
@@ -1445,7 +1445,7 @@
       },
       {
         "sentence": "We have stopped at hotels to have food and just in case any of us feels hungry , we have purchased some snacks just before the trip .",
-        "score": 0.9417333006858826,
+        "score": 0.9443530440330505,
         "edits": [
           {
             "start": 5,
@@ -1478,7 +1478,7 @@
       },
       {
         "sentence": "We have stopped at hotels for food and , just in case any of us feels hungry , we have purchased some snacks just before the trip .",
-        "score": 0.8896957635879517,
+        "score": 0.8948275446891785,
         "edits": [
           {
             "start": 6,
@@ -1518,21 +1518,8 @@
         ]
       },
       {
-        "sentence": "We have stopped at hotels for having food and , just in case if any of us feels hungry , we have purchased some snacks just before the trip .",
-        "score": 0.7271224856376648,
-        "edits": [
-          {
-            "start": 9,
-            "end": 9,
-            "replacement": [
-              ","
-            ]
-          }
-        ]
-      },
-      {
         "sentence": "We have stopped at hotels for food and just in case any of us feels hungry , we have purchased some snacks just before the trip .",
-        "score": 0.709852933883667,
+        "score": 0.7372550368309021,
         "edits": [
           {
             "start": 6,
@@ -1547,8 +1534,21 @@
         ]
       },
       {
+        "sentence": "We have stopped at hotels for having food and , just in case if any of us feels hungry , we have purchased some snacks just before the trip .",
+        "score": 0.7271224856376648,
+        "edits": [
+          {
+            "start": 9,
+            "end": 9,
+            "replacement": [
+              ","
+            ]
+          }
+        ]
+      },
+      {
         "sentence": "We have stopped at hotels for food and , just in case if any of us feels hungry , we have purchased some snacks just before the trip .",
-        "score": 0.6110915541648865,
+        "score": 0.6148156523704529,
         "edits": [
           {
             "start": 6,
@@ -1566,7 +1566,7 @@
       },
       {
         "sentence": "We have stopped at hotels for having food and just in case any of us feels hungry , we have purchased some snacks just before the trip .",
-        "score": 0.4987242519855499,
+        "score": 0.5777523517608643,
         "edits": [
           {
             "start": 12,
@@ -1627,7 +1627,7 @@
       },
       {
         "sentence": "Since we have the option to wait anytime we want to when we travel by car ( which is impossible when travelling by train & flight ) .",
-        "score": 0.8364147543907166,
+        "score": 0.8279111981391907,
         "edits": [
           {
             "start": 1,
@@ -1645,7 +1645,7 @@
       },
       {
         "sentence": "Since we have the option to wait anytime we want to when we travel by car ( which is impossible when travelling by train & Flight ) .",
-        "score": 0.44786980748176575,
+        "score": 0.4141543507575989,
         "edits": [
           {
             "start": 1,
@@ -1903,7 +1903,7 @@
       },
       {
         "sentence": "I love children and I enjoy looking after them . Also , I organized many sports activities before in my school .",
-        "score": 0.7787203192710876,
+        "score": 0.7885780334472656,
         "edits": [
           {
             "start": 3,
@@ -1926,7 +1926,7 @@
       },
       {
         "sentence": "I love children and I enjoy looking after them . also , I organized many sports activities before in my school .",
-        "score": 0.41081103682518005,
+        "score": 0.44495823979377747,
         "edits": [
           {
             "start": 3,
@@ -2106,7 +2106,7 @@
     "candidates": [
       {
         "sentence": "Thanks",
-        "score": 0.7880213260650635,
+        "score": 0.23728208243846893,
         "edits": []
       },
       {
@@ -2258,7 +2258,7 @@
     "candidates": [
       {
         "sentence": "Volleyball is a sport played every place . When I travel on the beach I like plays with my sister in the sand and after we go to the sea .",
-        "score": 0.5852614641189575,
+        "score": 0.6092586517333984,
         "edits": [
           {
             "start": 4,
@@ -2273,6 +2273,107 @@
             "replacement": [
               ".",
               "When"
+            ]
+          },
+          {
+            "start": 26,
+            "end": 28,
+            "replacement": [
+              "go"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "Volleyball is a sport played in every place . When I travel on the beach I like plays with my sister in the sand and after we go to the sea .",
+        "score": 0.5684542059898376,
+        "edits": [
+          {
+            "start": 4,
+            "end": 5,
+            "replacement": [
+              "played",
+              "in"
+            ]
+          },
+          {
+            "start": 7,
+            "end": 9,
+            "replacement": [
+              ".",
+              "When"
+            ]
+          },
+          {
+            "start": 26,
+            "end": 28,
+            "replacement": [
+              "go"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "Volleyball is a sport played in every place . When I travel on the beach I like play with my sister in the sand and after we go to the sea .",
+        "score": 0.5412821173667908,
+        "edits": [
+          {
+            "start": 4,
+            "end": 5,
+            "replacement": [
+              "played",
+              "in"
+            ]
+          },
+          {
+            "start": 7,
+            "end": 9,
+            "replacement": [
+              ".",
+              "When"
+            ]
+          },
+          {
+            "start": 16,
+            "end": 17,
+            "replacement": [
+              "play"
+            ]
+          },
+          {
+            "start": 26,
+            "end": 28,
+            "replacement": [
+              "go"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "Volleyball is a sport played in every place . When I travel on the beach I like playing with my sister in the sand and after we go to the sea .",
+        "score": 0.5008397102355957,
+        "edits": [
+          {
+            "start": 4,
+            "end": 5,
+            "replacement": [
+              "played",
+              "in"
+            ]
+          },
+          {
+            "start": 7,
+            "end": 9,
+            "replacement": [
+              ".",
+              "When"
+            ]
+          },
+          {
+            "start": 16,
+            "end": 17,
+            "replacement": [
+              "playing"
             ]
           },
           {
@@ -2322,109 +2423,8 @@
         ]
       },
       {
-        "sentence": "Volleyball is a sport played in every place . When I travel on the beach I like play with my sister in the sand and after we go to the sea .",
-        "score": 0.49541690945625305,
-        "edits": [
-          {
-            "start": 4,
-            "end": 5,
-            "replacement": [
-              "played",
-              "in"
-            ]
-          },
-          {
-            "start": 7,
-            "end": 9,
-            "replacement": [
-              ".",
-              "When"
-            ]
-          },
-          {
-            "start": 16,
-            "end": 17,
-            "replacement": [
-              "play"
-            ]
-          },
-          {
-            "start": 26,
-            "end": 28,
-            "replacement": [
-              "go"
-            ]
-          }
-        ]
-      },
-      {
-        "sentence": "Volleyball is a sport played in every place . When I travel on the beach I like plays with my sister in the sand and after we go to the sea .",
-        "score": 0.484822154045105,
-        "edits": [
-          {
-            "start": 4,
-            "end": 5,
-            "replacement": [
-              "played",
-              "in"
-            ]
-          },
-          {
-            "start": 7,
-            "end": 9,
-            "replacement": [
-              ".",
-              "When"
-            ]
-          },
-          {
-            "start": 26,
-            "end": 28,
-            "replacement": [
-              "go"
-            ]
-          }
-        ]
-      },
-      {
-        "sentence": "Volleyball is a sport played in every place . When I travel on the beach I like playing with my sister in the sand and after we go to the sea .",
-        "score": 0.47018367052078247,
-        "edits": [
-          {
-            "start": 4,
-            "end": 5,
-            "replacement": [
-              "played",
-              "in"
-            ]
-          },
-          {
-            "start": 7,
-            "end": 9,
-            "replacement": [
-              ".",
-              "When"
-            ]
-          },
-          {
-            "start": 16,
-            "end": 17,
-            "replacement": [
-              "playing"
-            ]
-          },
-          {
-            "start": 26,
-            "end": 28,
-            "replacement": [
-              "go"
-            ]
-          }
-        ]
-      },
-      {
         "sentence": "Volleyball is a sport played every place . When I travel on the beach I like play with my sister in the sand and after we go to the sea .",
-        "score": 0.4492497146129608,
+        "score": 0.48195961117744446,
         "edits": [
           {
             "start": 4,
@@ -2459,7 +2459,7 @@
       },
       {
         "sentence": "Volleyball is a sport play every place . When I travel on the beach I like plays with my sister in the sand and after we go to the sea .",
-        "score": 0.43014010787010193,
+        "score": 0.4512197971343994,
         "edits": [
           {
             "start": 7,
@@ -2480,7 +2480,7 @@
       },
       {
         "sentence": "Volleyball is a sport played every place . When I travel on the beach I like playing with my sister in the sand and after we go to the sea .",
-        "score": 0.39653414487838745,
+        "score": 0.41850170493125916,
         "edits": [
           {
             "start": 4,
@@ -2515,7 +2515,7 @@
       },
       {
         "sentence": "Volleyball is a sport played every place . When I travel on the beach I like to play with my sister in the sand and after we go to the sea .",
-        "score": 0.38265445828437805,
+        "score": 0.40039950609207153,
         "edits": [
           {
             "start": 4,
@@ -2551,7 +2551,7 @@
       },
       {
         "sentence": "Volleyball is a sport play every place . When I travel on the beach I like play with my sister in the sand and after we go to the sea .",
-        "score": 0.35816553235054016,
+        "score": 0.3754846155643463,
         "edits": [
           {
             "start": 7,
@@ -2579,7 +2579,7 @@
       },
       {
         "sentence": "Volleyball is a sport play every place . When I travel on the beach I like playing with my sister in the sand and after we go to the sea .",
-        "score": 0.33929452300071716,
+        "score": 0.34908321499824524,
         "edits": [
           {
             "start": 7,
@@ -2607,7 +2607,7 @@
       },
       {
         "sentence": "Volleyball is a sport play every place . When I travel on the beach I like to play with my sister in the sand and after we go to the sea .",
-        "score": 0.3365130126476288,
+        "score": 0.3437710404396057,
         "edits": [
           {
             "start": 7,
@@ -2630,6 +2630,27 @@
             "end": 28,
             "replacement": [
               "go"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "Volleyball is a sport played every place . When I travel on the beach I like plays with my sister in the sand and after we are going to the sea .",
+        "score": 0.2613644003868103,
+        "edits": [
+          {
+            "start": 4,
+            "end": 5,
+            "replacement": [
+              "played"
+            ]
+          },
+          {
+            "start": 7,
+            "end": 9,
+            "replacement": [
+              ".",
+              "When"
             ]
           }
         ]
@@ -2693,8 +2714,8 @@
         ]
       },
       {
-        "sentence": "Volleyball is a sport played in every place . When I travel on the beach I like plays with my sister in the sand and after we are going to the sea .",
-        "score": 0.23129288852214813,
+        "sentence": "Volleyball is a sport played in every place , when I travel on the beach I like play with my sister in the sand and after we go to the sea .",
+        "score": 0.23792320489883423,
         "edits": [
           {
             "start": 4,
@@ -2702,44 +2723,20 @@
             "replacement": [
               "played",
               "in"
-            ]
-          },
-          {
-            "start": 7,
-            "end": 9,
-            "replacement": [
-              ".",
-              "When"
-            ]
-          }
-        ]
-      },
-      {
-        "sentence": "Volleyball is a sport played in every place . When I travel on the beach I like to play with my sister in the sand and after we are going to the sea .",
-        "score": 0.22976502776145935,
-        "edits": [
-          {
-            "start": 4,
-            "end": 5,
-            "replacement": [
-              "played",
-              "in"
-            ]
-          },
-          {
-            "start": 7,
-            "end": 9,
-            "replacement": [
-              ".",
-              "When"
             ]
           },
           {
             "start": 16,
             "end": 17,
             "replacement": [
-              "to",
               "play"
+            ]
+          },
+          {
+            "start": 26,
+            "end": 28,
+            "replacement": [
+              "go"
             ]
           }
         ]

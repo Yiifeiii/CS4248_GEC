@@ -7,6 +7,14 @@ if [ ! -d external/greco ]; then
     git clone https://github.com/nusnlp/greco.git external/greco
 fi
 git -C external/greco checkout --detach 8e509aaacf4e5ec3276d3427371471fd82a7f58b
+# Upstream GRECO.score() drops the attention mask, so padding in a batch changes the
+# scores of shorter candidates. Apply the one-line fix unless it is already applied.
+patch=$PWD/greco_setup/greco-attention-mask.patch
+if git -C external/greco apply --reverse --check "$patch" 2>/dev/null; then
+    echo "GRECO attention-mask patch already applied"
+else
+    git -C external/greco apply "$patch"
+fi
 python -m pip install -r external/greco/requirements.txt
 # Missing from upstream requirements; the DeBERTa-v3 tokenizer needs it (<=3.20 for transformers 4.23)
 python -m pip install "protobuf==3.20.3"

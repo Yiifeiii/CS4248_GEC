@@ -46,7 +46,7 @@
     "candidates": [
       {
         "sentence": "It 's difficult to answer the question \" what are you going to do in the future ? \" if the only one who has to know it is in two minds .",
-        "score": 0.9949756264686584,
+        "score": 0.9955816864967346,
         "edits": [
           {
             "start": 3,
@@ -64,7 +64,7 @@
       },
       {
         "sentence": "It 's difficult to answer the question \" what are you going to do in the future ? \" if the only one who has to know is in two minds .",
-        "score": 0.9772621393203735,
+        "score": 0.9785516858100891,
         "edits": [
           {
             "start": 3,
@@ -87,7 +87,7 @@
       },
       {
         "sentence": "It 's a difficult answer to the question \" what are you going to do in the future ? \" if the only one who has to know it is in two minds .",
-        "score": 0.9764437079429626,
+        "score": 0.970133900642395,
         "edits": [
           {
             "start": 2,
@@ -131,6 +131,19 @@
         ]
       },
       {
+        "sentence": "It 's difficult to answer at the question \" what are you going to do in the future ? \" if the only one who has to know it is in two minds .",
+        "score": 0.9525312185287476,
+        "edits": [
+          {
+            "start": 3,
+            "end": 3,
+            "replacement": [
+              "to"
+            ]
+          }
+        ]
+      },
+      {
         "sentence": "It 's a difficult answer to the question \" what are you going to do in the future ? \" if the only one who has to know is in two minds .",
         "score": 0.9474413990974426,
         "edits": [
@@ -157,7 +170,7 @@
       },
       {
         "sentence": "It 's difficult answer to the question \" what are you going to do in the future ? \" if the only one who has to know it is in two minds .",
-        "score": 0.9399208426475525,
+        "score": 0.9456590414047241,
         "edits": [
           {
             "start": 4,
@@ -170,7 +183,7 @@
       },
       {
         "sentence": "It 's a difficult answer the question \" what are you going to do in the future ? \" if the only one who has to know it is in two minds .",
-        "score": 0.9397714138031006,
+        "score": 0.9423672556877136,
         "edits": [
           {
             "start": 2,
@@ -217,19 +230,8 @@
         ]
       },
       {
-        "sentence": "It 's difficult answer the question \" what are you going to do in the future ? \" if the only one who has to know it is in two minds .",
-        "score": 0.9133817553520203,
-        "edits": [
-          {
-            "start": 4,
-            "end": 5,
-            "replacement": []
-          }
-        ]
-      },
-      {
         "sentence": "It 's difficult to answer the question \" What are you going to do in the future ? \" if the only one who has to know it is in two minds .",
-        "score": 0.9108830690383911,
+        "score": 0.9271052479743958,
         "edits": [
           {
             "start": 3,
@@ -249,6 +251,17 @@
             "replacement": [
               "What"
             ]
+          }
+        ]
+      },
+      {
+        "sentence": "It 's difficult answer the question \" what are you going to do in the future ? \" if the only one who has to know it is in two minds .",
+        "score": 0.9246669411659241,
+        "edits": [
+          {
+            "start": 4,
+            "end": 5,
+            "replacement": []
           }
         ]
       },
@@ -267,7 +280,7 @@
       },
       {
         "sentence": "It 's a difficult answer the question \" what are you going to do in the future ? \" if the only one who has to know is in two minds .",
-        "score": 0.8886380195617676,
+        "score": 0.8937798142433167,
         "edits": [
           {
             "start": 2,
@@ -280,24 +293,6 @@
             "start": 4,
             "end": 5,
             "replacement": []
-          },
-          {
-            "start": 27,
-            "end": 28,
-            "replacement": []
-          }
-        ]
-      },
-      {
-        "sentence": "It 's difficult answer to the question \" what are you going to do in the future ? \" if the only one who has to know is in two minds .",
-        "score": 0.8849462270736694,
-        "edits": [
-          {
-            "start": 4,
-            "end": 5,
-            "replacement": [
-              "to"
-            ]
           },
           {
             "start": 27,
@@ -308,7 +303,7 @@
       },
       {
         "sentence": "It 's difficult to answer the question \" What are you going to do in the future ? \" if the only one who has to know is in two minds .",
-        "score": 0.8768980503082275,
+        "score": 0.8906031847000122,
         "edits": [
           {
             "start": 3,
@@ -337,16 +332,9 @@
         ]
       },
       {
-        "sentence": "It 's a difficult answer to the question \" What are you going to do in the future ? \" if the only one who has to know it is in two minds .",
-        "score": 0.8254542946815491,
+        "sentence": "It 's difficult answer to the question \" what are you going to do in the future ? \" if the only one who has to know is in two minds .",
+        "score": 0.8894553184509277,
         "edits": [
-          {
-            "start": 2,
-            "end": 2,
-            "replacement": [
-              "a"
-            ]
-          },
           {
             "start": 4,
             "end": 5,
@@ -355,24 +343,25 @@
             ]
           },
           {
-            "start": 8,
-            "end": 9,
-            "replacement": [
-              "What"
-            ]
+            "start": 27,
+            "end": 28,
+            "replacement": []
           }
         ]
       },
       {
-        "sentence": "It 's difficult to answer at the question \" what are you going to do in the future ? \" if the only one who has to know it is in two minds .",
-        "score": 0.8178227543830872,
+        "sentence": "It 's difficult answer the question \" what are you going to do in the future ? \" if the only one who has to know is in two minds .",
+        "score": 0.8374852538108826,
         "edits": [
           {
-            "start": 3,
-            "end": 3,
-            "replacement": [
-              "to"
-            ]
+            "start": 4,
+            "end": 5,
+            "replacement": []
+          },
+          {
+            "start": 27,
+            "end": 28,
+            "replacement": []
           }
         ]
       }
@@ -441,25 +430,12 @@
       },
       {
         "sentence": "When I was younger I used to say that I wanted to be a teacher , a saleswoman and even a butcher .. I do n't know why .",
-        "score": 0.9530239105224609,
+        "score": 0.9513720273971558,
         "edits": []
       },
       {
-        "sentence": "When I was younger I used to say that I wanted to be a teacher , a saleswoman , and even a butcher .. I do n't know why .",
-        "score": 0.946171760559082,
-        "edits": [
-          {
-            "start": 18,
-            "end": 18,
-            "replacement": [
-              ","
-            ]
-          }
-        ]
-      },
-      {
         "sentence": "When I was younger , I used to say that I wanted to be a teacher , a saleswoman and even a butcher . I do n't know why .",
-        "score": 0.9439953565597534,
+        "score": 0.9338482022285461,
         "edits": [
           {
             "start": 4,
@@ -478,8 +454,21 @@
         ]
       },
       {
+        "sentence": "When I was younger I used to say that I wanted to be a teacher , a saleswoman , and even a butcher .. I do n't know why .",
+        "score": 0.9328312277793884,
+        "edits": [
+          {
+            "start": 18,
+            "end": 18,
+            "replacement": [
+              ","
+            ]
+          }
+        ]
+      },
+      {
         "sentence": "When I was younger I used to say that I wanted to be a teacher , a saleswoman , and even a butcher . I do n't know why .",
-        "score": 0.9316681027412415,
+        "score": 0.9190740585327148,
         "edits": [
           {
             "start": 18,
@@ -526,7 +515,7 @@
       },
       {
         "sentence": "When I was younger I used to say that I wanted to be a teacher , a saleswoman and even a butcher . I do n't know why .",
-        "score": 0.911049485206604,
+        "score": 0.8956397771835327,
         "edits": [
           {
             "start": 22,
@@ -576,7 +565,7 @@
     "candidates": [
       {
         "sentence": "I would like to study psychology because one day I will open my own psychology office and help people .",
-        "score": 0.7537160515785217,
+        "score": 0.805672824382782,
         "edits": [
           {
             "start": 5,
@@ -596,7 +585,7 @@
       },
       {
         "sentence": "I would like to study Psychology because one day I will open my own psychology office and help people .",
-        "score": 0.7382533550262451,
+        "score": 0.7406374216079712,
         "edits": [
           {
             "start": 10,
@@ -608,14 +597,16 @@
         ]
       },
       {
-        "sentence": "I would like to study Psychology because one day I would open my own psychology office and help people .",
-        "score": 0.6079436540603638,
-        "edits": []
-      },
-      {
-        "sentence": "I would like to study Psychology because one day I will open my own psychology office to help people .",
-        "score": 0.6030001640319824,
+        "sentence": "I would like to study psychology because one day I will open my own psychology office to help people .",
+        "score": 0.6150609850883484,
         "edits": [
+          {
+            "start": 5,
+            "end": 6,
+            "replacement": [
+              "psychology"
+            ]
+          },
           {
             "start": 10,
             "end": 11,
@@ -631,6 +622,11 @@
             ]
           }
         ]
+      },
+      {
+        "sentence": "I would like to study Psychology because one day I would open my own psychology office and help people .",
+        "score": 0.6079436540603638,
+        "edits": []
       },
       {
         "sentence": "I would like to study Psychology , because one day I will open my own psychology office and help people .",
@@ -653,16 +649,9 @@
         ]
       },
       {
-        "sentence": "I would like to study psychology because one day I will open my own psychology office to help people .",
-        "score": 0.5879865288734436,
+        "sentence": "I would like to study Psychology because one day I will open my own psychology office to help people .",
+        "score": 0.5918575525283813,
         "edits": [
-          {
-            "start": 5,
-            "end": 6,
-            "replacement": [
-              "psychology"
-            ]
-          },
           {
             "start": 10,
             "end": 11,
@@ -782,7 +771,7 @@
       },
       {
         "sentence": "I would like to study Psychology because one day I would open my own psychology office to help people .",
-        "score": 0.37397924065589905,
+        "score": 0.37357595562934875,
         "edits": [
           {
             "start": 16,
@@ -808,7 +797,7 @@
       },
       {
         "sentence": "I would like to study psychology because one day I would open my own psychology office to help people .",
-        "score": 0.32370227575302124,
+        "score": 0.351409375667572,
         "edits": [
           {
             "start": 5,
@@ -898,7 +887,7 @@
   {
     "source": "It 's difficult because I 'll have to study hard and a lot , but I think that if you like a subject , you 'll study it easier .",
     "scorer": "greco",
-    "best_sentence": "It 's difficult , because I 'll have to study hard and a lot , but I think that if you like a subject , you 'll study it easier .",
+    "best_sentence": "It 's difficult because I 'll have to study hard and a lot , but I think that if you like a subject , you 'll study it easier .",
     "pooled_edits": [
       {
         "start": 3,
@@ -941,6 +930,11 @@
     ],
     "candidates": [
       {
+        "sentence": "It 's difficult because I 'll have to study hard and a lot , but I think that if you like a subject , you 'll study it easier .",
+        "score": 0.9506451487541199,
+        "edits": []
+      },
+      {
         "sentence": "It 's difficult , because I 'll have to study hard and a lot , but I think that if you like a subject , you 'll study it easier .",
         "score": 0.9348688125610352,
         "edits": [
@@ -952,11 +946,6 @@
             ]
           }
         ]
-      },
-      {
-        "sentence": "It 's difficult because I 'll have to study hard and a lot , but I think that if you like a subject , you 'll study it easier .",
-        "score": 0.931964099407196,
-        "edits": []
       },
       {
         "sentence": "It 's difficult , because I 'll have to study hard and a lot , but I think that if you like a subject , you will study it easier .",
@@ -1000,7 +989,7 @@
       },
       {
         "sentence": "It 's difficult , because I will have to study hard and a lot , but I think that if you like a subject , you will study it easier .",
-        "score": 0.8732384443283081,
+        "score": 0.8708959221839905,
         "edits": [
           {
             "start": 3,
@@ -1027,7 +1016,7 @@
       },
       {
         "sentence": "It 's difficult because I 'll have to study hard and a lot , but I think that if you like a subject , you will study it easier .",
-        "score": 0.8455832600593567,
+        "score": 0.8624151349067688,
         "edits": [
           {
             "start": 25,
@@ -1040,7 +1029,7 @@
       },
       {
         "sentence": "It 's difficult because I will have to study hard and a lot , but I think that if you like a subject , you will study it easier .",
-        "score": 0.8404604196548462,
+        "score": 0.8358091711997986,
         "edits": [
           {
             "start": 5,
@@ -1060,7 +1049,7 @@
       },
       {
         "sentence": "It 's difficult because I will have to study hard and a lot , but I think that if you like a subject , you 'll study it easier .",
-        "score": 0.8126257658004761,
+        "score": 0.7814555168151855,
         "edits": [
           {
             "start": 5,
@@ -1090,28 +1079,8 @@
         ]
       },
       {
-        "sentence": "It 's difficult , because I 'll have to study hard and a lot , but I think that if you like the subject , you 'll study it easier .",
-        "score": 0.7307350039482117,
-        "edits": [
-          {
-            "start": 3,
-            "end": 3,
-            "replacement": [
-              ","
-            ]
-          },
-          {
-            "start": 21,
-            "end": 22,
-            "replacement": [
-              "the"
-            ]
-          }
-        ]
-      },
-      {
         "sentence": "It 's difficult , because I 'll have to study hard and a lot , but I think that if you like a subject , you will study easier .",
-        "score": 0.7039738893508911,
+        "score": 0.7349491715431213,
         "edits": [
           {
             "start": 3,
@@ -1131,6 +1100,26 @@
             "start": 27,
             "end": 28,
             "replacement": []
+          }
+        ]
+      },
+      {
+        "sentence": "It 's difficult , because I 'll have to study hard and a lot , but I think that if you like the subject , you 'll study it easier .",
+        "score": 0.7307350039482117,
+        "edits": [
+          {
+            "start": 3,
+            "end": 3,
+            "replacement": [
+              ","
+            ]
+          },
+          {
+            "start": 21,
+            "end": 22,
+            "replacement": [
+              "the"
+            ]
           }
         ]
       },
@@ -1180,44 +1169,8 @@
         ]
       },
       {
-        "sentence": "It 's difficult because I have to study hard and a lot , but I think that if you like a subject , you 'll study it easier .",
-        "score": 0.6750601530075073,
-        "edits": [
-          {
-            "start": 5,
-            "end": 6,
-            "replacement": []
-          }
-        ]
-      },
-      {
-        "sentence": "It 's difficult , because I will have to study hard and a lot , but I think that if you like a subject , you 'll study easier .",
-        "score": 0.6733716130256653,
-        "edits": [
-          {
-            "start": 3,
-            "end": 3,
-            "replacement": [
-              ","
-            ]
-          },
-          {
-            "start": 5,
-            "end": 6,
-            "replacement": [
-              "will"
-            ]
-          },
-          {
-            "start": 27,
-            "end": 28,
-            "replacement": []
-          }
-        ]
-      },
-      {
         "sentence": "It 's difficult , because I will have to study hard and a lot , but I think that if you like a subject , you will study easier .",
-        "score": 0.6708516478538513,
+        "score": 0.6910380721092224,
         "edits": [
           {
             "start": 3,
@@ -1244,6 +1197,58 @@
             "start": 27,
             "end": 28,
             "replacement": []
+          }
+        ]
+      },
+      {
+        "sentence": "It 's difficult , because I will have to study hard and a lot , but I think that if you like a subject , you 'll study easier .",
+        "score": 0.6883437633514404,
+        "edits": [
+          {
+            "start": 3,
+            "end": 3,
+            "replacement": [
+              ","
+            ]
+          },
+          {
+            "start": 5,
+            "end": 6,
+            "replacement": [
+              "will"
+            ]
+          },
+          {
+            "start": 27,
+            "end": 28,
+            "replacement": []
+          }
+        ]
+      },
+      {
+        "sentence": "It 's difficult , because I will have to study hard and a lot , but I think that if you like the subject , you 'll study it easier .",
+        "score": 0.6783435344696045,
+        "edits": [
+          {
+            "start": 3,
+            "end": 3,
+            "replacement": [
+              ","
+            ]
+          },
+          {
+            "start": 5,
+            "end": 6,
+            "replacement": [
+              "will"
+            ]
+          },
+          {
+            "start": 21,
+            "end": 22,
+            "replacement": [
+              "the"
+            ]
           }
         ]
       }
@@ -1338,7 +1343,7 @@
       },
       {
         "sentence": "Maybe I will change my mind , maybe not .",
-        "score": 0.3538171648979187,
+        "score": 0.34258419275283813,
         "edits": [
           {
             "start": 2,
@@ -1351,7 +1356,7 @@
       },
       {
         "sentence": "Maybe I will change my mind , or maybe not .",
-        "score": 0.1863851100206375,
+        "score": 0.16562281548976898,
         "edits": [
           {
             "start": 2,
@@ -1371,7 +1376,7 @@
       },
       {
         "sentence": "Maybe I will change my mind , but maybe not .",
-        "score": 0.16423152387142181,
+        "score": 0.16077399253845215,
         "edits": [
           {
             "start": 2,
@@ -1431,7 +1436,7 @@
       },
       {
         "sentence": "Maybe I will change my mind ; maybe not .",
-        "score": 0.13991421461105347,
+        "score": 0.13263165950775146,
         "edits": [
           {
             "start": 2,
@@ -1465,7 +1470,7 @@
       },
       {
         "sentence": "Maybe I will change my mind ; or maybe not .",
-        "score": 0.09347052872180939,
+        "score": 0.08986300975084305,
         "edits": [
           {
             "start": 2,
@@ -1492,7 +1497,7 @@
       },
       {
         "sentence": "Maybe I will change my mind ; but maybe not .",
-        "score": 0.08561048656702042,
+        "score": 0.08808041363954544,
         "edits": [
           {
             "start": 2,
@@ -1519,7 +1524,7 @@
       },
       {
         "sentence": "Maybe I will change my mind . Maybe not .",
-        "score": 0.05032575875520706,
+        "score": 0.047761283814907074,
         "edits": [
           {
             "start": 2,
@@ -1591,7 +1596,7 @@
     "candidates": [
       {
         "sentence": "I think that public transport will always be in the future .",
-        "score": 0.9281485676765442,
+        "score": 0.9502431154251099,
         "edits": [
           {
             "start": 3,
@@ -1602,7 +1607,7 @@
       },
       {
         "sentence": "I think that public transport will always be important in the future .",
-        "score": 0.9143925309181213,
+        "score": 0.9033694267272949,
         "edits": [
           {
             "start": 3,
@@ -1620,7 +1625,7 @@
       },
       {
         "sentence": "I think that public transportation will always be important in the future .",
-        "score": 0.754023015499115,
+        "score": 0.7763806581497192,
         "edits": [
           {
             "start": 3,
@@ -1645,7 +1650,7 @@
       },
       {
         "sentence": "I think that public transport will always be important a part of the future .",
-        "score": 0.7311983108520508,
+        "score": 0.7554111480712891,
         "edits": [
           {
             "start": 3,
@@ -1672,7 +1677,7 @@
       },
       {
         "sentence": "I think that public transport will always be a part of the future .",
-        "score": 0.6822786331176758,
+        "score": 0.7094120383262634,
         "edits": [
           {
             "start": 3,
@@ -1705,7 +1710,7 @@
       },
       {
         "sentence": "I think that public transport will always be there a part of the future .",
-        "score": 0.5370885133743286,
+        "score": 0.6106534600257874,
         "edits": [
           {
             "start": 3,
@@ -1732,7 +1737,7 @@
       },
       {
         "sentence": "I think that public transportation will always be a part of the future .",
-        "score": 0.5365749597549438,
+        "score": 0.6045782566070557,
         "edits": [
           {
             "start": 3,
@@ -1744,51 +1749,6 @@
             "end": 6,
             "replacement": [
               "transportation"
-            ]
-          },
-          {
-            "start": 9,
-            "end": 10,
-            "replacement": [
-              "a",
-              "part",
-              "of"
-            ]
-          }
-        ]
-      },
-      {
-        "sentence": "I think that public transportation will always be in the future .",
-        "score": 0.5054425597190857,
-        "edits": [
-          {
-            "start": 3,
-            "end": 4,
-            "replacement": []
-          },
-          {
-            "start": 5,
-            "end": 6,
-            "replacement": [
-              "transportation"
-            ]
-          }
-        ]
-      },
-      {
-        "sentence": "I think that public transport will always be available a part of the future .",
-        "score": 0.482294499874115,
-        "edits": [
-          {
-            "start": 3,
-            "end": 4,
-            "replacement": []
-          },
-          {
-            "start": 9,
-            "end": 9,
-            "replacement": [
-              "available"
             ]
           },
           {
@@ -1804,7 +1764,7 @@
       },
       {
         "sentence": "I think that public transportation will always be important a part of the future .",
-        "score": 0.4817260205745697,
+        "score": 0.5469005107879639,
         "edits": [
           {
             "start": 3,
@@ -1837,8 +1797,87 @@
         ]
       },
       {
+        "sentence": "I think that public transportation will always be in the future .",
+        "score": 0.5354352593421936,
+        "edits": [
+          {
+            "start": 3,
+            "end": 4,
+            "replacement": []
+          },
+          {
+            "start": 5,
+            "end": 6,
+            "replacement": [
+              "transportation"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "I think that public transportation will always be there a part of the future .",
+        "score": 0.5084814429283142,
+        "edits": [
+          {
+            "start": 3,
+            "end": 4,
+            "replacement": []
+          },
+          {
+            "start": 5,
+            "end": 6,
+            "replacement": [
+              "transportation"
+            ]
+          },
+          {
+            "start": 9,
+            "end": 9,
+            "replacement": [
+              "there"
+            ]
+          },
+          {
+            "start": 9,
+            "end": 10,
+            "replacement": [
+              "a",
+              "part",
+              "of"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "I think that public transport will always be available a part of the future .",
+        "score": 0.4915907680988312,
+        "edits": [
+          {
+            "start": 3,
+            "end": 4,
+            "replacement": []
+          },
+          {
+            "start": 9,
+            "end": 9,
+            "replacement": [
+              "available"
+            ]
+          },
+          {
+            "start": 9,
+            "end": 10,
+            "replacement": [
+              "a",
+              "part",
+              "of"
+            ]
+          }
+        ]
+      },
+      {
         "sentence": "I think that public transport will always be available in the future .",
-        "score": 0.4543461501598358,
+        "score": 0.45848196744918823,
         "edits": [
           {
             "start": 3,
@@ -1860,6 +1899,40 @@
         "edits": []
       },
       {
+        "sentence": "I think that public transportation will always be available a part of the future .",
+        "score": 0.4287185072898865,
+        "edits": [
+          {
+            "start": 3,
+            "end": 4,
+            "replacement": []
+          },
+          {
+            "start": 5,
+            "end": 6,
+            "replacement": [
+              "transportation"
+            ]
+          },
+          {
+            "start": 9,
+            "end": 9,
+            "replacement": [
+              "available"
+            ]
+          },
+          {
+            "start": 9,
+            "end": 10,
+            "replacement": [
+              "a",
+              "part",
+              "of"
+            ]
+          }
+        ]
+      },
+      {
         "sentence": "I think that the public transportation will always be important in the future .",
         "score": 0.4243370294570923,
         "edits": [
@@ -1875,58 +1948,6 @@
             "end": 9,
             "replacement": [
               "important"
-            ]
-          }
-        ]
-      },
-      {
-        "sentence": "I think that public transport will always be there in the future .",
-        "score": 0.4143904745578766,
-        "edits": [
-          {
-            "start": 3,
-            "end": 4,
-            "replacement": []
-          },
-          {
-            "start": 9,
-            "end": 9,
-            "replacement": [
-              "there"
-            ]
-          }
-        ]
-      },
-      {
-        "sentence": "I think that public transportation will always be there a part of the future .",
-        "score": 0.40972042083740234,
-        "edits": [
-          {
-            "start": 3,
-            "end": 4,
-            "replacement": []
-          },
-          {
-            "start": 5,
-            "end": 6,
-            "replacement": [
-              "transportation"
-            ]
-          },
-          {
-            "start": 9,
-            "end": 9,
-            "replacement": [
-              "there"
-            ]
-          },
-          {
-            "start": 9,
-            "end": 10,
-            "replacement": [
-              "a",
-              "part",
-              "of"
             ]
           }
         ]
@@ -1971,7 +1992,7 @@
     "candidates": [
       {
         "sentence": "The rich will buy a car , but poor people always need to use a bus or taxi .",
-        "score": 0.9431082606315613,
+        "score": 0.9527862668037415,
         "edits": [
           {
             "start": 2,
@@ -2006,8 +2027,36 @@
         ]
       },
       {
+        "sentence": "rich will buy a car , but poor people always need to use a bus or taxi .",
+        "score": 0.919465184211731,
+        "edits": [
+          {
+            "start": 0,
+            "end": 1,
+            "replacement": []
+          },
+          {
+            "start": 2,
+            "end": 3,
+            "replacement": []
+          },
+          {
+            "start": 7,
+            "end": 7,
+            "replacement": [
+              ","
+            ]
+          },
+          {
+            "start": 8,
+            "end": 9,
+            "replacement": []
+          }
+        ]
+      },
+      {
         "sentence": "The rich will buy a car , but the poor people always need to use a bus or taxi .",
-        "score": 0.9147505760192871,
+        "score": 0.9190745949745178,
         "edits": [
           {
             "start": 2,
@@ -2042,17 +2091,12 @@
         ]
       },
       {
-        "sentence": "rich will buy a car , but poor people always need to use a bus or taxi .",
-        "score": 0.8836084604263306,
+        "sentence": "rich people will buy a car , but poor people always need to use a bus or taxi .",
+        "score": 0.9081732630729675,
         "edits": [
           {
             "start": 0,
             "end": 1,
-            "replacement": []
-          },
-          {
-            "start": 2,
-            "end": 3,
             "replacement": []
           },
           {
@@ -2071,7 +2115,7 @@
       },
       {
         "sentence": "rich will buy a car , but the poor people always need to use a bus or taxi .",
-        "score": 0.8583166003227234,
+        "score": 0.8865473866462708,
         "edits": [
           {
             "start": 0,
@@ -2093,28 +2137,26 @@
         ]
       },
       {
-        "sentence": "The rich people will buy a car , but the poor will always need to use a bus or taxi .",
-        "score": 0.8398208618164062,
+        "sentence": "rich people will buy a car , but the poor people always need to use a bus or taxi .",
+        "score": 0.8642305135726929,
         "edits": [
+          {
+            "start": 0,
+            "end": 1,
+            "replacement": []
+          },
           {
             "start": 7,
             "end": 7,
             "replacement": [
               ","
             ]
-          },
-          {
-            "start": 10,
-            "end": 11,
-            "replacement": [
-              "will"
-            ]
           }
         ]
       },
       {
         "sentence": "The rich will buy a car , but poor will always need to use a bus or taxi .",
-        "score": 0.8197601437568665,
+        "score": 0.8443347811698914,
         "edits": [
           {
             "start": 2,
@@ -2144,7 +2186,7 @@
       },
       {
         "sentence": "rich will buy a car , but the poor will always need to use a bus or taxi .",
-        "score": 0.8162353038787842,
+        "score": 0.8398458361625671,
         "edits": [
           {
             "start": 0,
@@ -2156,6 +2198,26 @@
             "end": 3,
             "replacement": []
           },
+          {
+            "start": 7,
+            "end": 7,
+            "replacement": [
+              ","
+            ]
+          },
+          {
+            "start": 10,
+            "end": 11,
+            "replacement": [
+              "will"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "The rich people will buy a car , but the poor will always need to use a bus or taxi .",
+        "score": 0.8398208618164062,
+        "edits": [
           {
             "start": 7,
             "end": 7,
@@ -2174,7 +2236,7 @@
       },
       {
         "sentence": "The rich will buy a car but poor people always need to use a bus or taxi .",
-        "score": 0.8151659369468689,
+        "score": 0.8364529609680176,
         "edits": [
           {
             "start": 2,
@@ -2190,7 +2252,7 @@
       },
       {
         "sentence": "The rich will buy a car , but the poor will always need to use a bus or taxi .",
-        "score": 0.7986923456192017,
+        "score": 0.8065875172615051,
         "edits": [
           {
             "start": 2,
@@ -2214,12 +2276,17 @@
         ]
       },
       {
-        "sentence": "rich people will buy a car , but poor people always need to use a bus or taxi .",
-        "score": 0.7859788537025452,
+        "sentence": "rich will buy a car , but poor will always need to use a bus or taxi .",
+        "score": 0.7965024709701538,
         "edits": [
           {
             "start": 0,
             "end": 1,
+            "replacement": []
+          },
+          {
+            "start": 2,
+            "end": 3,
             "replacement": []
           },
           {
@@ -2233,6 +2300,13 @@
             "start": 8,
             "end": 9,
             "replacement": []
+          },
+          {
+            "start": 10,
+            "end": 11,
+            "replacement": [
+              "will"
+            ]
           }
         ]
       },
@@ -2251,59 +2325,6 @@
         "sentence": "The rich people will buy a car but the poor people always need to use a bus or taxi .",
         "score": 0.7397895455360413,
         "edits": []
-      },
-      {
-        "sentence": "rich will buy a car , but poor will always need to use a bus or taxi .",
-        "score": 0.7345261573791504,
-        "edits": [
-          {
-            "start": 0,
-            "end": 1,
-            "replacement": []
-          },
-          {
-            "start": 2,
-            "end": 3,
-            "replacement": []
-          },
-          {
-            "start": 7,
-            "end": 7,
-            "replacement": [
-              ","
-            ]
-          },
-          {
-            "start": 8,
-            "end": 9,
-            "replacement": []
-          },
-          {
-            "start": 10,
-            "end": 11,
-            "replacement": [
-              "will"
-            ]
-          }
-        ]
-      },
-      {
-        "sentence": "rich people will buy a car , but the poor people always need to use a bus or taxi .",
-        "score": 0.723343014717102,
-        "edits": [
-          {
-            "start": 0,
-            "end": 1,
-            "replacement": []
-          },
-          {
-            "start": 7,
-            "end": 7,
-            "replacement": [
-              ","
-            ]
-          }
-        ]
       }
     ]
   },
@@ -2384,7 +2405,7 @@
       },
       {
         "sentence": "I consider that is more convenient to drive a car because you carry more things in your own car than travelling by car .",
-        "score": 0.9337417483329773,
+        "score": 0.9375974535942078,
         "edits": [
           {
             "start": 13,
@@ -2395,7 +2416,7 @@
       },
       {
         "sentence": "I consider it more convenient to drive a car because you carry more things in your own car than travelling by car .",
-        "score": 0.8311414122581482,
+        "score": 0.8387576341629028,
         "edits": [
           {
             "start": 2,
@@ -2408,6 +2429,31 @@
             "start": 13,
             "end": 14,
             "replacement": []
+          }
+        ]
+      },
+      {
+        "sentence": "I consider that it is more convenient to drive a car because you carry more things in your own car than traveling by car .",
+        "score": 0.8024362325668335,
+        "edits": [
+          {
+            "start": 3,
+            "end": 3,
+            "replacement": [
+              "it"
+            ]
+          },
+          {
+            "start": 13,
+            "end": 14,
+            "replacement": []
+          },
+          {
+            "start": 21,
+            "end": 22,
+            "replacement": [
+              "traveling"
+            ]
           }
         ]
       },
@@ -2437,8 +2483,26 @@
         ]
       },
       {
+        "sentence": "I think that is more convenient to drive a car because you carry more things in your own car than travelling by car .",
+        "score": 0.7876090407371521,
+        "edits": [
+          {
+            "start": 1,
+            "end": 2,
+            "replacement": [
+              "think"
+            ]
+          },
+          {
+            "start": 13,
+            "end": 14,
+            "replacement": []
+          }
+        ]
+      },
+      {
         "sentence": "I consider it more convenient to drive a car because you carry more things in your own car than traveling by car .",
-        "score": 0.7435897588729858,
+        "score": 0.7458593845367432,
         "edits": [
           {
             "start": 2,
@@ -2475,51 +2539,8 @@
         ]
       },
       {
-        "sentence": "I consider that it is more convenient to drive a car because you carry more things in your own car than traveling by car .",
-        "score": 0.7339685559272766,
-        "edits": [
-          {
-            "start": 3,
-            "end": 3,
-            "replacement": [
-              "it"
-            ]
-          },
-          {
-            "start": 13,
-            "end": 14,
-            "replacement": []
-          },
-          {
-            "start": 21,
-            "end": 22,
-            "replacement": [
-              "traveling"
-            ]
-          }
-        ]
-      },
-      {
-        "sentence": "I think that is more convenient to drive a car because you carry more things in your own car than travelling by car .",
-        "score": 0.7328939437866211,
-        "edits": [
-          {
-            "start": 1,
-            "end": 2,
-            "replacement": [
-              "think"
-            ]
-          },
-          {
-            "start": 13,
-            "end": 14,
-            "replacement": []
-          }
-        ]
-      },
-      {
         "sentence": "I think it is more convenient to drive a car because you carry more things in your own car than travelling by car .",
-        "score": 0.6805077791213989,
+        "score": 0.7262466549873352,
         "edits": [
           {
             "start": 1,
@@ -2537,26 +2558,8 @@
         ]
       },
       {
-        "sentence": "I consider that is more convenient to drive a car because you carry more things in your own car than traveling by car .",
-        "score": 0.6529601216316223,
-        "edits": [
-          {
-            "start": 13,
-            "end": 14,
-            "replacement": []
-          },
-          {
-            "start": 21,
-            "end": 22,
-            "replacement": [
-              "traveling"
-            ]
-          }
-        ]
-      },
-      {
         "sentence": "I think it more convenient to drive a car because you carry more things in your own car than travelling by car .",
-        "score": 0.6264446973800659,
+        "score": 0.6668391823768616,
         "edits": [
           {
             "start": 1,
@@ -2580,6 +2583,24 @@
         ]
       },
       {
+        "sentence": "I consider that is more convenient to drive a car because you carry more things in your own car than traveling by car .",
+        "score": 0.6348555088043213,
+        "edits": [
+          {
+            "start": 13,
+            "end": 14,
+            "replacement": []
+          },
+          {
+            "start": 21,
+            "end": 22,
+            "replacement": [
+              "traveling"
+            ]
+          }
+        ]
+      },
+      {
         "sentence": "I consider it more convenient to drive a car because you carry on more things in your own car than travelling by car .",
         "score": 0.5572003126144409,
         "edits": [
@@ -2588,6 +2609,32 @@
             "end": 4,
             "replacement": [
               "it"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "I think it is more convenient to drive a car because you carry more things in your own car than traveling by car .",
+        "score": 0.5563886761665344,
+        "edits": [
+          {
+            "start": 1,
+            "end": 3,
+            "replacement": [
+              "think",
+              "it"
+            ]
+          },
+          {
+            "start": 13,
+            "end": 14,
+            "replacement": []
+          },
+          {
+            "start": 21,
+            "end": 22,
+            "replacement": [
+              "traveling"
             ]
           }
         ]
@@ -2618,14 +2665,20 @@
         ]
       },
       {
-        "sentence": "I think it is more convenient to drive a car because you carry more things in your own car than traveling by car .",
-        "score": 0.528066098690033,
+        "sentence": "I think that it is more convenient to drive a car because you carry more things in your own car than traveling by car .",
+        "score": 0.5165776014328003,
         "edits": [
           {
             "start": 1,
+            "end": 2,
+            "replacement": [
+              "think"
+            ]
+          },
+          {
+            "start": 3,
             "end": 3,
             "replacement": [
-              "think",
               "it"
             ]
           },
@@ -2640,32 +2693,6 @@
             "replacement": [
               "traveling"
             ]
-          }
-        ]
-      },
-      {
-        "sentence": "I think it it is more convenient to drive a car because you carry more things in your own car than travelling by car .",
-        "score": 0.5118858218193054,
-        "edits": [
-          {
-            "start": 1,
-            "end": 3,
-            "replacement": [
-              "think",
-              "it"
-            ]
-          },
-          {
-            "start": 3,
-            "end": 3,
-            "replacement": [
-              "it"
-            ]
-          },
-          {
-            "start": 13,
-            "end": 14,
-            "replacement": []
           }
         ]
       }
@@ -2702,7 +2729,7 @@
     "candidates": [
       {
         "sentence": "Also , you 'll meet friendly people who usually ask you something to be friends and change your telephone number .",
-        "score": 0.9799891710281372,
+        "score": 0.9723490476608276,
         "edits": [
           {
             "start": 10,
@@ -2713,7 +2740,7 @@
       },
       {
         "sentence": "Also , you 'll meet friendly people who usually ask you to be friends and change your telephone number .",
-        "score": 0.9522085785865784,
+        "score": 0.9444838166236877,
         "edits": [
           {
             "start": 10,
@@ -2729,7 +2756,7 @@
       },
       {
         "sentence": "Also , you 'll meet friendly people who usually ask you to be friends with and change your telephone number .",
-        "score": 0.8714267611503601,
+        "score": 0.8852856159210205,
         "edits": [
           {
             "start": 10,
@@ -2778,24 +2805,8 @@
         ]
       },
       {
-        "sentence": "Also , you 'll meet friendly people who usually ask be friends and change your telephone number .",
-        "score": 0.6449578404426575,
-        "edits": [
-          {
-            "start": 10,
-            "end": 11,
-            "replacement": []
-          },
-          {
-            "start": 11,
-            "end": 14,
-            "replacement": []
-          }
-        ]
-      },
-      {
         "sentence": "Also , you 'll meet friendly people who usually ask you something to be friends with and change your telephone number .",
-        "score": 0.6045315265655518,
+        "score": 0.6038323044776917,
         "edits": [
           {
             "start": 10,
@@ -2812,26 +2823,24 @@
         ]
       },
       {
-        "sentence": "Also , you 'll meet friendly people who usually ask to be friends with and change your telephone number .",
-        "score": 0.49172550439834595,
+        "sentence": "Also , you 'll meet friendly people who usually ask be friends and change your telephone number .",
+        "score": 0.6007999777793884,
         "edits": [
+          {
+            "start": 10,
+            "end": 11,
+            "replacement": []
+          },
           {
             "start": 11,
             "end": 14,
             "replacement": []
-          },
-          {
-            "start": 16,
-            "end": 16,
-            "replacement": [
-              "with"
-            ]
           }
         ]
       },
       {
         "sentence": "Also , you 'll meet friendly people who usually ask to you to be friends with and change your telephone number .",
-        "score": 0.4619365930557251,
+        "score": 0.47252511978149414,
         "edits": [
           {
             "start": 12,
@@ -2848,14 +2857,9 @@
         ]
       },
       {
-        "sentence": "Also , you 'll meet friendly people who usually ask be friends with and change your telephone number .",
-        "score": 0.3995397090911865,
+        "sentence": "Also , you 'll meet friendly people who usually ask to be friends with and change your telephone number .",
+        "score": 0.4143054485321045,
         "edits": [
-          {
-            "start": 10,
-            "end": 11,
-            "replacement": []
-          },
           {
             "start": 11,
             "end": 14,
@@ -2874,6 +2878,29 @@
         "sentence": "Also , you 'll meet friendly people who usually ask to you something to be friends with and change your telephone number .",
         "score": 0.39697715640068054,
         "edits": [
+          {
+            "start": 16,
+            "end": 16,
+            "replacement": [
+              "with"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "Also , you 'll meet friendly people who usually ask be friends with and change your telephone number .",
+        "score": 0.3756100535392761,
+        "edits": [
+          {
+            "start": 10,
+            "end": 11,
+            "replacement": []
+          },
+          {
+            "start": 11,
+            "end": 14,
+            "replacement": []
+          },
           {
             "start": 16,
             "end": 16,
@@ -2949,6 +2976,24 @@
         ]
       },
       {
+        "sentence": "In my experience , when I did n't have a car I used to use the bus to go to school and go back to my house .",
+        "score": 0.9724165201187134,
+        "edits": [
+          {
+            "start": 3,
+            "end": 3,
+            "replacement": [
+              ","
+            ]
+          },
+          {
+            "start": 19,
+            "end": 20,
+            "replacement": []
+          }
+        ]
+      },
+      {
         "sentence": "In my experience , when I did n't have a car , I used to use the bus to go to the school and go back to my house .",
         "score": 0.9713951945304871,
         "edits": [
@@ -2969,24 +3014,6 @@
         ]
       },
       {
-        "sentence": "In my experience , when I did n't have a car I used to use the bus to go to school and go back to my house .",
-        "score": 0.9686107039451599,
-        "edits": [
-          {
-            "start": 3,
-            "end": 3,
-            "replacement": [
-              ","
-            ]
-          },
-          {
-            "start": 19,
-            "end": 20,
-            "replacement": []
-          }
-        ]
-      },
-      {
         "sentence": "In my experience , when I did n't have a car I used to use the bus to go to the school and go back to my house .",
         "score": 0.956457793712616,
         "edits": [
@@ -3001,7 +3028,7 @@
       },
       {
         "sentence": "In my experience when I did n't have a car , I used to use the bus to go to school and go back to my house .",
-        "score": 0.9228421449661255,
+        "score": 0.9302046298980713,
         "edits": [
           {
             "start": 10,
@@ -3019,7 +3046,7 @@
       },
       {
         "sentence": "In my experience , when I did n't have a car , I used to use the bus to go to school and return to my house .",
-        "score": 0.9049227833747864,
+        "score": 0.9178909659385681,
         "edits": [
           {
             "start": 3,
@@ -3050,8 +3077,21 @@
         ]
       },
       {
+        "sentence": "In my experience when I did n't have a car , I used to use the bus to go to the school and go back to my house .",
+        "score": 0.896618127822876,
+        "edits": [
+          {
+            "start": 10,
+            "end": 10,
+            "replacement": [
+              ","
+            ]
+          }
+        ]
+      },
+      {
         "sentence": "In my experience , when I did n't have a car I used to use the bus to go to school and return to my house .",
-        "score": 0.8711742758750916,
+        "score": 0.8752027153968811,
         "edits": [
           {
             "start": 3,
@@ -3103,7 +3143,7 @@
       },
       {
         "sentence": "In my experience , when I did n't have a car , I used to use the bus to go to school and back to my house .",
-        "score": 0.8464642763137817,
+        "score": 0.8554279804229736,
         "edits": [
           {
             "start": 3,
@@ -3128,6 +3168,31 @@
             "start": 22,
             "end": 23,
             "replacement": []
+          }
+        ]
+      },
+      {
+        "sentence": "In my experience when I did n't have a car , I used to use the bus to go to school and return to my house .",
+        "score": 0.8485782742500305,
+        "edits": [
+          {
+            "start": 10,
+            "end": 10,
+            "replacement": [
+              ","
+            ]
+          },
+          {
+            "start": 19,
+            "end": 20,
+            "replacement": []
+          },
+          {
+            "start": 22,
+            "end": 24,
+            "replacement": [
+              "return"
+            ]
           }
         ]
       },
@@ -3157,33 +3222,8 @@
         ]
       },
       {
-        "sentence": "In my experience when I did n't have a car , I used to use the bus to go to school and return to my house .",
-        "score": 0.8353276252746582,
-        "edits": [
-          {
-            "start": 10,
-            "end": 10,
-            "replacement": [
-              ","
-            ]
-          },
-          {
-            "start": 19,
-            "end": 20,
-            "replacement": []
-          },
-          {
-            "start": 22,
-            "end": 24,
-            "replacement": [
-              "return"
-            ]
-          }
-        ]
-      },
-      {
         "sentence": "In my experience , when I did n't have a car I used to use the bus to go to school and back to my house .",
-        "score": 0.8278756737709045,
+        "score": 0.8302465081214905,
         "edits": [
           {
             "start": 3,
@@ -3206,7 +3246,7 @@
       },
       {
         "sentence": "In my experience when I did n't have a car I used to use the bus to go to school and go back to my house .",
-        "score": 0.8245471715927124,
+        "score": 0.8248879909515381,
         "edits": [
           {
             "start": 19,
@@ -3216,20 +3256,15 @@
         ]
       },
       {
-        "sentence": "In my experience when I did n't have a car , I used to use the bus to go to school and back to my house .",
-        "score": 0.7827107906341553,
+        "sentence": "In my experience , when I did n't have a car I used to use the bus to go to the school and back to my house .",
+        "score": 0.7998249530792236,
         "edits": [
           {
-            "start": 10,
-            "end": 10,
+            "start": 3,
+            "end": 3,
             "replacement": [
               ","
             ]
-          },
-          {
-            "start": 19,
-            "end": 20,
-            "replacement": []
           },
           {
             "start": 22,
@@ -3239,21 +3274,8 @@
         ]
       },
       {
-        "sentence": "In my experience when I did n't have a car , I used to use the bus to go to the school and go back to my house .",
-        "score": 0.7491214275360107,
-        "edits": [
-          {
-            "start": 10,
-            "end": 10,
-            "replacement": [
-              ","
-            ]
-          }
-        ]
-      },
-      {
         "sentence": "In my experience , when I did n't have a car I used to use the bus to go to the school and return to my house .",
-        "score": 0.7022592425346375,
+        "score": 0.7920103073120117,
         "edits": [
           {
             "start": 3,
@@ -3778,7 +3800,7 @@
     "candidates": [
       {
         "sentence": "In India we have various types of public transport , like cycle , bike , car , train & flight .",
-        "score": 0.9627683162689209,
+        "score": 0.9612222909927368,
         "edits": [
           {
             "start": 7,
@@ -3847,6 +3869,129 @@
             "end": 12,
             "replacement": [
               "cycle"
+            ]
+          },
+          {
+            "start": 13,
+            "end": 14,
+            "replacement": [
+              "bike"
+            ]
+          },
+          {
+            "start": 15,
+            "end": 16,
+            "replacement": [
+              "car"
+            ]
+          },
+          {
+            "start": 17,
+            "end": 18,
+            "replacement": [
+              "train"
+            ]
+          },
+          {
+            "start": 19,
+            "end": 20,
+            "replacement": [
+              "flight"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "In India we have various types of Public transport , like cycle , bike , car , train & flight .",
+        "score": 0.9201397895812988,
+        "edits": [
+          {
+            "start": 11,
+            "end": 12,
+            "replacement": [
+              "cycle"
+            ]
+          },
+          {
+            "start": 13,
+            "end": 14,
+            "replacement": [
+              "bike"
+            ]
+          },
+          {
+            "start": 15,
+            "end": 16,
+            "replacement": [
+              "car"
+            ]
+          },
+          {
+            "start": 17,
+            "end": 18,
+            "replacement": [
+              "train"
+            ]
+          },
+          {
+            "start": 19,
+            "end": 20,
+            "replacement": [
+              "flight"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "In India we have various types of public transport , like cycle , Bike , car , train & flight .",
+        "score": 0.9182848334312439,
+        "edits": [
+          {
+            "start": 7,
+            "end": 8,
+            "replacement": [
+              "public"
+            ]
+          },
+          {
+            "start": 11,
+            "end": 12,
+            "replacement": [
+              "cycle"
+            ]
+          },
+          {
+            "start": 15,
+            "end": 16,
+            "replacement": [
+              "car"
+            ]
+          },
+          {
+            "start": 17,
+            "end": 18,
+            "replacement": [
+              "train"
+            ]
+          },
+          {
+            "start": 19,
+            "end": 20,
+            "replacement": [
+              "flight"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "In India we have various types of public transport , like Cycle , bike , car , train & flight .",
+        "score": 0.9172211289405823,
+        "edits": [
+          {
+            "start": 7,
+            "end": 8,
+            "replacement": [
+              "public"
             ]
           },
           {
@@ -3976,6 +4121,47 @@
         ]
       },
       {
+        "sentence": "In India we have various types of public transport , like cycle , bike , Car , train & flight .",
+        "score": 0.9103145003318787,
+        "edits": [
+          {
+            "start": 7,
+            "end": 8,
+            "replacement": [
+              "public"
+            ]
+          },
+          {
+            "start": 11,
+            "end": 12,
+            "replacement": [
+              "cycle"
+            ]
+          },
+          {
+            "start": 13,
+            "end": 14,
+            "replacement": [
+              "bike"
+            ]
+          },
+          {
+            "start": 17,
+            "end": 18,
+            "replacement": [
+              "train"
+            ]
+          },
+          {
+            "start": 19,
+            "end": 20,
+            "replacement": [
+              "flight"
+            ]
+          }
+        ]
+      },
+      {
         "sentence": "In India , we have various types of public transport , like Cycle , bike , car , train & flight .",
         "score": 0.9099404215812683,
         "edits": [
@@ -4012,6 +4198,47 @@
             "end": 18,
             "replacement": [
               "train"
+            ]
+          },
+          {
+            "start": 19,
+            "end": 20,
+            "replacement": [
+              "flight"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "In India we have various types of public transport , like cycle , bike , car , Train & flight .",
+        "score": 0.907745897769928,
+        "edits": [
+          {
+            "start": 7,
+            "end": 8,
+            "replacement": [
+              "public"
+            ]
+          },
+          {
+            "start": 11,
+            "end": 12,
+            "replacement": [
+              "cycle"
+            ]
+          },
+          {
+            "start": 13,
+            "end": 14,
+            "replacement": [
+              "bike"
+            ]
+          },
+          {
+            "start": 15,
+            "end": 16,
+            "replacement": [
+              "car"
             ]
           },
           {
@@ -4168,8 +4395,8 @@
         ]
       },
       {
-        "sentence": "In India we have various types of public transport , like cycle , bike , Car , train & flight .",
-        "score": 0.8596396446228027,
+        "sentence": "In India we have various types of public transport , like cycle , bike , car , train & Flight .",
+        "score": 0.8874893188476562,
         "edits": [
           {
             "start": 7,
@@ -4193,40 +4420,6 @@
             ]
           },
           {
-            "start": 17,
-            "end": 18,
-            "replacement": [
-              "train"
-            ]
-          },
-          {
-            "start": 19,
-            "end": 20,
-            "replacement": [
-              "flight"
-            ]
-          }
-        ]
-      },
-      {
-        "sentence": "In India we have various types of public transport , like cycle , Bike , car , train & flight .",
-        "score": 0.8592683672904968,
-        "edits": [
-          {
-            "start": 7,
-            "end": 8,
-            "replacement": [
-              "public"
-            ]
-          },
-          {
-            "start": 11,
-            "end": 12,
-            "replacement": [
-              "cycle"
-            ]
-          },
-          {
             "start": 15,
             "end": 16,
             "replacement": [
@@ -4238,13 +4431,6 @@
             "end": 18,
             "replacement": [
               "train"
-            ]
-          },
-          {
-            "start": 19,
-            "end": 20,
-            "replacement": [
-              "flight"
             ]
           }
         ]
@@ -4265,88 +4451,6 @@
             "end": 8,
             "replacement": [
               "public"
-            ]
-          },
-          {
-            "start": 15,
-            "end": 16,
-            "replacement": [
-              "car"
-            ]
-          },
-          {
-            "start": 17,
-            "end": 18,
-            "replacement": [
-              "train"
-            ]
-          },
-          {
-            "start": 19,
-            "end": 20,
-            "replacement": [
-              "flight"
-            ]
-          }
-        ]
-      },
-      {
-        "sentence": "In India we have various types of public transport , like cycle , bike , car , Train & flight .",
-        "score": 0.8479279279708862,
-        "edits": [
-          {
-            "start": 7,
-            "end": 8,
-            "replacement": [
-              "public"
-            ]
-          },
-          {
-            "start": 11,
-            "end": 12,
-            "replacement": [
-              "cycle"
-            ]
-          },
-          {
-            "start": 13,
-            "end": 14,
-            "replacement": [
-              "bike"
-            ]
-          },
-          {
-            "start": 15,
-            "end": 16,
-            "replacement": [
-              "car"
-            ]
-          },
-          {
-            "start": 19,
-            "end": 20,
-            "replacement": [
-              "flight"
-            ]
-          }
-        ]
-      },
-      {
-        "sentence": "In India we have various types of public transport , like Cycle , bike , car , train & flight .",
-        "score": 0.8325716853141785,
-        "edits": [
-          {
-            "start": 7,
-            "end": 8,
-            "replacement": [
-              "public"
-            ]
-          },
-          {
-            "start": 13,
-            "end": 14,
-            "replacement": [
-              "bike"
             ]
           },
           {
@@ -4423,88 +4527,6 @@
             "end": 20,
             "replacement": [
               "flights"
-            ]
-          }
-        ]
-      },
-      {
-        "sentence": "In India , we have various types of Public transport , like cycle , bike , Car , train & flight .",
-        "score": 0.7775823473930359,
-        "edits": [
-          {
-            "start": 2,
-            "end": 2,
-            "replacement": [
-              ","
-            ]
-          },
-          {
-            "start": 11,
-            "end": 12,
-            "replacement": [
-              "cycle"
-            ]
-          },
-          {
-            "start": 13,
-            "end": 14,
-            "replacement": [
-              "bike"
-            ]
-          },
-          {
-            "start": 17,
-            "end": 18,
-            "replacement": [
-              "train"
-            ]
-          },
-          {
-            "start": 19,
-            "end": 20,
-            "replacement": [
-              "flight"
-            ]
-          }
-        ]
-      },
-      {
-        "sentence": "In India , we have various types of Public transport , like Cycle , bike , car , train & flight .",
-        "score": 0.776101291179657,
-        "edits": [
-          {
-            "start": 2,
-            "end": 2,
-            "replacement": [
-              ","
-            ]
-          },
-          {
-            "start": 13,
-            "end": 14,
-            "replacement": [
-              "bike"
-            ]
-          },
-          {
-            "start": 15,
-            "end": 16,
-            "replacement": [
-              "car"
-            ]
-          },
-          {
-            "start": 17,
-            "end": 18,
-            "replacement": [
-              "train"
-            ]
-          },
-          {
-            "start": 19,
-            "end": 20,
-            "replacement": [
-              "flight"
             ]
           }
         ]
@@ -4600,7 +4622,7 @@
       },
       {
         "sentence": "Depending on the distance and duration to the desired place , mode of transportation is chosen accordingly .",
-        "score": 0.5555354356765747,
+        "score": 0.5539679527282715,
         "edits": [
           {
             "start": 13,
@@ -4613,7 +4635,7 @@
       },
       {
         "sentence": "Depending on the distance and duration to the desired place , mode of transport are chosen accordingly .",
-        "score": 0.5546249747276306,
+        "score": 0.5531872510910034,
         "edits": [
           {
             "start": 14,
@@ -4639,7 +4661,7 @@
       },
       {
         "sentence": "Depending on the distance and duration to the desired place , modes of transport is chosen accordingly .",
-        "score": 0.5464977025985718,
+        "score": 0.5462420582771301,
         "edits": [
           {
             "start": 11,
@@ -4870,7 +4892,7 @@
     "candidates": [
       {
         "sentence": "But generally speaking , travelling by car is much more fun when compared with other modes of transport .",
-        "score": 0.9553696513175964,
+        "score": 0.8285313844680786,
         "edits": [
           {
             "start": 1,
@@ -4904,12 +4926,12 @@
       },
       {
         "sentence": "But Generally speaking , travelling by car is much more fun when compared with other modes of transport .",
-        "score": 0.5800223350524902,
+        "score": 0.5739937424659729,
         "edits": []
       },
       {
         "sentence": "But generally speaking , travelling by car is much more fun when compared to other modes of transport .",
-        "score": 0.5683537721633911,
+        "score": 0.5639070868492126,
         "edits": [
           {
             "start": 1,
@@ -4929,7 +4951,7 @@
       },
       {
         "sentence": "But generally speaking , traveling by car is much more fun when compared with other modes of transport .",
-        "score": 0.564098596572876,
+        "score": 0.5585792064666748,
         "edits": [
           {
             "start": 1,
@@ -5005,7 +5027,7 @@
       },
       {
         "sentence": "But Generally speaking , travelling by car is much more fun when compared to other modes of transport .",
-        "score": 0.3403263986110687,
+        "score": 0.33924204111099243,
         "edits": [
           {
             "start": 13,
@@ -5017,21 +5039,8 @@
         ]
       },
       {
-        "sentence": "But Generally speaking , traveling by car is much more fun when compared with other modes of transport .",
-        "score": 0.33353328704833984,
-        "edits": [
-          {
-            "start": 4,
-            "end": 5,
-            "replacement": [
-              "traveling"
-            ]
-          }
-        ]
-      },
-      {
         "sentence": "But generally speaking , traveling by car is much more fun when compared to other modes of transport .",
-        "score": 0.3329554796218872,
+        "score": 0.33212950825691223,
         "edits": [
           {
             "start": 1,
@@ -5052,6 +5061,19 @@
             "end": 14,
             "replacement": [
               "to"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "But Generally speaking , traveling by car is much more fun when compared with other modes of transport .",
+        "score": 0.3316141664981842,
+        "edits": [
+          {
+            "start": 4,
+            "end": 5,
+            "replacement": [
+              "traveling"
             ]
           }
         ]
@@ -5149,7 +5171,7 @@
       },
       {
         "sentence": "But Generally speaking , traveling by car is much more fun when compared to other modes of transport .",
-        "score": 0.1941460818052292,
+        "score": 0.1933095008134842,
         "edits": [
           {
             "start": 4,
@@ -5234,7 +5256,7 @@
     "candidates": [
       {
         "sentence": "This reminds me of a trip that I have recently been on and the place was Agra .",
-        "score": 0.9911879301071167,
+        "score": 0.9913007616996765,
         "edits": [
           {
             "start": 11,
@@ -5243,6 +5265,19 @@
               "on"
             ]
           },
+          {
+            "start": 15,
+            "end": 16,
+            "replacement": [
+              "was"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "This reminds me of a trip that I have recently been to and the place was Agra .",
+        "score": 0.9679765701293945,
+        "edits": [
           {
             "start": 15,
             "end": 16,
@@ -5313,19 +5348,6 @@
         ]
       },
       {
-        "sentence": "This reminds me of a trip that I have recently been to and the place was Agra .",
-        "score": 0.8917853236198425,
-        "edits": [
-          {
-            "start": 15,
-            "end": 16,
-            "replacement": [
-              "was"
-            ]
-          }
-        ]
-      },
-      {
         "sentence": "This reminds me of a trip that I have recently been to , and the place was Agra .",
         "score": 0.7893325090408325,
         "edits": [
@@ -5347,7 +5369,7 @@
       },
       {
         "sentence": "This reminds me of a trip that I had recently been on and the place was Agra .",
-        "score": 0.733090341091156,
+        "score": 0.7580567598342896,
         "edits": [
           {
             "start": 8,
@@ -5500,7 +5522,7 @@
       },
       {
         "sentence": "This reminds me of a trip that I had recently been to and the place was Agra .",
-        "score": 0.31081241369247437,
+        "score": 0.3173685073852539,
         "edits": [
           {
             "start": 8,
@@ -5556,7 +5578,7 @@
   {
     "source": "It takes around 6 hours by National highway to go from Delhi to Agra .",
     "scorer": "greco",
-    "best_sentence": "It takes around 6 hours by National highway to go from Delhi to Agra .",
+    "best_sentence": "It takes around 6 hours by National Highway to go from Delhi to Agra .",
     "pooled_edits": [
       {
         "start": 5,
@@ -5590,13 +5612,8 @@
     ],
     "candidates": [
       {
-        "sentence": "It takes around 6 hours by National highway to go from Delhi to Agra .",
-        "score": 0.8509125709533691,
-        "edits": []
-      },
-      {
         "sentence": "It takes around 6 hours by National Highway to go from Delhi to Agra .",
-        "score": 0.7804457545280457,
+        "score": 0.7206391096115112,
         "edits": [
           {
             "start": 7,
@@ -5608,8 +5625,13 @@
         ]
       },
       {
+        "sentence": "It takes around 6 hours by National highway to go from Delhi to Agra .",
+        "score": 0.6630406379699707,
+        "edits": []
+      },
+      {
         "sentence": "It takes around 6 hours by national highway to go from Delhi to Agra .",
-        "score": 0.7478852868080139,
+        "score": 0.6130955815315247,
         "edits": [
           {
             "start": 6,
@@ -5621,21 +5643,8 @@
         ]
       },
       {
-        "sentence": "It takes around 6 hours by National highway to get from Delhi to Agra .",
-        "score": 0.4300461709499359,
-        "edits": [
-          {
-            "start": 9,
-            "end": 10,
-            "replacement": [
-              "get"
-            ]
-          }
-        ]
-      },
-      {
         "sentence": "It takes around 6 hours by National Highway to get from Delhi to Agra .",
-        "score": 0.4202215075492859,
+        "score": 0.4006282091140747,
         "edits": [
           {
             "start": 7,
@@ -5654,8 +5663,21 @@
         ]
       },
       {
+        "sentence": "It takes around 6 hours by National highway to get from Delhi to Agra .",
+        "score": 0.39444980025291443,
+        "edits": [
+          {
+            "start": 9,
+            "end": 10,
+            "replacement": [
+              "get"
+            ]
+          }
+        ]
+      },
+      {
         "sentence": "It takes around 6 hours by national highway to get from Delhi to Agra .",
-        "score": 0.4047940969467163,
+        "score": 0.37616220116615295,
         "edits": [
           {
             "start": 6,
@@ -5675,7 +5697,7 @@
       },
       {
         "sentence": "It takes around 6 hours by national Highway to go from Delhi to Agra .",
-        "score": 0.28461968898773193,
+        "score": 0.2732495069503784,
         "edits": [
           {
             "start": 6,
@@ -5751,7 +5773,7 @@
       },
       {
         "sentence": "It takes around 6 hours by national Highway to get from Delhi to Agra .",
-        "score": 0.13338938355445862,
+        "score": 0.13079138100147247,
         "edits": [
           {
             "start": 6,
@@ -5976,7 +5998,7 @@
     "candidates": [
       {
         "sentence": "We have stopped at hotels to have food and , just in case any of us feels hungry , we purchased some snacks just before the trip .",
-        "score": 0.9922152161598206,
+        "score": 0.9928796887397766,
         "edits": [
           {
             "start": 5,
@@ -6032,29 +6054,8 @@
         ]
       },
       {
-        "sentence": "We have stopped at hotels to have food and , just in case if any of us feels hungry , we have purchased some snacks just before the trip .",
-        "score": 0.9718940258026123,
-        "edits": [
-          {
-            "start": 5,
-            "end": 7,
-            "replacement": [
-              "to",
-              "have"
-            ]
-          },
-          {
-            "start": 9,
-            "end": 9,
-            "replacement": [
-              ","
-            ]
-          }
-        ]
-      },
-      {
         "sentence": "We stopped at hotels to have food and , just in case any of us feels hungry , we purchased some snacks just before the trip .",
-        "score": 0.9697465896606445,
+        "score": 0.9798881411552429,
         "edits": [
           {
             "start": 1,
@@ -6090,7 +6091,7 @@
       },
       {
         "sentence": "We stopped at hotels to have food and , just in case any of us felt hungry , we purchased some snacks just before the trip .",
-        "score": 0.9678680300712585,
+        "score": 0.9780725240707397,
         "edits": [
           {
             "start": 1,
@@ -6133,7 +6134,7 @@
       },
       {
         "sentence": "We have stopped at hotels to have food and , just in case any of us felt hungry , we purchased some snacks just before the trip .",
-        "score": 0.9641669392585754,
+        "score": 0.9735497832298279,
         "edits": [
           {
             "start": 5,
@@ -6170,8 +6171,8 @@
         ]
       },
       {
-        "sentence": "We have stopped at hotels to have food and , just in case if any of us feels hungry , we purchased some snacks just before the trip .",
-        "score": 0.9631996750831604,
+        "sentence": "We have stopped at hotels to have food and , just in case if any of us feels hungry , we have purchased some snacks just before the trip .",
+        "score": 0.9718940258026123,
         "edits": [
           {
             "start": 5,
@@ -6187,17 +6188,12 @@
             "replacement": [
               ","
             ]
-          },
-          {
-            "start": 20,
-            "end": 21,
-            "replacement": []
           }
         ]
       },
       {
         "sentence": "We have stopped at hotels to have food and , just in case any of us feel hungry , we purchased some snacks just before the trip .",
-        "score": 0.9627984762191772,
+        "score": 0.9698758125305176,
         "edits": [
           {
             "start": 5,
@@ -6235,7 +6231,7 @@
       },
       {
         "sentence": "We stopped at hotels to have food and , just in case any of us feels hungry , we have purchased some snacks just before the trip .",
-        "score": 0.9531422257423401,
+        "score": 0.9673530459403992,
         "edits": [
           {
             "start": 1,
@@ -6260,13 +6256,39 @@
           {
             "start": 12,
             "end": 13,
+            "replacement": []
+          }
+        ]
+      },
+      {
+        "sentence": "We have stopped at hotels to have food and , just in case if any of us feels hungry , we purchased some snacks just before the trip .",
+        "score": 0.9631996750831604,
+        "edits": [
+          {
+            "start": 5,
+            "end": 7,
+            "replacement": [
+              "to",
+              "have"
+            ]
+          },
+          {
+            "start": 9,
+            "end": 9,
+            "replacement": [
+              ","
+            ]
+          },
+          {
+            "start": 20,
+            "end": 21,
             "replacement": []
           }
         ]
       },
       {
         "sentence": "We have stopped at hotels to have food and , just in case any of us feel hungry , we have purchased some snacks just before the trip .",
-        "score": 0.9519732594490051,
+        "score": 0.9606788158416748,
         "edits": [
           {
             "start": 5,
@@ -6298,51 +6320,8 @@
         ]
       },
       {
-        "sentence": "We have stopped at hotels to have food and just in case any of us feels hungry , we have purchased some snacks just before the trip .",
-        "score": 0.9417333006858826,
-        "edits": [
-          {
-            "start": 5,
-            "end": 7,
-            "replacement": [
-              "to",
-              "have"
-            ]
-          },
-          {
-            "start": 12,
-            "end": 13,
-            "replacement": []
-          }
-        ]
-      },
-      {
-        "sentence": "We have stopped at hotels to have food and just in case any of us feels hungry , we purchased some snacks just before the trip .",
-        "score": 0.9414744973182678,
-        "edits": [
-          {
-            "start": 5,
-            "end": 7,
-            "replacement": [
-              "to",
-              "have"
-            ]
-          },
-          {
-            "start": 12,
-            "end": 13,
-            "replacement": []
-          },
-          {
-            "start": 20,
-            "end": 21,
-            "replacement": []
-          }
-        ]
-      },
-      {
         "sentence": "We stopped at hotels to have food and , just in case any of us feel hungry , we purchased some snacks just before the trip .",
-        "score": 0.9404990673065186,
+        "score": 0.9604434370994568,
         "edits": [
           {
             "start": 1,
@@ -6384,8 +6363,27 @@
         ]
       },
       {
+        "sentence": "We have stopped at hotels to have food and just in case any of us feels hungry , we have purchased some snacks just before the trip .",
+        "score": 0.9443530440330505,
+        "edits": [
+          {
+            "start": 5,
+            "end": 7,
+            "replacement": [
+              "to",
+              "have"
+            ]
+          },
+          {
+            "start": 12,
+            "end": 13,
+            "replacement": []
+          }
+        ]
+      },
+      {
         "sentence": "We have stopped at hotels to have food and , just in case any of us felt hungry , we have purchased some snacks just before the trip .",
-        "score": 0.9340189099311829,
+        "score": 0.9442707896232605,
         "edits": [
           {
             "start": 5,
@@ -6418,7 +6416,7 @@
       },
       {
         "sentence": "We stopped at hotels to have food and , just in case if any of us feels hungry , we purchased some snacks just before the trip .",
-        "score": 0.9323329329490662,
+        "score": 0.9434580206871033,
         "edits": [
           {
             "start": 1,
@@ -6448,8 +6446,34 @@
         ]
       },
       {
-        "sentence": "We have stopped at hotels to have food and just in case if any of us feels hungry , we have purchased some snacks just before the trip .",
-        "score": 0.9278252720832825,
+        "sentence": "We stopped at hotels to have food and , just in case if any of us feels hungry , we have purchased some snacks just before the trip .",
+        "score": 0.9382879137992859,
+        "edits": [
+          {
+            "start": 1,
+            "end": 2,
+            "replacement": []
+          },
+          {
+            "start": 5,
+            "end": 7,
+            "replacement": [
+              "to",
+              "have"
+            ]
+          },
+          {
+            "start": 9,
+            "end": 9,
+            "replacement": [
+              ","
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "We have stopped at hotels to have food and just in case any of us feels hungry , we purchased some snacks just before the trip .",
+        "score": 0.9376330971717834,
         "edits": [
           {
             "start": 5,
@@ -6458,6 +6482,16 @@
               "to",
               "have"
             ]
+          },
+          {
+            "start": 12,
+            "end": 13,
+            "replacement": []
+          },
+          {
+            "start": 20,
+            "end": 21,
+            "replacement": []
           }
         ]
       }
@@ -6529,7 +6563,7 @@
       },
       {
         "sentence": "Since we have the option to wait whenever we want to when we travel by car ( which is impossible when travelling by train & flight ) .",
-        "score": 0.9218707084655762,
+        "score": 0.9289301633834839,
         "edits": [
           {
             "start": 1,
@@ -6554,7 +6588,7 @@
       },
       {
         "sentence": "Since we have the option to wait anytime we want to when we travel by car ( which is impossible when travelling by train & flight ) .",
-        "score": 0.8364147543907166,
+        "score": 0.8279111981391907,
         "edits": [
           {
             "start": 1,
@@ -6572,7 +6606,7 @@
       },
       {
         "sentence": "Since we have the option to wait whenever we want when we travel by car ( which is impossible when travelling by train & flight ) .",
-        "score": 0.7446972131729126,
+        "score": 0.7627115845680237,
         "edits": [
           {
             "start": 1,
@@ -6602,7 +6636,7 @@
       },
       {
         "sentence": "Since , we have the option to wait whenever we want when we travel by car ( which is impossible when travelling by train & flight ) .",
-        "score": 0.7288709878921509,
+        "score": 0.7543787360191345,
         "edits": [
           {
             "start": 8,
@@ -6627,7 +6661,7 @@
       },
       {
         "sentence": "Since , we have the option to wait anytime we want when we travel by car ( which is impossible when travelling by train & flight ) .",
-        "score": 0.6512784957885742,
+        "score": 0.6744074821472168,
         "edits": [
           {
             "start": 11,
@@ -6645,7 +6679,7 @@
       },
       {
         "sentence": "Since we have the option to wait anytime we want when we travel by car ( which is impossible when travelling by train & flight ) .",
-        "score": 0.6155961751937866,
+        "score": 0.6212604641914368,
         "edits": [
           {
             "start": 1,
@@ -6668,7 +6702,7 @@
       },
       {
         "sentence": "Since we have the option to wait whenever we want to when we travel by car ( which is impossible when travelling by train & Flight ) .",
-        "score": 0.49308934807777405,
+        "score": 0.4591011703014374,
         "edits": [
           {
             "start": 1,
@@ -6686,7 +6720,7 @@
       },
       {
         "sentence": "Since we have the option to wait anytime we want to when we travel by car ( which is impossible when travelling by train & Flight ) .",
-        "score": 0.44786980748176575,
+        "score": 0.4141543507575989,
         "edits": [
           {
             "start": 1,
@@ -6715,7 +6749,7 @@
       },
       {
         "sentence": "Since we have the option to wait whenever we want when we travel by car ( which is impossible when travelling by train & Flight ) .",
-        "score": 0.35352110862731934,
+        "score": 0.3055480122566223,
         "edits": [
           {
             "start": 1,
@@ -6738,7 +6772,7 @@
       },
       {
         "sentence": "Since we have the option to wait anytime we want when we travel by car ( which is impossible when travelling by train & Flight ) .",
-        "score": 0.3353349268436432,
+        "score": 0.29124879837036133,
         "edits": [
           {
             "start": 1,
@@ -6849,7 +6883,7 @@
       },
       {
         "sentence": "In addition , we can also take a comfortable short nap on the back seat and wake up fresh .",
-        "score": 0.756852924823761,
+        "score": 0.6959862112998962,
         "edits": [
           {
             "start": 2,
@@ -6923,7 +6957,7 @@
       },
       {
         "sentence": "In addition , we can also take a comfortable short nap in the back seat and wake up fresh .",
-        "score": 0.46149885654449463,
+        "score": 0.4241989254951477,
         "edits": [
           {
             "start": 2,
@@ -6941,7 +6975,7 @@
       },
       {
         "sentence": "In addition we can also take a comfortable short nap on the back seat and wake up fresh .",
-        "score": 0.4145367741584778,
+        "score": 0.4101114869117737,
         "edits": [
           {
             "start": 2,
@@ -6986,7 +7020,7 @@
       },
       {
         "sentence": "In addition to that we can also take a comfortable short nap in the back seat and wake up fresh .",
-        "score": 0.3419526219367981,
+        "score": 0.3384411633014679,
         "edits": [
           {
             "start": 3,
@@ -7024,7 +7058,7 @@
       },
       {
         "sentence": "In addition to this we can also take a comfortable short nap in the back seat and wake up fresh .",
-        "score": 0.25971096754074097,
+        "score": 0.2543806731700897,
         "edits": [
           {
             "start": 3,
@@ -7049,7 +7083,7 @@
       },
       {
         "sentence": "In addition we can also take a comfortable short nap in the back seat and wake up fresh .",
-        "score": 0.2514415383338928,
+        "score": 0.24704182147979736,
         "edits": [
           {
             "start": 2,
@@ -7072,7 +7106,7 @@
       },
       {
         "sentence": "In addition to it we can also take a comfortable short nap in the back seat and wake up fresh .",
-        "score": 0.2250431329011917,
+        "score": 0.2213965654373169,
         "edits": [
           {
             "start": 4,
@@ -7147,22 +7181,8 @@
         ]
       },
       {
-        "sentence": "Because of the above mentioned reasons , I am going to conclude that travelling by car is much more convenient .",
-        "score": 0.8312196135520935,
-        "edits": [
-          {
-            "start": 0,
-            "end": 2,
-            "replacement": [
-              "Because",
-              "of"
-            ]
-          }
-        ]
-      },
-      {
         "sentence": "For the above mentioned reasons , I am going to conclude that traveling by car is much more convenient .",
-        "score": 0.7374697923660278,
+        "score": 0.8414133191108704,
         "edits": [
           {
             "start": 0,
@@ -7176,6 +7196,20 @@
             "end": 14,
             "replacement": [
               "traveling"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "Because of the above mentioned reasons , I am going to conclude that travelling by car is much more convenient .",
+        "score": 0.8312196135520935,
+        "edits": [
+          {
+            "start": 0,
+            "end": 2,
+            "replacement": [
+              "Because",
+              "of"
             ]
           }
         ]
@@ -7401,12 +7435,12 @@
     "candidates": [
       {
         "sentence": "My name is Sarah .",
-        "score": 0.9984668493270874,
+        "score": 0.516258955001831,
         "edits": []
       },
       {
         "sentence": "My name is Sarah !",
-        "score": 0.14125271141529083,
+        "score": 0.14490672945976257,
         "edits": [
           {
             "start": 4,
@@ -7432,7 +7466,7 @@
       },
       {
         "sentence": "My name is Sarah ,",
-        "score": 0.1403704136610031,
+        "score": 0.14040498435497284,
         "edits": [
           {
             "start": 4,
@@ -7477,7 +7511,7 @@
       },
       {
         "sentence": "My name is Sarah and I am a nurse , and",
-        "score": 0.11091664433479309,
+        "score": 0.09901583939790726,
         "edits": [
           {
             "start": 4,
@@ -7509,44 +7543,6 @@
             "end": 4,
             "replacement": [
               "isSarah"
-            ]
-          }
-        ]
-      },
-      {
-        "sentence": "My name is Sarah and I am a nurse ,",
-        "score": 0.06565533578395844,
-        "edits": [
-          {
-            "start": 4,
-            "end": 4,
-            "replacement": [
-              "and",
-              "I",
-              "am",
-              "a",
-              "nurse"
-            ]
-          },
-          {
-            "start": 4,
-            "end": 5,
-            "replacement": [
-              ","
-            ]
-          }
-        ]
-      },
-      {
-        "sentence": "My name is Sarah , and",
-        "score": 0.06369484961032867,
-        "edits": [
-          {
-            "start": 4,
-            "end": 5,
-            "replacement": [
-              ",",
-              "and"
             ]
           }
         ]
@@ -7585,7 +7581,7 @@
       },
       {
         "sentence": "My name is Sarah and I am a doctor , and",
-        "score": 0.0460568405687809,
+        "score": 0.04722331091761589,
         "edits": [
           {
             "start": 4,
@@ -7609,18 +7605,15 @@
         ]
       },
       {
-        "sentence": "My name is Sarah and I am a nurse .",
-        "score": 0.03824756294488907,
+        "sentence": "My name is Sarah , and",
+        "score": 0.03716915100812912,
         "edits": [
           {
             "start": 4,
-            "end": 4,
+            "end": 5,
             "replacement": [
-              "and",
-              "I",
-              "am",
-              "a",
-              "nurse"
+              ",",
+              "and"
             ]
           }
         ]
@@ -7657,8 +7650,49 @@
         ]
       },
       {
+        "sentence": "My name is Sarah and I am a nurse ,",
+        "score": 0.02809390425682068,
+        "edits": [
+          {
+            "start": 4,
+            "end": 4,
+            "replacement": [
+              "and",
+              "I",
+              "am",
+              "a",
+              "nurse"
+            ]
+          },
+          {
+            "start": 4,
+            "end": 5,
+            "replacement": [
+              ","
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "My name is Sarah and I am a nurse .",
+        "score": 0.026413673534989357,
+        "edits": [
+          {
+            "start": 4,
+            "end": 4,
+            "replacement": [
+              "and",
+              "I",
+              "am",
+              "a",
+              "nurse"
+            ]
+          }
+        ]
+      },
+      {
         "sentence": "My name is Sarah and I am a doctor .",
-        "score": 0.029475202783942223,
+        "score": 0.02390250936150551,
         "edits": [
           {
             "start": 4,
@@ -7675,7 +7709,7 @@
       },
       {
         "sentence": "My name 's Sarah ,",
-        "score": 0.024022428318858147,
+        "score": 0.02055143564939499,
         "edits": [
           {
             "start": 2,
@@ -7695,7 +7729,7 @@
       },
       {
         "sentence": "My name 's Sarah !",
-        "score": 0.022281937301158905,
+        "score": 0.020247889682650566,
         "edits": [
           {
             "start": 2,
@@ -7718,7 +7752,7 @@
   {
     "source": "I am 17 years old .",
     "scorer": "greco",
-    "best_sentence": "I am 17 years old .",
+    "best_sentence": "I am 17 years old",
     "pooled_edits": [
       {
         "start": 1,
@@ -7763,13 +7797,8 @@
     ],
     "candidates": [
       {
-        "sentence": "I am 17 years old .",
-        "score": 0.9947690963745117,
-        "edits": []
-      },
-      {
         "sentence": "I am 17 years old",
-        "score": 0.6812211871147156,
+        "score": 0.39715149998664856,
         "edits": [
           {
             "start": 5,
@@ -7779,8 +7808,13 @@
         ]
       },
       {
+        "sentence": "I am 17 years old .",
+        "score": 0.28220197558403015,
+        "edits": []
+      },
+      {
         "sentence": "I am 17 years old now .",
-        "score": 0.2377217411994934,
+        "score": 0.24339930713176727,
         "edits": [
           {
             "start": 5,
@@ -7792,8 +7826,34 @@
         ]
       },
       {
+        "sentence": "I am 17 years old !",
+        "score": 0.19645315408706665,
+        "edits": [
+          {
+            "start": 5,
+            "end": 6,
+            "replacement": [
+              "!"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "I am seventeen years old .",
+        "score": 0.19269652664661407,
+        "edits": [
+          {
+            "start": 2,
+            "end": 3,
+            "replacement": [
+              "seventeen"
+            ]
+          }
+        ]
+      },
+      {
         "sentence": "I am 17 years old now",
-        "score": 0.1915537714958191,
+        "score": 0.19255369901657104,
         "edits": [
           {
             "start": 5,
@@ -7810,27 +7870,14 @@
         ]
       },
       {
-        "sentence": "I am seventeen years old .",
-        "score": 0.19029268622398376,
-        "edits": [
-          {
-            "start": 2,
-            "end": 3,
-            "replacement": [
-              "seventeen"
-            ]
-          }
-        ]
-      },
-      {
-        "sentence": "I am 17 years old !",
-        "score": 0.19021400809288025,
+        "sentence": "I am 17 years old ,",
+        "score": 0.19019876420497894,
         "edits": [
           {
             "start": 5,
             "end": 6,
             "replacement": [
-              "!"
+              ","
             ]
           }
         ]
@@ -7849,21 +7896,8 @@
         ]
       },
       {
-        "sentence": "I am 17 years old ,",
-        "score": 0.18804927170276642,
-        "edits": [
-          {
-            "start": 5,
-            "end": 6,
-            "replacement": [
-              ","
-            ]
-          }
-        ]
-      },
-      {
         "sentence": "I 'm 17 years old",
-        "score": 0.13990303874015808,
+        "score": 0.1282637119293213,
         "edits": [
           {
             "start": 1,
@@ -7881,7 +7915,7 @@
       },
       {
         "sentence": "I am seventeen years old",
-        "score": 0.11318127065896988,
+        "score": 0.12400929629802704,
         "edits": [
           {
             "start": 2,
@@ -7894,26 +7928,6 @@
             "start": 5,
             "end": 6,
             "replacement": []
-          }
-        ]
-      },
-      {
-        "sentence": "I am seventeen years old now .",
-        "score": 0.056877315044403076,
-        "edits": [
-          {
-            "start": 2,
-            "end": 3,
-            "replacement": [
-              "seventeen"
-            ]
-          },
-          {
-            "start": 5,
-            "end": 5,
-            "replacement": [
-              "now"
-            ]
           }
         ]
       },
@@ -7938,28 +7952,28 @@
         ]
       },
       {
-        "sentence": "I am 17 years old now ,",
-        "score": 0.05661122873425484,
+        "sentence": "I am seventeen years old now .",
+        "score": 0.0568268783390522,
         "edits": [
+          {
+            "start": 2,
+            "end": 3,
+            "replacement": [
+              "seventeen"
+            ]
+          },
           {
             "start": 5,
             "end": 5,
             "replacement": [
               "now"
             ]
-          },
-          {
-            "start": 5,
-            "end": 6,
-            "replacement": [
-              ","
-            ]
           }
         ]
       },
       {
         "sentence": "I am 17 years old now !",
-        "score": 0.056535571813583374,
+        "score": 0.05670163780450821,
         "edits": [
           {
             "start": 5,
@@ -7973,6 +7987,26 @@
             "end": 6,
             "replacement": [
               "!"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "I am 17 years old now ,",
+        "score": 0.05653690919280052,
+        "edits": [
+          {
+            "start": 5,
+            "end": 5,
+            "replacement": [
+              "now"
+            ]
+          },
+          {
+            "start": 5,
+            "end": 6,
+            "replacement": [
+              ","
             ]
           }
         ]
@@ -7998,8 +8032,8 @@
         ]
       },
       {
-        "sentence": "I 'm 17 years old !",
-        "score": 0.037031542509794235,
+        "sentence": "I 'm 17 years old now",
+        "score": 0.03663584589958191,
         "edits": [
           {
             "start": 1,
@@ -8010,10 +8044,15 @@
           },
           {
             "start": 5,
-            "end": 6,
+            "end": 5,
             "replacement": [
-              "!"
+              "now"
             ]
+          },
+          {
+            "start": 5,
+            "end": 6,
+            "replacement": []
           }
         ]
       }
@@ -8070,7 +8109,7 @@
     "candidates": [
       {
         "sentence": "I am looking forward to joining you for this year 's summer camps .",
-        "score": 0.9838977456092834,
+        "score": 0.9851963520050049,
         "edits": [
           {
             "start": 5,
@@ -8097,13 +8136,33 @@
       },
       {
         "sentence": "I am looking forward to joining you in this year 's summer camps .",
-        "score": 0.9712042212486267,
+        "score": 0.974306583404541,
         "edits": [
           {
             "start": 5,
             "end": 6,
             "replacement": [
               "joining"
+            ]
+          },
+          {
+            "start": 10,
+            "end": 10,
+            "replacement": [
+              "'s"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "I am looking forward to join you for this year 's summer camps .",
+        "score": 0.9579910039901733,
+        "edits": [
+          {
+            "start": 7,
+            "end": 8,
+            "replacement": [
+              "for"
             ]
           },
           {
@@ -8136,28 +8195,8 @@
         ]
       },
       {
-        "sentence": "I am looking forward to join you for this year 's summer camps .",
-        "score": 0.9440233111381531,
-        "edits": [
-          {
-            "start": 7,
-            "end": 8,
-            "replacement": [
-              "for"
-            ]
-          },
-          {
-            "start": 10,
-            "end": 10,
-            "replacement": [
-              "'s"
-            ]
-          }
-        ]
-      },
-      {
         "sentence": "I am looking forward to joining you at this year 's summer camps .",
-        "score": 0.931425929069519,
+        "score": 0.9419498443603516,
         "edits": [
           {
             "start": 5,
@@ -8184,7 +8223,7 @@
       },
       {
         "sentence": "I am looking forward to join you in this year 's summer camps .",
-        "score": 0.9074386358261108,
+        "score": 0.9265701174736023,
         "edits": [
           {
             "start": 10,
@@ -8210,7 +8249,7 @@
       },
       {
         "sentence": "I am looking forward to joining you for the summer camps this year .",
-        "score": 0.8375337719917297,
+        "score": 0.8119854927062988,
         "edits": [
           {
             "start": 5,
@@ -8256,14 +8295,41 @@
         ]
       },
       {
-        "sentence": "I am looking forward to joining you in the summer camps this year .",
-        "score": 0.7689849138259888,
+        "sentence": "I am looking forward to join you at this year 's summer camps .",
+        "score": 0.7311902046203613,
+        "edits": [
+          {
+            "start": 7,
+            "end": 8,
+            "replacement": [
+              "at"
+            ]
+          },
+          {
+            "start": 10,
+            "end": 10,
+            "replacement": [
+              "'s"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "I am looking forward to joining you at the summer camps this year .",
+        "score": 0.7288780808448792,
         "edits": [
           {
             "start": 5,
             "end": 6,
             "replacement": [
               "joining"
+            ]
+          },
+          {
+            "start": 7,
+            "end": 8,
+            "replacement": [
+              "at"
             ]
           },
           {
@@ -8312,21 +8378,14 @@
         ]
       },
       {
-        "sentence": "I am looking forward to joining you at the summer camps this year .",
-        "score": 0.7137157917022705,
+        "sentence": "I am looking forward to joining you in the summer camps this year .",
+        "score": 0.7254286408424377,
         "edits": [
           {
             "start": 5,
             "end": 6,
             "replacement": [
               "joining"
-            ]
-          },
-          {
-            "start": 7,
-            "end": 8,
-            "replacement": [
-              "at"
             ]
           },
           {
@@ -8418,26 +8477,6 @@
             ]
           }
         ]
-      },
-      {
-        "sentence": "I am looking forward to join you at this year 's summer camps .",
-        "score": 0.6072171330451965,
-        "edits": [
-          {
-            "start": 7,
-            "end": 8,
-            "replacement": [
-              "at"
-            ]
-          },
-          {
-            "start": 10,
-            "end": 10,
-            "replacement": [
-              "'s"
-            ]
-          }
-        ]
       }
     ]
   },
@@ -8479,7 +8518,7 @@
     "candidates": [
       {
         "sentence": "I love children , and I enjoy looking after them . Also , I organized many sports activities in my school .",
-        "score": 0.9801149368286133,
+        "score": 0.9876027703285217,
         "edits": [
           {
             "start": 11,
@@ -8497,7 +8536,7 @@
       },
       {
         "sentence": "I love children , and I enjoy looking after them . I also organized many sports activities in my school .",
-        "score": 0.9526339173316956,
+        "score": 0.959459125995636,
         "edits": [
           {
             "start": 11,
@@ -8520,7 +8559,7 @@
       },
       {
         "sentence": "I love children , and I enjoy looking after them . Also , I organized many sports activities before in my school .",
-        "score": 0.9321680068969727,
+        "score": 0.9339357018470764,
         "edits": [
           {
             "start": 11,
@@ -8533,7 +8572,7 @@
       },
       {
         "sentence": "I love children and I enjoy looking after them . Also , I organized many sports activities in my school .",
-        "score": 0.8973384499549866,
+        "score": 0.9121576547622681,
         "edits": [
           {
             "start": 3,
@@ -8555,8 +8594,19 @@
         ]
       },
       {
+        "sentence": "I love children , and I enjoy looking after them . also , I organized many sports activities in my school .",
+        "score": 0.8902944326400757,
+        "edits": [
+          {
+            "start": 18,
+            "end": 19,
+            "replacement": []
+          }
+        ]
+      },
+      {
         "sentence": "I love children and I enjoy looking after them . I also organized many sports activities in my school .",
-        "score": 0.8502638936042786,
+        "score": 0.8729312419891357,
         "edits": [
           {
             "start": 3,
@@ -8584,7 +8634,7 @@
       },
       {
         "sentence": "I love children , and I enjoy looking after them . also organized many sports activities in my school .",
-        "score": 0.8472449779510498,
+        "score": 0.8705571889877319,
         "edits": [
           {
             "start": 12,
@@ -8617,6 +8667,47 @@
         ]
       },
       {
+        "sentence": "I love children , and I enjoy looking after them . Also organized many sports activities in my school .",
+        "score": 0.79861980676651,
+        "edits": [
+          {
+            "start": 11,
+            "end": 12,
+            "replacement": [
+              "Also"
+            ]
+          },
+          {
+            "start": 12,
+            "end": 14,
+            "replacement": []
+          },
+          {
+            "start": 18,
+            "end": 19,
+            "replacement": []
+          }
+        ]
+      },
+      {
+        "sentence": "I love children and I enjoy looking after them . Also , I organized many sports activities before in my school .",
+        "score": 0.7885780334472656,
+        "edits": [
+          {
+            "start": 3,
+            "end": 4,
+            "replacement": []
+          },
+          {
+            "start": 11,
+            "end": 12,
+            "replacement": [
+              "Also"
+            ]
+          }
+        ]
+      },
+      {
         "sentence": "I love children , and I enjoy looking after them . I also , I organized many sports activities in my school .",
         "score": 0.7809025049209595,
         "edits": [
@@ -8635,44 +8726,13 @@
         ]
       },
       {
-        "sentence": "I love children and I enjoy looking after them . Also , I organized many sports activities before in my school .",
-        "score": 0.7719829082489014,
+        "sentence": "I love children and I enjoy looking after them . also organized many sports activities in my school .",
+        "score": 0.7450075745582581,
         "edits": [
           {
             "start": 3,
             "end": 4,
             "replacement": []
-          },
-          {
-            "start": 11,
-            "end": 12,
-            "replacement": [
-              "Also"
-            ]
-          }
-        ]
-      },
-      {
-        "sentence": "I love children , and I enjoy looking after them . also organized many sports activities before in my school .",
-        "score": 0.7330533862113953,
-        "edits": [
-          {
-            "start": 12,
-            "end": 14,
-            "replacement": []
-          }
-        ]
-      },
-      {
-        "sentence": "I love children , and I enjoy looking after them . Also organized many sports activities in my school .",
-        "score": 0.7221144437789917,
-        "edits": [
-          {
-            "start": 11,
-            "end": 12,
-            "replacement": [
-              "Also"
-            ]
           },
           {
             "start": 12,
@@ -8687,13 +8747,47 @@
         ]
       },
       {
-        "sentence": "I love children and I enjoy looking after them . also organized many sports activities in my school .",
-        "score": 0.7177749276161194,
+        "sentence": "I love children and I enjoy looking after them . also , I organized many sports activities in my school .",
+        "score": 0.7407719492912292,
         "edits": [
           {
             "start": 3,
             "end": 4,
             "replacement": []
+          },
+          {
+            "start": 18,
+            "end": 19,
+            "replacement": []
+          }
+        ]
+      },
+      {
+        "sentence": "I love children , and I enjoy looking after them . also organized many sports activities before in my school .",
+        "score": 0.726737380027771,
+        "edits": [
+          {
+            "start": 12,
+            "end": 14,
+            "replacement": []
+          }
+        ]
+      },
+      {
+        "sentence": "I love children and I enjoy looking after them . Also organized many sports activities in my school .",
+        "score": 0.7186250686645508,
+        "edits": [
+          {
+            "start": 3,
+            "end": 4,
+            "replacement": []
+          },
+          {
+            "start": 11,
+            "end": 12,
+            "replacement": [
+              "Also"
+            ]
           },
           {
             "start": 12,
@@ -8709,7 +8803,7 @@
       },
       {
         "sentence": "I love children and I enjoy looking after them . I also organized many sports activities before in my school .",
-        "score": 0.7084569334983826,
+        "score": 0.687987744808197,
         "edits": [
           {
             "start": 3,
@@ -8726,70 +8820,6 @@
           {
             "start": 12,
             "end": 14,
-            "replacement": []
-          }
-        ]
-      },
-      {
-        "sentence": "I love children , and I enjoy looking after them . also , I organized many sports activities in my school .",
-        "score": 0.6805464625358582,
-        "edits": [
-          {
-            "start": 18,
-            "end": 19,
-            "replacement": []
-          }
-        ]
-      },
-      {
-        "sentence": "I love children and I enjoy looking after them . Also organized many sports activities in my school .",
-        "score": 0.6481404900550842,
-        "edits": [
-          {
-            "start": 3,
-            "end": 4,
-            "replacement": []
-          },
-          {
-            "start": 11,
-            "end": 12,
-            "replacement": [
-              "Also"
-            ]
-          },
-          {
-            "start": 12,
-            "end": 14,
-            "replacement": []
-          },
-          {
-            "start": 18,
-            "end": 19,
-            "replacement": []
-          }
-        ]
-      },
-      {
-        "sentence": "I love children , and I enjoy looking after them . I Also , I organized many sports activities in my school .",
-        "score": 0.6423609852790833,
-        "edits": [
-          {
-            "start": 11,
-            "end": 11,
-            "replacement": [
-              "I"
-            ]
-          },
-          {
-            "start": 11,
-            "end": 12,
-            "replacement": [
-              "Also"
-            ]
-          },
-          {
-            "start": 18,
-            "end": 19,
             "replacement": []
           }
         ]
@@ -8873,21 +8903,8 @@
         ]
       },
       {
-        "sentence": "In addition to that I enjoy cooking .",
-        "score": 0.5560239553451538,
-        "edits": [
-          {
-            "start": 4,
-            "end": 6,
-            "replacement": [
-              "I"
-            ]
-          }
-        ]
-      },
-      {
         "sentence": "In addition , I enjoy cooking .",
-        "score": 0.5509987473487854,
+        "score": 0.6313624978065491,
         "edits": [
           {
             "start": 2,
@@ -8904,13 +8921,44 @@
         ]
       },
       {
+        "sentence": "In addition to that I enjoy cooking .",
+        "score": 0.5560239553451538,
+        "edits": [
+          {
+            "start": 4,
+            "end": 6,
+            "replacement": [
+              "I"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "In addition I enjoy cooking .",
+        "score": 0.3663313090801239,
+        "edits": [
+          {
+            "start": 2,
+            "end": 4,
+            "replacement": []
+          },
+          {
+            "start": 4,
+            "end": 6,
+            "replacement": [
+              "I"
+            ]
+          }
+        ]
+      },
+      {
         "sentence": "In addition to that , i enjoy cooking .",
         "score": 0.35845664143562317,
         "edits": []
       },
       {
         "sentence": "In addition to this , I enjoy cooking .",
-        "score": 0.3226515054702759,
+        "score": 0.3226514756679535,
         "edits": [
           {
             "start": 3,
@@ -8943,24 +8991,6 @@
         ]
       },
       {
-        "sentence": "In addition I enjoy cooking .",
-        "score": 0.266505628824234,
-        "edits": [
-          {
-            "start": 2,
-            "end": 4,
-            "replacement": []
-          },
-          {
-            "start": 4,
-            "end": 6,
-            "replacement": [
-              "I"
-            ]
-          }
-        ]
-      },
-      {
         "sentence": "In addition to this I enjoy cooking .",
         "score": 0.23906347155570984,
         "edits": [
@@ -8982,7 +9012,7 @@
       },
       {
         "sentence": "In addition , I like cooking .",
-        "score": 0.18653713166713715,
+        "score": 0.22432780265808105,
         "edits": [
           {
             "start": 2,
@@ -8995,6 +9025,25 @@
             "replacement": [
               "I",
               "like"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "In addition , I enjoyed cooking .",
+        "score": 0.1782209724187851,
+        "edits": [
+          {
+            "start": 2,
+            "end": 4,
+            "replacement": []
+          },
+          {
+            "start": 5,
+            "end": 7,
+            "replacement": [
+              "I",
+              "enjoyed"
             ]
           }
         ]
@@ -9021,21 +9070,13 @@
         ]
       },
       {
-        "sentence": "In addition , I enjoyed cooking .",
-        "score": 0.14882436394691467,
+        "sentence": "In addition , i enjoy cooking .",
+        "score": 0.1144808828830719,
         "edits": [
           {
             "start": 2,
             "end": 4,
             "replacement": []
-          },
-          {
-            "start": 5,
-            "end": 7,
-            "replacement": [
-              "I",
-              "enjoyed"
-            ]
           }
         ]
       },
@@ -9070,17 +9111,6 @@
               "I",
               "enjoyed"
             ]
-          }
-        ]
-      },
-      {
-        "sentence": "In addition , i enjoy cooking .",
-        "score": 0.09844037145376205,
-        "edits": [
-          {
-            "start": 2,
-            "end": 4,
-            "replacement": []
           }
         ]
       }
@@ -9188,7 +9218,7 @@
       },
       {
         "sentence": "My family thinks my cooking is amazing .",
-        "score": 0.3803290128707886,
+        "score": 0.3418489992618561,
         "edits": [
           {
             "start": 2,
@@ -9273,21 +9303,8 @@
         ]
       },
       {
-        "sentence": "My family thinks my cook is amazing .",
-        "score": 0.14400041103363037,
-        "edits": [
-          {
-            "start": 2,
-            "end": 4,
-            "replacement": [
-              "thinks"
-            ]
-          }
-        ]
-      },
-      {
         "sentence": "My family thinks my cooking is amazing !",
-        "score": 0.12020358443260193,
+        "score": 0.15217500925064087,
         "edits": [
           {
             "start": 2,
@@ -9308,6 +9325,19 @@
             "end": 9,
             "replacement": [
               "!"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "My family thinks my cook is amazing .",
+        "score": 0.14400041103363037,
+        "edits": [
+          {
+            "start": 2,
+            "end": 4,
+            "replacement": [
+              "thinks"
             ]
           }
         ]
@@ -9354,7 +9384,7 @@
       },
       {
         "sentence": "My family thinks my chef is amazing .",
-        "score": 0.0776631310582161,
+        "score": 0.07716785371303558,
         "edits": [
           {
             "start": 2,
@@ -9393,14 +9423,21 @@
         ]
       },
       {
-        "sentence": "My family thinks my cook is amazing !",
-        "score": 0.06087497994303703,
+        "sentence": "My family thinks that my chef is amazing !",
+        "score": 0.03408825770020485,
         "edits": [
           {
             "start": 2,
-            "end": 4,
+            "end": 3,
             "replacement": [
               "thinks"
+            ]
+          },
+          {
+            "start": 5,
+            "end": 6,
+            "replacement": [
+              "chef"
             ]
           },
           {
@@ -9505,7 +9542,7 @@
       },
       {
         "sentence": "I hope that you give me the chance to join you .",
-        "score": 0.9632556438446045,
+        "score": 0.973046600818634,
         "edits": [
           {
             "start": 5,
@@ -9584,6 +9621,26 @@
         ]
       },
       {
+        "sentence": "I hope that you give me the chance to join you !",
+        "score": 0.8401244878768921,
+        "edits": [
+          {
+            "start": 5,
+            "end": 6,
+            "replacement": [
+              "me"
+            ]
+          },
+          {
+            "start": 11,
+            "end": 12,
+            "replacement": [
+              "!"
+            ]
+          }
+        ]
+      },
+      {
         "sentence": "I hope that you can give me the chance to join you !",
         "score": 0.8295714259147644,
         "edits": [
@@ -9627,26 +9684,6 @@
             "replacement": [
               "me",
               "a"
-            ]
-          }
-        ]
-      },
-      {
-        "sentence": "I hope that you give me the chance to join you !",
-        "score": 0.7849612832069397,
-        "edits": [
-          {
-            "start": 5,
-            "end": 6,
-            "replacement": [
-              "me"
-            ]
-          },
-          {
-            "start": 11,
-            "end": 12,
-            "replacement": [
-              "!"
             ]
           }
         ]
@@ -9726,6 +9763,43 @@
         ]
       },
       {
+        "sentence": "I hope that you give my the chance to join you .",
+        "score": 0.5989218354225159,
+        "edits": []
+      },
+      {
+        "sentence": "I hope that you will give me chance to join you !",
+        "score": 0.5971803069114685,
+        "edits": [
+          {
+            "start": 4,
+            "end": 4,
+            "replacement": [
+              "will"
+            ]
+          },
+          {
+            "start": 5,
+            "end": 6,
+            "replacement": [
+              "me"
+            ]
+          },
+          {
+            "start": 6,
+            "end": 7,
+            "replacement": []
+          },
+          {
+            "start": 11,
+            "end": 12,
+            "replacement": [
+              "!"
+            ]
+          }
+        ]
+      },
+      {
         "sentence": "I hope that you will gave me the chance to join you !",
         "score": 0.5575296878814697,
         "edits": [
@@ -9754,26 +9828,8 @@
         ]
       },
       {
-        "sentence": "I hope that you will give my chance to join you .",
-        "score": 0.5395275950431824,
-        "edits": [
-          {
-            "start": 4,
-            "end": 4,
-            "replacement": [
-              "will"
-            ]
-          },
-          {
-            "start": 6,
-            "end": 7,
-            "replacement": []
-          }
-        ]
-      },
-      {
         "sentence": "I hope that you give me chance to join you .",
-        "score": 0.52975994348526,
+        "score": 0.5486310720443726,
         "edits": [
           {
             "start": 5,
@@ -9788,34 +9844,13 @@
             "replacement": []
           }
         ]
-      },
-      {
-        "sentence": "I hope that you can gave me the chance to join you .",
-        "score": 0.5101094841957092,
-        "edits": [
-          {
-            "start": 4,
-            "end": 4,
-            "replacement": [
-              "can"
-            ]
-          },
-          {
-            "start": 4,
-            "end": 6,
-            "replacement": [
-              "gave",
-              "me"
-            ]
-          }
-        ]
       }
     ]
   },
   {
     "source": "Thanks",
     "scorer": "greco",
-    "best_sentence": "Thanks",
+    "best_sentence": "Thank you for your time .",
     "pooled_edits": [
       {
         "start": 0,
@@ -9903,121 +9938,6 @@
     ],
     "candidates": [
       {
-        "sentence": "Thanks",
-        "score": 0.7880213260650635,
-        "edits": []
-      },
-      {
-        "sentence": "Thanks !",
-        "score": 0.6135129332542419,
-        "edits": [
-          {
-            "start": 1,
-            "end": 1,
-            "replacement": [
-              "!"
-            ]
-          }
-        ]
-      },
-      {
-        "sentence": "Thank you for your kind words !",
-        "score": 0.411469966173172,
-        "edits": [
-          {
-            "start": 0,
-            "end": 1,
-            "replacement": [
-              "Thank",
-              "you"
-            ]
-          },
-          {
-            "start": 1,
-            "end": 1,
-            "replacement": [
-              "for",
-              "your",
-              "kind",
-              "words",
-              "!"
-            ]
-          }
-        ]
-      },
-      {
-        "sentence": "Thank you for your kind words .",
-        "score": 0.3838261663913727,
-        "edits": [
-          {
-            "start": 0,
-            "end": 1,
-            "replacement": [
-              "Thank",
-              "you"
-            ]
-          },
-          {
-            "start": 1,
-            "end": 1,
-            "replacement": [
-              "for",
-              "your",
-              "kind",
-              "words",
-              "."
-            ]
-          }
-        ]
-      },
-      {
-        "sentence": "Thanks for your kind words !",
-        "score": 0.34689486026763916,
-        "edits": [
-          {
-            "start": 1,
-            "end": 1,
-            "replacement": [
-              "for",
-              "your",
-              "kind",
-              "words",
-              "!"
-            ]
-          }
-        ]
-      },
-      {
-        "sentence": "Thanks .",
-        "score": 0.33454519510269165,
-        "edits": [
-          {
-            "start": 1,
-            "end": 1,
-            "replacement": [
-              "."
-            ]
-          }
-        ]
-      },
-      {
-        "sentence": "Thanks for your kind words .",
-        "score": 0.26980289816856384,
-        "edits": [
-          {
-            "start": 1,
-            "end": 1,
-            "replacement": [
-              "for",
-              "your",
-              "kind",
-              "words",
-              "."
-            ]
-          }
-        ]
-      },
-      {
         "sentence": "Thank you for your time .",
         "score": 0.2600601613521576,
         "edits": [
@@ -10042,25 +9962,34 @@
         ]
       },
       {
-        "sentence": "Thank you !",
-        "score": 0.2251538783311844,
+        "sentence": "Thank you . for your time .",
+        "score": 0.23827475309371948,
         "edits": [
           {
             "start": 0,
             "end": 1,
             "replacement": [
               "Thank",
-              "you"
+              "you",
+              "."
             ]
           },
           {
             "start": 1,
             "end": 1,
             "replacement": [
-              "!"
+              "for",
+              "your",
+              "time",
+              "."
             ]
           }
         ]
+      },
+      {
+        "sentence": "Thanks",
+        "score": 0.23728208243846893,
+        "edits": []
       },
       {
         "sentence": "Thank you",
@@ -10103,16 +10032,25 @@
         ]
       },
       {
-        "sentence": "Thanks for your time .",
-        "score": 0.12771311402320862,
+        "sentence": "Thank you for your kind words .",
+        "score": 0.17291796207427979,
         "edits": [
+          {
+            "start": 0,
+            "end": 1,
+            "replacement": [
+              "Thank",
+              "you"
+            ]
+          },
           {
             "start": 1,
             "end": 1,
             "replacement": [
               "for",
               "your",
-              "time",
+              "kind",
+              "words",
               "."
             ]
           }
@@ -10167,8 +10105,130 @@
         ]
       },
       {
+        "sentence": "Thank you for your kind words !",
+        "score": 0.10473448038101196,
+        "edits": [
+          {
+            "start": 0,
+            "end": 1,
+            "replacement": [
+              "Thank",
+              "you"
+            ]
+          },
+          {
+            "start": 1,
+            "end": 1,
+            "replacement": [
+              "for",
+              "your",
+              "kind",
+              "words",
+              "!"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "Thanks for your kind words .",
+        "score": 0.07086121290922165,
+        "edits": [
+          {
+            "start": 1,
+            "end": 1,
+            "replacement": [
+              "for",
+              "your",
+              "kind",
+              "words",
+              "."
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "Thank you . !",
+        "score": 0.0530795194208622,
+        "edits": [
+          {
+            "start": 0,
+            "end": 1,
+            "replacement": [
+              "Thank",
+              "you",
+              "."
+            ]
+          },
+          {
+            "start": 1,
+            "end": 1,
+            "replacement": [
+              "!"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "Thanks for your kind words !",
+        "score": 0.04510767385363579,
+        "edits": [
+          {
+            "start": 1,
+            "end": 1,
+            "replacement": [
+              "for",
+              "your",
+              "kind",
+              "words",
+              "!"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "Thanks for your time .",
+        "score": 0.04036671668291092,
+        "edits": [
+          {
+            "start": 1,
+            "end": 1,
+            "replacement": [
+              "for",
+              "your",
+              "time",
+              "."
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "Thank you . for your comment .",
+        "score": 0.03476366400718689,
+        "edits": [
+          {
+            "start": 0,
+            "end": 1,
+            "replacement": [
+              "Thank",
+              "you",
+              "."
+            ]
+          },
+          {
+            "start": 1,
+            "end": 1,
+            "replacement": [
+              "for",
+              "your",
+              "comment",
+              "."
+            ]
+          }
+        ]
+      },
+      {
         "sentence": "Thank you for your comment .",
-        "score": 0.0637538880109787,
+        "score": 0.03334525600075722,
         "edits": [
           {
             "start": 0,
@@ -10191,15 +10251,16 @@
         ]
       },
       {
-        "sentence": "Thank you for the comment .",
-        "score": 0.05510979890823364,
+        "sentence": "Thank you . for the comment .",
+        "score": 0.027554361149668694,
         "edits": [
           {
             "start": 0,
             "end": 1,
             "replacement": [
               "Thank",
-              "you"
+              "you",
+              "."
             ]
           },
           {
@@ -10264,7 +10325,7 @@
     "candidates": [
       {
         "sentence": "My favourite sport is volleyball because I love playing it with my friends .",
-        "score": 0.9870160818099976,
+        "score": 0.9834127426147461,
         "edits": [
           {
             "start": 8,
@@ -10319,7 +10380,7 @@
       },
       {
         "sentence": "My favourite sport is volleyball because I love playing with my friends .",
-        "score": 0.8572579026222229,
+        "score": 0.8390563130378723,
         "edits": [
           {
             "start": 8,
@@ -10345,7 +10406,7 @@
       },
       {
         "sentence": "My favourite sport is volleyball because I love plays with my friends .",
-        "score": 0.44930776953697205,
+        "score": 0.4561603367328644,
         "edits": []
       },
       {
@@ -10393,7 +10454,7 @@
       },
       {
         "sentence": "My favourite sport is volleyball because I love to play it with my friends .",
-        "score": 0.33246102929115295,
+        "score": 0.31762421131134033,
         "edits": [
           {
             "start": 8,
@@ -10408,7 +10469,7 @@
       },
       {
         "sentence": "My favourite sport is volleyball because I love to play with my friends .",
-        "score": 0.28882795572280884,
+        "score": 0.28569144010543823,
         "edits": [
           {
             "start": 8,
@@ -10491,7 +10552,7 @@
     "candidates": [
       {
         "sentence": "Volleyball is a sport played every place . When I travel on the beach I like plays with my sister in the sand and after we go to the sea .",
-        "score": 0.6150289177894592,
+        "score": 0.6092586517333984,
         "edits": [
           {
             "start": 4,
@@ -10519,7 +10580,7 @@
       },
       {
         "sentence": "Volleyball is a sport played in every place . When I travel on the beach I like plays with my sister in the sand and after we go to the sea .",
-        "score": 0.5438669323921204,
+        "score": 0.5684542059898376,
         "edits": [
           {
             "start": 4,
@@ -10535,6 +10596,42 @@
             "replacement": [
               ".",
               "When"
+            ]
+          },
+          {
+            "start": 26,
+            "end": 28,
+            "replacement": [
+              "go"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "Volleyball is a sport played in every place . When I travel on the beach I like play with my sister in the sand and after we go to the sea .",
+        "score": 0.5412821173667908,
+        "edits": [
+          {
+            "start": 4,
+            "end": 5,
+            "replacement": [
+              "played",
+              "in"
+            ]
+          },
+          {
+            "start": 7,
+            "end": 9,
+            "replacement": [
+              ".",
+              "When"
+            ]
+          },
+          {
+            "start": 16,
+            "end": 17,
+            "replacement": [
+              "play"
             ]
           },
           {
@@ -10576,44 +10673,8 @@
         ]
       },
       {
-        "sentence": "Volleyball is a sport played in every place . When I travel on the beach I like play with my sister in the sand and after we go to the sea .",
-        "score": 0.5087218284606934,
-        "edits": [
-          {
-            "start": 4,
-            "end": 5,
-            "replacement": [
-              "played",
-              "in"
-            ]
-          },
-          {
-            "start": 7,
-            "end": 9,
-            "replacement": [
-              ".",
-              "When"
-            ]
-          },
-          {
-            "start": 16,
-            "end": 17,
-            "replacement": [
-              "play"
-            ]
-          },
-          {
-            "start": 26,
-            "end": 28,
-            "replacement": [
-              "go"
-            ]
-          }
-        ]
-      },
-      {
         "sentence": "Volleyball is a sport played in every place . When I travel on the beach I like playing with my sister in the sand and after we go to the sea .",
-        "score": 0.4815566837787628,
+        "score": 0.5008397102355957,
         "edits": [
           {
             "start": 4,
@@ -10649,7 +10710,7 @@
       },
       {
         "sentence": "Volleyball is a sport played in every place . When I travel on the beach I like to play with my sister in the sand and after we go to the sea .",
-        "score": 0.4807327091693878,
+        "score": 0.500080943107605,
         "edits": [
           {
             "start": 4,
@@ -10685,8 +10746,44 @@
         ]
       },
       {
+        "sentence": "Volleyball is a sport that I play every place . When I travel on the beach I like play with my sister in the sand and after we go to the sea .",
+        "score": 0.49105381965637207,
+        "edits": [
+          {
+            "start": 4,
+            "end": 4,
+            "replacement": [
+              "that",
+              "I"
+            ]
+          },
+          {
+            "start": 7,
+            "end": 9,
+            "replacement": [
+              ".",
+              "When"
+            ]
+          },
+          {
+            "start": 16,
+            "end": 17,
+            "replacement": [
+              "play"
+            ]
+          },
+          {
+            "start": 26,
+            "end": 28,
+            "replacement": [
+              "go"
+            ]
+          }
+        ]
+      },
+      {
         "sentence": "Volleyball is a sport played every place . When I travel on the beach I like play with my sister in the sand and after we go to the sea .",
-        "score": 0.4660471975803375,
+        "score": 0.48195961117744446,
         "edits": [
           {
             "start": 4,
@@ -10708,6 +10805,27 @@
             "end": 17,
             "replacement": [
               "play"
+            ]
+          },
+          {
+            "start": 26,
+            "end": 28,
+            "replacement": [
+              "go"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "Volleyball is a sport play every place . When I travel on the beach I like plays with my sister in the sand and after we go to the sea .",
+        "score": 0.4512197971343994,
+        "edits": [
+          {
+            "start": 7,
+            "end": 9,
+            "replacement": [
+              ".",
+              "When"
             ]
           },
           {
@@ -10757,42 +10875,6 @@
         ]
       },
       {
-        "sentence": "Volleyball is a sport that I play every place . When I travel on the beach I like play with my sister in the sand and after we go to the sea .",
-        "score": 0.4404309391975403,
-        "edits": [
-          {
-            "start": 4,
-            "end": 4,
-            "replacement": [
-              "that",
-              "I"
-            ]
-          },
-          {
-            "start": 7,
-            "end": 9,
-            "replacement": [
-              ".",
-              "When"
-            ]
-          },
-          {
-            "start": 16,
-            "end": 17,
-            "replacement": [
-              "play"
-            ]
-          },
-          {
-            "start": 26,
-            "end": 28,
-            "replacement": [
-              "go"
-            ]
-          }
-        ]
-      },
-      {
         "sentence": "Volleyball is a sport that I play every place . When I travel on the beach I like playing with my sister in the sand and after we go to the sea .",
         "score": 0.4316422641277313,
         "edits": [
@@ -10829,29 +10911,8 @@
         ]
       },
       {
-        "sentence": "Volleyball is a sport play every place . When I travel on the beach I like plays with my sister in the sand and after we go to the sea .",
-        "score": 0.43014010787010193,
-        "edits": [
-          {
-            "start": 7,
-            "end": 9,
-            "replacement": [
-              ".",
-              "When"
-            ]
-          },
-          {
-            "start": 26,
-            "end": 28,
-            "replacement": [
-              "go"
-            ]
-          }
-        ]
-      },
-      {
         "sentence": "Volleyball is a sport played every place . When I travel on the beach I like playing with my sister in the sand and after we go to the sea .",
-        "score": 0.39653414487838745,
+        "score": 0.41850170493125916,
         "edits": [
           {
             "start": 4,
@@ -10886,7 +10947,7 @@
       },
       {
         "sentence": "Volleyball is a sport played every place . When I travel on the beach I like to play with my sister in the sand and after we go to the sea .",
-        "score": 0.38265445828437805,
+        "score": 0.40039950609207153,
         "edits": [
           {
             "start": 4,
@@ -10922,7 +10983,7 @@
       },
       {
         "sentence": "Volleyball is a sport play every place . When I travel on the beach I like play with my sister in the sand and after we go to the sea .",
-        "score": 0.35816553235054016,
+        "score": 0.3754846155643463,
         "edits": [
           {
             "start": 7,
@@ -10950,7 +11011,7 @@
       },
       {
         "sentence": "Volleyball is a sport play every place . When I travel on the beach I like playing with my sister in the sand and after we go to the sea .",
-        "score": 0.33929452300071716,
+        "score": 0.34908321499824524,
         "edits": [
           {
             "start": 7,
@@ -10978,7 +11039,7 @@
       },
       {
         "sentence": "Volleyball is a sport play every place . When I travel on the beach I like to play with my sister in the sand and after we go to the sea .",
-        "score": 0.3365130126476288,
+        "score": 0.3437710404396057,
         "edits": [
           {
             "start": 7,
