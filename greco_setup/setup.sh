@@ -9,7 +9,7 @@ fi
 git -C external/greco checkout --detach 8e509aaacf4e5ec3276d3427371471fd82a7f58b
 python -m pip install -r external/greco/requirements.txt
 if [ ! -s models/greco/checkpoint.bin ]; then
-    curl --fail --location --retry 3 \
+    curl --fail --location --retry 3 --continue-at - \
         https://huggingface.co/nusnlp/GRECO/resolve/main/checkpoint/checkpoint.bin \
         --output models/greco/checkpoint.bin.partial
     mv models/greco/checkpoint.bin.partial models/greco/checkpoint.bin

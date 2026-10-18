@@ -1,0 +1,117 @@
+[
+  {
+    "source": "It 's difficult answer at the question \" what are you going to do in the future ? \" if the only one who has to know it is in two minds .",
+    "scorer": "greco",
+    "best_sentence": "It 's difficult to answer the question \" what are you going to do in the future ? \" if the only one who has to know it is in two minds .",
+    "pooled_edits": [
+      {
+        "start": 3,
+        "end": 3,
+        "replacement": [
+          "to"
+        ]
+      },
+      {
+        "start": 4,
+        "end": 5,
+        "replacement": []
+      }
+    ],
+    "candidates": [
+      {
+        "sentence": "It 's difficult to answer the question \" what are you going to do in the future ? \" if the only one who has to know it is in two minds .",
+        "score": 0.9955816864967346,
+        "edits": [
+          {
+            "start": 3,
+            "end": 3,
+            "replacement": [
+              "to"
+            ]
+          },
+          {
+            "start": 4,
+            "end": 5,
+            "replacement": []
+          }
+        ]
+      },
+      {
+        "sentence": "It 's difficult to answer at the question \" what are you going to do in the future ? \" if the only one who has to know it is in two minds .",
+        "score": 0.9525312781333923,
+        "edits": [
+          {
+            "start": 3,
+            "end": 3,
+            "replacement": [
+              "to"
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "It 's difficult answer the question \" what are you going to do in the future ? \" if the only one who has to know it is in two minds .",
+        "score": 0.9192390441894531,
+        "edits": [
+          {
+            "start": 4,
+            "end": 5,
+            "replacement": []
+          }
+        ]
+      },
+      {
+        "sentence": "It 's difficult answer at the question \" what are you going to do in the future ? \" if the only one who has to know it is in two minds .",
+        "score": 0.6714091897010803,
+        "edits": []
+      }
+    ]
+  },
+  {
+    "source": "When I was younger I used to say that I wanted to be a teacher , a saleswoman and even a butcher .. I do n't know why .",
+    "scorer": "greco",
+    "best_sentence": "When I was younger , I used to say that I wanted to be a teacher , a saleswoman and even a butcher .. I do n't know why .",
+    "pooled_edits": [
+      {
+        "start": 4,
+        "end": 4,
+        "replacement": [
+          ","
+        ]
+      }
+    ],
+    "candidates": [
+      {
+        "sentence": "When I was younger , I used to say that I wanted to be a teacher , a saleswoman and even a butcher .. I do n't know why .",
+        "score": 0.9621469974517822,
+        "edits": [
+          {
+            "start": 4,
+            "end": 4,
+            "replacement": [
+              ","
+            ]
+          }
+        ]
+      },
+      {
+        "sentence": "When I was younger I used to say that I wanted to be a teacher , a saleswoman and even a butcher .. I do n't know why .",
+        "score": 0.9530237317085266,
+        "edits": []
+      }
+    ]
+  },
+  {
+    "source": "I would like to study Psychology because one day I would open my own psychology office and help people .",
+    "scorer": "greco",
+    "best_sentence": "I would like to study Psychology because one day I would open my own psychology office and help people .",
+    "pooled_edits": [],
+    "candidates": [
+      {
+        "sentence": "I would like to study Psychology because one day I would open my own psychology office and help people .",
+        "score": 0.607943594455719,
+        "edits": []
+      }
+    ]
+  }
+]
