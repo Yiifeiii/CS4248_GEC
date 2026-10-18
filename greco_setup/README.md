@@ -137,6 +137,27 @@ Results for BART + T5 + GECToR (`bart-t5-gector-dev30`, 73 gold edits):
 Recall rises with k, but precision falls about as much, so F0.5 does not improve
 on these 30 sentences.
 
+### Official GRECO with voting
+
+`combine.py` ranks candidates by the GRECO score alone. Official GRECO
+(`external/greco/run_combination.py`) can add a vote term,
+`vote_coef × log(average share of inputs proposing the candidate's edits)`.
+`bash greco_setup/run_official_vote.sh` (GRECO environment, repo root) runs it on the
+same dev30 hypotheses, one ERRANT M2 input per ranked hypothesis (3, 7 or 11 inputs),
+with `vote_coef` 0.4 (the paper's value) and 0 as a control. Results are in
+`outputs/greco/bart-t5-gector-dev30-vote/metrics.csv`:
+
+| k | Inputs | Vote 0.4: ERRANT P / R / F0.5 | M² F0.5 | Vote 0: ERRANT P / R / F0.5 | M² F0.5 |
+| --- | ---: | --- | ---: | --- | ---: |
+| 1 | 3 | 68.4 / 35.6 / 57.8 | 61.6 | 68.4 / 35.6 / 57.8 | 61.6 |
+| 3 | 7 | 68.3 / 38.4 / 59.1 | 63.8 | 61.4 / 37.0 / 54.2 | 58.7 |
+| 5 | 11 | 62.2 / 38.4 / 55.3 | 59.8 | 61.2 / 41.1 / 55.8 | 59.9 |
+
+Voting keeps precision at k=3 and gives the best F0.5 so far, but not at k=5:
+votes are counted per hypothesis, so BART's and T5's near-duplicate beams cast five
+votes each while GECToR casts one. The vote-0 control matches `combine.py`'s outputs on
+29 of 30 sentences at every k.
+
 The existing `bart-t5-dev30` results were produced before the outputs were
 unified. Rerunning reproduces the BART input exactly; 2 of 150 T5 lines differ
 because spaCy now separates a `?"` the old normalization left joined.
