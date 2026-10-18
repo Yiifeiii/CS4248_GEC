@@ -156,7 +156,7 @@ with `vote_coef` 0.4 (the paper's value) and 0 as a control. Results are in
 Voting keeps precision at k=3 and gives the best F0.5 so far, but not at k=5:
 votes are counted per hypothesis, so BART's and T5's near-duplicate beams cast five
 votes each while GECToR casts one. The vote-0 control matches `combine.py`'s outputs on
-29 of 30 sentences at every k.
+29 of 30 sentences at k=1 and k=3, and all 30 at k=5.
 
 The existing `bart-t5-dev30` results were produced before the outputs were
 unified. Rerunning reproduces the BART input exactly; 2 of 150 T5 lines differ
