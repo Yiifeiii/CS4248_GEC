@@ -12,14 +12,9 @@ The repository also contains datasets, prepared source/target sentence pairs, an
 
 | Path | Purpose |
 | --- | --- |
-| `data/` | Prepared training, development, and test sentence files |
-| `fce/` | FCE annotations, parallel files, and license |
-| `lang8.bea19/` | Lang-8 BEA-2019 annotations and parallel files |
-| `nucle/` | NUCLE BEA-2019 annotations and parallel files |
-| `wi+locness/` | W&I+LOCNESS annotations, parallel files, test input, and licenses |
-| `conll14/` | CoNLL-2014 gold annotations |
-| `m2_to_parallel.py` | Convert M2 annotations into original/corrected sentence pairs |
-| `error_type_stats.py` | Count sentences and edits by error type for selected corpora |
+| `data/` | Training, development, and test sentences, gold M2 annotations for scoring, and dataset licenses |
+| `m2_to_parallel.py` | Convert M2 annotations into original/corrected sentence pairs (used to build `data/`) |
+| `error_type_stats.py` | Count sentences and edits by error type (needs the original corpus M2 files, see below) |
 | `error_type_counts.csv` | Existing error-type counts by corpus |
 | `m2scorer/` | Bundled NUS MaxMatch scorer, supporting scripts, examples, and license |
 | `bart/` | BART n-best generation, export to the shared output format, n-best statistics |
@@ -33,14 +28,19 @@ The repository also contains datasets, prepared source/target sentence pairs, an
 
 Training uses the provided BEA-2019 corpora: FCE, Lang-8, NUCLE, and W&I+LOCNESS. No additional training data or manual annotation is planned.
 
-| Prepared files | Lines per file |
-| --- | ---: |
-| `data/train.src`, `data/train.tgt` | 561,535 |
-| `data/dev.src`, `data/dev.tgt` | 4,384 |
-| `data/test.bea19.src` | 4,477 |
-| `data/test.conll14.src` | 1,312 |
+| File | Contents | Built from | Lines / sentences |
+| --- | --- | --- | ---: |
+| `data/train.src`, `data/train.tgt` | Training pairs, erroneous sentences only | FCE train + dev, Lang-8, NUCLE, W&I A/B/C train (`--erroneous_only`) | 561,535 |
+| `data/dev.src`, `data/dev.tgt` | Development pairs, all sentences | W&I+LOCNESS `ABCN.dev.gold.bea19.m2` | 4,384 |
+| `data/dev.m2` | Dev gold edits, for ERRANT | W&I+LOCNESS `ABCN.dev.gold.bea19.m2` | 4,384 |
+| `data/test.bea19.src` | BEA-2019 test input (no gold; score on Codabench) | W&I+LOCNESS `ABCN.test.bea19.orig` | 4,477 |
+| `data/test.conll14.src` | CoNLL-2014 test input | `official-2014.combined.m2` | 1,312 |
+| `data/test.conll14.m2` | CoNLL-2014 gold edits (both annotators), for the M² scorer | `official-2014.combined.m2` | 1,312 |
+| `data/licenses/` | FCE, W&I and LOCNESS licenses | | |
 
-Each `.src` line is an original, tokenized sentence; the corresponding `.tgt` line is its corrected version. Preserve line alignment when processing these files. Test files in `data/` contain inputs only.
+Each `.src` line is an original, tokenized sentence; the corresponding `.tgt` line is its corrected version. Preserve line alignment when processing these files. The `.src` files of dev and CoNLL-2014 test are exactly the source sentences of their `.m2` files.
+
+The original corpus folders (`fce/`, `lang8.bea19/`, `nucle/`, `wi+locness/`, `conll14/`) were removed once `data/` was built. They remain in the Git history, e.g. `git checkout 04eec95 -- fce lang8.bea19 nucle wi+locness conll14` restores them.
 
 M2 files store source sentences and edits using zero-based token offsets. For example:
 
@@ -87,7 +87,7 @@ Prepared `.src` and `.tgt` files already contain sentence text. Consult the data
 The converter uses Python 3 and standard-library modules:
 
 ```bash
-python3 m2_to_parallel.py --data fce/m2/fce.train.gold.bea19.m2
+python3 m2_to_parallel.py --data data/dev.m2
 ```
 
 This writes `.src` and `.tgt` files beside the input, replacing existing outputs with the same names. Multiple input files can follow `--data`.
@@ -99,7 +99,7 @@ The converter applies edits while tracking token-position changes caused by inse
 
 ### Inspect error distributions
 
-`error_type_stats.py` counts sentences, sentences with errors, and edit categories for annotator `0`, excluding `noop` edits. Before running it, update its hardcoded `base` path to this checkout and choose an appropriate JSON output path; its current output is `~/errstats.json`.
+`error_type_stats.py` counts sentences, sentences with errors, and edit categories for annotator `0`, excluding `noop` edits. It reads the original corpus M2 files, so restore them first (see [Data and formats](#data-and-formats)); `error_type_counts.csv` already holds its results. Before running it, update its hardcoded `base` path to this checkout and choose an appropriate JSON output path; its current output is `~/errstats.json`.
 
 ```bash
 python3 error_type_stats.py
@@ -114,7 +114,7 @@ The bundled scorer accepts tokenized predictions, one sentence per line, and gol
 The scorer is legacy Python 2 code and is not directly compatible with Python 3. In a compatible Python 2 environment, run from the repository root:
 
 ```bash
-python2 m2scorer/scripts/m2scorer.py predictions.txt conll14/official-2014.combined.m2
+python2 m2scorer/scripts/m2scorer.py predictions.txt data/test.conll14.m2
 ```
 
 It reports precision, recall, and F₀.₅ by default. F₀.₅ gives precision more weight than recall, making unnecessary corrections costly. See [the scorer README](m2scorer/README) for options, prerequisites, annotation conventions, and attribution.

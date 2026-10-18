@@ -121,6 +121,22 @@ cp outputs/greco/bart-t5-dev30/gold.m2 outputs/greco/bart-t5-gector-dev30/
 python -m greco_setup.evaluate_pilot --output-dir outputs/greco/bart-t5-gector-dev30
 ```
 
+For ERRANT scores (the BEA-2019 metric) and the oracle recall of the edit pool,
+run `python -m greco_setup.evaluate_errant --output-dir <folder>` with any Python
+that has `errant`; it writes `<folder>/errant.json`.
+
+Results for BART + T5 + GECToR (`bart-t5-gector-dev30`, 73 gold edits):
+
+| System | ERRANT P | R | F0.5 | M² F0.5 | Gold edits reachable |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| GECToR | 71.4 | 34.2 | 58.7 | 59.4 | |
+| GRECO k=1 | 67.6 | 34.2 | 56.6 | 60.5 | 30 (41%) |
+| GRECO k=3 | 62.2 | 38.4 | 55.3 | 58.7 | 39 (53%) |
+| GRECO k=5 | 61.2 | 41.1 | 55.8 | 59.9 | 45 (62%) |
+
+Recall rises with k, but precision falls about as much, so F0.5 does not improve
+on these 30 sentences.
+
 The existing `bart-t5-dev30` results were produced before the outputs were
 unified. Rerunning reproduces the BART input exactly; 2 of 150 T5 lines differ
 because spaCy now separates a `?"` the old normalization left joined.

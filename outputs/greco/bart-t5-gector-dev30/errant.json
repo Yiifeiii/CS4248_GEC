@@ -1,0 +1,140 @@
+{
+  "metric": "ERRANT span-based correction and detection (-ds)",
+  "sentences": 30,
+  "results": {
+    "bart top-1": {
+      "correction": {
+        "tp": 19.0,
+        "fp": 10.0,
+        "fn": 54.0,
+        "precision": 0.6552,
+        "recall": 0.2603,
+        "f0_5": 0.5026
+      },
+      "detection": {
+        "tp": 21.0,
+        "fp": 8.0,
+        "fn": 54.0,
+        "precision": 0.7241,
+        "recall": 0.28,
+        "f0_5": 0.5497
+      },
+      "sentences_changed": 18
+    },
+    "t5 top-1": {
+      "correction": {
+        "tp": 15.0,
+        "fp": 15.0,
+        "fn": 58.0,
+        "precision": 0.5,
+        "recall": 0.2055,
+        "f0_5": 0.3886
+      },
+      "detection": {
+        "tp": 22.0,
+        "fp": 8.0,
+        "fn": 53.0,
+        "precision": 0.7333,
+        "recall": 0.2933,
+        "f0_5": 0.5641
+      },
+      "sentences_changed": 20
+    },
+    "gector top-1": {
+      "correction": {
+        "tp": 25.0,
+        "fp": 10.0,
+        "fn": 48.0,
+        "precision": 0.7143,
+        "recall": 0.3425,
+        "f0_5": 0.5869
+      },
+      "detection": {
+        "tp": 30.0,
+        "fp": 5.0,
+        "fn": 45.0,
+        "precision": 0.8571,
+        "recall": 0.4,
+        "f0_5": 0.6977
+      },
+      "sentences_changed": 20
+    },
+    "GRECO k=1": {
+      "correction": {
+        "tp": 25.0,
+        "fp": 12.0,
+        "fn": 48.0,
+        "precision": 0.6757,
+        "recall": 0.3425,
+        "f0_5": 0.5656
+      },
+      "detection": {
+        "tp": 31.0,
+        "fp": 6.0,
+        "fn": 44.0,
+        "precision": 0.8378,
+        "recall": 0.4133,
+        "f0_5": 0.6951
+      },
+      "sentences_changed": 22
+    },
+    "GRECO k=3": {
+      "correction": {
+        "tp": 28.0,
+        "fp": 17.0,
+        "fn": 45.0,
+        "precision": 0.6222,
+        "recall": 0.3836,
+        "f0_5": 0.5534
+      },
+      "detection": {
+        "tp": 35.0,
+        "fp": 10.0,
+        "fn": 40.0,
+        "precision": 0.7778,
+        "recall": 0.4667,
+        "f0_5": 0.6863
+      },
+      "sentences_changed": 24
+    },
+    "GRECO k=5": {
+      "correction": {
+        "tp": 30.0,
+        "fp": 19.0,
+        "fn": 43.0,
+        "precision": 0.6122,
+        "recall": 0.411,
+        "f0_5": 0.5576
+      },
+      "detection": {
+        "tp": 38.0,
+        "fp": 11.0,
+        "fn": 37.0,
+        "precision": 0.7755,
+        "recall": 0.5067,
+        "f0_5": 0.7011
+      },
+      "sentences_changed": 24
+    }
+  },
+  "oracle": {
+    "k=1": {
+      "pooled_edits": 55,
+      "gold_reachable": 30,
+      "gold_total": 73,
+      "oracle_recall": 0.410958904109589
+    },
+    "k=3": {
+      "pooled_edits": 121,
+      "gold_reachable": 39,
+      "gold_total": 73,
+      "oracle_recall": 0.5342465753424658
+    },
+    "k=5": {
+      "pooled_edits": 178,
+      "gold_reachable": 45,
+      "gold_total": 73,
+      "oracle_recall": 0.6164383561643836
+    }
+  }
+}
