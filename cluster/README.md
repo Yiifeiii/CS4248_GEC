@@ -16,9 +16,13 @@ salloc -t 120 && srun --pty bash      # a compute node for installing
 bash cluster/setup_env.sh             # Miniconda (if missing) + conda env gec-train
 exit; exit                            # back on xlogin
 
+salloc -t 30 && srun --pty bash      # downloads need a compute node: xlogin's memory limit aborts them
 conda activate gec-train
 bash cluster/download_models.sh       # bart-base and t5-base into the scratch HF cache
+exit; exit
 ```
+
+A new login only loads conda if the login shell reads `~/.bashrc`. If `conda` is not found after logging in, run `echo '[ -f ~/.bashrc ] && . ~/.bashrc' > ~/.bash_profile` once; check first that `~/.bash_profile` doesn't already exist.
 
 **Training data:**
 - `data/curriculum/` holds the committed stage-2 data and dev split.
