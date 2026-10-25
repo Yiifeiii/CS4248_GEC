@@ -17,7 +17,8 @@ if [ ! -x "$CONDA_BASE/bin/conda" ]; then
 fi
 set +u
 source "$CONDA_BASE/etc/profile.d/conda.sh"
-conda env list | grep -q '^gec-train ' || conda create -y -n gec-train python=3.11
+# conda-forge only: Anaconda's default channels need their Terms of Service accepted first
+conda env list | grep -q '^gec-train ' || conda create -y -n gec-train -c conda-forge --override-channels python=3.11
 conda activate gec-train
 set -u
 
