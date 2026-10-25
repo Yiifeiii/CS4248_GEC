@@ -22,9 +22,10 @@ conda env list | grep -q '^gec-train ' || conda create -y -n gec-train -c conda-
 conda activate gec-train
 set -u
 
-# The default Linux wheel bundles CUDA 12 libraries; if torch.cuda.is_available() prints False
-# on a GPU node, pick the wheel for the driver's CUDA version (nvidia-smi) from pytorch.org.
-pip install torch
+# The default Linux wheel is now built for CUDA 13, which the cluster's driver (12.9 in
+# October 2026) is too old for. CUDA 12.8 builds run on it; if the driver changes, pick the
+# build for the CUDA version that nvidia-smi reports (pytorch.org lists them).
+pip install torch --index-url https://download.pytorch.org/whl/cu128
 pip install -r requirements-train.txt
 python -m spacy download en_core_web_sm
 python -c "import torch, transformers, errant; print('torch', torch.__version__, 'cuda', torch.cuda.is_available(), \
