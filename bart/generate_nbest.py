@@ -6,12 +6,17 @@ source line holding its unique candidates ranked by model log-probability.
 import argparse
 import json
 import os
+from pathlib import Path
+import sys
 import time
 
 import torch
 from safetensors import safe_open
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
 from transformers.utils import cached_file
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from training.common import PREFIX, Postprocessor  # noqa: E402
 
 os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
 
@@ -127,8 +132,13 @@ def main(args):
     device = pick_device() if args.device == "auto" else torch.device(args.device)
     tokenizer = AutoTokenizer.from_pretrained(args.model)
     model = load_model(args.model).to(device).eval()
+    is_t5 = model.config.model_type == "t5"
     if device.type == "cuda":
-        model.half()
+        # T5 overflows in fp16
+        model.to(torch.bfloat16 if is_t5 else torch.float16)
+    prefix = args.prefix if args.prefix is not None else PREFIX.get(model.config.model_type, "")
+    # T5 cannot encode some characters (ã, `, < ...); copy them back from the source
+    restore = Postprocessor(tokenizer, "t5") if is_t5 else None
 
     if args.text is not None:
         sources = [args.text]
@@ -138,7 +148,7 @@ def main(args):
         if args.limit:
             sources = sources[:args.limit]
 
-    lengths = [len(tokenizer(s)["input_ids"]) if s.strip() else 0 for s in sources]
+    lengths = [len(tokenizer(prefix + s)["input_ids"]) if s.strip() else 0 for s in sources]
     results = [None] * len(sources)
     todo = []
     skipped_long = 0
@@ -192,7 +202,7 @@ def main(args):
         size = max(1, min(args.batch_size, args.max_batch_tokens // lengths[todo[pos]]))
         idx = todo[pos:pos + size]
         pos += size
-        batch = [sources[i] for i in idx]
+        batch = [prefix + sources[i] for i in idx]
         enc = tokenizer(batch, return_tensors="pt", padding=True).to(device)
         max_new = max(lengths[i] for i in idx) + 20
         with torch.no_grad():
@@ -203,7 +213,8 @@ def main(args):
         n = args.num_return
         for j, i in enumerate(idx):
             sl = slice(j * n, (j + 1) * n)
-            cands = build_candidates(sources[i], texts[sl], sum_lps[sl], avg_lps[sl])
+            outs = [restore(sources[i], t) for t in texts[sl]] if restore else texts[sl]
+            cands = build_candidates(sources[i], outs, sum_lps[sl], avg_lps[sl])
             results[i] = cands or fallback(sources[i])
             if partial is not None:
                 partial.write(json.dumps({"id": i, "cands": results[i]}, ensure_ascii=False) + "\n")
@@ -260,6 +271,8 @@ if __name__ == "__main__":
     parser.add_argument("--num_beam_groups", type=int, default=5, help="diverse mode only")
     parser.add_argument("--diversity_penalty", type=float, default=0.5, help="diverse mode only")
     parser.add_argument("--length_penalty", type=float, default=1.0)
+    parser.add_argument("--prefix", default=None,
+                        help='source prefix; default "gec: " for T5 (our fine-tuned models), none for BART')
     parser.add_argument("--no_repeat_ngram_size", type=int, default=0)
     parser.add_argument("--batch_size", type=int, default=16, help="maximum sentences per batch")
     parser.add_argument("--max_batch_tokens", type=int, default=400,

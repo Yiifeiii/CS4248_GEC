@@ -1,0 +1,134 @@
+{
+  "built_by": "training/build_data.py",
+  "git_commit": "b06bc20abf8777ed5fa2d40a586649fbac30409a",
+  "seed": 4248,
+  "options": {
+    "normalize_quotes": false,
+    "ratio_filter": false,
+    "dedupe": false
+  },
+  "filters": {
+    "empty": "empty source or target",
+    "over_128_tokens": "google-t5/t5-base tokens of \"gec: \"+source or of target > 128 (same pairs dropped for BART)",
+    "unk_only": "stage 2: sentence whose only annotator-0 edit is UNK"
+  },
+  "stage1": {
+    "pairs": 561338,
+    "unchanged_pairs": 0,
+    "by_corpus": {
+      "fce.dev": 1366,
+      "fce.train": 17705,
+      "lang8": 498292,
+      "nucle": 21294,
+      "wi.A": 8160,
+      "wi.B": 9124,
+      "wi.C": 5397
+    },
+    "sha256": {
+      "src": "a139e67e09b56596b7f0cfc75d7217bf02f53761da748f1c38fc9e13af3860f8",
+      "tgt": "68e912e7abdd52d5bf1414995e9f39ea1ba900f9a25f5095f8014f5ea43b238c"
+    },
+    "source": {
+      "files": [
+        "data/train.src",
+        "data/train.tgt"
+      ],
+      "sha256": {
+        "src": "812297b64ee54141d0ff0c3e18b611352cc86ae1c882f6715069602a034cc625",
+        "tgt": "ce1f28cb8dbd3aa2ee92eb54fa1fc55931b1cc9c32c5ab1802db1126e6958503"
+      },
+      "lines": 561535,
+      "corpora_in_order": {
+        "fce.train": 17715,
+        "fce.dev": 1370,
+        "lang8": 498360,
+        "nucle": 21353,
+        "wi.A": 8194,
+        "wi.B": 9138,
+        "wi.C": 5405
+      }
+    },
+    "dropped": {
+      "over_128_tokens": 151,
+      "empty": 46
+    }
+  },
+  "stage2": {
+    "pairs": 33943,
+    "unchanged_pairs": 11262,
+    "by_corpus": {
+      "wi.A": 10323,
+      "wi.B": 12913,
+      "wi.C": 10707
+    },
+    "sha256": {
+      "src": "cb0356298e0e40d0e915b58be9434072a30528a6f73c63527da7a2188560f046",
+      "tgt": "00f07004a8b8c7bb40a00242f62abaf982519247e63e15a96d949690e2f0d7c7"
+    },
+    "source": {
+      "rev": "3e50997",
+      "m2": {
+        "wi.A": "wi+locness/m2/A.train.gold.bea19.m2",
+        "wi.B": "wi+locness/m2/B.train.gold.bea19.m2",
+        "wi.C": "wi+locness/m2/C.train.gold.bea19.m2"
+      },
+      "converter": "m2_to_parallel.py (annotator 0, all sentences)"
+    },
+    "m2_sentences": {
+      "errorful": 22737,
+      "correct": 11263,
+      "unk_only": 308
+    },
+    "dropped": {
+      "unk_only": 308,
+      "over_128_tokens": 53,
+      "empty": 4
+    }
+  },
+  "dev_tune": {
+    "sentences": 2000,
+    "unchanged": 706,
+    "ids": "dev_tune.ids (0-based lines of data/dev.src)",
+    "sha256": {
+      "src": "1489cd243cb805f089036964ad0fb3331f23c5be038f6eee9563c549184f02f1",
+      "tgt": "aba7a651407f9a40fca22e12a796a7969b67d3e06396d3b83bd18a1b5173d910",
+      "m2": "84ead856cbe3a26af5eeea63b49ff17a364aea81512452d0b778ed955c2499dd"
+    }
+  },
+  "dev_test": {
+    "sentences": 2384,
+    "unchanged": 859,
+    "ids": "dev_test.ids (0-based lines of data/dev.src)",
+    "sha256": {
+      "src": "6ad27d4a81e917da1dffaf512d4795ae6514498eb1df3c1bec27d7d90d13930b",
+      "tgt": "20bd42ce1c2984278a55efde802a6dd39dd1994201297f096923b7211fa3824d",
+      "m2": "8a4ffc1d234e9597163fa08901ba94cc2630650ec31283188e20c0d70d6ae4c3"
+    }
+  },
+  "overlap_with_eval_sources": {
+    "stage1 vs dev.src": {
+      "sentences": 35,
+      "max_words": 13
+    },
+    "stage1 vs test.bea19.src": {
+      "sentences": 41,
+      "max_words": 8
+    },
+    "stage1 vs test.conll14.src": {
+      "sentences": 0,
+      "max_words": 0
+    },
+    "stage2 vs dev.src": {
+      "sentences": 61,
+      "max_words": 20
+    },
+    "stage2 vs test.bea19.src": {
+      "sentences": 67,
+      "max_words": 15
+    },
+    "stage2 vs test.conll14.src": {
+      "sentences": 0,
+      "max_words": 0
+    }
+  }
+}

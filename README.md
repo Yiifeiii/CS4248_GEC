@@ -6,7 +6,7 @@ This project investigates whether combining alternative corrections from multipl
 
 A standalone [manual GRECO combination workflow](greco_setup/README.md) accepts manually entered BART/T5 sentences or edits. It includes conflict-aware beam search, an adapter for the official GRECO scorer, examples, and setup instructions. Candidate generation can be tested without model dependencies; pretrained inference requires a separate Python 3.10 environment and downloaded weights.
 
-The repository also contains datasets, prepared source/target sentence pairs, an M2-to-parallel conversion script, an error statistics script, and the bundled NUS M² scorer. BART/T5 fine-tuning and automatic hypothesis generation, agreement features, and the proposed ablations remain planned work.
+The repository also contains datasets, prepared source/target sentence pairs, an M2-to-parallel conversion script, an error statistics script, and the bundled NUS M² scorer. [Two-stage fine-tuning](training/README.md) of `facebook/bart-base` and `t5-base` is set up: stage 1 on all four corpora (errorful sentences), stage 2 on W&I train including correct sentences, with jobs for the [SoC cluster](cluster/README.md). Agreement features and the proposed ablations remain planned work.
 
 ## Repository structure
 
@@ -22,7 +22,9 @@ The repository also contains datasets, prepared source/target sentence pairs, an
 | `gector/` | Grammarly's pretrained GECToR ([setup and usage](gector/README.md)) |
 | `greco_setup/` | GRECO edit combination ([setup and usage](greco_setup/README.md)) |
 | `outputs/` | System predictions in the shared format, see [Outputs](#outputs) |
-| `tests/` | Unit tests for the GRECO combination code |
+| `training/` | Two-stage BART/T5 fine-tuning: data build and checks, training, evaluation ([details](training/README.md)) |
+| `cluster/` | Slurm jobs and setup for the NUS SoC compute cluster ([details](cluster/README.md)) |
+| `tests/` | Unit tests for the GRECO combination and training data code |
 
 ## Data and formats
 
@@ -37,6 +39,7 @@ Training uses the provided BEA-2019 corpora: FCE, Lang-8, NUCLE, and W&I+LOCNESS
 | `data/test.conll14.src` | CoNLL-2014 test input | `official-2014.combined.m2` | 1,312 |
 | `data/test.conll14.m2` | CoNLL-2014 gold edits (both annotators), for the M² scorer | `official-2014.combined.m2` | 1,312 |
 | `data/licenses/` | FCE, W&I and LOCNESS licenses | | |
+| `data/curriculum/` | Stage-1/stage-2 training data and the dev_tune/dev_test split, built by `training/build_data.py` | | |
 
 Each `.src` line is an original, tokenized sentence; the corresponding `.tgt` line is its corrected version. Preserve line alignment when processing these files. The `.src` files of dev and CoNLL-2014 test are exactly the source sentences of their `.m2` files.
 
