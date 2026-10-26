@@ -84,6 +84,16 @@ sbatch -J bart-base.s1s2 --dependency=afterok:$b1 cluster/job.sbatch cluster/tra
 sbatch -J t5-base.s1s2   --dependency=afterok:$t1 cluster/job.sbatch cluster/train.sh training/configs/t5-base.stage2.json
 ```
 
+**Longer runs and the matched control** (see `training/README.md`):
+
+```bash
+for m in bart-base t5-base; do
+  s1=$(sbatch --parsable -J $m.long.s1 cluster/job.sbatch cluster/train.sh training/configs/$m.long.stage1.json)
+  sbatch -J $m.long.s1s2   --dependency=afterok:$s1 cluster/job.sbatch cluster/train.sh training/configs/$m.long.stage2.json
+  sbatch -J $m.long.s1cont --dependency=afterok:$s1 cluster/job.sbatch cluster/train.sh training/configs/$m.long.stage1cont.json
+done
+```
+
 **3. N-best lists for GRECO (top 5 of 10 beams):**
 
 ```bash

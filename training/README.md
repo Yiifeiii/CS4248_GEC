@@ -88,6 +88,15 @@ The best checkpoint is the one with the highest dev_tune ERRANT F0.5. BART gener
 
 The epoch counts are starting values. Run the 200-step pilot first (`cluster/pilot.sh`) and adjust them to the measured speed.
 
+### Longer runs and the matched control (`*.long.*` configs)
+
+In the first runs, every best checkpoint was the final step, so the `long` configs train for longer with the same hyperparameters:
+- **`long.s1`:** stage 1 for 8 epochs instead of 3 (≈35k steps).
+- **`long.s1s2`:** stage 2 for 10 epochs instead of 5, from `long.s1/best`. It has no early stopping, so it always runs 10,610 steps (1,061 per epoch).
+- **`long.s1cont`, the control:** continues `long.s1/best` with exactly the stage-2 recipe, but on stage-1 data. It uses the same learning rate, warmup, batch of 32 and 10,610 steps (`max_steps` in the config), and runs ERRANT every 1,061 steps.
+
+Ten stage-2 epochs are only 340k sentences, about 0.6 of one stage-1 epoch. Comparing `long.s1s2` with `long.s1cont` therefore separates the effect of W&I data from the effect of simply training longer. Both pick their best checkpoint the same way.
+
 ## Scripts
 
 | Script | Purpose |

@@ -162,7 +162,7 @@ def main():
     cuda = device.type == 'cuda'
     training_args = Seq2SeqTrainingArguments(
         output_dir=str(out), seed=cfg['seed'], data_seed=cfg['seed'],
-        num_train_epochs=cfg['epochs'], max_steps=args.max_steps or -1,
+        num_train_epochs=cfg['epochs'], max_steps=args.max_steps or cfg.get('max_steps') or -1,
         per_device_train_batch_size=cfg['batch_size'], per_device_eval_batch_size=cfg['batch_size'] * 2,
         gradient_accumulation_steps=cfg['grad_accum'],
         optim='adamw_torch', learning_rate=cfg['learning_rate'], weight_decay=cfg['weight_decay'],
