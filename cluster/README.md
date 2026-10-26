@@ -29,6 +29,16 @@ exit; exit
 - To avoid re-entering the token, run `git config --global credential.helper store` once. This stores the token in plain text in `~/.git-credentials`.
 - To use a branch that isn't merged yet, add `-b <branch>` to the clone command, or run `git checkout <branch>` afterwards.
 
+**If logging in hangs** (Ctrl-C shows a conda traceback): the block that `conda init` adds to `~/.bashrc` starts Python on every login, which is very slow on xlogin. Replace it with a line that only defines the `conda` command:
+
+```bash
+cp ~/.bashrc ~/.bashrc.bak
+sed -i '/# >>> conda initialize >>>/,/# <<< conda initialize <<</d' ~/.bashrc
+echo '[ -f ~/miniconda3/etc/profile.d/conda.sh ] && . ~/miniconda3/etc/profile.d/conda.sh' >> ~/.bashrc
+```
+
+Jobs are unaffected, because `job.sbatch` loads conda itself. `conda activate gec-train` still works, but the prompt no longer starts in `(base)`.
+
 A new login only loads conda if the login shell reads `~/.bashrc`. If `conda` is not found after logging in, run `echo '[ -f ~/.bashrc ] && . ~/.bashrc' > ~/.bash_profile` once; check first that `~/.bash_profile` doesn't already exist.
 
 **Training data:**
