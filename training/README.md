@@ -9,6 +9,8 @@ The stage-1 checkpoints are kept, so stage 1 alone (`*.s1`) can be compared with
 
 How to run the jobs on the SoC cluster is in [`cluster/README.md`](../cluster/README.md).
 
+The results of every run so far, the findings, and the trained models on Hugging Face (`CS4248-GEC/*`) are in [`experiments/training/README.md`](../experiments/training/README.md).
+
 ## From scratch, end to end
 
 1. **On your laptop:** set up an environment and build the data (see [Data](#data-datacurriculum)):

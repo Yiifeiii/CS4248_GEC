@@ -1,0 +1,26 @@
+{
+  "run": "bart-base.s1",
+  "init": "facebook/bart-base",
+  "learning_rate": 5e-05,
+  "train": "data/curriculum/stage1",
+  "errorful_only": false,
+  "epochs": 3,
+  "batch_size": 64,
+  "grad_accum": 2,
+  "warmup_steps": 1000,
+  "loss_eval_steps": 1000,
+  "save_steps": 1000,
+  "errant_eval": {
+    "steps": 2000,
+    "sentences": 1000,
+    "beams": 1,
+    "patience": null
+  },
+  "dropout": 0.1,
+  "weight_decay": 0.01,
+  "label_smoothing": 0.1,
+  "seed": 42,
+  "save_total_limit": 2,
+  "logging_steps": 50,
+  "output_dir": "${CKPT_ROOT}/bart-base.s1"
+}

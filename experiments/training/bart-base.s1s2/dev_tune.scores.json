@@ -1,0 +1,34 @@
+{
+  "model": "/mnt/scratch/d/dsyc777/cs4248-gec/checkpoints/bart-base.s1s2/best",
+  "split": "dev_tune",
+  "sentences": 2000,
+  "beams": 5,
+  "prefix": null,
+  "retokenize": false,
+  "git_commit": "8371a557f4e01caa333c0fc463fb176191c538d1",
+  "decode_seconds": 275,
+  "device": "cuda",
+  "errant": {
+    "correction": {
+      "tp": 1336.0,
+      "fp": 900.0,
+      "fn": 2085.0,
+      "precision": 0.5975,
+      "recall": 0.3905,
+      "f0_5": 0.5402
+    },
+    "detection": {
+      "tp": 1585.0,
+      "fp": 656.0,
+      "fn": 1913.0,
+      "precision": 0.7073,
+      "recall": 0.4531,
+      "f0_5": 0.6359
+    }
+  },
+  "m2": {
+    "precision": 0.6715,
+    "recall": 0.4197,
+    "f0_5": 0.5996
+  }
+}
