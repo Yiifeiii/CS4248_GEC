@@ -145,7 +145,7 @@ rsync -av -e "ssh -J <user>@stujump.comp.nus.edu.sg" \
 
 ```bash
 rsync -av --prune-empty-dirs -e "ssh -J <user>@stujump.comp.nus.edu.sg" \
-    --include='*/' --include='*/best/**' --exclude='*' \
+    --include='*/' --include='/*/best/**' --exclude='*' \
     <user>@xlogin.comp.nus.edu.sg:/mnt/scratch/<u>/<user>/cs4248-gec/checkpoints/ checkpoints/
 ```
 
