@@ -10,6 +10,7 @@ These instructions follow the course's `SoC_Cluster_Guide.pdf` and the [Unoffici
 
 ```bash
 ssh -J <user>@stujump.comp.nus.edu.sg <user>@xlogin.comp.nus.edu.sg   # from outside SoC
+echo 'export GOMAXPROCS=1' >> ~/.bashrc && export GOMAXPROCS=1   # else git-lfs crashes on xlogin (pthread limit)
 git clone https://github.com/Yiifeiii/CS4248_GEC.git ~/CS4248_GEC && cd ~/CS4248_GEC
 
 salloc -t 120 && srun --pty bash      # a compute node for installing
@@ -21,6 +22,12 @@ conda activate gec-train
 bash cluster/download_models.sh       # bart-base and t5-base into the scratch HF cache
 exit; exit
 ```
+
+**Cloning:**
+- The repository is private, and GitHub no longer accepts passwords. When `git clone` asks for a password, paste a [personal access token](https://github.com/settings/tokens) (classic, `repo` scope).
+- SSH to GitHub (ports 22 and 443) hangs from the cluster, so use the HTTPS URL above.
+- To avoid re-entering the token, run `git config --global credential.helper store` once. This stores the token in plain text in `~/.git-credentials`.
+- To use a branch that isn't merged yet, add `-b <branch>` to the clone command, or run `git checkout <branch>` afterwards.
 
 A new login only loads conda if the login shell reads `~/.bashrc`. If `conda` is not found after logging in, run `echo '[ -f ~/.bashrc ] && . ~/.bashrc' > ~/.bash_profile` once; check first that `~/.bash_profile` doesn't already exist.
 
@@ -77,7 +84,7 @@ sbatch -J pilot-t5   --time=00:30:00 cluster/job.sbatch cluster/pilot.sh trainin
 
 The logs show `train_steps_per_second` and the peak GPU memory. Stage 1 is about 13,200 steps (3 epochs). Choose `--time` from those numbers, or lower `epochs` in the config.
 
-**2. Stage 1, both models in parallel, then stage 2 once its stage 1 has succeeded:**
+**2. Stage 1, both models in parallel, then stage 2 once its stage 1 has succeeded.** These are the default configs: 3 epochs of stage 1 and up to 5 of stage 2, about 1 h + 0.5 h per model. The `long` runs below are a separate experiment. Paste each block whole: if the terminal breaks a line, `sbatch` gets the config as a separate command.
 
 ```bash
 b1=$(sbatch --parsable -J bart-base.s1 cluster/job.sbatch cluster/train.sh training/configs/bart-base.stage1.json)

@@ -13,7 +13,7 @@ How to run the jobs on the SoC cluster is in [`cluster/README.md`](../cluster/RE
 
 1. **On your laptop:** set up an environment and build the data (see [Data](#data-datacurriculum)):
    ```bash
-   python3.11 -m venv .venv && source .venv/bin/activate
+   python3.11 -m venv .venv && source .venv/bin/activate      # 3.11 or 3.12; 3.13 lacks lib2to3
    pip install torch -r requirements-train.txt && python -m spacy download en_core_web_sm
    git lfs install && git lfs fetch origin 3e50997    # the original W&I train M2 files
    python -m training.build_data && python -m training.check_data
