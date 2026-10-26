@@ -9,12 +9,25 @@ The stage-1 checkpoints are kept, so stage 1 alone (`*.s1`) can be compared with
 
 How to run the jobs on the SoC cluster is in [`cluster/README.md`](../cluster/README.md).
 
+## From scratch, end to end
+
+1. **On your laptop:** set up an environment and build the data (see [Data](#data-datacurriculum)):
+   ```bash
+   python3.11 -m venv .venv && source .venv/bin/activate
+   pip install torch -r requirements-train.txt && python -m spacy download en_core_web_sm
+   git lfs install && git lfs fetch origin 3e50997    # the original W&I train M2 files
+   python -m training.build_data && python -m training.check_data
+   ```
+2. **On the cluster:** clone, set up the environment, download the base models and copy `stage1.*` over ([one-time setup](../cluster/README.md#one-time-setup)).
+3. **Run** the pilots, then the stage-1 and stage-2 jobs ([submitting jobs](../cluster/README.md#submitting-jobs)).
+4. **On your laptop:** copy back the results and the best checkpoints ([copying results back](../cluster/README.md#copying-results-back)). Commit `experiments/training/`.
+
 ## Data (`data/curriculum/`)
 
 Build and verify the data from the repository root:
 
 ```bash
-python -m training.build_data     # needs transformers and the Git LFS objects of commit 3e50997
+python -m training.build_data     # needs transformers, internet (tokenizers) and `git lfs fetch origin 3e50997`
 python -m training.check_data     # exits non-zero if any check fails
 ```
 

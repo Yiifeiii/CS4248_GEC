@@ -29,7 +29,9 @@ A new login only loads conda if the login shell reads `~/.bashrc`. If `conda` is
 - Stage 1 (78 MB) is not in git. Build it on your own machine with `python -m training.build_data`, then copy it over:
 
   ```bash
-  rsync -av data/curriculum/stage1.* <user>@xlogin.comp.nus.edu.sg:~/CS4248_GEC/data/curriculum/
+  # on your laptop, from the repository root; -J goes through stujump from outside SoC
+  rsync -av -e "ssh -J <user>@stujump.comp.nus.edu.sg" data/curriculum/stage1.* \
+      <user>@xlogin.comp.nus.edu.sg:~/CS4248_GEC/data/curriculum/
   ```
 
   Then run `python -m training.check_data` in a job or on a compute node. It compares the hashes with the committed `manifest.json`.
@@ -120,3 +122,24 @@ squeue --start -j <id>; sprio -j <id>    # why a job is still pending
 - `best_checkpoint.json`
 
 Commit these files. The checkpoints themselves stay on scratch.
+
+## Copying results back
+
+Run these **on your laptop**, from the repository root, not inside the SSH session. Each command asks for your password twice: once for stujump and once for xlogin.
+
+**Results and predictions:**
+
+```bash
+rsync -av -e "ssh -J <user>@stujump.comp.nus.edu.sg" \
+    <user>@xlogin.comp.nus.edu.sg:~/CS4248_GEC/experiments/training/ experiments/training/
+```
+
+**Best checkpoints:** about 0.5 GB per BART run and 0.85 GB per T5 run. Scratch has no documented backup, so keep your own copy. `checkpoints/` is git-ignored. The filters below copy only `<run>/best/`; add `--exclude` for runs that are still training, e.g. `--exclude='*.long.*'`.
+
+```bash
+rsync -av --prune-empty-dirs -e "ssh -J <user>@stujump.comp.nus.edu.sg" \
+    --include='*/' --include='*/best/**' --exclude='*' \
+    <user>@xlogin.comp.nus.edu.sg:/mnt/scratch/<u>/<user>/cs4248-gec/checkpoints/ checkpoints/
+```
+
+Here `<u>` is the first letter of your username. A copied model loads like any other, e.g. `python -m training.evaluate --model checkpoints/t5-base.s1s2/best ...`.
