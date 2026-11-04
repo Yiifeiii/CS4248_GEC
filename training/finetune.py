@@ -35,8 +35,7 @@ from transformers.trainer_utils import get_last_checkpoint
 from training.common import (CURRICULUM, MAX_TOKENS, PREFIX, ROOT, decode, expand, family, git_commit,
                              pick_device, read_lines, write_lines)
 from training.metrics import m2_subset, score
-
-DROPOUT_KEY = {'bart': 'dropout', 't5': 'dropout_rate'}
+from training.dropout import configure_dropout
 
 
 class PairDataset(torch.utils.data.Dataset):
@@ -138,7 +137,7 @@ def main():
 
     config = AutoConfig.from_pretrained(init)
     model_family = family(config)
-    setattr(config, DROPOUT_KEY[model_family], cfg['dropout'])
+    dropout_settings = configure_dropout(config, cfg['dropout'], cfg.get('dropout_scope', 'model'))
     tokenizer = AutoTokenizer.from_pretrained(init)
     model = AutoModelForSeq2SeqLM.from_pretrained(init, config=config)
     gen = model.generation_config
@@ -188,6 +187,7 @@ def main():
     run_info = {
         'run': cfg.get('run'), 'config': cfg, 'config_path': str(args.config), 'args': vars(args) | {'config': str(args.config)},
         'init': init, 'family': model_family, 'prefix': prefix, 'training_pairs': len(train_set),
+        'dropout_settings': dropout_settings,
         'git_commit': git_commit(), 'data_manifest_sha256': hashlib.sha256(manifest.read_bytes()).hexdigest(),
         'versions': {'torch': torch.__version__, 'transformers': transformers.__version__},
         'device': torch.cuda.get_device_name() if cuda else device.type,

@@ -1,0 +1,9 @@
+baseline
+lr-low
+lr-high
+wd-zero
+wd-high
+dropout-zero
+dropout-high
+smoothing-zero
+smoothing-high
