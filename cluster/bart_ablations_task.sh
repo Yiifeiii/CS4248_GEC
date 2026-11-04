@@ -13,8 +13,8 @@ out="experiments/training/$run"
 mkdir -p "$out"
 
 python -m training.finetune --config "$config" --resume auto
-# Hyperparameter selection uses dev_tune. Hold dev_test for the final comparison.
-python -m training.evaluate --model "$CKPT_ROOT/$run/best" --split dev_tune --out "$out"
+# Match Dasha's final reporting; selection/early stopping still use dev_tune only.
+python -m training.evaluate --model "$CKPT_ROOT/$run/best" --split dev_tune dev_test --out "$out"
 cp "$CKPT_ROOT/$run/run_info.json" "$CKPT_ROOT/$run/trainer_state.json" \
    "$CKPT_ROOT/$run/errant_eval.json" "$config" "$out/"
 cp "$CKPT_ROOT/$run/best/best.json" "$out/best_checkpoint.json"

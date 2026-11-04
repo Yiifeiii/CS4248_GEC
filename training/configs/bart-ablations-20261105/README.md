@@ -1,7 +1,7 @@
 # BART stage-2 hyperparameter ablations
 
-Preparation only: creating these files, running tests, and previewing the submission
-does not submit cluster jobs. Actual submission requires `--submit`.
+Creating these files, running tests, and previewing the submission does not submit
+cluster jobs. Actual submission requires `--submit`.
 
 Stage 1 teaches general GEC from the broad BEA training mixture. Stage 2 adapts
 the best stage-1 model to W&I training essays, including already-correct sentences.
@@ -79,7 +79,9 @@ with at most two array tasks running at once. Each training task requests one
 H100-47 GPU and a four-hour limit on `gpu-long`. Queue delays and actual runtimes
 determine whether the whole sweep finishes overnight.
 
-The preflight downloads Dasha's private stage-1 checkpoint to the scratch cache,
+The preflight matches the baseline against Dasha's recorded `run_info.json` and
+requires her recorded PyTorch 2.11.0+cu128 and Transformers 4.46.3 versions.
+It downloads Dasha's private stage-1 checkpoint to the scratch cache,
 verifies its SHA-256 against `experiments/training/checkpoints.sha256`, checks
 baseline dropout, validates data, and runs the tests on the compute node. Training
 starts only if preflight succeeds; jobs run offline and auto-resume their own
@@ -93,9 +95,12 @@ Outputs:
 - Logs: `logs/slurm/bart-ablations-<task job ID>.out`.
 
 Each task records the config, effective dropout settings, training history, best
-checkpoint, and dev_tune predictions/scores. `dev_test` is deliberately not scored
-during this sweep. After selecting the planned settings on dev_tune, evaluate
-the baseline and selected models on dev_test using the same decoding setup.
+checkpoint, and dev_tune/dev_test predictions and ERRANT/M2 scores, matching Dasha's
+final reporting. Only dev_tune drives checkpoint selection and early stopping.
+Choose hyperparameters using dev_tune; use dev_test to report the final comparison,
+not to keep selecting new settings. Small hardware-dependent numerical differences
+are possible even with the same recipe; the rerun baseline controls for the shared
+environment of this sweep.
 
 Do not change configs in place and resume old checkpoints: give a revised
 experiment a new run/output path. The original Dasha checkpoints and prior pilot

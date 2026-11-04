@@ -58,7 +58,9 @@ class AblationDesignTests(unittest.TestCase):
                 self.assertEqual(runs[name]['init'], 'CS4248-GEC/gec-bart-base-s1')
 
     def test_baseline_retains_original_stage2_recipe(self):
-        original = json.loads((ROOT / 'training/configs/bart-base.stage2.json').read_text())
+        reference = json.loads((ROOT / 'experiments/training/bart-base.s1s2/run_info.json').read_text())
+        original = reference['config']
+        self.assertEqual(original, json.loads((ROOT / 'training/configs/bart-base.stage2.json').read_text()))
         baseline = configs()['baseline']
         for key, value in original.items():
             if key not in ('run', 'init', 'output_dir'):
