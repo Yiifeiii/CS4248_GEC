@@ -1,5 +1,9 @@
 # Two-stage fine-tuning of BART and T5
 
+For the nine BART-only stage-2 hyperparameter ablations, see the
+[configuration grid and launch instructions](configs/bart-ablations-20261105/README.md)
+and the [submitted experiment log](../experiments/training/bart-ablations-20261105/README.md).
+
 We fine-tune `facebook/bart-base` and `google-t5/t5-base` from their pretrained (not GEC-trained) weights in two stages:
 
 1. **Stage 1:** all four BEA-2019 training corpora (FCE, Lang-8, NUCLE, W&I+LOCNESS), errorful sentences only.
