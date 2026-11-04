@@ -1,0 +1,57 @@
+{
+  "t5-tune.base.lr3e-5.seed42": {
+    "phase": 1,
+    "knob": "base",
+    "run": "t5-tune.base.lr3e-5.seed42",
+    "seed": 42,
+    "lr": "3e-5",
+    "wd": "0.01",
+    "dropout": "0.1",
+    "ls": "0.1",
+    "config": "t5_tuning/configs/t5-tune.base.lr3e-5.seed42.json"
+  },
+  "t5-tune.base.lr3e-5.seed123": {
+    "phase": 1,
+    "knob": "base",
+    "run": "t5-tune.base.lr3e-5.seed123",
+    "seed": 123,
+    "lr": "3e-5",
+    "wd": "0.01",
+    "dropout": "0.1",
+    "ls": "0.1",
+    "config": "t5_tuning/configs/t5-tune.base.lr3e-5.seed123.json"
+  },
+  "t5-tune.base.lr3e-5.seed7": {
+    "phase": 1,
+    "knob": "base",
+    "run": "t5-tune.base.lr3e-5.seed7",
+    "seed": 7,
+    "lr": "3e-5",
+    "wd": "0.01",
+    "dropout": "0.1",
+    "ls": "0.1",
+    "config": "t5_tuning/configs/t5-tune.base.lr3e-5.seed7.json"
+  },
+  "t5-tune.base.lr1e-5.seed42": {
+    "phase": 1,
+    "knob": "lr",
+    "run": "t5-tune.base.lr1e-5.seed42",
+    "seed": 42,
+    "lr": "1e-5",
+    "wd": "0.01",
+    "dropout": "0.1",
+    "ls": "0.1",
+    "config": "t5_tuning/configs/t5-tune.base.lr1e-5.seed42.json"
+  },
+  "t5-tune.base.lr5e-5.seed42": {
+    "phase": 1,
+    "knob": "lr",
+    "run": "t5-tune.base.lr5e-5.seed42",
+    "seed": 42,
+    "lr": "5e-5",
+    "wd": "0.01",
+    "dropout": "0.1",
+    "ls": "0.1",
+    "config": "t5_tuning/configs/t5-tune.base.lr5e-5.seed42.json"
+  }
+}
