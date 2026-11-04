@@ -77,7 +77,9 @@ def plan(args):
     else:
         if not args.lr:
             raise SystemExit('phase 2 needs --lr, the learning rate chosen in phase 1')
-        rows = [make_row(2, 'base', 42, lr=args.lr)]
+        # At the default learning rate the baseline is the phase-1 seed-42 run, already in the manifest.
+        baseline = make_row(2, 'base', 42, lr=args.lr)
+        rows = [] if baseline['run'] in load_manifest() else [baseline]
         for knob in PHASE2_KNOBS:
             rows += [make_row(2, knob, 42, lr=args.lr, **{knob: v})
                      for v in GRID[knob] if v != DEFAULT[knob]]
@@ -176,13 +178,18 @@ def collect(args):
         chosen['lr'] = judge('learning rate (seed 42)', 'lr', lr_rows, lr_ref, scores, band)
 
     # Phase 2: each knob at the chosen learning rate, against the baseline at that rate.
-    lr_star = next((r['lr'] for r in manifest.values() if r['phase'] == 2 and r['knob'] == 'base'), None)
-    if lr_star:
-        p2_ref = next(r for r in manifest.values() if r['phase'] == 2 and r['knob'] == 'base')
+    # One group per phase-2 learning rate, so runs at a rate chosen later don't mix with earlier ones.
+    phase2_lrs = sorted({r['lr'] for r in manifest.values() if r['phase'] == 2 and r['knob'] != 'base'}, key=float)
+    for lr_star in phase2_lrs:
+        p2_ref = next((r for r in manifest.values()
+                       if r['knob'] == 'base' and r['lr'] == lr_star and r['seed'] == 42), None)
+        if p2_ref is None:
+            continue
         for knob in PHASE2_KNOBS:
             rows = [r for r in manifest.values() if r['lr'] == lr_star and r['seed'] == 42
                     and (r['knob'] == knob or r is p2_ref)]
-            chosen[knob] = judge(f'{knob} (at lr {lr_star}, seed 42)', knob, rows, p2_ref, scores, band)
+            chosen[f'{knob}@lr{lr_star}'] = judge(f'{knob} (at lr {lr_star}, seed 42)', knob, rows, p2_ref,
+                                                  scores, band)
 
     chosen = {k: v for k, v in chosen.items() if v is not None}
     if chosen:
