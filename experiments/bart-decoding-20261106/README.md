@@ -92,4 +92,21 @@ Settings are explored on dev_tune. After the settings are frozen, a final
 comparison against the baseline can be run separately on held-out data. This
 study does not claim that larger beams or more diverse outputs necessarily help.
 
-Submission IDs and results will be recorded after the jobs are submitted.
+## Submission
+
+- Submitted on 6 November 2026 as array **1081371**, indices 0–6, at most two
+  concurrent tasks. The grid table above is the array-index mapping.
+- Executed source commit: `8d898d4581441e3144f150e78f0f2e9f399741c7`.
+- Local validation: 35 tests ran, 34 passed, one unrelated GRECO integration test
+  skipped. Coverage diagnostics, no-submit preview, and real grouped generation on
+  tiny offline BART were tested; these are not the full-data experiment results.
+- Jobs use one H100-47 request each, eight CPUs, and a four-hour limit on gpu-long.
+- At submission all seven tasks were queued. Results are pending.
+
+```bash
+squeue -j 1081371
+sacct -j 1081371 --format=JobID,State,ExitCode,Elapsed -X
+```
+
+Logs are `logs/slurm/bart-decoding-<individual task job ID>.out`. The log's
+individual job ID may differ from array notation `1081371_<index>`.
