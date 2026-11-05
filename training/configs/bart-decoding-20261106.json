@@ -1,0 +1,22 @@
+{
+  "experiment": "bart-decoding-20261106",
+  "model": "CS4248-GEC/gec-bart-base-s1s2",
+  "checkpoint_sha256": "6d81a325ad27046c2d7594b09ec3fb5e6c8624b55e4ef30bc0c122b123c01bf9",
+  "split": "dev_tune",
+  "sentences": 2000,
+  "k": [1, 3, 5],
+  "num_return": 5,
+  "batch_size": 4,
+  "max_batch_tokens": 400,
+  "length_penalty": 1.0,
+  "no_repeat_ngram_size": 0,
+  "setups": [
+    {"name": "beam5", "mode": "beam", "beams": 5, "groups": 1, "penalty": 0.0},
+    {"name": "beam10", "mode": "beam", "beams": 10, "groups": 1, "penalty": 0.0},
+    {"name": "beam20", "mode": "beam", "beams": 20, "groups": 1, "penalty": 0.0},
+    {"name": "groups2-p05", "mode": "diverse", "beams": 10, "groups": 2, "penalty": 0.5},
+    {"name": "groups5-p05", "mode": "diverse", "beams": 10, "groups": 5, "penalty": 0.5},
+    {"name": "groups2-p01", "mode": "diverse", "beams": 10, "groups": 2, "penalty": 0.1},
+    {"name": "groups2-p10", "mode": "diverse", "beams": 10, "groups": 2, "penalty": 1.0}
+  ]
+}
