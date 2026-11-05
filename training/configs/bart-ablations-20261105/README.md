@@ -23,6 +23,31 @@ checkpoint or from our 200-step pilot weights.
 | 7 | `smoothing-zero.json` | 1e-5 | 0.01 | 0.1 | 0 |
 | 8 | `smoothing-high.json` | 1e-5 | 0.01 | 0.1 | 0.2 |
 
+## Follow-up: three 0.05 values
+
+The original nine runs are complete. The separate `runs-005.txt` list selects only
+these three new independent runs; it does not rerun or overwrite the baseline.
+
+| Follow-up array index | Config | Learning rate | Weight decay | Dropout | Label smoothing |
+|---|---|---:|---:|---:|---:|
+| 0 | `wd-mid.json` | 1e-5 | 0.05 | 0.1 | 0.1 |
+| 1 | `dropout-low.json` | 1e-5 | 0.01 | 0.05 | 0.1 |
+| 2 | `smoothing-low.json` | 1e-5 | 0.01 | 0.1 | 0.05 |
+
+Use the completed `baseline` run as the control. Initial weights, data, epochs,
+optimiser, scheduler, seed, checkpoint selection, and final evaluation remain the
+same. This is an exploratory extension chosen after inspecting the original
+results; do not describe the twelve-run grid as fixed before those results.
+
+Preview or submit only the three new configs:
+
+```bash
+bash cluster/submit_bart_ablations.sh --dry-run training/configs/bart-ablations-20261105/runs-005.txt
+bash cluster/submit_bart_ablations.sh --submit training/configs/bart-ablations-20261105/runs-005.txt
+```
+
+Without an explicit run-list argument, the script still selects the original nine.
+
 Everything else is fixed: stage-2 training pairs, batch 32, seed 42, AdamW,
 100 warmup steps followed by linear learning-rate decay, up to 5 epochs,
 evaluation each epoch on all 2,000 dev_tune sentences with 5 beams, and early
@@ -74,7 +99,7 @@ When explicitly ready to start jobs, run from the cluster repository root:
 bash cluster/submit_bart_ablations.sh --submit
 ```
 
-This submits a CPU preflight (no GPU), then an array of nine independent GPU jobs,
+This submits a CPU preflight (no GPU), then an array for the selected run list,
 with at most two array tasks running at once. Each training task requests one
 H100-47 GPU and a four-hour limit on `gpu-long`. Queue delays and actual runtimes
 determine whether the whole sweep finishes overnight.

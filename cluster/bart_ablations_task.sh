@@ -1,12 +1,14 @@
 #!/bin/bash
-# Called by job.sbatch once for each task in the nine-run Slurm array.
+# Called by job.sbatch once per task in the selected ablation run list.
 set -euo pipefail
 
 config_dir=training/configs/bart-ablations-20261105
 runs=()
-while IFS= read -r slug; do runs+=("$slug"); done < "$config_dir/runs.txt"
+run_list="${BART_ABLATION_RUN_LIST:-$config_dir/runs.txt}"
+while IFS= read -r slug; do runs+=("$slug"); done < "$run_list"
 index="${SLURM_ARRAY_TASK_ID:?Submit using cluster/submit_bart_ablations.sh}"
-[[ "$index" =~ ^[0-8]$ ]] || { echo "Invalid array task: $index" >&2; exit 1; }
+[[ "$index" =~ ^[0-9]+$ ]] && (( index < ${#runs[@]} )) || {
+    echo "Invalid array task: $index" >&2; exit 1; }
 run="bart-ablations-20261105/${runs[$index]}"
 config="$config_dir/${runs[$index]}.json"
 out="experiments/training/$run"

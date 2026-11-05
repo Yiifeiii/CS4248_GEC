@@ -23,10 +23,16 @@ CHANGES = {
     'smoothing-zero': {'label_smoothing': 0},
     'smoothing-high': {'label_smoothing': 0.2},
 }
+FOLLOWUP_CHANGES = {
+    'wd-mid': {'weight_decay': 0.05},
+    'dropout-low': {'dropout': 0.05},
+    'smoothing-low': {'label_smoothing': 0.05},
+}
 
 
 def configs():
-    return {name: json.loads((CONFIGS / f'{name}.json').read_text()) for name in CHANGES}
+    return {name: json.loads((CONFIGS / f'{name}.json').read_text())
+            for name in {**CHANGES, **FOLLOWUP_CHANGES}}
 
 
 class AblationDesignTests(unittest.TestCase):
@@ -36,18 +42,24 @@ class AblationDesignTests(unittest.TestCase):
             stub.write_text('#!/bin/sh\necho UNEXPECTED_SUBMISSION >&2\nexit 99\n')
             stub.chmod(0o755)
             env = dict(os.environ, PATH=directory + os.pathsep + os.environ['PATH'])
-            result = subprocess.run(['bash', str(ROOT / 'cluster/submit_bart_ablations.sh')],
-                                    cwd=directory, env=env, text=True, capture_output=True)
-            self.assertEqual(result.returncode, 0, result.stderr)
-            self.assertIn('Preview only', result.stdout)
-            self.assertNotIn('UNEXPECTED_SUBMISSION', result.stderr)
+            for extra in ([], ['--dry-run', str(CONFIGS / 'runs-005.txt')]):
+                result = subprocess.run(['bash', str(ROOT / 'cluster/submit_bart_ablations.sh'), *extra],
+                                        cwd=directory, env=env, text=True, capture_output=True)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertIn('Preview only', result.stdout)
+                self.assertNotIn('UNEXPECTED_SUBMISSION', result.stderr)
+                if extra:
+                    self.assertNotIn('  baseline\n', result.stdout)
+                    for name in FOLLOWUP_CHANGES:
+                        self.assertIn(f'  {name}\n', result.stdout)
 
     def test_single_factor_changes_and_no_checkpoint_collisions(self):
         runs = configs()
         self.assertEqual((CONFIGS / 'runs.txt').read_text().splitlines(), list(CHANGES))
-        self.assertEqual(len({c['output_dir'] for c in runs.values()}), 9)
-        self.assertEqual(len({c['run'] for c in runs.values()}), 9)
-        for name, change in CHANGES.items():
+        self.assertEqual((CONFIGS / 'runs-005.txt').read_text().splitlines(), list(FOLLOWUP_CHANGES))
+        self.assertEqual(len({c['output_dir'] for c in runs.values()}), 12)
+        self.assertEqual(len({c['run'] for c in runs.values()}), 12)
+        for name, change in {**CHANGES, **FOLLOWUP_CHANGES}.items():
             with self.subTest(run=name):
                 expected = copy.deepcopy(runs['baseline'])
                 expected.update(change)
@@ -100,7 +112,7 @@ class TinyBartTrainingTests(unittest.TestCase):
 
     These are two-update CPU smoke tests, not GEC experiments or score estimates.
     """
-    def test_all_nine_recipes_train_and_save_without_external_models(self):
+    def test_all_recipes_train_and_save_without_external_models(self):
         import torch
         from transformers import (BartConfig, BartForConditionalGeneration,
                                   Seq2SeqTrainer, Seq2SeqTrainingArguments)

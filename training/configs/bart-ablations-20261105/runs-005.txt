@@ -1,0 +1,3 @@
+wd-mid
+dropout-low
+smoothing-low
