@@ -1,16 +1,19 @@
-"""Stage-2 tuning for T5: plan the runs, submit them, and collect the results.
+"""T5 tuning: plan the runs, submit them, and collect the results, for stage 1 or stage 2.
 
+Stage 2 (the default), from the frozen stage-1 model:
     python t5_tuning/tune.py plan --phase 1                  # noise band and learning-rate sweep
-    python t5_tuning/tune.py submit --phase 1                # prints the sbatch commands
-    python t5_tuning/tune.py submit --phase 1 --run          # submits them, on xlogin
+    python t5_tuning/tune.py submit --phase 1 [--run]        # prints the sbatch commands; --run submits
     python t5_tuning/tune.py collect                         # band, per-knob table, chosen values
     python t5_tuning/tune.py plan --phase 2 --lr 3e-5        # wd, dropout, label smoothing at lr*
-    python t5_tuning/tune.py submit --phase 2 --run
+    python t5_tuning/tune.py submit --phase 2 [--run]
     python t5_tuning/tune.py collect
 
-Every run starts from the frozen stage-1 model (CS4248-GEC/gec-t5-base-s1) and uses
-training/configs/t5-base.stage2.json, changed only in the keys its knob varies. Each run
-is trained and then scored on dev_tune only (t5_tuning/run_one.sh). dev_test is never read.
+Stage 1, from the public T5 base model (a learning-rate sweep only):
+    python t5_tuning/tune.py plan --stage 1 --phase 1
+    python t5_tuning/tune.py submit --stage 1 --phase 1 [--run]
+    python t5_tuning/tune.py collect --stage 1
+
+Every run is trained and then scored on dev_tune only (t5_tuning/run_one.sh). dev_test is never read.
 """
 
 import argparse
@@ -21,39 +24,60 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
-BASE = ROOT / 'training' / 'configs' / 't5-base.stage2.json'
 CONFIGS = HERE / 'configs'
 RUNS = HERE / 'runs'
 MANIFEST = HERE / 'manifest.json'
 MANIFEST_TABLE = HERE / 'manifest.md'
-RESULTS = HERE / 'results.md'
 
-INIT = 'CS4248-GEC/gec-t5-base-s1'      # the frozen stage-1 model
 SEEDS = [42, 123, 7]                     # the noise-floor seeds
-DEFAULT = {'lr': '3e-5', 'wd': '0.01', 'dropout': '0.1', 'ls': '0.1'}
-GRID = {'lr': ['1e-5', '3e-5', '5e-5'], 'wd': ['0', '0.01', '0.1'],
-        'dropout': ['0', '0.1', '0.3'], 'ls': ['0', '0.1', '0.2']}
+GRID = {'wd': ['0', '0.01', '0.1'], 'dropout': ['0', '0.1', '0.3'], 'ls': ['0', '0.1', '0.2']}
 PHASE2_KNOBS = ['wd', 'dropout', 'ls']
 
+# Stage 1 starts from the public base model, so its learning rate is higher than stage 2's.
+# Stage 2 starts from the frozen stage-1 model. Run names of stage 2 have no stage tag, so the
+# runs already on the cluster keep their names.
+STAGES = {
+    1: {
+        'base_config': ROOT / 'training' / 'configs' / 't5-base.stage1.json',
+        'init': None,                    # keep the base config's init (google-t5/t5-base)
+        'prefix': 't5-tune.s1',
+        'default': {'lr': '1e-4', 'wd': '0.01', 'dropout': '0.1', 'ls': '0.1'},
+        'lr_grid': ['3e-5', '1e-4', '3e-4'],
+        'results': HERE / 'results-stage1.md',
+    },
+    2: {
+        'base_config': ROOT / 'training' / 'configs' / 't5-base.stage2.json',
+        'init': 'CS4248-GEC/gec-t5-base-s1',   # the frozen stage-1 model
+        'prefix': 't5-tune',
+        'default': {'lr': '3e-5', 'wd': '0.01', 'dropout': '0.1', 'ls': '0.1'},
+        'lr_grid': ['1e-5', '3e-5', '5e-5'],
+        'results': HERE / 'results.md',
+    },
+}
 
-def make_row(phase, knob, seed, **overrides):
-    """One run: the knob it varies, its settings, and its run name."""
-    params = {**DEFAULT, **overrides}
+
+def make_row(stage, phase, knob, seed, **overrides):
+    """One run: its stage, the knob it varies, its settings, and its run name."""
+    cfg = STAGES[stage]
+    params = {**cfg['default'], **overrides}
     tag = f'{knob}{overrides[knob]}' if knob in PHASE2_KNOBS else 'base'
-    run = f"t5-tune.{tag}.lr{params['lr']}.seed{seed}"
-    return {'phase': phase, 'knob': knob, 'run': run, 'seed': seed, **params,
+    run = f"{cfg['prefix']}.{tag}.lr{params['lr']}.seed{seed}"
+    return {'stage': stage, 'phase': phase, 'knob': knob, 'run': run, 'seed': seed, **params,
             'config': f'{CONFIGS.relative_to(ROOT)}/{run}.json'}
 
 
 def write_config(row):
-    cfg = json.loads(BASE.read_text(encoding='utf-8'))
-    cfg.update({
-        'run': row['run'], 'init': INIT,
+    cfg = STAGES[row['stage']]
+    settings = json.loads(cfg['base_config'].read_text(encoding='utf-8'))
+    settings.update({
+        'run': row['run'],
         'learning_rate': float(row['lr']), 'weight_decay': float(row['wd']),
         'dropout': float(row['dropout']), 'label_smoothing': float(row['ls']),
         'seed': row['seed'], 'output_dir': f"${{CKPT_ROOT}}/{row['run']}",
     })
-    (ROOT / row['config']).write_text(json.dumps(cfg, indent=2) + '\n', encoding='utf-8')
+    if cfg['init']:
+        settings['init'] = cfg['init']
+    (ROOT / row['config']).write_text(json.dumps(settings, indent=2) + '\n', encoding='utf-8')
 
 
 def load_manifest():
@@ -62,27 +86,31 @@ def load_manifest():
 
 def save_manifest(manifest):
     MANIFEST.write_text(json.dumps(manifest, indent=2) + '\n', encoding='utf-8')
-    lines = ['| run | phase | knob | lr | weight decay | dropout | label smoothing | seed | config |',
-             '|---|---|---|---|---|---|---|---|---|']
+    lines = ['| run | stage | phase | knob | lr | weight decay | dropout | label smoothing | seed | config |',
+             '|---|---|---|---|---|---|---|---|---|---|']
     for r in manifest.values():
-        lines.append(f"| {r['run']} | {r['phase']} | {r['knob']} | {r['lr']} | {r['wd']} | {r['dropout']} "
-                     f"| {r['ls']} | {r['seed']} | {r['config']} |")
+        lines.append(f"| {r['run']} | {r.get('stage', 2)} | {r['phase']} | {r['knob']} | {r['lr']} | {r['wd']} "
+                     f"| {r['dropout']} | {r['ls']} | {r['seed']} | {r['config']} |")
     MANIFEST_TABLE.write_text('\n'.join(lines) + '\n', encoding='utf-8')
 
 
 def plan(args):
+    stage = args.stage
+    default = STAGES[stage]['default']
     if args.phase == 1:
-        rows = [make_row(1, 'base', seed) for seed in SEEDS]
-        rows += [make_row(1, 'lr', 42, lr=v) for v in GRID['lr'] if v != DEFAULT['lr']]
+        rows = [make_row(stage, 1, 'base', seed) for seed in SEEDS]
+        rows += [make_row(stage, 1, 'lr', 42, lr=v) for v in STAGES[stage]['lr_grid'] if v != default['lr']]
     else:
+        if stage != 2:
+            raise SystemExit('phase 2 (weight decay, dropout, label smoothing) is only set up for stage 2')
         if not args.lr:
             raise SystemExit('phase 2 needs --lr, the learning rate chosen in phase 1')
         # At the default learning rate the baseline is the phase-1 seed-42 run, already in the manifest.
-        baseline = make_row(2, 'base', 42, lr=args.lr)
+        baseline = make_row(2, 2, 'base', 42, lr=args.lr)
         rows = [] if baseline['run'] in load_manifest() else [baseline]
         for knob in PHASE2_KNOBS:
-            rows += [make_row(2, knob, 42, lr=args.lr, **{knob: v})
-                     for v in GRID[knob] if v != DEFAULT[knob]]
+            rows += [make_row(2, 2, knob, 42, lr=args.lr, **{knob: v})
+                     for v in GRID[knob] if v != default[knob]]
     CONFIGS.mkdir(exist_ok=True)
     manifest = load_manifest()
     for row in rows:
@@ -95,7 +123,7 @@ def plan(args):
 
 def submit(args):
     for row in load_manifest().values():
-        if row['phase'] != args.phase:
+        if row.get('stage', 2) != args.stage or row['phase'] != args.phase:
             continue
         if (RUNS / row['run'] / 'dev_tune.scores.json').exists():
             print(f"skip {row['run']}: already scored")
@@ -115,7 +143,7 @@ def f05(run):
     return json.loads(path.read_text(encoding='utf-8'))['errant']['correction']['f0_5'] * 100
 
 
-def judge(title, knob, rows, reference, scores, band):
+def judge(title, knob, rows, reference, scores, band, grid):
     """Print one knob's candidates against its reference, and return the chosen value."""
     ref_score = scores[reference['run']]
     print(f'\n{title}: reference {knob}={reference[knob]}'
@@ -147,49 +175,54 @@ def judge(title, knob, rows, reference, scores, band):
         chosen = reference
         note = 'beats the default by less than the band: run a second seed before reporting it'
     print(f'  chosen {knob}={chosen[knob]} ({note})')
-    if chosen[knob] in (GRID[knob][0], GRID[knob][-1]):
+    if chosen[knob] in (grid[0], grid[-1]):
         print(f'  FLAG: {knob}={chosen[knob]} is an endpoint of the grid; the optimum may be outside it')
     return chosen[knob]
 
 
 def collect(args):
+    stage = args.stage
+    cfg = STAGES[stage]
+    default = cfg['default']
     manifest = load_manifest()
-    scores = {run: f05(run) for run in manifest}
+    rows = [r for r in manifest.values() if r.get('stage', 2) == stage]
+    scores = {r['run']: f05(r['run']) for r in rows}
+    print(f'stage {stage}')
 
     # The noise band: spread of the seed runs at the default learning rate.
-    seed_rows = [r for r in manifest.values()
-                 if r['knob'] == 'base' and r['lr'] == DEFAULT['lr'] and r['seed'] in SEEDS
+    seed_rows = [r for r in rows if r['knob'] == 'base' and r['lr'] == default['lr'] and r['seed'] in SEEDS
                  and scores[r['run']] is not None]
     values = [scores[r['run']] for r in seed_rows]
     band = None
     if len(values) >= 2:
         band = max(values) - min(values)
-        print(f'noise band from {len(values)} seeds at lr {DEFAULT["lr"]}: mean {statistics.mean(values):.2f}, '
+        print(f'noise band from {len(values)} seeds at lr {default["lr"]}: mean {statistics.mean(values):.2f}, '
               f'sd {statistics.stdev(values):.2f}, range {band:.2f}')
     else:
         print('noise band: not measured yet (needs at least two finished seed runs)')
 
     # Learning rate: all runs at seed 42 with the other knobs at default.
-    lr_rows = [r for r in manifest.values() if r['knob'] in ('base', 'lr') and r['seed'] == 42
-               and all(r[k] == DEFAULT[k] for k in ('wd', 'dropout', 'ls'))]
-    lr_ref = next((r for r in lr_rows if r['lr'] == DEFAULT['lr']), None)
+    lr_rows = [r for r in rows if r['knob'] in ('base', 'lr') and r['seed'] == 42
+               and all(r[k] == default[k] for k in ('wd', 'dropout', 'ls'))]
+    lr_ref = next((r for r in lr_rows if r['lr'] == default['lr']), None)
     chosen = {}
     if lr_ref:
-        chosen['lr'] = judge('learning rate (seed 42)', 'lr', lr_rows, lr_ref, scores, band)
+        chosen['lr'] = judge('learning rate (seed 42)', 'lr', lr_rows, lr_ref, scores, band, cfg['lr_grid'])
 
-    # Phase 2: each knob at the chosen learning rate, against the baseline at that rate.
-    # One group per phase-2 learning rate, so runs at a rate chosen later don't mix with earlier ones.
-    phase2_lrs = sorted({r['lr'] for r in manifest.values() if r['phase'] == 2 and r['knob'] != 'base'}, key=float)
-    for lr_star in phase2_lrs:
-        p2_ref = next((r for r in manifest.values()
-                       if r['knob'] == 'base' and r['lr'] == lr_star and r['seed'] == 42), None)
-        if p2_ref is None:
-            continue
-        for knob in PHASE2_KNOBS:
-            rows = [r for r in manifest.values() if r['lr'] == lr_star and r['seed'] == 42
-                    and (r['knob'] == knob or r is p2_ref)]
-            chosen[f'{knob}@lr{lr_star}'] = judge(f'{knob} (at lr {lr_star}, seed 42)', knob, rows, p2_ref,
-                                                  scores, band)
+    # Phase 2 (stage 2 only): each knob at a phase-2 learning rate, against the baseline at that rate.
+    # One group per learning rate, so runs at different rates are never compared.
+    if stage == 2:
+        phase2_lrs = sorted({r['lr'] for r in rows if r['phase'] == 2 and r['knob'] != 'base'}, key=float)
+        for lr_star in phase2_lrs:
+            p2_ref = next((r for r in rows
+                           if r['knob'] == 'base' and r['lr'] == lr_star and r['seed'] == 42), None)
+            if p2_ref is None:
+                continue
+            for knob in PHASE2_KNOBS:
+                group = [r for r in rows if r['lr'] == lr_star and r['seed'] == 42
+                         and (r['knob'] == knob or r is p2_ref)]
+                chosen[f'{knob}@lr{lr_star}'] = judge(f'{knob} (at lr {lr_star}, seed 42)', knob, group,
+                                                      p2_ref, scores, band, GRID[knob])
 
     chosen = {k: v for k, v in chosen.items() if v is not None}
     if chosen:
@@ -197,12 +230,12 @@ def collect(args):
 
     lines = ['| run | phase | knob | lr | wd | dropout | ls | seed | dev_tune F0.5 |',
              '|---|---|---|---|---|---|---|---|---|']
-    for r in manifest.values():
+    for r in rows:
         s = scores[r['run']]
         lines.append(f"| {r['run']} | {r['phase']} | {r['knob']} | {r['lr']} | {r['wd']} | {r['dropout']} "
                      f"| {r['ls']} | {r['seed']} | {'not finished' if s is None else f'{s:.2f}'} |")
-    RESULTS.write_text('\n'.join(lines) + '\n', encoding='utf-8')
-    print(f'\ntable written to {RESULTS}')
+    cfg['results'].write_text('\n'.join(lines) + '\n', encoding='utf-8')
+    print(f'\ntable written to {cfg["results"]}')
 
 
 def main():
@@ -210,16 +243,19 @@ def main():
     sub = parser.add_subparsers(dest='command', required=True)
 
     p = sub.add_parser('plan', help='write the configs and update the manifest')
+    p.add_argument('--stage', type=int, choices=[1, 2], default=2)
     p.add_argument('--phase', type=int, choices=[1, 2], required=True)
     p.add_argument('--lr', help='phase 2: the chosen learning rate, as written, e.g. 3e-5')
     p.set_defaults(func=plan)
 
     p = sub.add_parser('submit', help='submit one phase with sbatch')
+    p.add_argument('--stage', type=int, choices=[1, 2], default=2)
     p.add_argument('--phase', type=int, choices=[1, 2], required=True)
     p.add_argument('--run', action='store_true', help='submit; without this, only print the commands')
     p.set_defaults(func=submit)
 
-    p = sub.add_parser('collect', help='band, per-knob comparisons, chosen values')
+    p = sub.add_parser('collect', help='band, comparisons and chosen values')
+    p.add_argument('--stage', type=int, choices=[1, 2], default=2)
     p.set_defaults(func=collect)
 
     args = parser.parse_args()
