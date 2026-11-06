@@ -16,10 +16,12 @@ This records how the T5 hyperparameters were tuned for the GEC project. Every nu
 - **Tag.** A name for stage-2 runs that start from a different stage-1 model, such as `s1lr3e-4`. Tagged runs and their results are kept apart from the untagged runs.
 - **F0.5.** Correction-level ERRANT F0.5, as a percentage. Every decision uses it.
 
+Every F0.5 value in this document is read from `errant.correction.f0_5` in a `scores.json` file, multiplied by 100.
+
 ## 2. Data and models
 
-- **Stage 1** trains on the BEA-2019 corpora, errorful sentences only. It has 561,338 pairs after cleaning, and it starts from the base model.
-- **Stage 2** trains on the W&I+LOCNESS training data, including correct sentences. It has 33,943 pairs, and it starts from the frozen stage-1 model.
+- **Stage 1** trains on the BEA-2019 corpora, errorful sentences only. It has 561,338 pairs after cleaning, and it starts from the base model. Source: `data/curriculum/manifest.json`.
+- **Stage 2** trains on the W&I+LOCNESS training data, including correct sentences. It has 33,943 pairs, and it starts from the frozen stage-1 model. Source: `data/curriculum/manifest.json`.
 - **Dev splits** come from the W&I+LOCNESS dev set. `dev_tune` (2,000 sentences) is used for every choice. `dev_test` (2,384 sentences) is held out for reporting.
 - **Metric:** correction-level ERRANT F0.5. Each run's dev_tune score is that of its best checkpoint, which was chosen using dev_tune. Those scores are optimistic, in the same way for every run.
 - **Frozen stage-1 checkpoint:** `CS4248-GEC/gec-t5-base-s1`. Its sha256 matches `experiments/training/checkpoints.sha256`.
@@ -36,6 +38,8 @@ These are the default settings the sweeps start from:
 | Warmup steps | 1,000 | 100 |
 | Epochs | 3 | Up to 5, with early stopping (patience 2) |
 | Seed | 42 | 42 |
+
+Source: `training/configs/t5-base.stage1.json` and `training/configs/t5-base.stage2.json`.
 
 ## 3. Process
 
@@ -59,14 +63,18 @@ A value is chosen only if it beats the reference by more than the noise band. Ot
 | 123 | 55.44 |
 | 7 | 55.29 |
 
+Source: `t5_tuning/runs/t5-tune.base.lr3e-5.seed42/`, `seed123/` and `seed7/`, each `dev_tune.scores.json`.
+
 - **Mean** 55.45. **Range** 0.32, which is the band used for every decision. **Sample standard deviation** 0.16, which I computed from these three values.
 - **How precise that is:** with three values, the true standard deviation could be about half to six times 0.16 (a 95% interval), which is roughly 0.08 to 1.0.
 - **Rule:** a difference from the reference is noise when its absolute size is at most 0.32 F0.5. A candidate is chosen only if it beats the reference by more than 0.32. A smaller gain keeps the default and calls for a second seed before it's reported.
 - **Caveat:** each candidate is compared with the seed-42 default run (55.61), the highest of the three seeds. Against the three-seed mean (55.45), every delta shifts by 0.16. Negative deltas get smaller and positive deltas get larger. For example, weight decay 0.1 is −0.36 against the seed-42 run but −0.20 against the mean. It's outside the band in one comparison and inside it in the other.
 
-**Stage 1** (seeds 42, 123, 7; default learning rate 1e-4), dev_tune F0.5: mean 46.69, sample standard deviation 0.19, range 0.35. The values for seeds 123 and 7 are in `t5_tuning/results-stage1.md` on the cluster, not in this document.
+**Stage 1** (seeds 42, 123, 7; default learning rate 1e-4), dev_tune F0.5: mean 46.69, sample standard deviation 0.19, range 0.35.
+Source: `t5_tuning/runs/t5-tune.s1.base.lr1e-4.seed42/`, `seed123/` and `seed7/`. The table is also in `t5_tuning/results-stage1.md`.
 
-**Stage-2 re-run on the 3e-4 stage-1 model**, dev_tune F0.5: mean 54.84, sample standard deviation 0.21, range 0.38. Seed 42 scored 54.95. The values for seeds 123 and 7 are in `t5_tuning/results-s1lr3e-4.md` on the cluster.
+**Stage-2 re-run on the 3e-4 stage-1 model**, dev_tune F0.5: mean 54.84, sample standard deviation 0.21, range 0.38. Seed 42 scored 54.95.
+Source: `t5_tuning/runs/t5-tune.s1lr3e-4.base.lr3e-5.seed42/`, `seed123/` and `seed7/`. The table is also in `t5_tuning/results-s1lr3e-4.md`.
 
 ## 5. Hyperparameters
 
@@ -84,6 +92,8 @@ Each subsection gives why the setting was varied, the values, the results and th
 | **3e-5** (default) | 55.61 | — | reference |
 | 5e-5 | 55.72 | +0.11 | inside band |
 
+Source: `t5_tuning/runs/t5-tune.base.lr1e-5.seed42/`, `t5-tune.base.lr3e-5.seed42/` and `t5-tune.base.lr5e-5.seed42/`, each `dev_tune.scores.json`.
+
 - **Chosen:** 3e-5, the default. 5e-5 is inside the band, so there's no significant change and the default is kept. 5e-5 is the top of the grid, so the best rate may be higher. The gain is within noise, so the grid wasn't extended.
 
 ### 5.2 Stage-2 weight decay
@@ -97,6 +107,8 @@ Each subsection gives why the setting was varied, the values, the results and th
 | 0 | 55.13 | −0.48 | outside band, worse |
 | **0.01** (default) | 55.61 | — | reference |
 | 0.1 | 55.25 | −0.36 | outside band vs seed-42 reference; inside band vs the three-seed mean (−0.20) |
+
+Source: `t5_tuning/runs/t5-tune.wd0.lr3e-5.seed42/`, `t5-tune.base.lr3e-5.seed42/` and `t5-tune.wd0.1.lr3e-5.seed42/`, each `dev_tune.scores.json`.
 
 - **Chosen:** 0.01, the default. Neither alternative beats it. The 0.1 result is borderline depending on the reference, and it's lower in both comparisons.
 
@@ -112,8 +124,10 @@ Each subsection gives why the setting was varied, the values, the results and th
 | **0.1** (default) | 55.61 | — | reference |
 | 0.3 | 50.73 | −4.88 | outside band, much worse |
 
+Source: `t5_tuning/runs/t5-tune.dropout0.lr3e-5.seed42/`, `t5-tune.base.lr3e-5.seed42/` and `t5-tune.dropout0.3.lr3e-5.seed42/`, each `dev_tune.scores.json`.
+
 - **Chosen:** 0.1, the default.
-- **Observation (not a result):** the dropout 0.3 run reached its best score at the last evaluation (step 5,305). Its final recall was 0.29, against 0.41 for the default run with seed 123. The five-epoch cap and early stopping were held fixed, so a longer run might change this. That wasn't tested.
+- **Observation (not a result):** the dropout 0.3 run reached its best score at the last evaluation (step 5,305). Its final recall was 0.29, against 0.41 for the default run with seed 123. Both recall values are from the `[errant]` lines in the Slurm logs on the cluster: `logs/slurm/t5-tune.dropout0.3.lr3e-5.seed42-1079920.out` and `logs/slurm/t5-tune.base.lr3e-5.seed123-1076161.out`. The five-epoch cap and early stopping were held fixed, so a longer run might change this. That wasn't tested.
 
 ### 5.4 Stage-2 label smoothing
 
@@ -126,6 +140,8 @@ Each subsection gives why the setting was varied, the values, the results and th
 | 0 | 54.87 | −0.74 | outside band, worse |
 | **0.1** (default) | 55.61 | — | reference |
 | 0.2 | 55.03 | −0.58 | outside band, worse |
+
+Source: `t5_tuning/runs/t5-tune.ls0.lr3e-5.seed42/`, `t5-tune.base.lr3e-5.seed42/` and `t5-tune.ls0.2.lr3e-5.seed42/`, each `dev_tune.scores.json`.
 
 - **Chosen:** 0.1, the default.
 
@@ -141,6 +157,8 @@ Each subsection gives why the setting was varied, the values, the results and th
 | **1e-4** (default) | 46.82 | — | reference |
 | 3e-4 | 47.93 | +1.11 | outside band, better |
 
+Source: `t5_tuning/runs/t5-tune.s1.base.lr3e-5.seed42/`, `t5-tune.s1.base.lr1e-4.seed42/` and `t5-tune.s1.base.lr3e-4.seed42/`, each `dev_tune.scores.json`.
+
 - **Effect on stage 2** (the test that matters for the pipeline). The higher stage-1 score didn't carry through. Stage 2 was rerun from the 3e-4 stage-1 model with the default settings, and it scored lower.
 
   | Stage-2 learning rate (seed 42, on the 3e-4 stage-1 model) | F0.5 | Change vs reference (54.95) | Verdict |
@@ -149,7 +167,9 @@ Each subsection gives why the setting was varied, the values, the results and th
   | **3e-5** (default) | 54.95 | — | reference |
   | 5e-5 | 55.26 | +0.31 | inside band |
 
-  - Noise band from three seeds at the default: mean 54.84, sample standard deviation 0.21, range 0.38.
+  Source: `t5_tuning/runs/t5-tune.s1lr3e-4.base.lr1e-5.seed42/`, `t5-tune.s1lr3e-4.base.lr3e-5.seed42/` and `t5-tune.s1lr3e-4.base.lr5e-5.seed42/`, each `dev_tune.scores.json`.
+
+  - Noise band from three seeds at the default: mean 54.84, sample standard deviation 0.21, range 0.38. Source: section 4.
   - The stage-2 learning rate stays at 3e-5. 5e-5 is inside the band, so it isn't a reported gain.
   - Against the original pipeline, the mean fell from 55.45 to 54.84, a drop of 0.61. The seed-42 run fell from 55.61 to 54.95, a drop of 0.66. Both are larger than either band, so the drop isn't noise.
 - **Chosen for the final pipeline:** none. The group's stage-1 model at 1e-4 is kept. On stage 1 alone, 3e-4 is the best value in the grid. It's the top of the grid, so the best rate may be higher, and 1e-3 **has not been run**.
@@ -179,9 +199,9 @@ Results files: `t5_tuning/results.md` (stage 2, untagged), `t5_tuning/results-st
 
 Run these from the repo root. Steps 1 to 3 are one-time setup.
 
-1. **Build and copy the stage-1 data** (laptop, then cluster). `python3 -m training.build_data` builds `data/curriculum/stage1.*`. Copy the three files to `data/curriculum/` on the cluster with `rsync`. The stage-2 data and dev splits are committed.
+1. **Build and copy the stage-1 data** (laptop, then cluster). `python3 -m training.build_data` builds `data/curriculum/stage1.*`. It needs `git lfs fetch origin 3e50997` first; see the "From scratch" and "Data" sections of `training/README.md`. Copy the three files to `data/curriculum/` on the cluster with `rsync`. The stage-2 data and dev splits are committed.
 2. **Cache the base models** (compute node): `bash cluster/download_models.sh`. Stage 1 needs `google-t5/t5-base`, and jobs run offline.
-3. **Cache the frozen stage-1 model** (compute node): `bash t5_tuning/fetch_stage1.sh`. It must print "sha256 matches".
+3. **Cache the frozen stage-1 model** (compute node): `hf auth login` first, with a token from an account in the `CS4248-GEC` organization (see `experiments/training/README.md`), then `bash t5_tuning/fetch_stage1.sh`. It must print "sha256 matches".
 4. **Noise band and stage-2 learning-rate sweep:**
    ```bash
    python3 t5_tuning/tune.py plan --phase 1

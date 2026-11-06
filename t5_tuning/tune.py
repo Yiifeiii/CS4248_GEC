@@ -36,7 +36,7 @@ MANIFEST_TABLE = HERE / 'manifest.md'
 
 SEEDS = [42, 123, 7]                     # the noise-floor seeds
 GRID = {'wd': ['0', '0.01', '0.1'], 'dropout': ['0', '0.1', '0.3'], 'ls': ['0', '0.1', '0.2']}
-PHASE2_KNOBS = ['wd', 'dropout', 'ls']
+PHASE2_PARAMS = ['wd', 'dropout', 'ls']
 
 # Stage 1 starts from the public base model, so its learning rate is higher than stage 2's.
 # Stage 2 starts from the frozen stage-1 model. Run names of stage 2 have no stage tag, so the
@@ -61,14 +61,14 @@ STAGES = {
 }
 
 
-def make_row(stage, phase, knob, seed, tag=None, init=None, **overrides):
-    """One run: its stage, tag, starting model, the knob it varies, its settings, and its run name."""
+def make_row(stage, phase, param, seed, tag=None, init=None, **overrides):
+    """One run: its stage, tag, starting model, the hyperparameter it varies, its settings, and its run name."""
     cfg = STAGES[stage]
     params = {**cfg['default'], **overrides}
-    knob_tag = f'{knob}{overrides[knob]}' if knob in PHASE2_KNOBS else 'base'
+    param_tag = f'{param}{overrides[param]}' if param in PHASE2_PARAMS else 'base'
     prefix = cfg['prefix'] if tag is None else f't5-tune.{tag}'
-    run = f"{prefix}.{knob_tag}.lr{params['lr']}.seed{seed}"
-    return {'stage': stage, 'phase': phase, 'tag': tag, 'init': init, 'knob': knob, 'run': run,
+    run = f"{prefix}.{param_tag}.lr{params['lr']}.seed{seed}"
+    return {'stage': stage, 'phase': phase, 'tag': tag, 'init': init, 'param': param, 'run': run,
             'seed': seed, **params, 'config': f'{CONFIGS.relative_to(ROOT)}/{run}.json'}
 
 
@@ -93,10 +93,10 @@ def load_manifest():
 
 def save_manifest(manifest):
     MANIFEST.write_text(json.dumps(manifest, indent=2) + '\n', encoding='utf-8')
-    lines = ['| run | stage | tag | phase | knob | lr | weight decay | dropout | label smoothing | seed | config |',
+    lines = ['| run | stage | tag | phase | param | lr | weight decay | dropout | label smoothing | seed | config |',
              '|---|---|---|---|---|---|---|---|---|---|---|']
     for r in manifest.values():
-        lines.append(f"| {r['run']} | {r.get('stage', 2)} | {r.get('tag') or ''} | {r['phase']} | {r['knob']} "
+        lines.append(f"| {r['run']} | {r.get('stage', 2)} | {r.get('tag') or ''} | {r['phase']} | {r['param']} "
                      f"| {r['lr']} | {r['wd']} | {r['dropout']} | {r['ls']} | {r['seed']} | {r['config']} |")
     MANIFEST_TABLE.write_text('\n'.join(lines) + '\n', encoding='utf-8')
 
@@ -121,9 +121,9 @@ def plan(args):
         # At the default learning rate the baseline is the phase-1 seed-42 run, already in the manifest.
         baseline = make_row(2, 2, 'base', 42, lr=args.lr, **common)
         rows = [] if baseline['run'] in load_manifest() else [baseline]
-        for knob in PHASE2_KNOBS:
-            rows += [make_row(2, 2, knob, 42, lr=args.lr, **common, **{knob: v})
-                     for v in GRID[knob] if v != default[knob]]
+        for param in PHASE2_PARAMS:
+            rows += [make_row(2, 2, param, 42, lr=args.lr, **common, **{param: v})
+                     for v in GRID[param] if v != default[param]]
     CONFIGS.mkdir(exist_ok=True)
     manifest = load_manifest()
     for row in rows:
@@ -156,21 +156,21 @@ def f05(run):
     return json.loads(path.read_text(encoding='utf-8'))['errant']['correction']['f0_5'] * 100
 
 
-def judge(title, knob, rows, reference, scores, band, grid):
+def judge(title, param, rows, reference, scores, band, grid):
     """Print one hyperparameter's candidates against its reference, and return the chosen value."""
     ref_score = scores[reference['run']]
-    print(f'\n{title}: reference {knob}={reference[knob]}'
+    print(f'\n{title}: reference {param}={reference[param]}'
           + (f' (F0.5 {ref_score:.2f})' if ref_score is not None else ' (not finished)'))
-    for r in sorted(rows, key=lambda r: float(r[knob])):
+    for r in sorted(rows, key=lambda r: float(r[param])):
         score = scores[r['run']]
         if score is None:
-            print(f'  {r[knob]:>8}  not finished')
+            print(f'  {r[param]:>8}  not finished')
         elif r is reference:
-            print(f'  {r[knob]:>8}  {score:6.2f}  reference')
+            print(f'  {r[param]:>8}  {score:6.2f}  reference')
         else:
             delta = score - ref_score
             verdict = 'inside band' if band is None or abs(delta) <= band else 'outside band'
-            print(f'  {r[knob]:>8}  {score:6.2f}  {delta:+6.2f}  {verdict}')
+            print(f'  {r[param]:>8}  {score:6.2f}  {delta:+6.2f}  {verdict}')
 
     if band is None or ref_score is None:
         print('  no choice yet: the band or the reference is missing')
@@ -187,10 +187,10 @@ def judge(title, knob, rows, reference, scores, band, grid):
     else:
         chosen = reference
         note = 'beats the default by less than the band: run a second seed before reporting it'
-    print(f'  chosen {knob}={chosen[knob]} ({note})')
-    if chosen[knob] in (grid[0], grid[-1]):
-        print(f'  FLAG: {knob}={chosen[knob]} is an endpoint of the grid; the optimum may be outside it')
-    return chosen[knob]
+    print(f'  chosen {param}={chosen[param]} ({note})')
+    if chosen[param] in (grid[0], grid[-1]):
+        print(f'  FLAG: {param}={chosen[param]} is an endpoint of the grid; the optimum may be outside it')
+    return chosen[param]
 
 
 def collect(args):
@@ -203,7 +203,7 @@ def collect(args):
     print(f'stage {stage}' + (f', tag {args.tag}' if args.tag else ''))
 
     # The noise band: spread of the seed runs at the default learning rate.
-    seed_rows = [r for r in rows if r['knob'] == 'base' and r['lr'] == default['lr'] and r['seed'] in SEEDS
+    seed_rows = [r for r in rows if r['param'] == 'base' and r['lr'] == default['lr'] and r['seed'] in SEEDS
                  and scores[r['run']] is not None]
     values = [scores[r['run']] for r in seed_rows]
     band = None
@@ -214,8 +214,8 @@ def collect(args):
     else:
         print('noise band: not measured yet (needs at least two finished seed runs)')
 
-    # Learning rate: all runs at seed 42 with the other knobs at default.
-    lr_rows = [r for r in rows if r['knob'] in ('base', 'lr') and r['seed'] == 42
+    # Learning rate: all runs at seed 42 with the other hyperparameters at default.
+    lr_rows = [r for r in rows if r['param'] in ('base', 'lr') and r['seed'] == 42
                and all(r[k] == default[k] for k in ('wd', 'dropout', 'ls'))]
     lr_ref = next((r for r in lr_rows if r['lr'] == default['lr']), None)
     chosen = {}
@@ -225,27 +225,27 @@ def collect(args):
     # Phase 2 (stage 2 only): each hyperparameter at a phase-2 learning rate, against the baseline at that rate.
     # One group per learning rate, so runs at different rates are never compared.
     if stage == 2:
-        phase2_lrs = sorted({r['lr'] for r in rows if r['phase'] == 2 and r['knob'] != 'base'}, key=float)
+        phase2_lrs = sorted({r['lr'] for r in rows if r['phase'] == 2 and r['param'] != 'base'}, key=float)
         for lr_star in phase2_lrs:
             p2_ref = next((r for r in rows
-                           if r['knob'] == 'base' and r['lr'] == lr_star and r['seed'] == 42), None)
+                           if r['param'] == 'base' and r['lr'] == lr_star and r['seed'] == 42), None)
             if p2_ref is None:
                 continue
-            for knob in PHASE2_KNOBS:
+            for param in PHASE2_PARAMS:
                 group = [r for r in rows if r['lr'] == lr_star and r['seed'] == 42
-                         and (r['knob'] == knob or r is p2_ref)]
-                chosen[f'{knob}@lr{lr_star}'] = judge(f'{knob} (at lr {lr_star}, seed 42)', knob, group,
-                                                      p2_ref, scores, band, GRID[knob])
+                         and (r['param'] == param or r is p2_ref)]
+                chosen[f'{param}@lr{lr_star}'] = judge(f'{param} (at lr {lr_star}, seed 42)', param, group,
+                                                      p2_ref, scores, band, GRID[param])
 
     chosen = {k: v for k, v in chosen.items() if v is not None}
     if chosen:
         print('\nchosen: ' + ', '.join(f'{k}={v}' for k, v in chosen.items()))
 
-    lines = ['| run | phase | knob | lr | wd | dropout | ls | seed | dev_tune F0.5 |',
+    lines = ['| run | phase | param | lr | wd | dropout | ls | seed | dev_tune F0.5 |',
              '|---|---|---|---|---|---|---|---|---|']
     for r in rows:
         s = scores[r['run']]
-        lines.append(f"| {r['run']} | {r['phase']} | {r['knob']} | {r['lr']} | {r['wd']} | {r['dropout']} "
+        lines.append(f"| {r['run']} | {r['phase']} | {r['param']} | {r['lr']} | {r['wd']} | {r['dropout']} "
                      f"| {r['ls']} | {r['seed']} | {'not finished' if s is None else f'{s:.2f}'} |")
     results_path = cfg['results'] if args.tag is None else HERE / f'results-{args.tag}.md'
     results_path.write_text('\n'.join(lines) + '\n', encoding='utf-8')
