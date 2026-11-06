@@ -1,8 +1,9 @@
 #!/bin/bash
 # One-time setup of the GRECO environment on the cluster. Run on a compute node (it
 # needs internet and memory), from the repository root:
-#   salloc -t 60 && srun --pty bash
+#   salloc -t 120 && srun --pty bash
 #   bash cluster/setup_greco_env.sh
+# Safe to rerun: finished steps (env, torch, clone, checkpoint) are skipped or resumed.
 # Creates conda env "greco" (Python 3.10), clones and patches upstream GRECO into
 # external/greco, puts the 1.7 GB checkpoint and the DeBERTa-v3-large download on
 # scratch, so jobs can run offline.
@@ -22,11 +23,15 @@ set -u
 mkdir -p "$SCRATCH/cs4248-gec/greco" models "$HF_HOME"
 [ -e models/greco ] || ln -s "$SCRATCH/cs4248-gec/greco" models/greco
 
-bash greco_setup/setup.sh
+# Wheels are large; do not cache them in the home directory (quota)
+export PIP_NO_CACHE_DIR=1
 
-# GRECO pins torch 1.12, which cannot run on H100 GPUs (sm_90). Replace it with a CUDA 11.8
-# build; the other pinned packages (transformers 4.23.1) stay.
-python -m pip install "torch==2.1.2" --index-url https://download.pytorch.org/whl/cu118
+# GRECO pins torch 1.12, which cannot run on H100 GPUs (sm_90). Install a CUDA 11.8 build
+# instead; the other pinned packages (transformers 4.23.1) stay.
+python -c 'import torch; assert torch.__version__.startswith("2.1.2")' 2>/dev/null ||
+    python -m pip install "torch==2.1.2" --index-url https://download.pytorch.org/whl/cu118
+
+GRECO_KEEP_TORCH=1 bash greco_setup/setup.sh
 
 python - <<'EOF'
 from transformers import AutoModel, AutoTokenizer
