@@ -9,6 +9,7 @@ set -euo pipefail
 
 SCRATCH="${SCRATCH:-/mnt/scratch/${USER:0:1}/$USER}"
 export HF_HOME="${HF_HOME:-$SCRATCH/cs4248-gec/hf_cache}"
+
 # Same workaround as cluster/download_models.sh: the Xet backend aborts on xlogin.
 export HF_HUB_DISABLE_XET=1
 

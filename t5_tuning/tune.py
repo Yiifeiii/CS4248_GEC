@@ -3,7 +3,7 @@
 Stage 2 (the default), from the frozen stage-1 model:
     python t5_tuning/tune.py plan --phase 1                  # noise band and learning-rate sweep
     python t5_tuning/tune.py submit --phase 1 [--run]        # prints the sbatch commands; --run submits
-    python t5_tuning/tune.py collect                         # band, per-knob table, chosen values
+    python t5_tuning/tune.py collect                         # band, one results table per hyperparameter, chosen values
     python t5_tuning/tune.py plan --phase 2 --lr 3e-5        # wd, dropout, label smoothing at lr*
     python t5_tuning/tune.py submit --phase 2 [--run]
     python t5_tuning/tune.py collect
@@ -157,7 +157,7 @@ def f05(run):
 
 
 def judge(title, knob, rows, reference, scores, band, grid):
-    """Print one knob's candidates against its reference, and return the chosen value."""
+    """Print one hyperparameter's candidates against its reference, and return the chosen value."""
     ref_score = scores[reference['run']]
     print(f'\n{title}: reference {knob}={reference[knob]}'
           + (f' (F0.5 {ref_score:.2f})' if ref_score is not None else ' (not finished)'))
@@ -222,7 +222,7 @@ def collect(args):
     if lr_ref:
         chosen['lr'] = judge('learning rate (seed 42)', 'lr', lr_rows, lr_ref, scores, band, cfg['lr_grid'])
 
-    # Phase 2 (stage 2 only): each knob at a phase-2 learning rate, against the baseline at that rate.
+    # Phase 2 (stage 2 only): each hyperparameter at a phase-2 learning rate, against the baseline at that rate.
     # One group per learning rate, so runs at different rates are never compared.
     if stage == 2:
         phase2_lrs = sorted({r['lr'] for r in rows if r['phase'] == 2 and r['knob'] != 'base'}, key=float)
