@@ -8,6 +8,11 @@ Stage 2 (the default), from the frozen stage-1 model:
     python t5_tuning/tune.py submit --phase 2 [--run]
     python t5_tuning/tune.py collect
 
+Stage 2 from a different stage-1 model, under its own tag (runs and results are kept apart):
+    python t5_tuning/tune.py plan --phase 1 --tag s1lr3e-4 --init '${CKPT_ROOT}/t5-tune.s1.base.lr3e-4.seed42/best'
+    python t5_tuning/tune.py submit --phase 1 --tag s1lr3e-4 [--run]
+    python t5_tuning/tune.py collect --tag s1lr3e-4
+
 Stage 1, from the public T5 base model (a learning-rate sweep only):
     python t5_tuning/tune.py plan --stage 1 --phase 1
     python t5_tuning/tune.py submit --stage 1 --phase 1 [--run]
@@ -56,14 +61,15 @@ STAGES = {
 }
 
 
-def make_row(stage, phase, knob, seed, **overrides):
-    """One run: its stage, the knob it varies, its settings, and its run name."""
+def make_row(stage, phase, knob, seed, tag=None, init=None, **overrides):
+    """One run: its stage, tag, starting model, the knob it varies, its settings, and its run name."""
     cfg = STAGES[stage]
     params = {**cfg['default'], **overrides}
-    tag = f'{knob}{overrides[knob]}' if knob in PHASE2_KNOBS else 'base'
-    run = f"{cfg['prefix']}.{tag}.lr{params['lr']}.seed{seed}"
-    return {'stage': stage, 'phase': phase, 'knob': knob, 'run': run, 'seed': seed, **params,
-            'config': f'{CONFIGS.relative_to(ROOT)}/{run}.json'}
+    knob_tag = f'{knob}{overrides[knob]}' if knob in PHASE2_KNOBS else 'base'
+    prefix = cfg['prefix'] if tag is None else f't5-tune.{tag}'
+    run = f"{prefix}.{knob_tag}.lr{params['lr']}.seed{seed}"
+    return {'stage': stage, 'phase': phase, 'tag': tag, 'init': init, 'knob': knob, 'run': run,
+            'seed': seed, **params, 'config': f'{CONFIGS.relative_to(ROOT)}/{run}.json'}
 
 
 def write_config(row):
@@ -75,8 +81,9 @@ def write_config(row):
         'dropout': float(row['dropout']), 'label_smoothing': float(row['ls']),
         'seed': row['seed'], 'output_dir': f"${{CKPT_ROOT}}/{row['run']}",
     })
-    if cfg['init']:
-        settings['init'] = cfg['init']
+    init = row.get('init') or cfg['init']
+    if init:
+        settings['init'] = init
     (ROOT / row['config']).write_text(json.dumps(settings, indent=2) + '\n', encoding='utf-8')
 
 
@@ -86,30 +93,36 @@ def load_manifest():
 
 def save_manifest(manifest):
     MANIFEST.write_text(json.dumps(manifest, indent=2) + '\n', encoding='utf-8')
-    lines = ['| run | stage | phase | knob | lr | weight decay | dropout | label smoothing | seed | config |',
-             '|---|---|---|---|---|---|---|---|---|---|']
+    lines = ['| run | stage | tag | phase | knob | lr | weight decay | dropout | label smoothing | seed | config |',
+             '|---|---|---|---|---|---|---|---|---|---|---|']
     for r in manifest.values():
-        lines.append(f"| {r['run']} | {r.get('stage', 2)} | {r['phase']} | {r['knob']} | {r['lr']} | {r['wd']} "
-                     f"| {r['dropout']} | {r['ls']} | {r['seed']} | {r['config']} |")
+        lines.append(f"| {r['run']} | {r.get('stage', 2)} | {r.get('tag') or ''} | {r['phase']} | {r['knob']} "
+                     f"| {r['lr']} | {r['wd']} | {r['dropout']} | {r['ls']} | {r['seed']} | {r['config']} |")
     MANIFEST_TABLE.write_text('\n'.join(lines) + '\n', encoding='utf-8')
 
 
 def plan(args):
     stage = args.stage
+    if args.init and not args.tag:
+        raise SystemExit('--init needs --tag, so the new runs get their own names')
+    if args.init and stage != 2:
+        raise SystemExit('--init is only for stage 2')
     default = STAGES[stage]['default']
+    common = {'tag': args.tag, 'init': args.init}
     if args.phase == 1:
-        rows = [make_row(stage, 1, 'base', seed) for seed in SEEDS]
-        rows += [make_row(stage, 1, 'lr', 42, lr=v) for v in STAGES[stage]['lr_grid'] if v != default['lr']]
+        rows = [make_row(stage, 1, 'base', seed, **common) for seed in SEEDS]
+        rows += [make_row(stage, 1, 'lr', 42, lr=v, **common)
+                 for v in STAGES[stage]['lr_grid'] if v != default['lr']]
     else:
         if stage != 2:
             raise SystemExit('phase 2 (weight decay, dropout, label smoothing) is only set up for stage 2')
         if not args.lr:
             raise SystemExit('phase 2 needs --lr, the learning rate chosen in phase 1')
         # At the default learning rate the baseline is the phase-1 seed-42 run, already in the manifest.
-        baseline = make_row(2, 2, 'base', 42, lr=args.lr)
+        baseline = make_row(2, 2, 'base', 42, lr=args.lr, **common)
         rows = [] if baseline['run'] in load_manifest() else [baseline]
         for knob in PHASE2_KNOBS:
-            rows += [make_row(2, 2, knob, 42, lr=args.lr, **{knob: v})
+            rows += [make_row(2, 2, knob, 42, lr=args.lr, **common, **{knob: v})
                      for v in GRID[knob] if v != default[knob]]
     CONFIGS.mkdir(exist_ok=True)
     manifest = load_manifest()
@@ -123,7 +136,7 @@ def plan(args):
 
 def submit(args):
     for row in load_manifest().values():
-        if row.get('stage', 2) != args.stage or row['phase'] != args.phase:
+        if row.get('stage', 2) != args.stage or row.get('tag') != args.tag or row['phase'] != args.phase:
             continue
         if (RUNS / row['run'] / 'dev_tune.scores.json').exists():
             print(f"skip {row['run']}: already scored")
@@ -185,9 +198,9 @@ def collect(args):
     cfg = STAGES[stage]
     default = cfg['default']
     manifest = load_manifest()
-    rows = [r for r in manifest.values() if r.get('stage', 2) == stage]
+    rows = [r for r in manifest.values() if r.get('stage', 2) == stage and r.get('tag') == args.tag]
     scores = {r['run']: f05(r['run']) for r in rows}
-    print(f'stage {stage}')
+    print(f'stage {stage}' + (f', tag {args.tag}' if args.tag else ''))
 
     # The noise band: spread of the seed runs at the default learning rate.
     seed_rows = [r for r in rows if r['knob'] == 'base' and r['lr'] == default['lr'] and r['seed'] in SEEDS
@@ -234,8 +247,9 @@ def collect(args):
         s = scores[r['run']]
         lines.append(f"| {r['run']} | {r['phase']} | {r['knob']} | {r['lr']} | {r['wd']} | {r['dropout']} "
                      f"| {r['ls']} | {r['seed']} | {'not finished' if s is None else f'{s:.2f}'} |")
-    cfg['results'].write_text('\n'.join(lines) + '\n', encoding='utf-8')
-    print(f'\ntable written to {cfg["results"]}')
+    results_path = cfg['results'] if args.tag is None else HERE / f'results-{args.tag}.md'
+    results_path.write_text('\n'.join(lines) + '\n', encoding='utf-8')
+    print(f'\ntable written to {results_path}')
 
 
 def main():
@@ -246,16 +260,20 @@ def main():
     p.add_argument('--stage', type=int, choices=[1, 2], default=2)
     p.add_argument('--phase', type=int, choices=[1, 2], required=True)
     p.add_argument('--lr', help='phase 2: the chosen learning rate, as written, e.g. 3e-5')
+    p.add_argument('--tag', help='name the runs under this tag, e.g. s1lr3e-4, and keep their results apart')
+    p.add_argument('--init', help='stage 2: the starting model, e.g. ${CKPT_ROOT}/<stage-1 run>/best (needs --tag)')
     p.set_defaults(func=plan)
 
     p = sub.add_parser('submit', help='submit one phase with sbatch')
     p.add_argument('--stage', type=int, choices=[1, 2], default=2)
     p.add_argument('--phase', type=int, choices=[1, 2], required=True)
+    p.add_argument('--tag', help='submit only the runs planned under this tag')
     p.add_argument('--run', action='store_true', help='submit; without this, only print the commands')
     p.set_defaults(func=submit)
 
     p = sub.add_parser('collect', help='band, comparisons and chosen values')
     p.add_argument('--stage', type=int, choices=[1, 2], default=2)
+    p.add_argument('--tag', help='collect only the runs planned under this tag')
     p.set_defaults(func=collect)
 
     args = parser.parse_args()
