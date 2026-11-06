@@ -111,6 +111,7 @@ class GrecoScorer:
         self.model.device = torch.device(device)
         self.model.to(self.model.device)
         state = torch.load(checkpoint, map_location="cpu")
+        state.pop("lm.embeddings.position_ids", None)
         self.model.load_state_dict(state, strict=True)
         self.model.eval()
 
