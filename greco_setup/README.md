@@ -89,6 +89,30 @@ The output contains `best_sentence`, pooled edits, and the surviving candidates 
 python3 -m unittest discover -s tests -v
 ```
 
+## Voting
+
+`--vote-coef α` (default 0, no voting) ranks candidates by log Q + α · log V, the paper's voting bias (Qorib & Ng, 2023, Eq. 10). V is the average support of the candidate's edits; `--vote-mode` sets how support is counted:
+
+| Mode | Support of an edit | Note |
+| --- | --- | --- |
+| `hypothesis` | share of all hypotheses containing it | What official `run_combination.py` does when each ranked hypothesis is an input file |
+| `system` | share of systems with at least one hypothesis containing it | The paper's count(e) / c: a system repeating an edit across its beams votes once |
+| `rank` | Σ over systems of 1 / (best rank containing it), ÷ number of systems | A system's top-beam edits keep the same vote at any k; edits only in lower beams count less |
+
+At k = 1 the three modes are identical. As in the official code, the unchanged sentence gets one voter's share (1/hypotheses or 1/systems), so V is never 0. `--score-cache PATH` stores GRECO scores in a JSON-lines file; they depend only on (source, candidate), so runs with different vote settings reuse them.
+
+### Tuning α on dev_tune
+
+`tune_vote.py` runs every (k, mode, α) on `data/curriculum/dev_tune.ids` (α ∈ {0, 0.1, …, 0.9}, the paper's grid plus 0). `score_tuning.py` scores them with ERRANT and writes the best α per (k, mode) to `best.json`; `tune_vote.py --best-from` then runs only those settings on `dev_test`. With α = 0, the predictions reproduce `outputs/greco/full/greco-k*.tgt`. On the cluster:
+
+```bash
+bash cluster/setup_greco_env.sh                                  # once, on a compute node
+sbatch -J greco-tune cluster/job.sbatch cluster/greco_tune.sh dev_tune
+sbatch -J greco-test-set cluster/job.sbatch cluster/greco_tune.sh dev_test --best-from outputs/greco/tuning/dev_tune/best.json
+```
+
+Results: `outputs/greco/tuning/<split>/scores.csv`. The score cache (`outputs/greco/tuning/score_cache.jsonl`) is not committed.
+
 ## Sources
 
 - [Official GRECO code](https://github.com/nusnlp/greco), pinned to `8e509aaacf4e5ec3276d3427371471fd82a7f58b`; the adapter uses `models.GRECO.score(source, hypotheses)` and loads the released state dictionary strictly.
