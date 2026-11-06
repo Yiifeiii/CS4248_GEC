@@ -1,0 +1,34 @@
+{
+  "model": "/mnt/scratch/d/dsyc777/cs4248-gec/checkpoints/t5-base.long.s1/best",
+  "split": "dev_test",
+  "sentences": 2384,
+  "beams": 5,
+  "prefix": null,
+  "retokenize": false,
+  "git_commit": "c42fd560c0afc020f592ff27e5373c9aef7c91db",
+  "decode_seconds": 52,
+  "device": "cuda",
+  "errant": {
+    "correction": {
+      "tp": 1246.0,
+      "fp": 1050.0,
+      "fn": 2794.0,
+      "precision": 0.5427,
+      "recall": 0.3084,
+      "f0_5": 0.4711
+    },
+    "detection": {
+      "tp": 1544.0,
+      "fp": 764.0,
+      "fn": 2590.0,
+      "precision": 0.669,
+      "recall": 0.3735,
+      "f0_5": 0.5776
+    }
+  },
+  "m2": {
+    "precision": 0.6249,
+    "recall": 0.3345,
+    "f0_5": 0.5325
+  }
+}

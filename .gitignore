@@ -6,3 +6,7 @@ __pycache__/
 .venv-greco/
 external/
 models/
+logs/
+checkpoints/
+# Rebuilt by training/build_data.py (sha256 in data/curriculum/manifest.json)
+data/curriculum/stage1.*

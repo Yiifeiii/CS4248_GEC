@@ -1,0 +1,27 @@
+{
+  "run": "t5-base.long.s1cont",
+  "init": "${CKPT_ROOT}/t5-base.long.s1/best",
+  "learning_rate": 3e-05,
+  "train": "data/curriculum/stage1",
+  "errorful_only": false,
+  "epochs": 10,
+  "batch_size": 32,
+  "grad_accum": 1,
+  "warmup_steps": 100,
+  "loss_eval_steps": 500,
+  "save_steps": 500,
+  "errant_eval": {
+    "steps": 1061,
+    "sentences": 2000,
+    "beams": 5,
+    "patience": null
+  },
+  "dropout": 0.1,
+  "weight_decay": 0.01,
+  "label_smoothing": 0.1,
+  "seed": 42,
+  "save_total_limit": 2,
+  "logging_steps": 50,
+  "output_dir": "${CKPT_ROOT}/t5-base.long.s1cont",
+  "max_steps": 10610
+}

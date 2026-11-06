@@ -1,0 +1,66 @@
+{
+  "run": "bart-base.s1s2",
+  "config": {
+    "run": "bart-base.s1s2",
+    "init": "${CKPT_ROOT}/bart-base.s1/best",
+    "learning_rate": 1e-05,
+    "train": "data/curriculum/stage2",
+    "errorful_only": false,
+    "epochs": 5,
+    "batch_size": 32,
+    "grad_accum": 1,
+    "warmup_steps": 100,
+    "loss_eval_steps": 500,
+    "save_steps": 500,
+    "errant_eval": {
+      "steps": "epoch",
+      "sentences": 2000,
+      "beams": 5,
+      "patience": 2
+    },
+    "dropout": 0.1,
+    "weight_decay": 0.01,
+    "label_smoothing": 0.1,
+    "seed": 42,
+    "save_total_limit": 2,
+    "logging_steps": 50,
+    "output_dir": "${CKPT_ROOT}/bart-base.s1s2"
+  },
+  "config_path": "training/configs/bart-base.stage2.json",
+  "args": {
+    "config": "training/configs/bart-base.stage2.json",
+    "resume": "auto",
+    "output_dir": null,
+    "max_steps": null,
+    "train_limit": null,
+    "dev_limit": null,
+    "errant_steps": null
+  },
+  "init": "/mnt/scratch/d/dsyc777/cs4248-gec/checkpoints/bart-base.s1/best",
+  "family": "bart",
+  "prefix": "",
+  "training_pairs": 33943,
+  "git_commit": "8371a557f4e01caa333c0fc463fb176191c538d1",
+  "data_manifest_sha256": "928e11ebe6d5a8aededbd201395491baa968e9a75e9bba563a7724f88cb0846d",
+  "versions": {
+    "torch": "2.11.0+cu128",
+    "transformers": "4.46.3"
+  },
+  "device": "NVIDIA H100 NVL MIG 3g.47gb",
+  "started": "2026-10-26 01:57:06",
+  "finished": "2026-10-26 02:25:07",
+  "steps": 5305,
+  "best": {
+    "step": 5305,
+    "epoch": 5.0,
+    "beams": 5,
+    "sentences": 2000,
+    "tp": 1336.0,
+    "fp": 900.0,
+    "fn": 2085.0,
+    "precision": 0.5975,
+    "recall": 0.3905,
+    "f0_5": 0.5402,
+    "seconds": 44
+  }
+}
