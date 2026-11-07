@@ -1,6 +1,6 @@
 """Build GRECO training records from n-best candidates, labelled with ERRANT.
 
-Each source sentence gets a group of n hypotheses (n = 4, as in the GRECO paper). The
+Each source sentence gets a group of n hypotheses (n = 3, one per system; the GRECO paper uses 4). The
 group is one JSON line holding one record per hypothesis, in the layout that the
 upstream loader (utils/data.py, TrainDataset) reads:
 
@@ -32,7 +32,7 @@ from pathlib import Path
 
 from greco_setup.prepare import read_lines, read_system
 
-GROUP_SIZE = 4
+GROUP_SIZE = 3  # one slot per system (BART, T5, GECToR); the paper uses 4
 MAX_LENGTH = 200  # the upstream loader pads and truncates to this many subword tokens
 
 
@@ -151,14 +151,14 @@ class Builder:
 
 
 def build(source_path, gold_path, system_specs, k, out_path, annotator, tokenizer=None,
-          max_length=MAX_LENGTH):
+          max_length=MAX_LENGTH, group_size=GROUP_SIZE):
     sources = read_lines(Path(source_path))
     golds = read_lines(Path(gold_path))
     if len(sources) != len(golds):
         raise ValueError('source and gold files have different line counts')
     systems = [read_system(spec, len(sources)) for spec in system_specs]
 
-    builder = Builder(annotator, tokenizer, max_length=max_length)
+    builder = Builder(annotator, tokenizer, group_size=group_size, max_length=max_length)
     with open(out_path, 'w', encoding='utf-8') as out:
         for i, (source, gold) in enumerate(zip(sources, golds)):
             group = builder.group(source, gold, systems, i, k)
@@ -177,6 +177,7 @@ def main():
     parser.add_argument('--tokenizer', default=None,
                         help='e.g. microsoft/deberta-v3-large: drop groups longer than --max-length')
     parser.add_argument('--max-length', type=int, default=MAX_LENGTH)
+    parser.add_argument('--group-size', type=int, default=GROUP_SIZE)
     args = parser.parse_args()
 
     import errant
@@ -185,7 +186,7 @@ def main():
         from transformers import AutoTokenizer
         tokenizer = AutoTokenizer.from_pretrained(args.tokenizer)
     stats = build(args.source, args.gold, args.system, args.k, args.out, errant.load('en'),
-                  tokenizer, args.max_length)
+                  tokenizer, args.max_length, args.group_size)
     print(json.dumps(stats, indent=2))
 
 

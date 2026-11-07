@@ -35,7 +35,7 @@ Other facts about the dev splits:
 - **Original.** The released GRECO checkpoint, `models/greco/checkpoint.bin`, from upstream commit `8e509aa`. It is the starting point and the baseline. Tuning is only worth reporting if it beats the original.
 - **Stage 1 (clean).** BEA-2019 errorful pairs from FCE, Lang-8 and NUCLE: 538,657 pairs.
 - **Hypothesis.** One candidate correction of a source sentence. GRECO scores hypotheses, not sentence pairs.
-- **Group.** The four hypotheses for one source sentence. One JSON line holds one group. The loader needs every group to have the same size, and the paper uses four.
+- **Group.** The three hypotheses for one source sentence, one from each system. One JSON line holds one group. The loader needs every group to have the same size. The paper uses four; we use three so that no system gets an extra slot.
 - **Sentence target.** The F0.5 of a hypothesis against the gold correction, between 0 and 1. It is stored as `labels[0][0]` and is what the scorer's score head is trained to predict.
 - **Word label.** 1 if a token should be kept, 0 if it should change. Source labels say which source words the gold corrects. Hypothesis labels say which hypothesis words differ from the gold.
 - **Gap label.** One per gap between hypothesis words, plus one at the end. 0 means a word must be inserted in that gap.
@@ -50,8 +50,8 @@ Other facts about the dev splits:
 | Stage 1 (full) | `data/curriculum/stage1.*`, from `training/build_data.py` | 561,338 pairs |
 | Stage 1 (clean) | `prepare_stage1.py`, step P1 | 538,657 pairs |
 | Stage 1 sample | `prepare_stage1.py`, step P1 | 50,000 sources, seed 4248 |
-| Candidates | BART and T5 `s1s2` n-best, step P2 | k = 5 each per source |
-| Labelled groups | `build_labels.py`, step P3 | up to 50,000 groups of 4 |
+| Candidates | BART and T5 `s1s2` n-best, step P2 (k = 5 each); GECToR 1-best (k = 1) | 11 candidates per source before filtering |
+| Labelled groups | `build_labels.py`, step P3 | up to 50,000 groups of 3 |
 | dev_tune / dev_test | `data/curriculum/dev_*.*` | 2,000 and 2,384 sentences |
 | Original | `models/greco/checkpoint.bin` from `greco_setup/setup.sh` | record its sha256 |
 
@@ -61,9 +61,13 @@ The stage-1 files are git-ignored and rebuilt by `training/build_data.py` (see `
 
 **Candidates (step P2).** The candidate models are the published `s1s2` checkpoints, `CS4248-GEC/gec-bart-base-s1s2` and `CS4248-GEC/gec-t5-base-s1s2`. The plain Hugging Face models (`facebook/bart-base`, `google-t5/t5-base`) are not GEC-trained and are not used.
 
+**GECToR** is the official pretrained model, run with `gector/predict.py` from its own environment. It gives one correction per sentence, which matches the pool GRECO reranks at test time. It is not fine-tuned on our data.
+
 These models were trained on the stage-1 corpora, so their outputs on the sampled sources are closer to gold than outputs on unseen text. The paper does not state, in the text I read, which data its nine systems were trained on, so this bias cannot be compared with the paper directly.
 
-**Choosing four per source (in `build_labels.py`).** Candidates are merged by rank, alternating between BART and T5: BART rank 1, T5 rank 1, BART rank 2, and so on. A candidate is dropped if it is empty, duplicates an earlier one, equals the source (no edit), equals the gold (already perfect), or, when a tokenizer is given, is too long for the loader (section 6, P3). The first four usable candidates form the group. A source with fewer than four is skipped.
+**Choosing three per source (in `build_labels.py`).** Candidates are merged by rank, alternating between the systems: BART rank 1, T5 rank 1, GECToR rank 1, then BART rank 2, and so on. A candidate is dropped if it is empty, duplicates an earlier one, equals the source (no edit), equals the gold (already perfect), or, when a tokenizer is given, is too long for the loader (section 6, P3). The first three usable candidates form the group, so each system contributes one. A source with fewer than three is skipped.
+
+We use three rather than the paper's four because four does not split evenly across three systems. The extra slot would go to BART, and training on more BART output could bias the model towards BART's errors. Group size is a choice to revisit, not a tuned value yet.
 
 **Labels (ERRANT).** Every edit is found with ERRANT, which is the same edit matching the F0.5 metric uses. For one hypothesis:
 
@@ -84,11 +88,11 @@ ERRANT parses with spaCy. Each source, gold and hypothesis must come out with ex
    "gap": [1,1,1,1,1],
    "masks": [[false,true,false,false], [true,false,false,false]],
    "gap_mask": [false,false,false,false,false]},
-  ...three more records of the same source...
+  ...two more records of the same source...
 ]
 ```
 
-The loader's `labels[0][0]` is the first token's label, which the score head is regressed to. `labels[1]` is the source and `labels[2]` the hypothesis. A check with the upstream `TrainDataset` read this group as 4 hypotheses, with `[CLS]` at 0.556, `He eat apple .` as `1 0 1 1` and `She eats apple .` as `0 1 1 1`.
+The loader's `labels[0][0]` is the first token's label, which the score head is regressed to. `labels[1]` is the source and `labels[2]` the hypothesis. An earlier check with the upstream `TrainDataset`, run when groups had four hypotheses, read the group with `[CLS]` at 0.556, `He eat apple .` as `1 0 1 1` and `She eats apple .` as `0 1 1 1`. It needs rerunning on the real file with groups of three before training.
 
 ## 6. Process
 
@@ -98,7 +102,7 @@ Step numbers match `greco_tuning/README.md` and the commands in section 10.
 
 **P1. Stage 1: remove W&I, draw the sample.** Writes `data/greco/stage1.clean.*`, `stage1.sample.*` and `stage1.manifest.json`. Run in the repo's Python 3 environment. *Done.*
 
-**P2. Candidates.** Generate the n-best lists on the cluster or a GPU, after `hf auth login`. The sample is 50,000 sources, so this is the step with the largest compute cost. *Not run.*
+**P2. Candidates.** Generate the BART and T5 n-best lists on the cluster or a GPU, after `hf auth login`. The sample is 50,000 sources, so this is the step with the largest compute cost. *Not run.* Then run GECToR on the same sample, locally or on a GPU, with `gector/predict.py` (section 11). *Not run.*
 
 **P3. Label.** Build the groups with `build_labels.py`, with the DeBERTa tokenizer. The tokenizer drops any candidate whose source and hypothesis together are longer than 200 subword tokens, because the loader would truncate it and misalign the labels. The next candidate is used in its place. Run in the label environment (section 10). *Implemented and tested.*
 
@@ -127,7 +131,7 @@ Compare **original** and **stage 1 (clean)**, optionally with **stage 1 (full)**
 ## 9. Open decisions and known limits
 
 - **In-sample candidates.** The `s1s2` checkpoints were trained on the stage-1 corpora. Section 5 explains the effect.
-- **Cost.** Step P2 generates 10 candidates for each of 50,000 sources, and training runs on up to 50,000 groups of four. Neither has been timed. Measure both before choosing the sample size or the number of epochs.
+- **Cost.** Step P2 generates 10 candidates for each of 50,000 sources, and training runs on up to 50,000 groups of three. Neither has been timed. Measure both before choosing the sample size or the number of epochs.
 - **Full or clean stage 1.** The clean run is the main one. The full run is a secondary comparison.
 - **Label definitions.** The sentence target and the word labels follow the upstream code's use of them. They are not verified against the paper's own labelling procedure, which is not in the text I could read.
 
@@ -175,10 +179,15 @@ for m in bart-base:bart t5-base:t5; do
     --out outputs/greco-s1/${sys}.tgt --k 5
 done
 
+# GECToR, one correction per source (GECToR environment: gector/setup.sh first)
+gector/.venv/bin/python gector/predict.py \
+  --input data/greco/stage1.sample.src --output outputs/greco-s1/gector.tgt
+
 # P3: labelled groups (label environment, with the DeBERTa tokenizer)
 .venv-label/bin/python -m greco_tuning.build_labels \
   --source data/greco/stage1.sample.src --gold data/greco/stage1.sample.tgt \
   --system bart=outputs/greco-s1/bart.tgt --system t5=outputs/greco-s1/t5.tgt \
+  --system gector=outputs/greco-s1/gector.tgt \
   --k 5 --tokenizer microsoft/deberta-v3-large --max-length 200 \
   --out data/greco/stage1.train.jsonl
 
