@@ -1,9 +1,10 @@
+import json
 from pathlib import Path
 import tempfile
 import unittest
 
-from greco_setup.combine import combine, read_record
-from greco_setup.prepare import build, collect, read_system
+from greco_setup.combine import combine, edit_support, read_record
+from greco_setup.prepare import build, collect, edits_path, file_hash, read_edits, read_system
 
 
 class PrepareTests(unittest.TestCase):
@@ -35,8 +36,37 @@ class PrepareTests(unittest.TestCase):
     def test_source_fallback_and_collect(self):
         records = build(["Fine ."], [("t5", [[""]])])
         self.assertEqual(records[0]["proposals"][0]["system"], "source")
+        # The fallback must be a valid proposal for the voting code too
+        edit_support(records[0], "rank")
         result = combine(*read_record(records[0]))
         self.assertEqual(collect([result]), ["Fine ."])
+
+    def test_padded_duplicates_are_dropped(self):
+        # export_candidates.py pads a short n-best list with copies of the top hypothesis
+        hyps = ["He eats .", "He ate .", "He eats .", "He eats ."]
+        records = build(["He eat ."], [("bart", [hyps])])
+        self.assertEqual([(p["rank"], p["sentence"]) for p in records[0]["proposals"]],
+                         [(1, "He eats ."), (2, "He ate .")])
+
+    def test_precomputed_edits_replace_the_sentence(self):
+        edits = {"bart": [[[{"start": 1, "end": 2, "replacement": "eats"}],
+                           [{"start": 1, "end": 2, "replacement": "ate"}]]]}
+        records = build(["He eat ."], [("bart", [["He eats .", "He ate ."]])], edits=edits)
+        self.assertEqual(records[0]["proposals"][1],
+                         {"system": "bart", "rank": 2, "edits": [{"start": 1, "end": 2, "replacement": "ate"}]})
+        self.assertEqual(len(read_record(records[0])[1]), 2)
+
+    def test_read_edits_checks_the_prediction_file(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tgt = Path(tmp, "bart.tgt")
+            tgt.write_text("He eats .\nHe ate .\n")
+            with self.assertRaises(ValueError):
+                read_edits(f"bart={tgt}", 1)
+            edits_path(tgt).write_text(json.dumps({"sha256": file_hash(tgt)}) + "\n[]\n[]\n")
+            self.assertEqual(read_edits(f"bart={tgt}", 1), ("bart", [[[], []]]))
+            tgt.write_text("He eats .\nHe eaten .\n")
+            with self.assertRaises(ValueError):
+                read_edits(f"bart={tgt}", 1)
 
 
 if __name__ == "__main__":

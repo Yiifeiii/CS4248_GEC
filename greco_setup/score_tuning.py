@@ -1,7 +1,7 @@
 """Score tune_vote.py predictions with ERRANT and pick the best alpha per (k, vote mode).
 
 Needs errant (e.g. the gec-train environment), not the GRECO environment:
-    python -m greco_setup.score_tuning --split dev_tune
+    python -m greco_setup.score_tuning --split dev_tune.errant
 
 Writes <out>/<split>/scores.csv (every setting) and, for dev_tune, best.json: the alpha
 with the highest ERRANT F0.5 for each k and vote mode, which tune_vote.py --best-from
@@ -35,7 +35,7 @@ def errant_scores(source, hyp, ref):
 
 def reference_subset(split, out_dir, n):
     """The split's reference M2, cut to the first n sentences for --limit runs."""
-    ref = Path(f"data/curriculum/{split.split('.first')[0]}.m2")
+    ref = Path(f"data/curriculum/{split.split('.')[0]}.m2")
     blocks = ref.read_text(encoding="utf-8").strip().split("\n\n")
     if n == len(blocks):
         return ref
@@ -46,7 +46,8 @@ def reference_subset(split, out_dir, n):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--split", default="dev_tune", help="folder under --out, e.g. dev_tune or dev_test")
+    parser.add_argument("--split", default="dev_tune.errant",
+                        help="folder under --out, e.g. dev_tune.errant or dev_test.errant")
     parser.add_argument("--out", type=Path, default=Path("outputs/greco/tuning"))
     parser.add_argument("--jobs", type=int, default=8, help="files scored in parallel")
     args = parser.parse_args()

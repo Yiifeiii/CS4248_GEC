@@ -246,7 +246,10 @@ def combine(source, edits, scorer=None, beam_size=16, batch_size=8, max_candidat
         expanded = list(beam)
         for state in beam:
             if all(not conflicts(edit, chosen) for chosen in state):
-                expanded.append(tuple(sorted((*state, edit))))
+                state = tuple(sorted((*state, edit)))
+                # Deletions from different hypotheses can combine into an empty sentence
+                if render(tokens, state):
+                    expanded.append(state)
         expanded = list(dict.fromkeys(expanded))
         if scorer is None:
             if len(expanded) > max_candidates:

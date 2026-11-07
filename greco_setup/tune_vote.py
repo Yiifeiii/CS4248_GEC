@@ -9,7 +9,11 @@ Tuning on dev_tune (GRECO environment, repository root):
 Then the chosen settings, once, on dev_test:
     python -m greco_setup.tune_vote --split dev_test --best-from outputs/greco/tuning/dev_tune/best.json
 
-Output: <out>/<split>/source.txt and <out>/<split>/k<k>/<mode>/alpha<a>.tgt, aligned with
+Edits come from ERRANT by default (--edits errant: run greco_setup.extract_edits first,
+in an environment with errant) or from difflib (--edits difflib). ERRANT runs are written
+to <split>.errant, difflib runs to <split>; --limit N appends .first<N>.
+
+Output: <out>/<folder>/source.txt and <out>/<folder>/k<k>/<mode>/alpha<a>.tgt, aligned with
 data/curriculum/<split>.ids. alpha 0 does not depend on the vote mode and is written
 once per k as k<k>/none/alpha0.0.tgt. Finished files are skipped, so a job that hits
 its time limit can be resubmitted. GRECO scores are cached in <out>/score_cache.jsonl
@@ -23,7 +27,7 @@ import sys
 import time
 
 from greco_setup.combine import VOTE_MODES, CachedScorer, GrecoScorer, combine, edit_support, read_record
-from greco_setup.prepare import build, read_lines, read_system
+from greco_setup.prepare import build, read_edits, read_lines, read_system
 
 DEFAULT_SYSTEMS = ["bart=outputs/bart/full/diverse.tgt", "t5=outputs/t5/full/diverse.tgt",
                    "gector=outputs/gector/dev.tgt"]
@@ -59,6 +63,8 @@ def main():
     parser.add_argument("--best-from", type=Path, help="best.json from score_tuning.py: run only those alphas")
     parser.add_argument("--out", type=Path, default=Path("outputs/greco/tuning"))
     parser.add_argument("--limit", type=int, help="only the first N sentences of the split (test runs)")
+    parser.add_argument("--edits", choices=["errant", "difflib"], default="errant",
+                        help="how hypotheses are split into edits")
     parser.add_argument("--greco-repo", default="external/greco")
     parser.add_argument("--checkpoint", default="models/greco/checkpoint.bin")
     parser.add_argument("--device", default="cuda", choices=["cpu", "cuda"])
@@ -70,11 +76,17 @@ def main():
     ids = [int(x) for x in Path(f"data/curriculum/{args.split}.ids").read_text().split()]
     if args.limit:
         ids = ids[:args.limit]
-    systems = [read_system(spec, len(sources_all)) for spec in (args.system or DEFAULT_SYSTEMS)]
+    specs = args.system or DEFAULT_SYSTEMS
+    systems = [read_system(spec, len(sources_all)) for spec in specs]
     sources = [sources_all[i] for i in ids]
     systems = [(name, [hyps[i] for i in ids]) for name, hyps in systems]
+    edits = None
+    if args.edits == "errant":
+        edits = {name: [per[i] for i in ids]
+                 for name, per in (read_edits(spec, len(sources_all)) for spec in specs)}
 
-    out = args.out / (args.split if not args.limit else f"{args.split}.first{args.limit}")
+    folder = args.split + (".errant" if args.edits == "errant" else "")
+    out = args.out / (folder if not args.limit else f"{folder}.first{args.limit}")
     out.mkdir(parents=True, exist_ok=True)
     (out / "source.txt").write_text("\n".join(sources) + "\n", encoding="utf-8")
     (out / "ids.txt").write_text("\n".join(map(str, ids)) + "\n", encoding="utf-8")
@@ -91,7 +103,7 @@ def main():
     records = {}
     for k, mode, alpha in todo:
         if k not in records:
-            records[k] = build(sources, systems, k)
+            records[k] = build(sources, systems, k, edits)
         started, cached = time.time(), len(scorer.cache)
         best = []
         for i, record in enumerate(records[k], 1):
