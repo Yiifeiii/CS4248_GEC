@@ -1,0 +1,34 @@
+{
+  "model": "/mnt/scratch/r/raeedaih/cs4248-gec/checkpoints/bart-ablations-20261105/lr-high/best",
+  "split": "dev_tune",
+  "sentences": 2000,
+  "beams": 5,
+  "prefix": null,
+  "retokenize": false,
+  "git_commit": null,
+  "decode_seconds": 272,
+  "device": "cuda",
+  "errant": {
+    "correction": {
+      "tp": 1352.0,
+      "fp": 945.0,
+      "fn": 2069.0,
+      "precision": 0.5886,
+      "recall": 0.3952,
+      "f0_5": 0.5361
+    },
+    "detection": {
+      "tp": 1602.0,
+      "fp": 699.0,
+      "fn": 1896.0,
+      "precision": 0.6962,
+      "recall": 0.458,
+      "f0_5": 0.6306
+    }
+  },
+  "m2": {
+    "precision": 0.6626,
+    "recall": 0.4234,
+    "f0_5": 0.5954
+  }
+}

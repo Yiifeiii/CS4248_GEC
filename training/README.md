@@ -1,5 +1,7 @@
 # Two-stage fine-tuning of BART and T5
 
+See [BART hyperparameter experiments](../experiments/ablations/README.md) for grouped training/beam-search scripts, completed F-scores, and reproduction commands.
+
 For the nine BART-only stage-2 hyperparameter ablations, see the
 [configuration grid and launch instructions](configs/bart-ablations-20261105/README.md)
 and the [submitted experiment log](../experiments/training/bart-ablations-20261105/README.md).

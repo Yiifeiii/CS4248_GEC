@@ -69,7 +69,7 @@ class BartDecodingGridTests(unittest.TestCase):
             stub.write_text('#!/bin/sh\nexit 99\n')
             stub.chmod(0o755)
             env = dict(os.environ, PATH=directory + os.pathsep + os.environ['PATH'])
-            result = subprocess.run(['bash', str(ROOT / 'cluster/submit_bart_decoding.sh')],
+            result = subprocess.run(['bash', str(ROOT / 'cluster/ablations/decoding/submit.sh')],
                                     cwd=directory, env=env, capture_output=True, text=True)
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn('Preview only', result.stdout)

@@ -42,5 +42,19 @@ squeue -j 1078869,1078870
 sacct -j 1078869,1078870 --format=JobID,State,ExitCode,Elapsed -X
 ```
 
-No follow-up results have been recorded yet. Result/checkpoint folders use the
-three new config names alongside the completed original nine folders.
+## Completed results
+
+All three tasks completed successfully with exit code 0. The output files were
+retrieved on 6 November 2026 and checked against the committed configs, original
+software versions, effective dropout settings, and prediction counts.
+
+| Config | dev_tune ERRANT F0.5 | dev_test ERRANT F0.5 | Job elapsed |
+|---|---:|---:|---|
+| `wd-mid` | 54.04 | 52.04 | 34m 49s |
+| `dropout-low` | 53.51 | 51.10 | 33m 59s |
+| `smoothing-low` | 53.87 | 52.01 | 33m 49s |
+
+The original baseline scored 54.02 / 52.26. See the
+[all-twelve comparison](results-all-12.md) for the full grid and interpretation.
+Raw results and checkpoint metadata use the three new config names alongside
+the original nine folders; model weights remain on cluster scratch.

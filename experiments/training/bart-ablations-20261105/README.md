@@ -1,12 +1,17 @@
 # BART stage-2 hyperparameter ablations — 5 November 2026
 
+**Completed:** all nine original jobs and all three 0.05 follow-up jobs finished
+successfully (exit code 0). The [consolidated twelve-run results](results-all-12.md)
+were retrieved and validated on 6 November 2026. Curated per-run scores are
+versioned; raw predictions and training histories remain local/on the cluster.
+
 Nine independent BART-only runs test learning rate, weight decay, dropout, and
 label smoothing during stage-2 adaptation. The reference is Dasha's recorded
 `bart-base.s1s2` recipe, rerun alongside the variants in the same environment.
 Each variant changes one hyperparameter; these are not cumulative changes.
 
 The complete numerical grid and launch instructions are in the
-[configuration README](../../../training/configs/bart-ablations-20261105/README.md).
+[ablation index](../../ablations/README.md).
 The [ordered run list](../../../training/configs/bart-ablations-20261105/runs.txt)
 maps each Slurm array index to a config.
 
@@ -112,8 +117,9 @@ Best/final weights and resumable checkpoints stay under
 `$CKPT_ROOT/bart-ablations-20261105/<config name>/`, outside Git.
 
 Copy completed result folders back with the rsync procedure in
-[cluster/README.md](../../../cluster/README.md#copying-results-back). Keep raw
-predictions, counts, and score JSONs with any reported result. Never resume a
+[cluster/README.md](../../../cluster/README.md#copying-results-back). Retain raw
+predictions and histories locally or on the cluster. Commit curated score JSONs
+and summaries with reported results. Never resume a
 changed config into the same checkpoint folder or label the two-update smoke-test
 outputs as ablation results.
 

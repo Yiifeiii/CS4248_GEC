@@ -1,0 +1,34 @@
+{
+  "model": "/mnt/scratch/r/raeedaih/cs4248-gec/checkpoints/bart-ablations-20261105/dropout-zero/best",
+  "split": "dev_test",
+  "sentences": 2384,
+  "beams": 5,
+  "prefix": null,
+  "retokenize": false,
+  "git_commit": null,
+  "decode_seconds": 120,
+  "device": "cuda",
+  "errant": {
+    "correction": {
+      "tp": 1590.0,
+      "fp": 1289.0,
+      "fn": 2450.0,
+      "precision": 0.5523,
+      "recall": 0.3936,
+      "f0_5": 0.5111
+    },
+    "detection": {
+      "tp": 1929.0,
+      "fp": 967.0,
+      "fn": 2205.0,
+      "precision": 0.6661,
+      "recall": 0.4666,
+      "f0_5": 0.6136
+    }
+  },
+  "m2": {
+    "precision": 0.6364,
+    "recall": 0.4267,
+    "f0_5": 0.5794
+  }
+}

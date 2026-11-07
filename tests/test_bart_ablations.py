@@ -43,7 +43,7 @@ class AblationDesignTests(unittest.TestCase):
             stub.chmod(0o755)
             env = dict(os.environ, PATH=directory + os.pathsep + os.environ['PATH'])
             for extra in ([], ['--dry-run', str(CONFIGS / 'runs-005.txt')]):
-                result = subprocess.run(['bash', str(ROOT / 'cluster/submit_bart_ablations.sh'), *extra],
+                result = subprocess.run(['bash', str(ROOT / 'cluster/ablations/training/submit.sh'), *extra],
                                         cwd=directory, env=env, text=True, capture_output=True)
                 self.assertEqual(result.returncode, 0, result.stderr)
                 self.assertIn('Preview only', result.stdout)

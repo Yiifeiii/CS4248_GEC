@@ -1,0 +1,78 @@
+{
+  "verified_on": "2026-11-06",
+  "verification": "Slurm sacct --format=JobID,State,ExitCode,Elapsed -X; raw evaluations and prediction counts checked locally",
+  "tasks": [
+    {
+      "job_id": "1075239_0",
+      "run": "baseline",
+      "state": "COMPLETED",
+      "exit_code": "0:0"
+    },
+    {
+      "job_id": "1075239_1",
+      "run": "lr-low",
+      "state": "COMPLETED",
+      "exit_code": "0:0"
+    },
+    {
+      "job_id": "1075239_2",
+      "run": "lr-high",
+      "state": "COMPLETED",
+      "exit_code": "0:0"
+    },
+    {
+      "job_id": "1075239_3",
+      "run": "wd-zero",
+      "state": "COMPLETED",
+      "exit_code": "0:0"
+    },
+    {
+      "job_id": "1075239_4",
+      "run": "wd-high",
+      "state": "COMPLETED",
+      "exit_code": "0:0"
+    },
+    {
+      "job_id": "1075239_5",
+      "run": "dropout-zero",
+      "state": "COMPLETED",
+      "exit_code": "0:0"
+    },
+    {
+      "job_id": "1075239_6",
+      "run": "dropout-high",
+      "state": "COMPLETED",
+      "exit_code": "0:0"
+    },
+    {
+      "job_id": "1075239_7",
+      "run": "smoothing-zero",
+      "state": "COMPLETED",
+      "exit_code": "0:0"
+    },
+    {
+      "job_id": "1075239_8",
+      "run": "smoothing-high",
+      "state": "COMPLETED",
+      "exit_code": "0:0"
+    },
+    {
+      "job_id": "1078870_0",
+      "run": "wd-mid",
+      "state": "COMPLETED",
+      "exit_code": "0:0"
+    },
+    {
+      "job_id": "1078870_1",
+      "run": "dropout-low",
+      "state": "COMPLETED",
+      "exit_code": "0:0"
+    },
+    {
+      "job_id": "1078870_2",
+      "run": "smoothing-low",
+      "state": "COMPLETED",
+      "exit_code": "0:0"
+    }
+  ]
+}

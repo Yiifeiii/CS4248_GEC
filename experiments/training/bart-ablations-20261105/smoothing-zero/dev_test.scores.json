@@ -1,0 +1,34 @@
+{
+  "model": "/mnt/scratch/r/raeedaih/cs4248-gec/checkpoints/bart-ablations-20261105/smoothing-zero/best",
+  "split": "dev_test",
+  "sentences": 2384,
+  "beams": 5,
+  "prefix": null,
+  "retokenize": false,
+  "git_commit": null,
+  "decode_seconds": 119,
+  "device": "cuda",
+  "errant": {
+    "correction": {
+      "tp": 1605.0,
+      "fp": 1322.0,
+      "fn": 2435.0,
+      "precision": 0.5483,
+      "recall": 0.3973,
+      "f0_5": 0.5096
+    },
+    "detection": {
+      "tp": 1943.0,
+      "fp": 1000.0,
+      "fn": 2191.0,
+      "precision": 0.6602,
+      "recall": 0.47,
+      "f0_5": 0.6108
+    }
+  },
+  "m2": {
+    "precision": 0.6388,
+    "recall": 0.432,
+    "f0_5": 0.583
+  }
+}

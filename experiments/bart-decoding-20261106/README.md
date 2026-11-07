@@ -1,5 +1,8 @@
 # Frozen BART decoding and candidate-quality ablations
 
+**Completed:** all seven tasks finished successfully with exit code 0. See the
+[consolidated results](results.md), retrieved and checked on 6 November 2026.
+
 This BART-only study changes inference search, not weights. It uses the completed
 `CS4248-GEC/gec-bart-base-s1s2` baseline checkpoint throughout. T5, GECToR, and GRECO
 are not loaded or combined. Seven independent jobs use all 2,000 original
@@ -68,9 +71,9 @@ routes to beam search alone.
 
 ```bash
 HF_HOME=/tmp/gec-ablation-test-cache HF_HUB_OFFLINE=1 python -m unittest discover -s tests -v
-bash cluster/submit_bart_decoding.sh --dry-run
+bash cluster/ablations/decoding/submit.sh --dry-run
 # On the cluster, after syncing these files and confirming the baseline is cached:
-bash cluster/submit_bart_decoding.sh --submit
+bash cluster/ablations/decoding/submit.sh --submit
 ```
 
 The submission script creates a seven-task GPU array, at most two tasks running
@@ -101,7 +104,7 @@ study does not claim that larger beams or more diverse outputs necessarily help.
   skipped. Coverage diagnostics, no-submit preview, and real grouped generation on
   tiny offline BART were tested; these are not the full-data experiment results.
 - Jobs use one H100-47 request each, eight CPUs, and a four-hour limit on gpu-long.
-- At submission all seven tasks were queued. Results are pending.
+- All seven tasks completed successfully. See [scores and conclusions](results.md).
 
 ```bash
 squeue -j 1081371

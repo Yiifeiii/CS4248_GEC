@@ -6,7 +6,7 @@ config_dir=training/configs/bart-ablations-20261105
 runs=()
 run_list="${BART_ABLATION_RUN_LIST:-$config_dir/runs.txt}"
 while IFS= read -r slug; do runs+=("$slug"); done < "$run_list"
-index="${SLURM_ARRAY_TASK_ID:?Submit using cluster/submit_bart_ablations.sh}"
+index="${SLURM_ARRAY_TASK_ID:?Submit using cluster/ablations/training/submit.sh}"
 [[ "$index" =~ ^[0-9]+$ ]] && (( index < ${#runs[@]} )) || {
     echo "Invalid array task: $index" >&2; exit 1; }
 run="bart-ablations-20261105/${runs[$index]}"
