@@ -15,6 +15,9 @@ shift
 GRECO_ENV="${GRECO_ENV:-greco}"
 SCORE_ENV="${SCORE_ENV:-gec-train}"
 export TRANSFORMERS_OFFLINE=1
+# The ERRANT steps run one process per CPU; keep each to one thread
+export OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1
+step() { echo "== $(date +%T) $*"; }
 
 # The folder tune_vote.py writes: <split>[.errant][.first<N>]
 EDITS=errant
@@ -33,15 +36,18 @@ set +u
 source "${CONDA_BASE:-$HOME/miniconda3}/etc/profile.d/conda.sh"
 conda activate "$SCORE_ENV"
 set -u
+step extracting ERRANT edits
 [ "$EDITS" = errant ] && python -m greco_setup.extract_edits
 
 set +u
 conda activate "$GRECO_ENV"
 set -u
+step GRECO
 python -c "import torch; assert torch.cuda.is_available(), 'no GPU'; print('torch', torch.__version__, 'on', torch.cuda.get_device_name(0))"
 python -m greco_setup.tune_vote --split "$SPLIT" --device cuda "$@"
 
 set +u
 conda activate "$SCORE_ENV"
 set -u
+step scoring
 python -m greco_setup.score_tuning --split "$OUT_SPLIT"
