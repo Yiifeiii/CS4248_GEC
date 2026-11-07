@@ -1,5 +1,6 @@
 #!/bin/bash
 # GRECO training on the stage-1 groups: learning rate 2e-5, 3 epochs, seed 42.
+# Runs upstream train.py through train_lazy.py, which tokenizes each group when it is read.
 # Writes $CKPT_ROOT/greco.s1.lr2e-5.seed42/pytorch_model.bin, the state dict that score.sh loads.
 # Submit from the repository root on the cluster:
 #   sbatch -J greco-train --time=24:00:00 cluster/job.sbatch greco_tuning/train.sh
@@ -21,7 +22,7 @@ conda activate greco
 set -u
 
 cd "$REPO/external/greco"
-python train.py --do_train \
+python "$REPO/greco_tuning/train_lazy.py" --do_train \
   --model_name_or_path microsoft/deberta-v3-large \
   --pretrained_path "$CKPT" \
   --output_dir "$OUT" \

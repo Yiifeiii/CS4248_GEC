@@ -146,7 +146,7 @@ Compare **original** and **stage 1 (clean)**, optionally with **stage 1 (full)**
 | Combine and collect | `greco_setup/combine.py`, `greco_setup/prepare.py` | Exists | GRECO |
 | ERRANT and M2 scores | `greco_setup/evaluate_errant.py`, `training/metrics.py` | Exists | ERRANT env and repo |
 | Dev pool and M2 inputs | `greco_tuning/dev_pool.sh`, `greco_tuning/make_m2.py` | Written. `make_m2.py` reproduces the pilot's M2 files exactly. | cluster (gec-train) |
-| Training | `greco_tuning/train.sh` | Written, not run | cluster (greco) |
+| Training | `greco_tuning/train.sh`, `greco_tuning/train_lazy.py` | Written. The first run ran out of 64 GB while upstream's loader tokenized the whole file, so `train_lazy.py` runs upstream `train.py` with a dataset that tokenizes each group when it is read. Its items are identical to upstream's on a test file. | cluster (greco) |
 | Scoring with the mini experiment's settings | `greco_tuning/score.sh` | Written, not run | cluster (greco) |
 | Comparison | `greco_tuning/evaluate.py` | Written. Its scoring reproduces the pilot's recorded numbers. | any with errant and torch |
 | Paired bootstrap and seed band | — | Not written. The comparison reports differences only. | — |
