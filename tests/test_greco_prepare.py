@@ -55,6 +55,10 @@ class PrepareTests(unittest.TestCase):
         self.assertEqual(records[0]["proposals"][1],
                          {"system": "bart", "rank": 2, "edits": [{"start": 1, "end": 2, "replacement": "ate"}]})
         self.assertEqual(len(read_record(records[0])[1]), 2)
+        # Anything but a mapping for every system must fail, not fall back to difflib
+        for bad in ([], {"t5": []}):
+            with self.assertRaises(ValueError):
+                build(["He eat ."], [("bart", [["He eats ."]])], edits=bad)
 
     def test_read_edits_checks_the_prediction_file(self):
         with tempfile.TemporaryDirectory() as tmp:

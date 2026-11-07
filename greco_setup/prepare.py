@@ -54,6 +54,9 @@ def build(sources, systems, k=None, edits=None):
     read_edits), aligned with its hypotheses; those proposals then carry the edits
     instead of the sentence, so combine.py does not align them itself.
     """
+    if edits is not None and (not isinstance(edits, dict)
+                              or not all(name in edits for name, _ in systems)):
+        raise ValueError("edits must map every system name to its precomputed edits")
     edits = edits or {}
     records = []
     for i, source in enumerate(sources):

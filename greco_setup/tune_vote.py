@@ -107,9 +107,9 @@ def main():
         started, cached = time.time(), len(scorer.cache)
         best = []
         for i, record in enumerate(records[k], 1):
-            source, edits = read_record(record)
+            source, pool = read_record(record)
             support = edit_support(record, mode) if alpha > 0 else None
-            result = combine(source, edits, scorer, args.beam_size, args.batch_size,
+            result = combine(source, pool, scorer, args.beam_size, args.batch_size,
                              support=support, vote_coef=alpha)
             best.append(result["best_sentence"])
             if i % 200 == 0:
