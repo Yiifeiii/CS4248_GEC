@@ -111,11 +111,11 @@ Step numbers match `greco_tuning/README.md` and the commands in section 10.
 
 **Fixed settings**, from the upstream retraining command: `word_dropout 0.25`, `alpha 1`, `edit_weight 2.0`, `rank_multiplier 5`, batch 32 with gradient accumulation 4. Set `--gamma 0.2` explicitly. The upstream code references `self.d` and `self.bucket_size` in places that `__init__` does not set, so check the first run for an `AttributeError`.
 
-**Tuned setting: learning rate.** Continuing from the original with upstream's 2e-5 may move the scorer too far. The grid is `{5e-6, 1e-5, 2e-5}`. This grid is proposed, not tested. The number of epochs depends on how long one epoch takes, so time one epoch before fixing it. Proposed: 1 to 2 epochs.
+**Learning rate and epochs (one default, no sweep).** Learning rate 2e-5, the value in upstream's retraining command. Epochs 3, the value in the BART and T5 stage-1 configs (`training/configs/*.stage1.json`). The paper's training learning rate is not in the text I read, so 2e-5 is the nearest documented value. Upstream's command uses 15 epochs for training from the DeBERTa backbone. We use 3 because we start from the released checkpoint.
 
-**Selection.** For each learning rate, save a checkpoint every epoch. Score each checkpoint on the dev_tune pool with `combine.py` and collect the output. Use ERRANT F0.5 of the combined output as the selection metric, not the training loss.
+**Selection.** As for BART and T5, the best checkpoint is the one with the highest dev_tune ERRANT F0.5, so its dev_tune score is optimistic, the same way for every run. Training saves a checkpoint every epoch. `score.sh` with `SETTINGS=select` scores each one at vote 0.4, k 3 (the mini experiment's best setting), and `evaluate.py --select` picks the highest. Only that epoch is then scored on the full grid and compared with the original. The selection metric is ERRANT F0.5 of the combined output, not the training loss.
 
-**Noise band.** Rerun the best learning rate with seeds 42, 123 and 7. The spread across seeds is the band. A learning rate is chosen only if it beats the original's dev_tune F0.5 by more than the band. Otherwise the original is kept.
+**Noise band.** Rerun the same settings with seeds 123 and 7, alongside the seed-42 run. The spread across seeds is the band. A learning rate is chosen only if it beats the original's dev_tune F0.5 by more than the band. Otherwise the original is kept.
 
 **Decision rule.** The default is the original. If no learning rate beats it by more than the band, stage-1 fine-tuning does not help GRECO on this pool. That is a valid result.
 
@@ -124,13 +124,13 @@ Step numbers match `greco_tuning/README.md` and the commands in section 10.
 Compare **original** and **stage 1 (clean)**, optionally with **stage 1 (full)**. Report:
 
 - **Metric:** ERRANT F0.5 of the combined output on the shared pool. M2 F0.5 from `training/metrics.py` as a check.
-- **Uncertainty:** a paired bootstrap over dev_tune sentences gives a 95% interval for each difference. A difference counts only if the interval excludes zero and it is larger than the seed band.
+- **Uncertainty:** a paired bootstrap over dev_tune sentences gives a 95% interval for each difference. A difference counts only if the interval excludes zero and it is larger than the seed band. Not implemented yet: `evaluate.py` prints the differences without an interval or a seed band.
 - **dev_test:** score the original and the chosen model once each, after the choices are fixed.
 
 ## 9. Open decisions and known limits
 
 - **In-sample candidates.** The `s1s2` checkpoints were trained on the stage-1 corpora. Section 5 explains the effect.
-- **Cost.** Step P2 generates 10 candidates for each of 538,657 sources, and training runs on up to 538,657 groups of three. Neither has been timed. The 12-hour job limit may not cover step P2, so it may need splitting into chunks. Measure before choosing the number of epochs.
+- **Cost.** Step P2 generates 10 candidates for each of 538,657 sources, and training runs on up to 538,657 groups of three. Neither has been timed. The 12-hour job limit may not cover step P2, so it may need splitting into chunks. Time one epoch before setting the job's time limit.
 - **Full or clean stage 1.** The clean run is the main one. The full run is a secondary comparison.
 - **Label definitions.** The sentence target and the word labels follow the upstream code's use of them. They are not verified against the paper's own labelling procedure, which is not in the text I could read.
 
@@ -145,7 +145,11 @@ Compare **original** and **stage 1 (clean)**, optionally with **stage 1 (full)**
 | Training | upstream `train.py` with `--pretrained_path` | Exists upstream | GRECO |
 | Combine and collect | `greco_setup/combine.py`, `greco_setup/prepare.py` | Exists | GRECO |
 | ERRANT and M2 scores | `greco_setup/evaluate_errant.py`, `training/metrics.py` | Exists | ERRANT env and repo |
-| Tuning loop and bootstrap | `greco_tuning/tune.py` | Not written | — |
+| Dev pool and M2 inputs | `greco_tuning/dev_pool.sh`, `greco_tuning/make_m2.py` | Written. `make_m2.py` reproduces the pilot's M2 files exactly. | cluster (gec-train) |
+| Training | `greco_tuning/train.sh` | Written, not run | cluster (greco) |
+| Scoring with the mini experiment's settings | `greco_tuning/score.sh` | Written, not run | cluster (greco) |
+| Comparison | `greco_tuning/evaluate.py` | Written. Its scoring reproduces the pilot's recorded numbers. | any with errant and torch |
+| Paired bootstrap and seed band | — | Not written. The comparison reports differences only. | — |
 
 **Label environment.** `build_labels.py` needs ERRANT, `en_core_web_sm`, and a fast DeBERTa tokenizer. The tested setup was:
 
@@ -194,20 +198,30 @@ gector/.venv/bin/python gector/predict.py \
 git clone https://github.com/nusnlp/greco external/greco
 (cd external/greco && git checkout 8e509aaacf4e5ec3276d3427371471fd82a7f58b)
 
-# Section 7: learning-rate grid (GRECO environment, run from external/greco)
-for LR in 5e-6 1e-5 2e-5; do
-  python train.py --do_train \
-    --model_name_or_path microsoft/deberta-v3-large \
-    --pretrained_path models/greco/checkpoint.bin \
-    --output_dir ${CKPT_ROOT}/greco.s1.lr${LR}.seed42 \
-    --learning_rate ${LR} --word_dropout 0.25 --alpha 1 \
-    --edit_weight 2.0 --rank_multiplier 5 --gamma 0.2 \
-    --per_device_train_batch_size 32 --gradient_accumulation_steps 4 \
-    --num_train_epochs 2 --save_strategy epoch --seed 42 \
-    --data ${REPO}/data/greco/stage1.train.jsonl --data_mode hierarchical
-done
+# Dev pool: BART and T5 5-best, GECToR 1-best, and the M2 inputs (job, cluster)
+sbatch -J greco-pool --time=3:00:00 cluster/job.sbatch greco_tuning/dev_pool.sh
 
-# Scoring and collection: greco_setup/combine.py and prepare.py, as in the GRECO pilot (to write: tune.py)
+# Training: one run, learning rate 2e-5, 3 epochs (job, cluster)
+sbatch -J greco-train --time=24:00:00 cluster/job.sbatch greco_tuning/train.sh
+
+# Epoch selection: score each epoch checkpoint at vote 0.4, k 3 (jobs, cluster).
+# Training saves one checkpoint-<step>/ folder per epoch; list them with ls.
+ls ${CKPT_ROOT}/greco.s1.lr2e-5.seed42/
+for e in 1 2 3; do
+  step=<step of epoch $e>   # from the ls above, in order
+  SETTINGS=select sbatch -J greco-select --time=3:00:00 --export=ALL cluster/job.sbatch greco_tuning/score.sh \
+    ${CKPT_ROOT}/greco.s1.lr2e-5.seed42/checkpoint-${step}/pytorch_model.bin s1-epoch$e
+done
+python3 -m greco_tuning.evaluate --select s1-epoch1 s1-epoch2 s1-epoch3   # writes runs/selection.json
+
+# Full grid for the released checkpoint and for the best epoch (jobs, cluster)
+sbatch -J greco-score --time=6:00:00 cluster/job.sbatch greco_tuning/score.sh \
+  $PWD/models/greco/checkpoint.bin original
+sbatch -J greco-score --time=6:00:00 cluster/job.sbatch greco_tuning/score.sh \
+  ${CKPT_ROOT}/greco.s1.lr2e-5.seed42/checkpoint-<best step>/pytorch_model.bin s1-epoch<best>
+
+# Comparison: ERRANT and M2 F0.5 on dev_tune, before and after (any environment with errant and torch)
+python3 -m greco_tuning.evaluate original s1-epoch<best>
 ```
 
-`--num_train_epochs 2` is a placeholder until the timing check in section 9 is done. The `train.py` command is the upstream retraining command with `--pretrained_path` added.
+The training and scoring scripts use the GRECO environment, which the job script doesn't activate, so each script activates `greco` itself. The `train.py` command is the upstream retraining command with `--pretrained_path` added. `--learning_rate 2e-5` is the value in upstream's retraining command, and `--num_train_epochs 3` matches the BART and T5 stage-1 configs.
