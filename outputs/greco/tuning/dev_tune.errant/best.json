@@ -4,6 +4,11 @@
     "rank": 0.4,
     "system": 0.4
   },
+  "k2": {
+    "hypothesis": 0.1,
+    "rank": 0.3,
+    "system": 0.3
+  },
   "k3": {
     "hypothesis": 0.1,
     "rank": 0.4,
