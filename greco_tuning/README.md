@@ -6,7 +6,7 @@ This documents how the released GRECO scorer is fine-tuned on the stage-1 curric
 
 | Part | State |
 |---|---|
-| Stage-1 split and sample (`prepare_stage1.py`) | Implemented and run on the local data |
+| Stage-1 split without W&I (`prepare_stage1.py`) | Implemented and run on the local data |
 | Labelled records (`build_labels.py`) | Implemented. Tested on hand-checked cases and on a small real file. |
 | Candidates from the `s1s2` checkpoints (step P2) | **Not run.** The checkpoints are not public. They need `hf auth login` with an account in the `CS4248-GEC` organisation. |
 | Full label build, training, tuning, comparison | Not run |
@@ -49,9 +49,8 @@ Other facts about the dev splits:
 |---|---|---|
 | Stage 1 (full) | `data/curriculum/stage1.*`, from `training/build_data.py` | 561,338 pairs |
 | Stage 1 (clean) | `prepare_stage1.py`, step P1 | 538,657 pairs |
-| Stage 1 sample | `prepare_stage1.py`, step P1 | 50,000 sources, seed 4248 |
 | Candidates | BART and T5 `s1s2` n-best, step P2 (k = 5 each); GECToR 1-best (k = 1) | 11 candidates per source before filtering |
-| Labelled groups | `build_labels.py`, step P3 | up to 50,000 groups of 3 |
+| Labelled groups | `build_labels.py`, step P3 | up to 538,657 groups of 3 |
 | dev_tune / dev_test | `data/curriculum/dev_*.*` | 2,000 and 2,384 sentences |
 | Original | `models/greco/checkpoint.bin` from `greco_setup/setup.sh` | record its sha256 |
 
@@ -63,7 +62,7 @@ The stage-1 files are git-ignored and rebuilt by `training/build_data.py` (see `
 
 **GECToR** is the official pretrained model, run with `gector/predict.py` from its own environment. It gives one correction per sentence, which matches the pool GRECO reranks at test time. It is not fine-tuned on our data.
 
-These models were trained on the stage-1 corpora, so their outputs on the sampled sources are closer to gold than outputs on unseen text. The paper does not state, in the text I read, which data its nine systems were trained on, so this bias cannot be compared with the paper directly.
+These models were trained on the stage-1 corpora, so their outputs on the stage-1 sources are closer to gold than outputs on unseen text. The paper does not state, in the text I read, which data its nine systems were trained on, so this bias cannot be compared with the paper directly.
 
 **Choosing three per source (in `build_labels.py`).** Candidates are merged by rank, alternating between the systems: BART rank 1, T5 rank 1, GECToR rank 1, then BART rank 2, and so on. A candidate is dropped if it is empty, duplicates an earlier one, equals the source (no edit), equals the gold (already perfect), or, when a tokenizer is given, is too long for the loader (section 6, P3). The first three usable candidates form the group, so each system contributes one. A source with fewer than three is skipped.
 
@@ -100,9 +99,9 @@ Step numbers match `greco_tuning/README.md` and the commands in section 10.
 
 **P0. Get the original.** `bash greco_setup/setup.sh` in the GRECO environment. Record the sha256 of `models/greco/checkpoint.bin`.
 
-**P1. Stage 1: remove W&I, draw the sample.** Writes `data/greco/stage1.clean.*`, `stage1.sample.*` and `stage1.manifest.json`. Run in the repo's Python 3 environment. *Done.*
+**P1. Stage 1: remove W&I.** Writes `data/greco/stage1.clean.*` and `stage1.manifest.json`. Run in the repo's Python 3 environment. *Done.*
 
-**P2. Candidates.** Generate the BART and T5 n-best lists on the cluster or a GPU, after `hf auth login`. The sample is 50,000 sources, so this is the step with the largest compute cost. *Not run.* Then run GECToR on the same sample, locally or on a GPU, with `gector/predict.py` (section 11). *Not run.*
+**P2. Candidates.** Generate the BART and T5 n-best lists on the cluster or a GPU, after `hf auth login`. All 538,657 sources make this the largest compute cost. *Not run.* Then run GECToR on the same sources, locally or on a GPU, with `gector/predict.py` (section 11). *Not run.*
 
 **P3. Label.** Build the groups with `build_labels.py`, with the DeBERTa tokenizer. The tokenizer drops any candidate whose source and hypothesis together are longer than 200 subword tokens, because the loader would truncate it and misalign the labels. The next candidate is used in its place. Run in the label environment (section 10). *Implemented and tested.*
 
@@ -131,7 +130,7 @@ Compare **original** and **stage 1 (clean)**, optionally with **stage 1 (full)**
 ## 9. Open decisions and known limits
 
 - **In-sample candidates.** The `s1s2` checkpoints were trained on the stage-1 corpora. Section 5 explains the effect.
-- **Cost.** Step P2 generates 10 candidates for each of 50,000 sources, and training runs on up to 50,000 groups of three. Neither has been timed. Measure both before choosing the sample size or the number of epochs.
+- **Cost.** Step P2 generates 10 candidates for each of 538,657 sources, and training runs on up to 538,657 groups of three. Neither has been timed. The 12-hour job limit may not cover step P2, so it may need splitting into chunks. Measure before choosing the number of epochs.
 - **Full or clean stage 1.** The clean run is the main one. The full run is a secondary comparison.
 - **Label definitions.** The sentence target and the word labels follow the upstream code's use of them. They are not verified against the paper's own labelling procedure, which is not in the text I could read.
 
@@ -140,7 +139,7 @@ Compare **original** and **stage 1 (clean)**, optionally with **stage 1 (full)**
 | Step | File | Status | Environment |
 |---|---|---|---|
 | Original checkpoint | `greco_setup/setup.sh` | Exists | GRECO (Python 3.10) |
-| Stage 1 split and sample (P1) | `greco_tuning/prepare_stage1.py` | Implemented, run | repo Python 3 |
+| Stage 1 split without W&I (P1) | `greco_tuning/prepare_stage1.py` | Implemented, run | repo Python 3 |
 | Candidates (P2) | `bart/generate_nbest.py`, `bart/export_candidates.py` | Exists, not run with the `s1s2` checkpoints | GPU, with HF login |
 | Labels (P3) | `greco_tuning/build_labels.py` | Implemented, tested | label environment (below) |
 | Training | upstream `train.py` with `--pretrained_path` | Exists upstream | GRECO |
@@ -166,14 +165,14 @@ Run from the repo root. Steps P0 and P2 need the GRECO environment and the clust
 # P0: original checkpoint (GRECO environment)
 bash greco_setup/setup.sh
 
-# P1: stage 1 without W&I, plus a 50,000-sentence sample (tested)
-python3 -m greco_tuning.prepare_stage1 --sample 50000 --seed 4248
+# P1: stage 1 without W&I (tested)
+python3 -m greco_tuning.prepare_stage1
 
 # P2: candidates from the s1s2 checkpoints (cluster or GPU, after hf auth login)
 for m in bart-base:bart t5-base:t5; do
   name=${m%%:*}; sys=${m##*:}
   python3 bart/generate_nbest.py --model CS4248-GEC/gec-${name}-s1s2 \
-    --input data/greco/stage1.sample.src \
+    --input data/greco/stage1.clean.src \
     --output outputs/greco-s1/${sys}.nbest.jsonl --num_beams 10 --num_return 10 --batch_size 64
   python3 bart/export_candidates.py --nbest outputs/greco-s1/${sys}.nbest.jsonl \
     --out outputs/greco-s1/${sys}.tgt --k 5
@@ -181,11 +180,11 @@ done
 
 # GECToR, one correction per source (GECToR environment: gector/setup.sh first)
 gector/.venv/bin/python gector/predict.py \
-  --input data/greco/stage1.sample.src --output outputs/greco-s1/gector.tgt
+  --input data/greco/stage1.clean.src --output outputs/greco-s1/gector.tgt
 
 # P3: labelled groups (label environment, with the DeBERTa tokenizer)
 .venv-label/bin/python -m greco_tuning.build_labels \
-  --source data/greco/stage1.sample.src --gold data/greco/stage1.sample.tgt \
+  --source data/greco/stage1.clean.src --gold data/greco/stage1.clean.tgt \
   --system bart=outputs/greco-s1/bart.tgt --system t5=outputs/greco-s1/t5.tgt \
   --system gector=outputs/greco-s1/gector.tgt \
   --k 5 --tokenizer microsoft/deberta-v3-large --max-length 200 \

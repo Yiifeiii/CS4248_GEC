@@ -19,7 +19,7 @@ equal to the source (no edit) or to the gold target (already perfect) are droppe
 the paper. Duplicates are dropped too. A source with fewer than n usable candidates is skipped.
 
     python3 -m greco_tuning.build_labels \\
-      --source data/greco/stage1.sample.src --gold data/greco/stage1.sample.tgt \\
+      --source data/greco/stage1.clean.src --gold data/greco/stage1.clean.tgt \\
       --system bart=outputs/greco-s1/bart.tgt --system t5=outputs/greco-s1/t5.tgt \\
       --k 5 --out data/greco/stage1.train.jsonl
 

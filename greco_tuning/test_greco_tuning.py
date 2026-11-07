@@ -127,7 +127,7 @@ class BuildTests(unittest.TestCase):
 
 
 class PrepareStage1Tests(unittest.TestCase):
-    def test_removes_wi_and_samples_deterministically(self):
+    def test_removes_wi_pairs(self):
         with tempfile.TemporaryDirectory() as tmp:
             tmp = Path(tmp)
             data, out = tmp / 'data', tmp / 'out'
@@ -139,15 +139,10 @@ class PrepareStage1Tests(unittest.TestCase):
                 (data / f'stage1.{col}').write_text(''.join(r[idx] + '\n' for r in rows),
                                                     encoding='utf-8')
 
-            manifest = prepare(data, out, sample=2, seed=4248)
+            manifest = prepare(data, out)
             self.assertEqual(manifest['clean']['pairs'], 3)
             clean_src = (out / 'stage1.clean.src').read_text(encoding='utf-8').splitlines()
             self.assertEqual(clean_src, ['a b .', 'g h .', 'm n .'])
-            self.assertEqual(len((out / 'stage1.sample.src').read_text(encoding='utf-8').splitlines()), 2)
-
-            first = (out / 'stage1.sample.src').read_text(encoding='utf-8')
-            prepare(data, out, sample=2, seed=4248)
-            self.assertEqual((out / 'stage1.sample.src').read_text(encoding='utf-8'), first)
 
 
 if __name__ == '__main__':

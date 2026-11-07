@@ -1,6 +1,6 @@
 #!/bin/bash
 # Stage-1 GRECO training data on the cluster, in one job:
-#   P2: BART and T5 n-best candidates, and GECToR's correction, for the stage-1 sample
+#   P2: BART and T5 n-best candidates, and GECToR's correction, for all clean stage-1 sentences
 #   P3: labelled training file, data/greco/stage1.train.jsonl
 # Submit from the repository root on the cluster:
 #   sbatch -J greco-s1 --time=12:00:00 cluster/job.sbatch greco_tuning/candidates.sh
@@ -9,11 +9,11 @@
 #   - the BART and T5 s1s2 checkpoints and the DeBERTa tokenizer in the scratch Hugging Face cache
 #   - gector/setup.sh has been run, so gector/.venv exists
 #   - errant, en_core_web_sm, transformers==4.46.3, sentencepiece and protobuf in gec-train
-#   - data/greco/stage1.sample.src and data/greco/stage1.sample.tgt copied over
+#   - data/greco/stage1.clean.src and data/greco/stage1.clean.tgt copied over
 set -euo pipefail
 
-SRC=data/greco/stage1.sample.src
-GOLD=data/greco/stage1.sample.tgt
+SRC=data/greco/stage1.clean.src
+GOLD=data/greco/stage1.clean.tgt
 OUT=outputs/greco-s1
 mkdir -p "$OUT" data/greco
 
