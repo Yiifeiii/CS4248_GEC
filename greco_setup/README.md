@@ -111,6 +111,8 @@ sbatch -J greco-tune cluster/job.sbatch cluster/greco_tune.sh dev_tune
 sbatch -J greco-test-set cluster/job.sbatch cluster/greco_tune.sh dev_test --best-from outputs/greco/tuning/dev_tune.errant/best.json
 ```
 
+Plain beam search lists instead of diverse ones: `cluster/nbest_beam.sh` writes `outputs/{bart,t5}/full/beam.tgt`, and `--tag beam --system bart=outputs/bart/full/beam.tgt --system t5=outputs/t5/full/beam.tgt --system gector=outputs/gector/dev.tgt` runs the tuning on them into `<split>.errant.beam` (see the header of `cluster/greco_tune.sh`).
+
 Results: `outputs/greco/tuning/<split>.errant/scores.csv`. `outputs/greco/tuning/dev_tune/` holds the earlier run with difflib edits and without the duplicate and empty-sentence fixes (`--edits difflib` writes there). The score cache (`outputs/greco/tuning/score_cache.jsonl`) is not committed; it is keyed by sentence, so the ERRANT runs reuse the scores of the difflib run.
 
 ## Sources

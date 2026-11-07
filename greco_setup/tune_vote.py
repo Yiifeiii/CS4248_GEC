@@ -11,7 +11,8 @@ Then the chosen settings, once, on dev_test:
 
 Edits come from ERRANT by default (--edits errant: run greco_setup.extract_edits first,
 in an environment with errant) or from difflib (--edits difflib). ERRANT runs are written
-to <split>.errant, difflib runs to <split>; --limit N appends .first<N>.
+to <split>.errant, difflib runs to <split>; --tag T appends .T (e.g. for other --system
+files) and --limit N appends .first<N>.
 
 Output: <out>/<folder>/source.txt and <out>/<folder>/k<k>/<mode>/alpha<a>.tgt, aligned with
 data/curriculum/<split>.ids. alpha 0 does not depend on the vote mode and is written
@@ -65,6 +66,7 @@ def main():
     parser.add_argument("--limit", type=int, help="only the first N sentences of the split (test runs)")
     parser.add_argument("--edits", choices=["errant", "difflib"], default="errant",
                         help="how hypotheses are split into edits")
+    parser.add_argument("--tag", help="suffix for the output folder, e.g. beam for plain beam search lists")
     parser.add_argument("--greco-repo", default="external/greco")
     parser.add_argument("--checkpoint", default="models/greco/checkpoint.bin")
     parser.add_argument("--device", default="cuda", choices=["cpu", "cuda"])
@@ -85,7 +87,7 @@ def main():
         edits = {name: [per[i] for i in ids]
                  for name, per in (read_edits(spec, len(sources_all)) for spec in specs)}
 
-    folder = args.split + (".errant" if args.edits == "errant" else "")
+    folder = args.split + (".errant" if args.edits == "errant" else "") + (f".{args.tag}" if args.tag else "")
     out = args.out / (folder if not args.limit else f"{folder}.first{args.limit}")
     out.mkdir(parents=True, exist_ok=True)
     (out / "source.txt").write_text("\n".join(sources) + "\n", encoding="utf-8")
