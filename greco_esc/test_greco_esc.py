@@ -55,8 +55,8 @@ class SettingsTests(unittest.TestCase):
                              capture_output=True, text=True, check=True).stdout.split('\n')
         self.assertIn('greco+esc.vote0.1 3 0.1 1 hypothesis', out)
         self.assertIn('greco.vote0 1 0 0 hypothesis', out)
-        self.assertIn('greco+esc.rank0.9 5 0.9 1 rank', out)
-        self.assertIn('greco.system0.3 2 0.3 0 system', out)
+        self.assertIn('greco+esc.rank0.4 5 0.4 1 rank', out)
+        self.assertIn('greco.system0.1 2 0.1 0 system', out)
 
 
 class VoteModeTests(unittest.TestCase):
@@ -255,11 +255,11 @@ class EvaluateTests(unittest.TestCase):
     def test_the_table_has_one_line_per_k_and_marks_missing_outputs(self):
         rows = [{'system': 'greco', 'k': 1, 'vote_mode': '-', 'vote_coef': '0', 'esc': 'no',
                  'errant_f0_5': 57.6, 'errant_p': 65.0, 'errant_r': 39.5},
-                {'system': 'greco', 'k': 5, 'vote_mode': 'rank', 'vote_coef': '0.9', 'esc': 'yes',
+                {'system': 'greco', 'k': 5, 'vote_mode': 'rank', 'vote_coef': f"{settings.VOTES['rank'][5]:g}", 'esc': 'yes',
                  'errant_f0_5': 59.0, 'errant_p': 70.0, 'errant_r': 36.0}]
         text = evaluate.table(rows)
         self.assertIn('| 1 | 0.4 | 57.6 (65.0 / 39.5) | missing |', text)
-        self.assertIn('59.0 (70.0 / 36.0) [α 0.9] |', text)
+        self.assertIn(f"59.0 (70.0 / 36.0) [α {settings.VOTES['rank'][5]:g}] |", text)
         self.assertIn('= hypothesis', text)
         # two tables, each with one line per k
         self.assertEqual(sum(line.startswith('| ') and line[2].isdigit() for line in text.splitlines()),

@@ -53,9 +53,9 @@ All settings are in `settings.py`, and the scripts read them from there.
 | BART/T5 decoding | **Plain** beam search, 10 beams, 10 returned; re-ranked by length-normalised teacher-forced log-probability, duplicates removed, top 5 kept | `bart/generate_nbest.py` default `--mode beam`; `bart/export_candidates.py --k 5` |
 | GECToR | Grammarly's `roberta_1_gectorv2.th`, no further training; keep-confidence 0.2, min error probability 0.5, up to 5 iterations | `gector/predict.py` defaults |
 | k (hypotheses per BART/T5) | 1, 2, 3, 5 | As in the `greco-voting` tuning |
-| α (`vote_coef`), `hypothesis` | k1 0.4, k2 0.1, k3 0.1, k5 0.1 | Best α per mode on `dev_tune`, `greco-voting` branch, `outputs/greco/tuning/dev_tune.errant/best.json` |
-| α, `system` | k2 0.3, k3 0.1, k5 0.1 | same file |
-| α, `rank` | k2 0.3, k3 0.4, k5 0.9 | same file |
+| α (`vote_coef`), `hypothesis` | k1 0.4, k2 0.1, k3 0.1, k5 0.1 | Best α per mode on `dev_tune`, on plain beam search lists: `outputs/greco/tuning/dev_tune.errant.beam/best.json` on `main` |
+| α, `system` | k2 0.1, k3 0.1, k5 0.1 | same file |
+| α, `rank` | k2 0.4, k3 0.4, k5 0.4 | same file |
 | Control α | 0 | No voting |
 | r (`score_ratio`) | 0.7 | Paper (BEA-2019 command) |
 | Beam size, batch size | 16, 16 | Paper; with the attention-mask fix the batch size does not change scores |
@@ -68,7 +68,7 @@ All settings are in `settings.py`, and the scripts read them from there.
 - **system:** the share of systems proposing it.
 - **rank:** weighted by the best rank that proposes it.
 
-Upstream `run_combination.py` computes only "hypothesis"; `combine.py` adds "system" and "rank" (section 1), so all three are run with their own α. Those α were tuned on **diverse** beam search lists (10 beams in 5 groups, diversity penalty 0.5), without ESC; this pipeline uses **plain** beam search lists, so they are carried over, not retuned (section 4).
+Upstream `run_combination.py` computes only "hypothesis"; `combine.py` adds "system" and "rank" (section 1), so all three are run with their own α. The α come from the tuning on **plain** beam search lists (`cluster/nbest_beam.sh` on `main`: the same models, 10 beams, 10 returned, top 5 after re-ranking, as this pipeline), on `dev_tune`, without ESC. The full-dev tuning (`dev.errant.beam`) is not used: it includes `dev_test`, where everything here is scored. The first run of this pipeline used the `hypothesis` α tuned on diverse lists (`dev_tune.errant`), which are the same values.
 
 Two tables of these results exist:
 
@@ -168,8 +168,8 @@ The end-to-end test runs only with `external/esc` and `external/greco` in place 
 
 ## 4. Differences from the paper and known limits
 
-- **α was tuned without ESC, on diverse beam search lists,** with the `greco-voting` branch's own combiner. This pipeline uses plain beam search lists and upstream's beam search. α was not retuned here, so the best α with ESC, or on plain beam lists, may differ. r = 0.7 is the paper's value and was not tuned either.
-- **The comparison with `greco-voting` mixes decoding modes.** Its `dev_test` results are on diverse lists, these on plain lists, so a difference between the two branches is partly the candidates.
+- **α was tuned without ESC,** on plain beam search lists, with the `greco-voting` branch's own combiner rather than upstream's beam search. It was not retuned with ESC, so the best α with ESC may differ. r = 0.7 is the paper's value and was not tuned either.
+- **Compare with the plain beam tuning, not the diverse one.** `greco-voting`'s `dev_test.errant` results are on diverse lists; the plain beam tuning on `main` (`dev_tune.errant.beam`) uses the same candidates as this pipeline.
 - **ESC is trained on 2,000 sentences.** The paper used the 4,384 of BEA-2019 dev, and we hold half of that out as `dev_test`. With 11 inputs at k = 5, ESC has 11 × (number of edit types) features from 2,000 sentences.
 - **Each ranked hypothesis is one ESC "system".** `bart-2` gets its own weights, separate from `bart-1`. That is how upstream ESC treats input files. The paper combined 1-best outputs only.
 - **Upstream ESC quirk.** ESC retrains on all the data for as many epochs as the best validation epoch. Epochs are counted from 0, so if the best is epoch 0, the final model is untrained. The log line `Best checkpoint at epoch N` shows the chosen epoch.

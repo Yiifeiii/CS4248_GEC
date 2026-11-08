@@ -20,14 +20,15 @@ MAX_RANK = 5  # BART and T5 hypotheses kept per source; GECToR gives one
 
 KS = (1, 2, 3, 5)
 
-# Voting coefficient per vote mode and k: the best alpha on dev_tune from the greco-voting
-# branch (outputs/greco/tuning/dev_tune.errant/best.json), tuned there without ESC on diverse
-# beam search lists. "hypothesis" is what official run_combination.py counts; "system" and
-# "rank" are counted by combine.py (see its docstring).
+# Voting coefficient per vote mode and k: the best alpha on dev_tune, tuned without ESC on
+# plain beam search lists decoded as here (main, outputs/greco/tuning/dev_tune.errant.beam/
+# best.json). Not the full-dev tuning (dev.errant.beam), which includes dev_test.
+# "hypothesis" is what official run_combination.py counts; "system" and "rank" are counted by
+# combine.py (see its docstring).
 VOTES = {
     'hypothesis': {1: 0.4, 2: 0.1, 3: 0.1, 5: 0.1},
-    'system': {1: 0.4, 2: 0.3, 3: 0.1, 5: 0.1},
-    'rank': {1: 0.4, 2: 0.3, 3: 0.4, 5: 0.9},
+    'system': {1: 0.4, 2: 0.1, 3: 0.1, 5: 0.1},
+    'rank': {1: 0.4, 2: 0.4, 3: 0.4, 5: 0.4},
 }
 VOTE = VOTES['hypothesis']
 VOTE_MODES = tuple(VOTES)
