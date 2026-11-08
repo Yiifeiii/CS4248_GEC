@@ -84,3 +84,8 @@ restored. The launcher now runs a CPU compute-node preflight covering source
 imports, scorer files, exact historical software versions, tests and full data
 validation. The GPU array depends on its success, avoiding repeated setup failures
 on allocated GPUs. This changes validation/packaging, not the training recipe.
+
+Replacement submission on 8 November 2026: CPU preflight **1094809**, dependent
+BART/T5 array **1094810** (index0 BART, index1 T5). Executed source commit:
+`39b9029`. Initial failed array 1094732 did not train either model. Results
+remain pending; the training recipe and exposure counts have not changed.
