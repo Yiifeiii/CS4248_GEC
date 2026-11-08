@@ -96,3 +96,22 @@ Configs: `training/configs/four-controls/`. Data/checkpoints live on scratch.
 Results: `experiments/training/four-controls-20261108/<family>-<control>/`, with
 separate `best/` and `final/` scores and exposure/initialization provenance.
 No model training is performed on login nodes. No completed scores claimed yet.
+
+## Submission — 8 November 2026
+
+CPU preflight **1097381**, dependent GPU array **1097382**, at most two tasks
+concurrently. Executed source commit: `1a4c872`. Isolated source snapshot:
+`~/CS4248_GEC_experiments/four-controls/`. Local validation: 34 tests, 33 passed
+and one environment-dependent GRECO integration test skipped; shell syntax and
+whitespace checks passed. Submission is not a completed result.
+
+| Array index | Model | Control |
+|---|---|---|
+| 0 | BART | 1A |
+| 1 | BART | 1B |
+| 2 | BART | 2A |
+| 3 | BART | 2B |
+| 4 | T5 | 1A |
+| 5 | T5 | 1B |
+| 6 | T5 | 2A |
+| 7 | T5 | 2B |
