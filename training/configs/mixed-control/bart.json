@@ -1,0 +1,26 @@
+{
+  "run": "bart-base.mixed-control",
+  "init": "facebook/bart-base",
+  "learning_rate": 5e-05,
+  "train": "${MIXED_CONTROL_TRAIN}",
+  "errorful_only": false,
+  "epochs": 1,
+  "batch_size": 32,
+  "grad_accum": 4,
+  "warmup_steps": 1000,
+  "loss_eval_steps": 1000,
+  "save_steps": 1000,
+  "errant_eval": {
+    "steps": 1000,
+    "sentences": 2000,
+    "beams": 5,
+    "patience": null
+  },
+  "dropout": 0.1,
+  "weight_decay": 0.01,
+  "label_smoothing": 0.1,
+  "seed": 42,
+  "save_total_limit": 2,
+  "logging_steps": 50,
+  "output_dir": "${CKPT_ROOT}/bart-base.mixed-control"
+}

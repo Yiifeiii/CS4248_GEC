@@ -2,3 +2,5 @@
 outputs/**/*.m2 -filter -diff -merge text
 *.patch -text
 data/curriculum/*.m2 -filter -diff -merge text
+
+cluster/*.sh text eol=lf
