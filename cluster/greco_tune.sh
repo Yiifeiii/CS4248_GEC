@@ -13,6 +13,11 @@
 # The whole grid on all 4,384 dev sentences (split "dev"; scored against data/dev.m2):
 #   sbatch -J greco-dev-beam cluster/job.sbatch cluster/greco_tune.sh dev --k 1 2 3 5 --tag beam \
 #       --system bart=outputs/bart/dev.tgt --system t5=outputs/t5/dev.tgt --system gector=outputs/gector/dev.tgt
+# The BEA-2019 test set (no gold, so no scoring; submit the outputs to Codabench), with the
+# settings tuned on the full dev set:
+#   sbatch -J greco-bea19 cluster/job.sbatch cluster/greco_tune.sh bea19 --k 1 2 3 5 --tag beam \
+#       --system bart=outputs/bart/bea19.tgt --system t5=outputs/t5/bea19.tgt \
+#       --system gector=outputs/gector/bea19.tgt --best-from outputs/greco/tuning/dev.errant.beam/best.json
 # The first argument is the split; the rest go to tune_vote.py (--edits difflib uses the
 # old difflib edits and writes to <split> instead of <split>.errant).
 set -euo pipefail
@@ -41,6 +46,10 @@ done
 OUT_SPLIT="$SPLIT"
 [ "$EDITS" = errant ] && OUT_SPLIT="$OUT_SPLIT.errant"
 OUT_SPLIT="$OUT_SPLIT$TAG$LIMIT"
+# Test sets have their own source file and no gold edits
+SOURCE=data/dev.src
+SCORE=1
+if [ "$SPLIT" = bea19 ]; then SOURCE=data/test.bea19.src; SCORE=0; fi
 
 # job.sbatch runs this script in a new bash, which does not inherit the conda function
 set +u
@@ -48,7 +57,7 @@ source "${CONDA_BASE:-$HOME/miniconda3}/etc/profile.d/conda.sh"
 conda activate "$SCORE_ENV"
 set -u
 step extracting ERRANT edits
-[ "$EDITS" = errant ] && python -m greco_setup.extract_edits ${SYSTEMS[@]+"${SYSTEMS[@]}"}
+[ "$EDITS" = errant ] && python -m greco_setup.extract_edits --source "$SOURCE" ${SYSTEMS[@]+"${SYSTEMS[@]}"}
 
 set +u
 conda activate "$GRECO_ENV"
@@ -57,8 +66,12 @@ step GRECO
 python -c "import torch; assert torch.cuda.is_available(), 'no GPU'; print('torch', torch.__version__, 'on', torch.cuda.get_device_name(0))"
 python -m greco_setup.tune_vote --split "$SPLIT" --device cuda "$@"
 
-set +u
-conda activate "$SCORE_ENV"
-set -u
-step scoring
-python -m greco_setup.score_tuning --split "$OUT_SPLIT"
+if [ "$SCORE" = 1 ]; then
+    set +u
+    conda activate "$SCORE_ENV"
+    set -u
+    step scoring
+    python -m greco_setup.score_tuning --split "$OUT_SPLIT"
+else
+    step "no gold edits for $SPLIT; predictions are in outputs/greco/tuning/$OUT_SPLIT"
+fi

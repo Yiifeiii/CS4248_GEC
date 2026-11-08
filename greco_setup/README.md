@@ -113,6 +113,20 @@ sbatch -J greco-test-set cluster/job.sbatch cluster/greco_tune.sh dev_test --bes
 
 Plain beam search lists instead of diverse ones: `cluster/nbest_beam.sh` writes `outputs/{bart,t5}/full/beam.tgt`, and `--tag beam --system bart=outputs/bart/full/beam.tgt --system t5=outputs/t5/full/beam.tgt --system gector=outputs/gector/dev.tgt` runs the tuning on them into `<split>.errant.beam` (see the header of `cluster/greco_tune.sh`).
 
+### BEA-2019 test set
+
+`data/test.bea19.src` (4,477 sentences) has no public gold edits, so nothing is tuned or scored on it: GRECO runs the settings tuned on the full dev set, and the predictions are scored by submitting them to Codabench. In order (GECToR also runs locally, see `gector/README.md`):
+
+```bash
+gector/.venv/bin/python gector/predict.py --input data/test.bea19.src --output outputs/gector/bea19.tgt
+sbatch -J nbest-bea19 --time=04:00:00 cluster/job.sbatch cluster/nbest_beam.sh data/test.bea19.src bea19
+sbatch -J greco-bea19 cluster/job.sbatch cluster/greco_tune.sh bea19 --k 1 2 3 5 --tag beam \
+    --system bart=outputs/bart/bea19.tgt --system t5=outputs/t5/bea19.tgt --system gector=outputs/gector/bea19.tgt \
+    --best-from outputs/greco/tuning/dev.errant.beam/best.json
+```
+
+Predictions: `outputs/greco/tuning/bea19.errant.beam/k<k>/<mode>/alpha<a>.tgt`, one corrected sentence per line, tokenized like the source.
+
 Results: `outputs/greco/tuning/<split>.errant/scores.csv`. `outputs/greco/tuning/dev_tune/` holds the earlier run with difflib edits and without the duplicate and empty-sentence fixes (`--edits difflib` writes there). The score cache (`outputs/greco/tuning/score_cache.jsonl`) is not committed; it is keyed by sentence, so the ERRANT runs reuse the scores of the difflib run.
 
 ## Sources

@@ -9,6 +9,9 @@ Tuning on dev_tune (GRECO environment, repository root):
 Or the whole grid on all of dev (--split dev); score_tuning.py then also reports a
 two-fold estimate that chooses settings on one half and scores them on the other.
 
+The BEA-2019 test set (--split bea19, all of data/test.bea19.src, no gold) runs only the
+settings in --best-from, e.g. those tuned on the full dev set.
+
 Then the chosen settings, once, on dev_test:
     python -m greco_setup.tune_vote --split dev_test --best-from outputs/greco/tuning/dev_tune/best.json
 
@@ -35,6 +38,8 @@ from greco_setup.prepare import build, read_edits, read_lines, read_system
 
 DEFAULT_SYSTEMS = ["bart=outputs/bart/full/diverse.tgt", "t5=outputs/t5/full/diverse.tgt",
                    "gector=outputs/gector/dev.tgt"]
+# Test sets: every sentence of the file, which has no gold edits here (score on Codabench)
+TEST_SOURCES = {"bea19": "data/test.bea19.src"}
 DEFAULT_ALPHAS = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
 
 
@@ -60,7 +65,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--split", default="dev_tune",
                         help="data/curriculum/<split>.ids selects the sentences; 'dev' is all of data/dev.src")
-    parser.add_argument("--source", type=Path, default=Path("data/dev.src"))
+    parser.add_argument("--source", type=Path,
+                        help="source sentences; default data/test.bea19.src for --split bea19, else data/dev.src")
     parser.add_argument("--system", action="append", help="NAME=PATH (k lines per source); default BART, T5, GECToR")
     parser.add_argument("--k", type=int, nargs="+", default=[1, 3, 5])
     parser.add_argument("--modes", nargs="+", choices=VOTE_MODES, default=list(VOTE_MODES))
@@ -78,8 +84,10 @@ def main():
     parser.add_argument("--batch-size", type=int, default=32)
     args = parser.parse_args()
 
+    if args.source is None:
+        args.source = Path(TEST_SOURCES.get(args.split, "data/dev.src"))
     sources_all = read_lines(args.source)
-    if args.split == "dev":
+    if args.split in ("dev", *TEST_SOURCES):
         ids = list(range(len(sources_all)))
     else:
         ids = [int(x) for x in Path(f"data/curriculum/{args.split}.ids").read_text().split()]
