@@ -63,4 +63,12 @@ Results go to `experiments/training/{bart,t5}-base.mixed-control/`. Retain
 run_info.json, trainer_state.json, best_checkpoint.json, score JSONs and the mixed
 data manifest. Report actual optimizer steps and selected checkpoint alongside F0.5.
 
-Status: prepared; submission and results must be recorded separately.
+Status: submitted; results pending.
+
+## Submission — 8 November 2026
+
+- Slurm job/array: **1094732**.
+- Executed source commit: `41225d37af54a2d7105b7368751488ac72105eea`.
+- Local validation: 24 tests: 23 passed, one GRECO environment integration test skipped.
+- Dedicated cluster snapshot: `~/CS4248_GEC_experiments/mixed-control/`.
+- This records submission, not a completed training or F-score result.
