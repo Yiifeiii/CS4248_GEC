@@ -20,7 +20,7 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
-from greco_esc import evaluate, prepare, settings
+from greco_esc import combine, evaluate, prepare, settings
 
 REPO = Path(__file__).resolve().parent.parent
 
@@ -31,22 +31,71 @@ class SettingsTests(unittest.TestCase):
         self.assertEqual(settings.inputs(3), ['gector-1', 'bart-1', 't5-1', 'bart-2', 't5-2', 'bart-3', 't5-3'])
         self.assertEqual(len(settings.inputs(5)), 11)
 
-    def test_every_k_has_the_four_combinations(self):
+    def test_every_k_has_each_combination(self):
         runs = settings.runs()
-        self.assertEqual(len(runs), 4 * len(settings.KS))
-        self.assertEqual(len({(name, k) for name, k, _, _ in runs}), len(runs))
+        self.assertEqual(len({(name, k) for name, k, *_ in runs}), len(runs))
         for k in settings.KS:
-            self.assertEqual({(esc, vote) for _, kk, vote, esc in runs if kk == k},
-                             {(False, 0), (False, settings.VOTE[k]), (True, 0), (True, settings.VOTE[k])})
+            modes = ('hypothesis',) if k == 1 else settings.VOTE_MODES
+            want = {(esc, 0, 'hypothesis') for esc in (False, True)} | \
+                   {(esc, settings.VOTES[m][k], m) for esc in (False, True) for m in modes}
+            self.assertEqual({(esc, vote, mode) for _, kk, vote, esc, mode in runs if kk == k}, want)
 
-    def test_every_k_has_a_tuned_vote(self):
-        self.assertEqual(set(settings.VOTE), set(settings.KS))
+    def test_the_hypothesis_runs_keep_their_names(self):
+        # finished runs from before the vote modes were added are reused by name
+        names = {(name, k) for name, k, *_ in settings.runs()}
+        self.assertIn(('greco+esc.vote0.1', 3), names)
+        self.assertIn(('greco.vote0.4', 1), names)
+
+    def test_every_mode_and_k_has_a_tuned_vote(self):
+        for mode in settings.VOTE_MODES:
+            self.assertEqual(set(settings.VOTES[mode]), set(settings.KS))
 
     def test_the_shell_listing_matches(self):
         out = subprocess.run([sys.executable, '-m', 'greco_esc.settings', 'runs'], cwd=REPO,
                              capture_output=True, text=True, check=True).stdout.split('\n')
-        self.assertIn('greco+esc.vote0.1 3 0.1 1', out)
-        self.assertIn('greco.vote0 1 0 0', out)
+        self.assertIn('greco+esc.vote0.1 3 0.1 1 hypothesis', out)
+        self.assertIn('greco.vote0 1 0 0 hypothesis', out)
+        self.assertIn('greco+esc.rank0.9 5 0.9 1 rank', out)
+        self.assertIn('greco.system0.3 2 0.3 0 system', out)
+
+
+class VoteModeTests(unittest.TestCase):
+    """combine.support, against the greco-voting branch's definitions."""
+    LABELS = [('gector', 1), ('bart', 1), ('t5', 1), ('bart', 2), ('t5', 2)]
+    A, B, C = (0, 1, 'x'), (2, 3, 'y'), (4, 4, 'z')
+    # A: everyone; B: bart at ranks 1 and 2 only; C: t5 at rank 2 only
+    EDITS = [{A}, {A, B}, {A}, {A, B}, {A, C}]
+
+    def test_hypothesis_counts_inputs(self):
+        sup, base = combine.support(self.EDITS, self.LABELS, 'hypothesis')
+        self.assertEqual(sup, {self.A: 1.0, self.B: 2 / 5, self.C: 1 / 5})
+        self.assertEqual(base, 1 / 5)
+
+    def test_system_counts_a_repeated_edit_once(self):
+        sup, base = combine.support(self.EDITS, self.LABELS, 'system')
+        self.assertEqual(sup, {self.A: 1.0, self.B: 1 / 3, self.C: 1 / 3})
+        self.assertEqual(base, 1 / 3)
+
+    def test_rank_counts_each_system_at_its_best_rank(self):
+        sup, base = combine.support(self.EDITS, self.LABELS, 'rank')
+        self.assertEqual(sup, {self.A: 1.0, self.B: 1 / 3, self.C: (1 / 2) / 3})
+        self.assertEqual(base, 1 / 3)
+
+    def test_the_modes_agree_at_k_1(self):
+        labels, edits = self.LABELS[:3], self.EDITS[:3]
+        results = [combine.support(edits, labels, m) for m in settings.VOTE_MODES]
+        self.assertTrue(all(r == results[0] for r in results))
+
+    def test_input_names_give_system_and_rank(self):
+        self.assertEqual(combine.system_rank('/x/m2/bart-2.m2'), ('bart', 2))
+        self.assertEqual(combine.system_rank('gector-1.m2'), ('gector', 1))
+        with self.assertRaises(ValueError):
+            combine.system_rank('bart.m2')
+
+    def test_vote_mode_is_removed_before_upstream_parses(self):
+        argv, mode = combine._pop_vote_mode(['x', '--vote_coef', '0.1', '--vote_mode', 'rank', '--data', 'a'])
+        self.assertEqual((argv, mode), (['x', '--vote_coef', '0.1', '--data', 'a'], 'rank'))
+        self.assertEqual(combine._pop_vote_mode(['x'])[1], 'hypothesis')
 
 
 class ClipTests(unittest.TestCase):
@@ -173,14 +222,48 @@ class EndToEndTests(unittest.TestCase):
             self.assertEqual(result[0], 'He goes to school number 0 .')
 
 
+@unittest.skipUnless((REPO / 'external/greco/run_combination.py').exists() and has('torch', 'transformers'),
+                     'needs external/greco and torch')
+class VotedDatasetTests(unittest.TestCase):
+    """combine.voted_dataset on upstream's SysCombDataset: the vote beam_search sees per mode."""
+
+    def test_counts_per_mode(self):
+        x = 'A 0 1|||R:NOUN|||A|||REQUIRED|||-NONE-|||0'
+        y = 'A 2 3|||R:NOUN|||C|||REQUIRED|||-NONE-|||0'
+        noop = 'A -1 -1|||noop|||-NONE-|||REQUIRED|||-NONE-|||0'
+        # A from every system's top input; C only from bart at ranks 2 and 3
+        edits = {'gector-1': x, 'bart-1': x, 't5-1': x, 'bart-2': y, 't5-2': noop, 'bart-3': y, 't5-3': noop}
+        with tempfile.TemporaryDirectory() as tmp:
+            files = []
+            for name, edit in edits.items():
+                path = Path(tmp, f'{name}.m2')
+                path.write_text(f'S a b c d\n{edit}\n\n', encoding='utf-8')
+                files.append(str(path))
+            sys.path.insert(0, str(REPO / 'external/greco'))
+            self.addCleanup(sys.path.remove, str(REPO / 'external/greco'))
+            want = {'hypothesis': (7, {'A': 3 / 7, 'C': 2 / 7}), 'system': (3, {'A': 1, 'C': 1 / 3}),
+                    'rank': (3, {'A': 1, 'C': 1 / 6})}
+            for mode, (voters, support) in want.items():
+                dataset = combine.voted_dataset(files, None, mode)
+                got = {e[3]: count / dataset.num_hyp for e, count in dataset[0]['edits']}
+                self.assertEqual(dataset.num_hyp, voters, mode)
+                for edit, value in support.items():
+                    self.assertAlmostEqual(got[edit], value, msg=mode)
+
+
 class EvaluateTests(unittest.TestCase):
     def test_the_table_has_one_line_per_k_and_marks_missing_outputs(self):
-        rows = [{'system': 'greco', 'k': 1, 'vote_coef': '0', 'esc': 'no',
-                 'errant_f0_5': 57.6, 'errant_p': 65.0, 'errant_r': 39.5}]
+        rows = [{'system': 'greco', 'k': 1, 'vote_mode': '-', 'vote_coef': '0', 'esc': 'no',
+                 'errant_f0_5': 57.6, 'errant_p': 65.0, 'errant_r': 39.5},
+                {'system': 'greco', 'k': 5, 'vote_mode': 'rank', 'vote_coef': '0.9', 'esc': 'yes',
+                 'errant_f0_5': 59.0, 'errant_p': 70.0, 'errant_r': 36.0}]
         text = evaluate.table(rows)
         self.assertIn('| 1 | 0.4 | 57.6 (65.0 / 39.5) | missing |', text)
+        self.assertIn('59.0 (70.0 / 36.0) [α 0.9] |', text)
+        self.assertIn('= hypothesis', text)
+        # two tables, each with one line per k
         self.assertEqual(sum(line.startswith('| ') and line[2].isdigit() for line in text.splitlines()),
-                         len(settings.KS))
+                         2 * len(settings.KS))
 
     def test_every_run_has_an_output_path(self):
         paths = [p for *_, p in evaluate.outputs()]

@@ -5,8 +5,9 @@
 #   1. Candidates (gec-train): BART and T5 s1s2 5-best, GECToR 1-best, on dev_tune and dev_test
 #   2. M2 files (gec-train): one ERRANT M2 per ranked output; ESC's folders for every k
 #   3. ESC (greco): train on dev_tune for each k; edit scores and ESC's own output on dev_test
-#   4. GRECO (greco): official run_combination.py on dev_test, for every run in settings.py:
-#      with and without ESC's edit scores, with the tuned vote_coef and with 0
+#   4. GRECO (greco): official run_combination.py (through combine.py, which adds the "system" and
+#      "rank" vote modes) on dev_test, for every run in settings.py: with and without ESC's edit
+#      scores, with no vote and with the tuned vote_coef of each vote mode
 #   5. Scores (gec-train): ERRANT and M2 against dev_test.m2 (greco_esc/evaluate.py)
 #
 # Every step skips output that is already complete, so a job cut off by its time limit can be
@@ -84,7 +85,7 @@ done
 # 4. GRECO
 read -r BEAM BATCH RATIO < <(python3 -c "from greco_esc import settings as s; print(s.BEAM_SIZE, s.BATCH_SIZE, s.SCORE_RATIO)")
 # Read the runs on fd 3, so the programs inside the loop cannot consume the list from stdin
-while read -r name k vote esc <&3; do
+while read -r name k vote esc mode <&3; do
   dir=$REPO/$ROOT/dev_test/k$k/$name
   [ "$(plines "$dir/pred.txt")" -eq "$TEST_N" ] && continue
   step "k$k: $name"
@@ -93,7 +94,9 @@ while read -r name k vote esc <&3; do
   for i in $(python3 -m greco_esc.settings inputs "$k"); do inputs+=("$REPO/$ROOT/dev_test/m2/$i.m2"); done
   extra=()
   [ "$esc" = 1 ] && extra=(--edit_scores "$REPO/$ROOT/dev_test/k$k/esc.scores.jsonl" --score_ratio "$RATIO")
-  (cd external/greco && python run_combination.py --model greco --lm_model microsoft/deberta-v3-large \
+  # combine.py is upstream run_combination.py with the vote counted per --vote_mode
+  (cd external/greco && python "$REPO/greco_esc/combine.py" --vote_mode "$mode" \
+    --model greco --lm_model microsoft/deberta-v3-large \
     --checkpoint "$CKPT" --beam_size "$BEAM" --batch_size "$BATCH" --vote_coef "$vote" \
     ${extra[@]+"${extra[@]}"} --output_path "$dir/pred.txt" --data "${inputs[@]}" > "$dir/log.txt" 2>&1) || {
     tail -n 20 "$dir/log.txt" >&2; exit 1; }

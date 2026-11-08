@@ -19,6 +19,16 @@ This combines our three systems the way the GRECO paper's strongest setup does (
 
 This is upstream's `run_combination.py --edit_scores <ESC scores> --score_ratio 0.7`, the paper's command for BEA-2019. Upstream ESC writes the scores with `run.py --score`, which its README added for GRECO.
 
+GRECO runs through `combine.py`, a thin wrapper around upstream's `run_combination.py`. It keeps upstream's beam search, scorer and ESC term, and adds `--vote_mode`, which sets how V counts an edit's support:
+
+| Mode | Support of an edit | Voters (the unchanged sentence's share) |
+|---|---|---|
+| `hypothesis` | share of the 1 + 2k inputs proposing it; upstream's own count | 1 + 2k |
+| `system` | share of systems with at least one input proposing it; the paper's count(e) / c | c = 3 |
+| `rank` | Σ over systems of 1 / (best rank proposing it), ÷ c | c = 3 |
+
+These are the `greco-voting` branch's definitions (`greco_setup/combine.py` there). At k = 1 each system has one input, so the three modes give the same output and only `hypothesis` is run.
+
 **What this pipeline does:**
 
 | Step | What | Where |
@@ -26,7 +36,7 @@ This is upstream's `run_combination.py --edit_scores <ESC scores> --score_ratio 
 | 1 | BART and T5 `s1s2` 5-best (beam 10), GECToR 1-best, on `dev_tune` and `dev_test` | `runs/<split>/pool/` |
 | 2 | One ERRANT M2 file per ranked output: `gector-1`, `bart-1..5`, `t5-1..5` | `runs/<split>/m2/` |
 | 3 | For each k: train ESC on `dev_tune` with the inputs GRECO combines at that k; score the `dev_test` edits; ESC's own output too | `runs/esc/k<k>/`, `runs/dev_test/k<k>/` |
-| 4 | For each k: GRECO with and without ESC, each with the tuned α and with α = 0 | `runs/dev_test/k<k>/<run>/pred.txt` |
+| 4 | For each k: GRECO with and without ESC, each with α = 0 and with each vote mode at its tuned α (k = 1: `hypothesis` only) | `runs/dev_test/k<k>/<run>/pred.txt` |
 | 5 | ERRANT and M2 scores against `dev_test.m2` | `runs/dev_test/results.{csv,md}` |
 
 At k, GRECO and ESC both read the 1 + 2k inputs `gector-1, bart-1, t5-1, …, bart-k, t5-k`, the mini experiment's order. GRECO and ESC read the same M2 files, so ESC has a score for every edit GRECO considers. The job stops if any edit lacks one.
@@ -40,8 +50,12 @@ All settings are in `settings.py`, and the scripts read them from there.
 | Setting | Value | Source |
 |---|---|---|
 | Systems | `CS4248-GEC/gec-bart-base-s1s2`, `CS4248-GEC/gec-t5-base-s1s2`, GECToR | Our final models |
+| BART/T5 decoding | **Plain** beam search, 10 beams, 10 returned; re-ranked by length-normalised teacher-forced log-probability, duplicates removed, top 5 kept | `bart/generate_nbest.py` default `--mode beam`; `bart/export_candidates.py --k 5` |
+| GECToR | Grammarly's `roberta_1_gectorv2.th`, no further training; keep-confidence 0.2, min error probability 0.5, up to 5 iterations | `gector/predict.py` defaults |
 | k (hypotheses per BART/T5) | 1, 2, 3, 5 | As in the `greco-voting` tuning |
-| α (`vote_coef`) | k1 0.4, k2 0.1, k3 0.1, k5 0.1 | Best "hypothesis" α on `dev_tune`, `greco-voting` branch, `outputs/greco/tuning/dev_tune.errant/best.json` |
+| α (`vote_coef`), `hypothesis` | k1 0.4, k2 0.1, k3 0.1, k5 0.1 | Best α per mode on `dev_tune`, `greco-voting` branch, `outputs/greco/tuning/dev_tune.errant/best.json` |
+| α, `system` | k2 0.3, k3 0.1, k5 0.1 | same file |
+| α, `rank` | k2 0.3, k3 0.4, k5 0.9 | same file |
 | Control α | 0 | No voting |
 | r (`score_ratio`) | 0.7 | Paper (BEA-2019 command) |
 | Beam size, batch size | 16, 16 | Paper; with the attention-mask fix the batch size does not change scores |
@@ -54,7 +68,7 @@ All settings are in `settings.py`, and the scripts read them from there.
 - **system:** the share of systems proposing it.
 - **rank:** weighted by the best rank that proposes it.
 
-Only "hypothesis" is what upstream `run_combination.py` computes. "system" and "rank" exist only in that branch's own combiner, so this pipeline uses the "hypothesis" α.
+Upstream `run_combination.py` computes only "hypothesis"; `combine.py` adds "system" and "rank" (section 1), so all three are run with their own α. Those α were tuned on **diverse** beam search lists (10 beams in 5 groups, diversity penalty 0.5), without ESC; this pipeline uses **plain** beam search lists, so they are carried over, not retuned (section 4).
 
 Two tables of these results exist:
 
@@ -115,10 +129,10 @@ tail -f logs/slurm/greco-esc-<jobid>.out       # "== <time> <step>" marks each s
 
 The job skips any step whose output is already complete. If it fails or runs out of time, fix the cause and submit the same command again. Don't `git pull` while it runs, because bash reads the script as it goes.
 
-**Expected time:** about 3 hours.
+**Expected time:** about 4 hours from scratch. If the first version of this job (before vote modes) already finished, resubmitting runs only the 12 new `system` and `rank` runs and the scoring: about 1.5 hours.
 
 - Candidates: about 30 min for both splits.
-- GRECO: 16 runs of about 5–10 min each, longer at larger k.
+- GRECO: 28 runs of about 3–8 min each, longer at larger k (16 `hypothesis` and no-vote runs, 12 `system` and `rank` runs).
 - Scoring: about 25 min.
 
 **Check it when it finishes:**
@@ -127,12 +141,12 @@ The job skips any step whose output is already complete. If it fails or runs out
 sacct -j <jobid> --format=JobID,State,ExitCode,Elapsed        # COMPLETED 0:0
 wc -l greco_esc/runs/dev_tune/pool/*.tgt     # bart, t5 10000; gector 2000
 wc -l greco_esc/runs/dev_test/pool/*.tgt     # bart, t5 11920; gector 2384
-ls greco_esc/runs/dev_test/k*/*/pred.txt | wc -l               # 20: 16 GRECO runs and 4 ESC
+ls greco_esc/runs/dev_test/k*/*/pred.txt | wc -l               # 32: 28 GRECO runs and 4 ESC
 grep -h "Best checkpoint at epoch" logs/slurm/greco-esc-<jobid>.out   # ESC's chosen epoch per k; should not be 0
 cat greco_esc/runs/dev_test/results.md
 ```
 
-`results.md` has one line per k: ERRANT F0.5 (P / R) for GRECO alone, GRECO with voting, GRECO + ESC, GRECO + ESC with voting, and ESC alone, plus the three single systems. `results.csv` adds the M2 scores. To rescore without rerunning, use `conda activate gec-train && python -m greco_esc.evaluate` on a compute node.
+`results.md` has two tables. The first has one line per k: ERRANT F0.5 (P / R) for GRECO alone, GRECO with `hypothesis` voting, GRECO + ESC, GRECO + ESC with voting, and ESC alone, plus the three single systems. The second compares the three vote modes at their tuned α, without and with ESC. `results.csv` adds the M2 scores. To rescore without rerunning, use `conda activate gec-train && python -m greco_esc.evaluate` on a compute node.
 
 **Bring the results to your laptop.** The runs folder is small apart from the n-best JSONL files:
 
@@ -154,7 +168,8 @@ The end-to-end test runs only with `external/esc` and `external/greco` in place 
 
 ## 4. Differences from the paper and known limits
 
-- **α was tuned without ESC,** on the `greco-voting` branch's n-best lists, with that branch's combiner. It was not retuned here, so the best α with ESC may differ. r = 0.7 is the paper's value and was not tuned either.
+- **α was tuned without ESC, on diverse beam search lists,** with the `greco-voting` branch's own combiner. This pipeline uses plain beam search lists and upstream's beam search. α was not retuned here, so the best α with ESC, or on plain beam lists, may differ. r = 0.7 is the paper's value and was not tuned either.
+- **The comparison with `greco-voting` mixes decoding modes.** Its `dev_test` results are on diverse lists, these on plain lists, so a difference between the two branches is partly the candidates.
 - **ESC is trained on 2,000 sentences.** The paper used the 4,384 of BEA-2019 dev, and we hold half of that out as `dev_test`. With 11 inputs at k = 5, ESC has 11 × (number of edit types) features from 2,000 sentences.
 - **Each ranked hypothesis is one ESC "system".** `bart-2` gets its own weights, separate from `bart-1`. That is how upstream ESC treats input files. The paper combined 1-best outputs only.
 - **Upstream ESC quirk.** ESC retrains on all the data for as many epochs as the best validation epoch. Epochs are counted from 0, so if the best is epoch 0, the final model is untrained. The log line `Best checkpoint at epoch N` shows the chosen epoch.
@@ -167,9 +182,10 @@ The end-to-end test runs only with `external/esc` and `external/greco` in place 
 | `settings.py` | Every setting; `python3 -m greco_esc.settings runs` lists the GRECO runs for `run.sh` |
 | `setup.sh` | Clones ESC at `cdefd3b` into `external/esc` and installs scikit-learn |
 | `run.sh` | The cluster job: candidates, M2 files, ESC, GRECO, scores |
+| `combine.py` | Upstream `run_combination.py` with `--vote_mode hypothesis/system/rank` |
 | `prepare.py` | `m2 <split>`: text and M2 per ranked output; `esc`: ESC folders per k; `scores <k>`: checks and clips ESC's scores |
 | `evaluate.py` | Scores every output on `dev_test`; writes `results.csv` and `results.md` |
-| `test_greco_esc.py` | Tests, including the end-to-end ESC → GRECO test |
+| `test_greco_esc.py` | Tests, including the vote modes on upstream's dataset and the end-to-end ESC → GRECO test |
 
 ## Sources
 
