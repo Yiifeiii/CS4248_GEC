@@ -111,6 +111,20 @@ class CachedScorerTests(unittest.TestCase):
             self.assertEqual(len(path.read_text().splitlines()), 3)
             self.assertEqual(json.loads(path.read_text().splitlines()[0])["h"], "x")
 
+    def test_broken_cache_lines_are_skipped(self):
+        # Lines left by two jobs appending at once: invalid JSON, or valid JSON missing fields
+        class Scorer:
+            def score(self, source, candidates):
+                return [0.5] * len(candidates)
+
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp, "cache.jsonl")
+            path.write_text('{"s": "s", "h": "x", "q": 0.9}\n{"s": "s", "h"\n'
+                            '{"s": "s", "q": 0.1}\n42\n{"s": "s", "h": "y", "q": "nan"}\n')
+            scorer = CachedScorer(Scorer(), path)
+            self.assertEqual(scorer.cache, {("s", "x"): 0.9})
+            self.assertEqual(scorer.score("s", ["x", "y"]), [0.9, 0.5])
+
 
 if __name__ == "__main__":
     unittest.main()
