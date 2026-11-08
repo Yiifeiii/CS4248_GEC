@@ -1,5 +1,7 @@
 # CS4248: Grammatical Error Correction
 
+New experiment: [matched BART/T5 curriculum ordering](experiments/matched-order/README.md).
+
 Completed experiment: [single-stage BART/T5 controls and curriculum comparison](experiments/mixed-control/README.md).
 
 This project investigates whether combining alternative corrections from multiple grammatical error correction (GEC) systems improves precision, recall, and coverage of rare error types. The planned approach pools the top-k hypotheses from BART and T5 with GECToR's best correction, then combines their edits using GRECO.
