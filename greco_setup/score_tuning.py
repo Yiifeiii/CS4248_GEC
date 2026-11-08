@@ -3,9 +3,10 @@
 Needs errant (e.g. the gec-train environment), not the GRECO environment:
     python -m greco_setup.score_tuning --split dev_tune.errant
 
-Writes <out>/<split>/scores.csv (every setting) and, for dev_tune, best.json: the alpha
-with the highest ERRANT F0.5 for each k and vote mode, which tune_vote.py --best-from
-then runs on dev_test. Reference edits: data/curriculum/<split>.m2.
+Writes <out>/<split>/scores.csv (every setting), report.md (the best alpha per k and
+vote mode, and the best setting overall) and, unless the split is dev_test, best.json,
+which tune_vote.py --best-from then runs on another split. Reference edits:
+data/curriculum/<split>.m2, or data/dev.m2 for the full dev set (--split dev...).
 """
 
 import argparse
@@ -35,7 +36,8 @@ def errant_scores(source, hyp, ref):
 
 def reference_subset(split, out_dir, n):
     """The split's reference M2, cut to the first n sentences for --limit runs."""
-    ref = Path(f"data/curriculum/{split.split('.')[0]}.m2")
+    base = split.split(".")[0]
+    ref = Path("data/dev.m2") if base == "dev" else Path(f"data/curriculum/{base}.m2")
     blocks = ref.read_text(encoding="utf-8").strip().split("\n\n")
     if n == len(blocks):
         return ref
@@ -44,10 +46,19 @@ def reference_subset(split, out_dir, n):
     return path
 
 
+def pick(rows):
+    """Best row by F0.5; ties go to the smaller alpha."""
+    return max(rows, key=lambda r: (r["f0_5"], -r["alpha"]))
+
+
+def scores(r):
+    return f"{r['f0_5']*100:.1f} ({r['precision']*100:.1f} / {r['recall']*100:.1f})"
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--split", default="dev_tune.errant",
-                        help="folder under --out, e.g. dev_tune.errant or dev_test.errant")
+                        help="folder under --out, e.g. dev_tune.errant, dev_test.errant or dev.errant")
     parser.add_argument("--out", type=Path, default=Path("outputs/greco/tuning"))
     parser.add_argument("--jobs", type=int, default=8, help="files scored in parallel")
     args = parser.parse_args()
@@ -61,9 +72,9 @@ def main():
         sys.exit(f"no predictions under {out_dir}; run greco_setup.tune_vote first")
 
     with ProcessPoolExecutor(args.jobs) as pool:
-        scores = list(pool.map(errant_scores, [source] * len(files), files, [ref] * len(files)))
+        results = list(pool.map(errant_scores, [source] * len(files), files, [ref] * len(files)))
     rows = []
-    for path, s in zip(files, scores):
+    for path, s in zip(files, results):
         k = int(path.parts[-3][1:])
         mode = path.parts[-2]
         alpha = float(re.fullmatch(r"alpha([0-9.]+)\.tgt", path.name).group(1))
@@ -80,14 +91,27 @@ def main():
               f"{r['recall']*100:5.1f} {r['f0_5']*100:5.1f}")
 
     # Best alpha per (k, mode); alpha 0 ('none') competes in every mode
+    ks = sorted({r["k"] for r in rows})
+    modes = sorted({r["mode"] for r in rows} - {"none"})
     best = {}
-    for k in sorted({r["k"] for r in rows}):
+    lines = [f"# GRECO tuning on {args.split} ({n} sentences)", "",
+             "ERRANT F0.5 (P / R) at the best α per k and vote mode; α 0 is no voting.", "",
+             "| k | no voting | " + " | ".join(modes) + " |",
+             "|---|---|" + "---|" * len(modes)]
+    for k in ks:
         base = [r for r in rows if r["k"] == k and r["mode"] == "none"]
         best[f"k{k}"] = {}
-        for mode in sorted({r["mode"] for r in rows if r["k"] == k} - {"none"}):
-            candidates = base + [r for r in rows if r["k"] == k and r["mode"] == mode]
-            winner = max(candidates, key=lambda r: (r["f0_5"], -r["alpha"]))
+        cells = [scores(base[0]) if base else "–"]
+        for mode in modes:
+            winner = pick(base + [r for r in rows if r["k"] == k and r["mode"] == mode])
             best[f"k{k}"][mode] = winner["alpha"]
+            cells.append(f"{scores(winner)}, α {winner['alpha']:.1f}")
+        lines.append(f"| {k} | " + " | ".join(cells) + " |")
+    top = pick(rows)
+    lines += ["", f"**Best setting:** k = {top['k']}, {top['mode']}, α {top['alpha']:.1f}: F0.5 {scores(top)}."]
+    (out_dir / "report.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    print("\n" + "\n".join(lines))
+
     print("\nbest alpha per (k, mode):", json.dumps(best))
     if not args.split.startswith("dev_test"):
         (out_dir / "best.json").write_text(json.dumps(best, indent=2) + "\n", encoding="utf-8")

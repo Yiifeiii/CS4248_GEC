@@ -6,6 +6,9 @@ ERRANT (it needs a different environment) and picks the best alpha per (k, vote 
 Tuning on dev_tune (GRECO environment, repository root):
     python -m greco_setup.tune_vote --split dev_tune --device cuda
 
+Or the whole grid on all of dev (--split dev); score_tuning.py then also reports a
+two-fold estimate that chooses settings on one half and scores them on the other.
+
 Then the chosen settings, once, on dev_test:
     python -m greco_setup.tune_vote --split dev_test --best-from outputs/greco/tuning/dev_tune/best.json
 
@@ -55,7 +58,8 @@ def settings(args):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--split", default="dev_tune", help="data/curriculum/<split>.ids selects the sentences")
+    parser.add_argument("--split", default="dev_tune",
+                        help="data/curriculum/<split>.ids selects the sentences; 'dev' is all of data/dev.src")
     parser.add_argument("--source", type=Path, default=Path("data/dev.src"))
     parser.add_argument("--system", action="append", help="NAME=PATH (k lines per source); default BART, T5, GECToR")
     parser.add_argument("--k", type=int, nargs="+", default=[1, 3, 5])
@@ -75,7 +79,10 @@ def main():
     args = parser.parse_args()
 
     sources_all = read_lines(args.source)
-    ids = [int(x) for x in Path(f"data/curriculum/{args.split}.ids").read_text().split()]
+    if args.split == "dev":
+        ids = list(range(len(sources_all)))
+    else:
+        ids = [int(x) for x in Path(f"data/curriculum/{args.split}.ids").read_text().split()]
     if args.limit:
         ids = ids[:args.limit]
     specs = args.system or DEFAULT_SYSTEMS

@@ -10,6 +10,9 @@
 #   sbatch -J greco-tune-beam cluster/job.sbatch cluster/greco_tune.sh dev_tune --k 1 2 3 5 --tag beam \
 #       --system bart=outputs/bart/full/beam.tgt --system t5=outputs/t5/full/beam.tgt \
 #       --system gector=outputs/gector/dev.tgt
+# The whole grid on all 4,384 dev sentences (split "dev"; scored against data/dev.m2):
+#   sbatch -J greco-dev-beam cluster/job.sbatch cluster/greco_tune.sh dev --k 1 2 3 5 --tag beam \
+#       --system bart=outputs/bart/dev.tgt --system t5=outputs/t5/dev.tgt --system gector=outputs/gector/dev.tgt
 # The first argument is the split; the rest go to tune_vote.py (--edits difflib uses the
 # old difflib edits and writes to <split> instead of <split>.errant).
 set -euo pipefail

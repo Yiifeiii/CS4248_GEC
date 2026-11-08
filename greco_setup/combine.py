@@ -191,7 +191,12 @@ class CachedScorer:
         if self.path.is_file():
             with self.path.open(encoding="utf-8") as f:
                 for line in f:
-                    item = json.loads(line)
+                    # Two jobs appending at once can leave a broken line; skip it, the
+                    # score is simply recomputed
+                    try:
+                        item = json.loads(line)
+                    except json.JSONDecodeError:
+                        continue
                     self.cache[(item["s"], item["h"])] = item["q"]
         self.path.parent.mkdir(parents=True, exist_ok=True)
 
