@@ -72,3 +72,6 @@ Status: submitted; results pending.
 - Local validation: 24 tests: 23 passed, one GRECO environment integration test skipped.
 - Dedicated cluster snapshot: `~/CS4248_GEC_experiments/mixed-control/`.
 - This records submission, not a completed training or F-score result.
+
+Snapshot dependencies `data/`, `external/`, `models/` and `m2scorer/` link to
+the original cluster project. Training outputs and code remain isolated.
