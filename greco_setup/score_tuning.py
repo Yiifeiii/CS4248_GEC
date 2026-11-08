@@ -34,13 +34,35 @@ def errant_scores(source, hyp, ref):
     return dict(zip(["tp", "fp", "fn", "precision", "recall", "f0_5"], map(float, values)))
 
 
+def full_dev_reference():
+    """The M2 of all of dev in data/dev.src order, rebuilt from the dev_tune and dev_test
+    halves. data/dev.m2 is stored in Git LFS, so checkouts without git-lfs (the
+    cluster) only have a pointer file."""
+    blocks = {}
+    for half in ("dev_tune", "dev_test"):
+        ids = [int(x) for x in Path(f"data/curriculum/{half}.ids").read_text().split()]
+        half_blocks = Path(f"data/curriculum/{half}.m2").read_text(encoding="utf-8").strip().split("\n\n")
+        if len(ids) != len(half_blocks):
+            raise ValueError(f"{half}: {len(ids)} ids but {len(half_blocks)} M2 blocks")
+        blocks.update(zip(ids, half_blocks))
+    if sorted(blocks) != list(range(len(blocks))):
+        raise ValueError("dev_tune and dev_test ids do not cover dev exactly once")
+    return [blocks[i] for i in range(len(blocks))]
+
+
 def reference_subset(split, out_dir, n):
     """The split's reference M2, cut to the first n sentences for --limit runs."""
     base = split.split(".")[0]
-    ref = Path("data/dev.m2") if base == "dev" else Path(f"data/curriculum/{base}.m2")
-    blocks = ref.read_text(encoding="utf-8").strip().split("\n\n")
-    if n == len(blocks):
-        return ref
+    if base == "dev":
+        blocks = full_dev_reference()
+    else:
+        ref = Path(f"data/curriculum/{base}.m2")
+        blocks = ref.read_text(encoding="utf-8").strip().split("\n\n")
+        if n == len(blocks):
+            return ref
+    sources = (out_dir / "source.txt").read_text(encoding="utf-8").splitlines()
+    if [b.split("\n")[0][2:] for b in blocks[:n]] != sources:
+        raise ValueError(f"reference M2 does not match {out_dir / 'source.txt'}")
     path = out_dir / "reference.m2"
     path.write_text("\n\n".join(blocks[:n]) + "\n", encoding="utf-8")
     return path
