@@ -1,5 +1,7 @@
 # CS4248: Grammatical Error Correction
 
+New experiments: [four controls per model against the original curriculum baseline](experiments/four-controls/README.md).
+
 Completed experiments: [BART/T5 recipe and matched-order curriculum comparisons](experiments/curriculum-comparison.md).
 
 Completed experiment: [single-stage BART/T5 controls and curriculum comparison](experiments/mixed-control/README.md).

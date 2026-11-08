@@ -12,7 +12,8 @@ class OrderedTrainer(Seq2SeqTrainer):
 
 def validate_order_config(cfg):
     if cfg.get('preserve_train_order'):
-        if cfg['epochs'] != 1 or cfg['grad_accum'] != 1 or cfg.get('max_steps'):
+        if (cfg['epochs'] != 1 or cfg.get('max_steps') or
+                (cfg['grad_accum'] != 1 and not cfg.get('exact_exposure_batches'))):
             raise ValueError('Fixed stream needs one full pass, no accumulation or max-step truncation')
         if cfg['errant_eval'].get('patience'):
             raise ValueError('Early stopping would break matched example exposure')

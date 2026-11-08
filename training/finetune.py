@@ -36,6 +36,7 @@ from training.common import (CURRICULUM, MAX_TOKENS, PREFIX, ROOT, decode, expan
                              pick_device, read_lines, write_lines)
 from training.metrics import m2_subset, score
 from training.ordered import OrderedTrainer, validate_order_config
+from training.exposure_batching import ExactExposureTrainer
 
 DROPOUT_KEY = {'bart': 'dropout', 't5': 'dropout_rate'}
 
@@ -182,7 +183,8 @@ def main():
     if args.errant_steps:
         errant_cfg['steps'] = args.errant_steps
     callback = ErrantEval(errant_cfg, tokenizer, out, dev_src, dev_m2)
-    trainer_class = OrderedTrainer if cfg.get('preserve_train_order') else Seq2SeqTrainer
+    trainer_class = (ExactExposureTrainer if cfg.get('exact_exposure_batches') else
+                     OrderedTrainer if cfg.get('preserve_train_order') else Seq2SeqTrainer)
     trainer = trainer_class(
         model=model, args=training_args, train_dataset=train_set, eval_dataset=loss_set,
         data_collator=DataCollatorForSeq2Seq(tokenizer, model=model, label_pad_token_id=-100),
