@@ -1,0 +1,20 @@
+{
+  "seed": 42,
+  "stage1_repetitions": 3,
+  "stage2_repetitions": 5,
+  "stage_pairs": [
+    561338,
+    33943
+  ],
+  "pairs": 1853729,
+  "sha256": {
+    "stage1.src": "a139e67e09b56596b7f0cfc75d7217bf02f53761da748f1c38fc9e13af3860f8",
+    "stage1.tgt": "68e912e7abdd52d5bf1414995e9f39ea1ba900f9a25f5095f8014f5ea43b238c",
+    "stage2.src": "cb0356298e0e40d0e915b58be9434072a30528a6f73c63527da7a2188560f046",
+    "stage2.tgt": "00f07004a8b8c7bb40a00242f62abaf982519247e63e15a96d949690e2f0d7c7",
+    "mixed.src": "06cf97cb99f9f38a1a0dc5f0e599bd215c2748a5b0109a39422e2de1213cc09e",
+    "mixed.tgt": "b6dc3f0be2ae3915473a472fa0b711301c692e4017b1b33452c43d019c398a1d"
+  },
+  "deduplicated": false,
+  "uses_dev_or_test": false
+}

@@ -1,0 +1,111 @@
+{
+  "experiment": "mixed-control",
+  "completed_on": "2026-11-08",
+  "slurm_preflight": 1094809,
+  "slurm_array": 1094810,
+  "all_completed_exit_0": true,
+  "rows": [
+    {
+      "model": "bart",
+      "run": "bart-base.mixed-control",
+      "elapsed": "01:27:08",
+      "optimizer_steps": 14482,
+      "selected_step": 9000,
+      "selected_epoch": 0.621,
+      "nominal_training_pairs": 1853729,
+      "splits": {
+        "dev_tune": {
+          "sentences": 2000,
+          "single_stage": {
+            "tp": 1147.0,
+            "fp": 880.0,
+            "fn": 2274.0,
+            "precision": 0.5659,
+            "recall": 0.3353,
+            "f0_5": 0.4974
+          },
+          "curriculum": {
+            "tp": 1336.0,
+            "fp": 900.0,
+            "fn": 2085.0,
+            "precision": 0.5975,
+            "recall": 0.3905,
+            "f0_5": 0.5402
+          },
+          "curriculum_gain_points": 4.28
+        },
+        "dev_test": {
+          "sentences": 2384,
+          "single_stage": {
+            "tp": 1318.0,
+            "fp": 1099.0,
+            "fn": 2722.0,
+            "precision": 0.5453,
+            "recall": 0.3262,
+            "f0_5": 0.4807
+          },
+          "curriculum": {
+            "tp": 1531.0,
+            "fp": 1121.0,
+            "fn": 2509.0,
+            "precision": 0.5773,
+            "recall": 0.379,
+            "f0_5": 0.5226
+          },
+          "curriculum_gain_points": 4.19
+        }
+      }
+    },
+    {
+      "model": "t5",
+      "run": "t5-base.mixed-control",
+      "elapsed": "01:22:36",
+      "optimizer_steps": 14482,
+      "selected_step": 13000,
+      "selected_epoch": 0.898,
+      "nominal_training_pairs": 1853729,
+      "splits": {
+        "dev_tune": {
+          "sentences": 2000,
+          "single_stage": {
+            "tp": 1143.0,
+            "fp": 758.0,
+            "fn": 2278.0,
+            "precision": 0.6013,
+            "recall": 0.3341,
+            "f0_5": 0.5184
+          },
+          "curriculum": {
+            "tp": 1384.0,
+            "fp": 894.0,
+            "fn": 2037.0,
+            "precision": 0.6076,
+            "recall": 0.4046,
+            "f0_5": 0.5521
+          },
+          "curriculum_gain_points": 3.37
+        },
+        "dev_test": {
+          "sentences": 2384,
+          "single_stage": {
+            "tp": 1300.0,
+            "fp": 954.0,
+            "fn": 2740.0,
+            "precision": 0.5768,
+            "recall": 0.3218,
+            "f0_5": 0.4979
+          },
+          "curriculum": {
+            "tp": 1578.0,
+            "fp": 1169.0,
+            "fn": 2462.0,
+            "precision": 0.5744,
+            "recall": 0.3906,
+            "f0_5": 0.525
+          },
+          "curriculum_gain_points": 2.71
+        }
+      }
+    }
+  ]
+}

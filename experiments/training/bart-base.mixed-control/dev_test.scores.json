@@ -1,0 +1,34 @@
+{
+  "model": "/mnt/scratch/r/raeedaih/cs4248-gec/checkpoints/bart-base.mixed-control/best",
+  "split": "dev_test",
+  "sentences": 2384,
+  "beams": 5,
+  "prefix": null,
+  "retokenize": false,
+  "git_commit": null,
+  "decode_seconds": 121,
+  "device": "cuda",
+  "errant": {
+    "correction": {
+      "tp": 1318.0,
+      "fp": 1099.0,
+      "fn": 2722.0,
+      "precision": 0.5453,
+      "recall": 0.3262,
+      "f0_5": 0.4807
+    },
+    "detection": {
+      "tp": 1602.0,
+      "fp": 827.0,
+      "fn": 2532.0,
+      "precision": 0.6595,
+      "recall": 0.3875,
+      "f0_5": 0.5783
+    }
+  },
+  "m2": {
+    "precision": 0.6288,
+    "recall": 0.3544,
+    "f0_5": 0.5444
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "model": "/mnt/scratch/r/raeedaih/cs4248-gec/checkpoints/t5-base.mixed-control/best",
+  "split": "dev_test",
+  "sentences": 2384,
+  "beams": 5,
+  "prefix": null,
+  "retokenize": false,
+  "git_commit": null,
+  "decode_seconds": 49,
+  "device": "cuda",
+  "errant": {
+    "correction": {
+      "tp": 1300.0,
+      "fp": 954.0,
+      "fn": 2740.0,
+      "precision": 0.5768,
+      "recall": 0.3218,
+      "f0_5": 0.4979
+    },
+    "detection": {
+      "tp": 1589.0,
+      "fp": 681.0,
+      "fn": 2545.0,
+      "precision": 0.7,
+      "recall": 0.3844,
+      "f0_5": 0.6013
+    }
+  },
+  "m2": {
+    "precision": 0.6568,
+    "recall": 0.3491,
+    "f0_5": 0.5584
+  }
+}

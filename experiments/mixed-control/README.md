@@ -1,5 +1,8 @@
 # Single-stage BART and T5 curriculum controls
 
+**Completed:** both runs succeeded. See [all F-scores and conclusions](results.md)
+and the [machine-readable comparison](results.json).
+
 Question: how does a stage-free training recipe compare with Dasha's curriculum?
 Both models start from their original pretrained checkpoint, not stage-1 weights.
 
@@ -63,7 +66,7 @@ Results go to `experiments/training/{bart,t5}-base.mixed-control/`. Retain
 run_info.json, trainer_state.json, best_checkpoint.json, score JSONs and the mixed
 data manifest. Report actual optimizer steps and selected checkpoint alongside F0.5.
 
-Status: submitted; results pending.
+Status: completed successfully; final results are linked above.
 
 ## Submission — 8 November 2026
 
@@ -88,4 +91,4 @@ on allocated GPUs. This changes validation/packaging, not the training recipe.
 Replacement submission on 8 November 2026: CPU preflight **1094809**, dependent
 BART/T5 array **1094810** (index0 BART, index1 T5). Executed source commit:
 `39b9029`. Initial failed array 1094732 did not train either model. Results
-remain pending; the training recipe and exposure counts have not changed.
+are now complete; the training recipe and exposure counts have not changed.
