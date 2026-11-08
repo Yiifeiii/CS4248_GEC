@@ -1,0 +1,70 @@
+{
+  "run": "matched-order-20261108/bart-shuffled",
+  "config": {
+    "run": "matched-order-20261108/bart-shuffled",
+    "init": "facebook/bart-base",
+    "learning_rate": 5e-05,
+    "train": "${ORDER_DATA_ROOT}/shuffled/train",
+    "errorful_only": false,
+    "epochs": 1,
+    "batch_size": 64,
+    "grad_accum": 1,
+    "warmup_steps": 2000,
+    "loss_eval_steps": 2000,
+    "save_steps": 2000,
+    "errant_eval": {
+      "steps": 2000,
+      "sentences": 2000,
+      "beams": 5,
+      "patience": null
+    },
+    "dropout": 0.1,
+    "weight_decay": 0.01,
+    "label_smoothing": 0.1,
+    "seed": 42,
+    "save_total_limit": 2,
+    "logging_steps": 50,
+    "output_dir": "${CKPT_ROOT}/matched-order-20261108/bart-shuffled",
+    "preserve_train_order": true,
+    "logical_rounds": 8,
+    "order_mode": "shuffled",
+    "exposure_manifest": "${ORDER_DATA_ROOT}/manifest.json"
+  },
+  "config_path": "training/configs/matched-order/bart-shuffled.json",
+  "args": {
+    "config": "training/configs/matched-order/bart-shuffled.json",
+    "resume": "auto",
+    "output_dir": null,
+    "max_steps": null,
+    "train_limit": null,
+    "dev_limit": null,
+    "errant_steps": null
+  },
+  "init": "facebook/bart-base",
+  "family": "bart",
+  "prefix": "",
+  "training_pairs": 1853729,
+  "git_commit": null,
+  "data_manifest_sha256": "8d8b1bb1b0b40d4c6ecac589a7e7467ba5fd5344d3ffd9550c98a4e0ccb515a7",
+  "versions": {
+    "torch": "2.11.0+cu128",
+    "transformers": "4.46.3"
+  },
+  "device": "NVIDIA H100 NVL MIG 3g.47gb",
+  "started": "2026-11-08 13:15:10",
+  "finished": "2026-11-08 14:32:55",
+  "steps": 28965,
+  "best": {
+    "step": 20000,
+    "epoch": 0.69,
+    "beams": 5,
+    "sentences": 2000,
+    "tp": 1213.0,
+    "fp": 950.0,
+    "fn": 2208.0,
+    "precision": 0.5608,
+    "recall": 0.3546,
+    "f0_5": 0.5024,
+    "seconds": 41
+  }
+}

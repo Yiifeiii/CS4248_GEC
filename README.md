@@ -1,6 +1,6 @@
 # CS4248: Grammatical Error Correction
 
-New experiment: [matched BART/T5 curriculum ordering](experiments/matched-order/README.md).
+Completed experiments: [BART/T5 recipe and matched-order curriculum comparisons](experiments/curriculum-comparison.md).
 
 Completed experiment: [single-stage BART/T5 controls and curriculum comparison](experiments/mixed-control/README.md).
 

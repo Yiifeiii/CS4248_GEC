@@ -1,5 +1,8 @@
 # Matched curriculum-order experiment: BART and T5
 
+**Completed:** all four runs succeeded. See [final F-scores](results.md),
+[machine-readable results](results.json), and [both comparison designs](../curriculum-comparison.md).
+
 Question: does broad-correction-first, W&I-later ordering help compared with
 mixing exactly the same training presentations throughout?
 
@@ -75,9 +78,9 @@ configs retain their previous sampling behavior. Results live under
 scores, and `best/` for dev_tune diagnostics. Retain exposure/initialization
 manifests, full run metadata and trainer state with results.
 
-Status: submitted on 8 November 2026. CPU preflight **1095333**; dependent
+Status: all four runs completed successfully on 8 November 2026. CPU preflight **1095333**; dependent
 GPU array **1095334**, indices0–3 as above, at most two concurrent tasks.
 Executed source: `2c3d817`. Dedicated snapshot:
 `~/CS4248_GEC_experiments/matched-order/`. Local validation: 29 tests,
 28 passed and one environment-dependent GRECO integration test skipped. Shell
-syntax, no-submit preview and whitespace checks passed. No scores claimed yet.
+syntax, no-submit preview and whitespace checks passed. Final results are linked above.

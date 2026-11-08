@@ -1,0 +1,34 @@
+{
+  "model": "/mnt/scratch/r/raeedaih/cs4248-gec/checkpoints/matched-order-20261108/bart-curriculum/final",
+  "split": "dev_tune",
+  "sentences": 2000,
+  "beams": 5,
+  "prefix": null,
+  "retokenize": false,
+  "git_commit": null,
+  "decode_seconds": 271,
+  "device": "cuda",
+  "errant": {
+    "correction": {
+      "tp": 1258.0,
+      "fp": 897.0,
+      "fn": 2163.0,
+      "precision": 0.5838,
+      "recall": 0.3677,
+      "f0_5": 0.5224
+    },
+    "detection": {
+      "tp": 1499.0,
+      "fp": 659.0,
+      "fn": 1999.0,
+      "precision": 0.6946,
+      "recall": 0.4285,
+      "f0_5": 0.6179
+    }
+  },
+  "m2": {
+    "precision": 0.656,
+    "recall": 0.3942,
+    "f0_5": 0.5791
+  }
+}

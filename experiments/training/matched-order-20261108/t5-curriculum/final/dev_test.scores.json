@@ -1,0 +1,34 @@
+{
+  "model": "/mnt/scratch/r/raeedaih/cs4248-gec/checkpoints/matched-order-20261108/t5-curriculum/final",
+  "split": "dev_test",
+  "sentences": 2384,
+  "beams": 5,
+  "prefix": null,
+  "retokenize": false,
+  "git_commit": null,
+  "decode_seconds": 49,
+  "device": "cuda",
+  "errant": {
+    "correction": {
+      "tp": 1537.0,
+      "fp": 1104.0,
+      "fn": 2503.0,
+      "precision": 0.582,
+      "recall": 0.3804,
+      "f0_5": 0.5262
+    },
+    "detection": {
+      "tp": 1862.0,
+      "fp": 796.0,
+      "fn": 2272.0,
+      "precision": 0.7005,
+      "recall": 0.4504,
+      "f0_5": 0.6305
+    }
+  },
+  "m2": {
+    "precision": 0.6646,
+    "recall": 0.4132,
+    "f0_5": 0.5925
+  }
+}

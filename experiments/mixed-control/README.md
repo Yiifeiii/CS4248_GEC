@@ -3,6 +3,10 @@
 **Completed:** both runs succeeded. See [all F-scores and conclusions](results.md)
 and the [machine-readable comparison](results.json).
 
+The follow-up [matched-order experiment](../matched-order/results.md) isolates
+ordering under a shared recipe. See [both comparisons](../curriculum-comparison.md)
+before interpreting the original recipe-level gains as an ordering effect.
+
 Question: how does a stage-free training recipe compare with Dasha's curriculum?
 Both models start from their original pretrained checkpoint, not stage-1 weights.
 

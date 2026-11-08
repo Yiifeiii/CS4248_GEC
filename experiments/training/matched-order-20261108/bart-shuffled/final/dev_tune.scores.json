@@ -1,0 +1,34 @@
+{
+  "model": "/mnt/scratch/r/raeedaih/cs4248-gec/checkpoints/matched-order-20261108/bart-shuffled/final",
+  "split": "dev_tune",
+  "sentences": 2000,
+  "beams": 5,
+  "prefix": null,
+  "retokenize": false,
+  "git_commit": null,
+  "decode_seconds": 267,
+  "device": "cuda",
+  "errant": {
+    "correction": {
+      "tp": 1222.0,
+      "fp": 1022.0,
+      "fn": 2199.0,
+      "precision": 0.5446,
+      "recall": 0.3572,
+      "f0_5": 0.4929
+    },
+    "detection": {
+      "tp": 1474.0,
+      "fp": 774.0,
+      "fn": 2024.0,
+      "precision": 0.6557,
+      "recall": 0.4214,
+      "f0_5": 0.5901
+    }
+  },
+  "m2": {
+    "precision": 0.6179,
+    "recall": 0.3836,
+    "f0_5": 0.5506
+  }
+}
