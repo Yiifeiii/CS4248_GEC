@@ -75,4 +75,9 @@ configs retain their previous sampling behavior. Results live under
 scores, and `best/` for dev_tune diagnostics. Retain exposure/initialization
 manifests, full run metadata and trainer state with results.
 
-Status: prepared; no completed scores claimed.
+Status: submitted on 8 November 2026. CPU preflight **1095333**; dependent
+GPU array **1095334**, indices0–3 as above, at most two concurrent tasks.
+Executed source: `2c3d817`. Dedicated snapshot:
+`~/CS4248_GEC_experiments/matched-order/`. Local validation: 29 tests,
+28 passed and one environment-dependent GRECO integration test skipped. Shell
+syntax, no-submit preview and whitespace checks passed. No scores claimed yet.
