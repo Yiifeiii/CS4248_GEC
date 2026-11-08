@@ -14,7 +14,7 @@ assert reference['versions']=={'torch':torch.__version__,'transformers':transfor
 CHECK
 # Each job builds its own deterministic copy; no shared-output write race.
 data_root="$CKPT_ROOT/mixed-control-data/$family"
-python -m training.check_data
+# Full data/import validation runs in the CPU preflight dependency.
 python -m training.build_mixed_control --output "$data_root/train"
 export MIXED_CONTROL_TRAIN="$data_root/train"
 config="training/configs/mixed-control/$family.json"

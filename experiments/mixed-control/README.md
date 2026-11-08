@@ -75,3 +75,12 @@ Status: submitted; results pending.
 
 Snapshot dependencies `data/`, `external/`, `models/` and `m2scorer/` link to
 the original cluster project. Training outputs and code remain isolated.
+
+## Repair after initial submission
+
+Array 1094732 failed before training (both tasks, exit 1) because the isolated
+snapshot omitted the original root `m2_to_parallel.py` dependency. It has been
+restored. The launcher now runs a CPU compute-node preflight covering source
+imports, scorer files, exact historical software versions, tests and full data
+validation. The GPU array depends on its success, avoiding repeated setup failures
+on allocated GPUs. This changes validation/packaging, not the training recipe.
