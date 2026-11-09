@@ -72,6 +72,11 @@ def main():
         report = {'model': name, 'split': split, 'sentences': len(sources), 'beams': args.beams,
                   'prefix': args.prefix, 'retokenize': args.retokenize, 'git_commit': git_commit(),
                   'decode_seconds': seconds, 'device': device.type}
+        if gold and gold.read_text(encoding='utf-8')[:40].startswith('version https://git-lfs'):
+            # data/test.conll14.m2 is in Git LFS; without git-lfs (the cluster) it is a pointer file
+            print(f'{split:<12} {gold} is a Git LFS pointer: predictions only, score where git-lfs '
+                  'has pulled it (greco_setup/test_report.py)', flush=True)
+            gold = None
         if gold:
             if args.limit:
                 src_path = args.out / f'{split}.{args.limit}.src'
