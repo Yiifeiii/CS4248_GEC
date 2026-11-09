@@ -18,7 +18,7 @@ This combines our three systems the way the GRECO paper's strongest setup does (
 | Best single system | GECToR | 54.77 | 71.57 | 64.03 |
 
 - **Main result: GRECO + ESC, k = 3, `rank` vote 0.4.** It is the highest of the 28 combinations on BEA-2019 dev (60.35), chosen before any test score was seen. It scores **77.24 on BEA-2019 test** and **66.14 on CoNLL-2014**, 5.7 and 2.1 points above GECToR. These are the held-out numbers.
-- **Best on BEA-2019 test: GRECO + ESC, k = 2, `system` vote 0.1, at 77.45.** It is 0.21 above the main result, a difference within noise (see below).
+- **Best on BEA-2019 test: GRECO + ESC, k = 2, `system` vote 0.1, at 77.45.** It is 0.21 above the main result (see below for why).
 - **Best on CoNLL-2014 test: GRECO alone, without ESC, k = 2, `rank` vote 0.2, at 67.98 M2.** ESC, trained on BEA-2019 dev, lowers CoNLL-2014's M2 by trading recall for precision. The GRECO paper likewise uses ESC only for BEA-2019.
 - The two "best on test" rows were picked by looking at test scores. They show the best each setup reaches, not held-out estimates.
 
@@ -30,17 +30,17 @@ This combines our three systems the way the GRECO paper's strongest setup does (
 
 ### Why k = 2 beats k = 3 on BEA-2019 test
 
-The best dev model (k = 3, `rank` 0.4) and the best BEA-2019 model (k = 2, `system` 0.1) differ by **0.21** on BEA-2019 test (77.24 vs 77.45). That is too small to mean that k = 2 is better:
+The best dev model (k = 3, `rank` 0.4) and the best BEA-2019 model (k = 2, `system` 0.1) differ by **0.21** on BEA-2019 test (77.24 vs 77.45). On dev the order was the other way round: k = 3 was ahead by 0.13 (60.35 vs 60.22).
 
-- **The lead flips between dev and test.** On dev, k = 3 was ahead by 0.13 (60.35 vs 60.22). BEA-2019 dev and test are both W&I+LOCNESS. When a lead this small changes sign between two samples of the same kind of text, that is what random variation looks like.
-- **It is inside the spread of near-identical runs.** The six best GRECO + ESC runs on BEA-2019 test (k = 1, 2 and 3) are all within 0.3 of each other (77.16–77.45). On a few thousand sentences, F0.5 moves by a few tenths when the sentences are resampled, so their order is partly chance. No significance test was run: BEA-2019's test gold is hidden, so a paired bootstrap is only possible on dev.
-- **The model is chosen on dev,** as the GRECO paper does. Switching to k = 2 because of this gap would be tuning on the test set.
+**We attribute this to differences in the content of the two sets.** Dev and test were written by different learners. They contain different sentences, a different mix of error types, and different reference annotations; the test references are hidden on Codabench. A setting that suits one set's errors slightly better can rank a little lower on the other. We did not test whether the gap is statistically significant.
 
-**It still supports the top-k hypothesis: combining more than each system's 1-best helps, once ESC filters the extra edits.**
+The best dev model stays the main result, because it was chosen before any test score was seen. Switching to k = 2 because of a test score would be tuning on the test set.
 
-- **Both winners use k > 1.** On BEA-2019 test, the best k = 2 and k = 3 GRECO + ESC runs (77.45 and 77.24) are both above the best k = 1 run (77.17). On dev, the best k = 3 run (60.35) is above the best k = 1 run (60.31).
-- **Without ESC, extra hypotheses hurt.** GRECO alone is best at k = 1 (76.82 on BEA-2019 test) and falls to at most 74.83 at k = 2, 74.56 at k = 3 and 73.67 at k = 5. With ESC, every k from 2 to 5 stays within about 0.7 (76.73–77.45). ESC is what makes the extra hypotheses usable.
-- **The gain over k = 1 is modest:** +0.07 to +0.28 on BEA-2019 test, +0.04 on dev. So the claim the results support is "k > 1 with ESC is at least as good as k = 1, and slightly better", not a large gain.
+**What this says about using more than each system's 1-best (k > 1):**
+
+- **With ESC, adding hypotheses does not hurt.** Every k from 1 to 5 scores between 76.73 and 77.45 on BEA-2019 test, and both best models use k > 1.
+- **Without ESC, adding hypotheses clearly hurts.** GRECO alone falls from 76.82 at k = 1 to at most 74.83 at k = 2, 74.56 at k = 3 and 73.67 at k = 5.
+- **So ESC is what makes the extra hypotheses safe to use.** The best k > 1 runs are only 0.07–0.28 above the best k = 1 run on test (0.04 on dev). The results show that k > 1 is no worse than k = 1 once ESC is on, not that it is better.
 
 **Full results, every run, in [`results/`](results/):**
 
@@ -161,7 +161,7 @@ Upstream `run_combination.py` computes only "hypothesis"; `combine.py` adds "sys
 **Why α was reused, not retuned with ESC.** The α come from the GRECO voting tuning already done on `main` (plain beam search lists, full dev set). They were not tuned again with ESC switched on, and r = 0.7 was not tuned at all. There are three reasons:
 
 - **The tuning already answers the question α is for.** α sets how much GRECO trusts agreement between inputs. It was tuned for exactly these candidate lists (same models, same decoding, same k) on the same dev set the paper tunes on. The GRECO paper likewise reports one vote coefficient and takes r = 0.7 as given rather than retuning them together.
-- **With ESC on, α barely matters.** At r = 0.7, ESC's edit term carries 70 % of the score, and the vote is a small extra term. On the full dev set, every GRECO + ESC run, whatever its α and vote mode, falls between 59.59 and 60.35: within 0.8 points, about the noise between runs. Without ESC, the same α choices move GRECO by up to 3.7 points (k = 5). So a retuned α could gain only a fraction of a point.
+- **With ESC on, α barely matters.** At r = 0.7, ESC's edit term carries 70 % of the score, and the vote is a small extra term. On the full dev set, every GRECO + ESC run, whatever its α and vote mode, falls between 59.59 and 60.35: within 0.8 points. Without ESC, the same α choices move GRECO by up to 3.7 points (k = 5). So a retuned α could gain only a fraction of a point.
 - **Retuning with ESC would be costly to do cleanly.** It would mean 10 α values × 3 vote modes × 4 k, each run on both dev halves for cross-fitting: about 240 GRECO runs of 3–8 minutes each, or roughly 20 GPU hours, for the small gain above. Tuning α on the same dev sentences ESC is trained on would also need nested cross-fitting to stay fair. Given the time left in the project, we kept the existing α and record this as a limitation (section 4).
 
 **Earlier runs used the `dev_tune`-only α** (`dev_tune.errant.beam`: k1 0.4, rank 0.4 at every k; hypothesis and system as now). They kept `dev_test` held out. The runs whose α changed (k1 voting, k2 `rank` 0.2, k5 `rank` 0.6) are new runs with new names. Job 1101538 made their dev outputs with the new α; the old outputs stay on disk. The changes were small (−0.25 to +0.48, see [`results/dev.md`](results/dev.md)), and the best dev model (k3, `rank` 0.4) has the same α under both tunings.

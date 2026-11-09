@@ -82,7 +82,7 @@ None of them overtook the best dev model, which has the same α (0.4) under both
 2. **GRECO + ESC is flat across k**, at 59.59–60.35 for all 14 GRECO + ESC rows. GRECO alone falls as k grows, from 59.85 at k = 1 to 53.81–57.50 at k = 5. More hypotheses give GRECO more wrong edits to choose from, and ESC filters them out.
 3. **ESC's gain grows with k**: +0.4 to +1.1 at k = 1, +1.6 to +2.6 at k = 2, +2.3 to +4.0 at k = 3 and +2.1 to +6.2 at k = 5.
 4. **All GRECO + ESC rows beat ESC alone** (58.65–59.10) and every single system (BART 53.07, T5 53.74, GECToR 54.77).
-5. **The top runs are within noise of each other.** The best dev model is the highest, but five other GRECO + ESC rows are within 0.15 of it: k = 1 no vote (60.31), k = 3 `system` (60.31), k = 3 no vote (60.23), k = 2 `system` (60.22) and k = 1 vote 0.1 (60.21).
+5. **The top runs are close together.** The best dev model is the highest, and five other GRECO + ESC rows are within 0.15 of it: k = 1 no vote (60.31), k = 3 `system` (60.31), k = 3 no vote (60.23), k = 2 `system` (60.22) and k = 1 vote 0.1 (60.21).
 
 ## Dev against the test sets
 
@@ -133,7 +133,7 @@ Every run, on all three sets. BEA-2019 test is ERRANT F0.5 from Codabench. For C
 - `rank` voting helps GRECO alone most.
 - Every GRECO + ESC run beats ESC alone and the single systems.
 
-Only the order of the near-tied top runs changes. k = 2 `system` 0.1 was 0.13 behind the best dev model on dev and is 0.21 ahead of it on test. This is within noise and still supports the top-k hypothesis; see [`bea19.md`](bea19.md#why-k--2-beats-k--3-on-bea-2019-test).
+Only the order of the near-tied top runs changes. k = 2 `system` 0.1 was 0.13 behind the best dev model on dev and is 0.21 ahead of it on test. See [`bea19.md`](bea19.md#why-k--2-beats-k--3-on-bea-2019-test) for how we interpret this.
 
 **What carries over to CoNLL-2014.** On ERRANT the pattern partly holds: ESC helps in 13 of 14 pairs. On M2, the official metric, GRECO alone is best and ESC lowers the score at k ≤ 3.
 
@@ -143,6 +143,6 @@ None of this means a run was set up wrongly: every run uses the same code and se
 
 1. **Different sentences and references.** Dev and BEA-2019 test are both W&I+LOCNESS, but they come from different writers. The test references are hidden on Codabench. CoNLL-2014 is a different corpus (NUCLE essays) with different annotators, guidelines and an M2 metric. Absolute scores are not comparable across sets: every BEA-2019 test row is 13.5–17.5 points above its dev row, single systems, ESC alone and GRECO alone included, so the gap comes from the data and its references, not from the combination. Compare how runs rank within a set, not raw numbers across sets.
 2. **The choices were made on dev, so dev flatters them.** α was tuned on the full dev set, and the best dev model was the highest of 28 combinations on it. The best of many close runs on a set is usually a little lucky on that set (the "winner's curse"), so its dev score overstates what it gets elsewhere. The test sets are the unbiased check.
-3. **Differences between the top runs are within noise.** The leading GRECO + ESC rows differ by 0.1–0.3 on both dev and test. On a few thousand sentences, F0.5 moves by more than that when the sentences are resampled, so the order among them can flip between sets, as k = 2 and k = 3 did.
+3. **The top runs are close together.** The leading GRECO + ESC rows differ by 0.1–0.3 on both dev and test, so small differences in the sets' content (point 1) are enough to change their order, as k = 2 and k = 3 did.
 4. **ESC was trained on more data for the test sets.** For dev scores (cross-fitting), each ESC learned from one half, 2,000 or 2,384 sentences. For the test sets, ESC learned from all 4,384. A better-trained ESC is one plausible reason ESC's gain on BEA-2019 test is larger than on dev at k ≥ 2 (k = 3 no vote: +3.97 on dev, +6.55 on test).
 5. **ESC is fitted to BEA's annotation and ERRANT's edits.** That fits BEA-2019 test, which shares both. It does not fit CoNLL-2014's annotation or the M2 scorer's edit matching, so ESC's effect on CoNLL-2014 M2 differs from dev ERRANT (see [`conll14.md`](conll14.md)).

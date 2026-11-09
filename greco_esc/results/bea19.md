@@ -83,22 +83,22 @@ k is the number of hypotheses taken from each of BART and T5. GECToR always cont
 2. **ESC is what makes the combination work on BEA-2019.** At every k and with every voting setting, GRECO + ESC beats GRECO alone, by +0.3–1.0 at k = 1, +2.4–4.3 at k = 2, +2.7–6.6 at k = 3 and +3.1–9.5 at k = 5. The more hypotheses GRECO sees, the more ESC adds. Every GRECO + ESC run also beats ESC alone.
 3. **GRECO alone gets worse as k grows.** Its best score is 76.82 at k = 1, 74.83 at k = 2, 74.56 at k = 3 and 73.67 at k = 5. Without `rank` voting it drops below GECToR (71.57): k = 3 with no vote (70.22) and the three other k = 5 runs (67.26–69.58). More hypotheses give the beam search more wrong edits to choose from. With ESC, the score stays flat across k: 76.73–76.85 at k = 5, against 77.16–77.17 at k = 1.
 4. **`rank` voting is the best voting for GRECO alone at larger k.** At k = 3 it scores 74.56, against 70.22 without voting and about 71.9 for `hypothesis` and `system`. At k = 5 it scores 73.67, against 67.26–69.58. It trusts each system's 1-best more than its lower-ranked hypotheses. With ESC on, the vote modes are within 0.5 of each other.
-5. **The top GRECO + ESC runs are within noise.** The best (k = 2 `system`, 77.45) and the best dev model (k = 3 `rank`, 77.24) are 0.21 apart, and on dev the order was reversed by 0.13. See [Why k = 2 beats k = 3](#why-k--2-beats-k--3-on-bea-2019-test) below.
+5. **The top GRECO + ESC runs are close.** The best (k = 2 `system`, 77.45) and the best dev model (k = 3 `rank`, 77.24) are 0.21 apart, and on dev the order was reversed by 0.13. See [Why k = 2 beats k = 3](#why-k--2-beats-k--3-on-bea-2019-test) below.
 6. **The test set ranks the runs as the full dev set did.** On dev, GRECO + ESC was flat across k, GRECO alone fell with k, and rank voting helped most without ESC. All three hold here.
 
 ## Why k = 2 beats k = 3 on BEA-2019 test
 
-The best dev model (k = 3, `rank` 0.4) and the best BEA-2019 model (k = 2, `system` 0.1) differ by **0.21** on BEA-2019 test (77.24 vs 77.45). That is too small to mean that k = 2 is better:
+The best dev model (k = 3, `rank` 0.4) and the best BEA-2019 model (k = 2, `system` 0.1) differ by **0.21** on BEA-2019 test (77.24 vs 77.45). On dev the order was the other way round: k = 3 was ahead by 0.13 (60.35 vs 60.22).
 
-- **The lead flips between dev and test.** On dev, k = 3 was ahead by 0.13 (60.35 vs 60.22). BEA-2019 dev and test are both W&I+LOCNESS. When a lead this small changes sign between two samples of the same kind of text, that is what random variation looks like.
-- **It is inside the spread of near-identical runs.** The six best GRECO + ESC runs on BEA-2019 test (k = 1, 2 and 3) are all within 0.3 of each other (77.16–77.45). On a few thousand sentences, F0.5 moves by a few tenths when the sentences are resampled, so their order is partly chance. No significance test was run: BEA-2019's test gold is hidden, so a paired bootstrap is only possible on dev.
-- **The model is chosen on dev,** as the GRECO paper does. Switching to k = 2 because of this gap would be tuning on the test set.
+**We attribute this to differences in the content of the two sets.** Dev and test were written by different learners. They contain different sentences, a different mix of error types, and different reference annotations; the test references are hidden on Codabench. A setting that suits one set's errors slightly better can rank a little lower on the other. We did not test whether the gap is statistically significant.
 
-**It still supports the top-k hypothesis: combining more than each system's 1-best helps, once ESC filters the extra edits.**
+The best dev model stays the main result, because it was chosen before any test score was seen. Switching to k = 2 because of a test score would be tuning on the test set.
 
-- **Both winners use k > 1.** On BEA-2019 test, the best k = 2 and k = 3 GRECO + ESC runs (77.45 and 77.24) are both above the best k = 1 run (77.17). On dev, the best k = 3 run (60.35) is above the best k = 1 run (60.31).
-- **Without ESC, extra hypotheses hurt.** GRECO alone is best at k = 1 (76.82 on BEA-2019 test) and falls to at most 74.83 at k = 2, 74.56 at k = 3 and 73.67 at k = 5. With ESC, every k from 2 to 5 stays within about 0.7 (76.73–77.45). ESC is what makes the extra hypotheses usable.
-- **The gain over k = 1 is modest:** +0.07 to +0.28 on BEA-2019 test, +0.04 on dev. So the claim the results support is "k > 1 with ESC is at least as good as k = 1, and slightly better", not a large gain.
+**What this says about using more than each system's 1-best (k > 1):**
+
+- **With ESC, adding hypotheses does not hurt.** Every k from 1 to 5 scores between 76.73 and 77.45 on BEA-2019 test, and both best models use k > 1.
+- **Without ESC, adding hypotheses clearly hurts.** GRECO alone falls from 76.82 at k = 1 to at most 74.83 at k = 2, 74.56 at k = 3 and 73.67 at k = 5.
+- **So ESC is what makes the extra hypotheses safe to use.** The best k > 1 runs are only 0.07–0.28 above the best k = 1 run on test (0.04 on dev). The results show that k > 1 is no worse than k = 1 once ESC is on, not that it is better.
 
 ## Reproducing
 
