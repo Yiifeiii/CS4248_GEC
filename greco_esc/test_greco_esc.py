@@ -222,6 +222,73 @@ class FullDevTests(unittest.TestCase):
             evaluate.merge({settings.TRAIN_SPLIT: ['a'], settings.TEST_SPLIT: ['b', 'c', 'd']})
 
 
+class TestSetTests(unittest.TestCase):
+    """test.sh: settings fixed on dev, ESC trained on the full dev set, test sets never trained on."""
+
+    def test_the_test_runs_are_fixed_and_their_esc_uses_the_full_dev_model(self):
+        self.assertEqual(settings.TEST_RUNS[0], ('greco+esc.k3.vote0', 3, 0, True, 'hypothesis'))
+        for name, k, vote, esc, mode in settings.TEST_RUNS:
+            if esc:
+                self.assertEqual(k, settings.FINAL_K, name)
+            self.assertIn(mode, settings.VOTE_MODES)
+
+    def test_test_sets_share_one_esc_model_outside_the_dev_folders(self):
+        self.assertEqual(settings.esc_home(3, 'conll14'), settings.esc_home(3, 'bea19'))
+        self.assertEqual(settings.esc_home(3, 'conll14'), settings.ROOT / 'esc' / 'final' / 'k3')
+        self.assertEqual(settings.source('conll14'), Path('data/test.conll14.src'))
+        self.assertEqual(settings.source('dev_tune'), settings.DATA / 'dev_tune.src')
+
+    def test_the_full_dev_esc_trains_on_both_halves_and_the_test_set_has_no_gold(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            data, root = toy_pool(tmp)
+            # a 3-sentence toy test set with the k = 1 inputs
+            test_src = Path(tmp, 'test.src')
+            test_src.write_text('A b .\nC d .\nE f .\n', encoding='utf-8')
+            for sub in ('text', 'm2'):
+                (root / 'toy' / sub).mkdir(parents=True)
+            for name in settings.inputs(1):
+                (root / 'toy' / 'text' / f'{name}.txt').write_text('x\n' * 3, encoding='utf-8')
+                write_m2(root / 'toy' / 'm2' / f'{name}.m2', ['A b .', 'C d .', 'E f .'], [[], [], []])
+            patches = [mock.patch.object(settings, 'DATA', data), mock.patch.object(settings, 'ROOT', root),
+                       mock.patch.object(settings, 'FINAL_K', 1),
+                       mock.patch.dict(settings.TEST_SETS, {'toy': (test_src, None)})]
+            for p in patches:
+                p.start()
+                self.addCleanup(p.stop)
+            with contextlib.redirect_stdout(io.StringIO()):
+                prepare.build_final_esc(['toy'])
+            home = root / 'esc' / 'final' / 'k1'
+            # 20 dev_tune + 20 dev_test sentences, in every file ESC reads
+            self.assertEqual(len(read_lines(home / 'dev' / 'text' / 'source.txt')), 40)
+            self.assertEqual(len(read_lines(home / 'dev' / 'text' / 'bart-1.txt')), 40)
+            for name in settings.inputs(1) + ['target']:
+                self.assertEqual(len(prepare.m2_sources(home / 'dev' / 'm2' / f'{name}.m2')), 40, name)
+            self.assertEqual(sorted(p.name for p in (home / 'toy' / 'text').iterdir()),
+                             ['bart-1.txt', 'gector-1.txt', 'source.txt', 't5-1.txt'])
+            self.assertFalse((home / 'toy' / 'm2' / 'target.m2').exists())
+            self.assertEqual(read_lines(home / 'toy' / 'text' / 'source.txt'), ['A b .', 'C d .', 'E f .'])
+
+    def test_an_lfs_pointer_gold_is_not_scored(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            src, gold = Path(tmp, 't.src'), Path(tmp, 't.m2')
+            src.write_text('a\nb\n', encoding='utf-8')
+            gold.write_text('version https://git-lfs.github.com/spec/v1\noid sha256:0\nsize 1\n', encoding='utf-8')
+            root = Path(tmp, 'runs')
+            with mock.patch.object(settings, 'ROOT', root), \
+                    mock.patch.dict(settings.TEST_SETS, {'toy': (src, gold)}):
+                for label, path in evaluate.test_outputs('toy', 'released'):
+                    path.parent.mkdir(parents=True, exist_ok=True)
+                    path.write_text('a\nb', encoding='utf-8')
+                log = io.StringIO()
+                with contextlib.redirect_stdout(log):
+                    evaluate.main_test('toy', 'released')
+            self.assertIn('Git LFS pointer', log.getvalue())
+            self.assertFalse((root / 'toy' / 'released' / 'results.md').exists())
+
+    def test_the_shell_script_parses(self):
+        subprocess.run(['bash', '-n', str(REPO / 'greco_esc' / 'test.sh')], check=True)
+
+
 def prepare_dirs(root, k):
     with mock.patch.object(settings, 'ROOT', root):
         return prepare.esc_dir(k, settings.TRAIN_SPLIT), prepare.esc_dir(k, settings.TEST_SPLIT)

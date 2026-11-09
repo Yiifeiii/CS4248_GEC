@@ -6,6 +6,8 @@ The shell scripts read the runs from here, so a setting is changed only in this 
     python3 -m greco_esc.settings inputs 3    # the input names for k = 3, in combination order
     python3 -m greco_esc.settings splits      # each test split and the split ESC trains on for it
     python3 -m greco_esc.settings esc_home 3 dev_tune   # ESC's folder for that k and test split
+    python3 -m greco_esc.settings test_runs   # the GRECO runs test.sh makes on each test set
+    python3 -m greco_esc.settings source conll14        # a split's or test set's source file
 """
 
 import sys
@@ -42,6 +44,24 @@ VOTES = {
 }
 VOTE = VOTES['hypothesis']
 VOTE_MODES = tuple(VOTES)
+
+# Test sets: source, and gold M2 where it is public. CoNLL-2014's gold is in Git LFS (git lfs pull
+# before scoring); BEA-2019 has no public gold, so its output is scored on Codabench.
+TEST_SETS = {
+    'conll14': (Path('data/test.conll14.src'), Path('data/test.conll14.m2')),
+    'bea19': (Path('data/test.bea19.src'), None),
+}
+
+# What test.sh runs on the test sets, all fixed on dev_test beforehand (runs/dev_test/results.md):
+# (name, k, vote_coef, esc, vote_mode). The final system is GRECO + ESC at k = 3 without voting
+# (58.9, the best; voting made no difference with ESC). Next to it, the best GRECO without ESC
+# (k = 1, vote 0.4: 58.2). ESC alone at k = 3 and the three single systems are scored as well.
+# ESC is trained once on the full dev set (dev_tune + dev_test), as the paper does on BEA-2019 dev.
+TEST_RUNS = [
+    ('greco+esc.k3.vote0', 3, 0, True, 'hypothesis'),
+    ('greco.k1.vote0.4', 1, 0.4, False, 'hypothesis'),
+]
+FINAL_K = 3  # k of the full-dev ESC model, used by the final system and by ESC alone
 
 SCORE_RATIO = 0.7  # weight of the ESC edit scores, as in the paper's GRECO + ESC command
 BEAM_SIZE = 16     # paper and upstream README
@@ -80,9 +100,16 @@ def pred_path(k, name, split=TEST_SPLIT):
     return ROOT / split / f'k{k}' / name / 'pred.txt'
 
 
+def source(split):
+    """The source sentences of a dev split or a test set."""
+    return TEST_SETS[split][0] if split in TEST_SETS else DATA / f'{split}.src'
+
+
 def esc_home(k, test_split=TEST_SPLIT):
     """ESC's folders and model for scoring test_split at k. The dev_test ones keep their
     original place (runs/esc/k<k>), so a finished run is reused."""
+    if test_split in TEST_SETS:
+        return ROOT / 'esc' / 'final' / f'k{k}'  # trained on the full dev set, shared by the test sets
     home = ROOT / 'esc' / f'k{k}'
     return home if test_split == TEST_SPLIT else home / f'for-{test_split}'
 
@@ -98,8 +125,14 @@ def main(argv):
             print(split, ESC_TRAIN[split])
     elif argv[:1] == ['esc_home'] and len(argv) == 3:
         print(esc_home(int(argv[1]), argv[2]))
+    elif argv == ['test_runs']:
+        for name, k, vote, esc, mode in TEST_RUNS:
+            print(name, k, f'{vote:g}', int(esc), mode)
+    elif argv[:1] == ['source'] and len(argv) == 2:
+        print(source(argv[1]))
     else:
-        sys.exit('usage: python3 -m greco_esc.settings runs | inputs <k> | splits | esc_home <k> <split>')
+        sys.exit('usage: python3 -m greco_esc.settings runs | inputs <k> | splits | esc_home <k> <split> '
+                 '| test_runs | source <split>')
 
 
 if __name__ == '__main__':
