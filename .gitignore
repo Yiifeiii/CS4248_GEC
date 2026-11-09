@@ -11,3 +11,4 @@ checkpoints/
 # Rebuilt by training/build_data.py (sha256 in data/curriculum/manifest.json)
 data/curriculum/stage1.*
 outputs/greco/tuning/score_cache.jsonl
+outputs/greco/codabench_bea19/

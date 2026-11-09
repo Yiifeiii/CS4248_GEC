@@ -1,0 +1,11 @@
+{
+  "model": "CS4248-GEC/gec-t5-base-s1",
+  "split": "bea19_test",
+  "sentences": 4477,
+  "beams": 5,
+  "prefix": null,
+  "retokenize": false,
+  "git_commit": "79f64dd2c06c7c3be534be9cd55473b1431530fd",
+  "decode_seconds": 84,
+  "device": "cuda"
+}

@@ -191,13 +191,16 @@ class CachedScorer:
         if self.path.is_file():
             with self.path.open(encoding="utf-8") as f:
                 for line in f:
-                    # Two jobs appending at once can leave a broken line; skip it, the
-                    # score is simply recomputed
+                    # Two jobs appending at once can leave broken lines, some of them
+                    # still valid JSON; skip anything that is not a complete entry (the
+                    # score is simply recomputed)
                     try:
                         item = json.loads(line)
-                    except json.JSONDecodeError:
+                        key, q = (item["s"], item["h"]), float(item["q"])
+                    except (ValueError, KeyError, TypeError):
                         continue
-                    self.cache[(item["s"], item["h"])] = item["q"]
+                    if isinstance(key[0], str) and isinstance(key[1], str) and math.isfinite(q):
+                        self.cache[key] = q
         self.path.parent.mkdir(parents=True, exist_ok=True)
 
     def score(self, source, candidates):
