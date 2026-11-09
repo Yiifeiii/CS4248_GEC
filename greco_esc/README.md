@@ -191,6 +191,16 @@ Every setting (systems, k, α, r, beam size) is in `settings.py`, so these comma
 
 The α are not tuned here: they come from the GRECO voting tuning on `main` (`outputs/greco/tuning/dev.errant.beam/best.json`, section 2). ESC is trained inside steps 2 and 4.
 
+**What to expect when reproducing.**
+
+- **Deterministic by design.** Beam search decoding, GECToR and GRECO's scoring have no sampling, and upstream ESC fixes its seed (`--seed 0`) for its train/validation split and training. Floating-point differences between GPUs can still move a score by a few hundredths.
+- **Needs access to:**
+  - the `CS4248-GEC` Hugging Face organisation, for the BART and T5 models;
+  - the SoC cluster, or an equivalent Slurm GPU node: `cluster/job.sbatch` and the `HF_HOME` path are written for SoC;
+  - a Codabench account on the BEA-2019 task, for BEA-2019 test scores.
+- **Pinned dependencies.** Upstream GRECO is at `8e509aa` and ESC at `cdefd3b`; the GRECO checkpoint is the released one. The α come from `outputs/greco/tuning/dev.errant.beam/best.json` on `main` and are copied into `settings.py`.
+- **Not yet verified from scratch.** The whole pipeline has not been rerun end to end in a clean checkout. The α rerun (job 1101538) reran only the six changed runs, and the other outputs were reused.
+
 ### One-time setup
 
 If you have already set up the `greco_tuning` work, steps 1–4 are done; only step 5 is new.

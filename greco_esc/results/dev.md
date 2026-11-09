@@ -63,7 +63,7 @@ k is the number of hypotheses taken from each of BART and T5. GECToR always give
 
 ## The α rerun (job 1101538)
 
-The six runs whose α changed, before (earlier `dev_tune`-only α) and after (full-dev α). Every other run reproduced its earlier score exactly.
+The six runs whose α changed, before (earlier `dev_tune`-only α) and after (full-dev α). The other runs were not rerun: `run.sh` skips finished outputs, so their scores are unchanged.
 
 | Run | Old α → new α | Old score | New score | Change |
 |---|---|---|---|---|
@@ -139,7 +139,7 @@ Only the order of the near-tied top runs changes. k = 2 `system` 0.1 was 0.13 be
 
 ## Why dev and test results can differ
 
-None of this means a run was set up wrongly. The unchanged runs reproduced their dev scores exactly in the rerun.
+None of this means a run was set up wrongly: every run uses the same code and settings on every set, and the differences come from the reasons below.
 
 1. **Different sentences and references.** Dev and BEA-2019 test are both W&I+LOCNESS, but they come from different writers. The test references are hidden on Codabench. CoNLL-2014 is a different corpus (NUCLE essays) with different annotators, guidelines and an M2 metric. Absolute scores are not comparable across sets: every BEA-2019 test row is 13.5–17.5 points above its dev row, single systems, ESC alone and GRECO alone included, so the gap comes from the data and its references, not from the combination. Compare how runs rank within a set, not raw numbers across sets.
 2. **The choices were made on dev, so dev flatters them.** α was tuned on the full dev set, and the best dev model was the highest of 28 combinations on it. The best of many close runs on a set is usually a little lucky on that set (the "winner's curse"), so its dev score overstates what it gets elsewhere. The test sets are the unbiased check.
