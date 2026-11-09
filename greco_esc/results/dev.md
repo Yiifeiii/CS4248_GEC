@@ -120,7 +120,7 @@ Every run, on all three sets. BEA-2019 test is ERRANT F0.5 from Codabench. For C
 | GRECO, k5, no vote | 53.81 | 67.26 | 64.90 | 59.50 |
 | GRECO, k5, `hypothesis` 0.1 | 54.80 | 69.58 | 65.81 | 61.04 |
 | GRECO, k5, `system` 0.1 | 54.76 | 68.97 | 65.01 | 60.37 |
-| GRECO, k5, `rank` 0.6 | 57.50 | not submitted | 67.28 | 63.35 |
+| GRECO, k5, `rank` 0.6 | 57.50 | 73.67 | 67.28 | 63.35 |
 | GRECO + ESC, k5, no vote | 59.98 | 76.74 | 65.88 | 63.96 |
 | GRECO + ESC, k5, `hypothesis` 0.1 | 59.85 | 76.80 | 66.94 | 64.64 |
 | GRECO + ESC, k5, `system` 0.1 | 59.81 | 76.85 | 66.96 | 64.84 |
