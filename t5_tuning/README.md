@@ -304,4 +304,27 @@ python3 -m unittest tests.test_t5_tuning
    ```
    For another stage, tag or learning rate, add `--stage`, `--tag` or `--lr`. Scores go to `runs/final-dev_test/seed<seed>/` (with `-s1` or `-<tag>` for other stages and tags). `run_test.sh` refuses a folder that already has dev_test scores and checks there are 2,384 predictions.
 
+### Rerunning the experiments yourself
+
+**Why `submit` says "nothing to submit".** The scores of all 21 runs are committed in `t5_tuning/runs/`. `submit` skips any run that already has `dev_tune.scores.json`, and `test` skips any seed that already has `dev_test.scores.json`. That's deliberate: it stops a run being trained twice by accident and stops dev_test being scored more than once. On a fresh clone, the steps above therefore submit nothing until you move the old results out of the way.
+
+**To retrain from scratch:**
+
+```bash
+# 1. Move the committed results aside, so they're kept for comparison
+mv t5_tuning/runs t5_tuning/past_runs
+
+# 2. Only if you're rerunning on the cluster account that made the original runs:
+#    move the old checkpoints too, or training resumes from them (--resume auto)
+mv "$CKPT_ROOT" "${CKPT_ROOT}_past"     # CKPT_ROOT defaults to $SCRATCH/cs4248-gec/checkpoints
+
+# 3. Follow steps 4 to 8 above. New scores are written to t5_tuning/runs/ again.
+```
+
+To rerun a single experiment instead, move only its folder, for example `mv t5_tuning/runs/t5-tune.base.lr5e-5.seed42 t5_tuning/past_runs/`, then run `submit` for its phase again. Only that run is submitted. The configs don't need to be regenerated. `plan` reproduces them exactly, and they're already committed.
+
+**What to expect.** Seeds are fixed in every config, but GPU training isn't bit-for-bit deterministic. Rerun scores won't match the committed ones exactly, but each should land within about the noise band (±0.3 F0.5 on dev_tune). The conclusions in section 5 hold if each verdict (inside or outside the band, better or worse) comes out the same. To compare, run `tune.py collect` on the new `runs/`, and look up the old values in `past_runs/` or in the tables in sections 4, 5 and 8.
+
+**`past_runs/` is in `.gitignore`, so it is never committed.** The original results are already in git history. If you want the new results to replace them, commit the new `runs/` and note in this README that the numbers changed.
+
 To check runs that finished before these checks existed, run `python3 t5_tuning/tune.py verify --stage 2` on a compute node with `CKPT_ROOT` set (as `cluster/job.sbatch` does). It needs the runs' `run_info.json` and `trainer_state.json` from scratch, and their `dev_tune.pred` in `t5_tuning/runs/`.
