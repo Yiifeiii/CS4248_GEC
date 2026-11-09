@@ -23,8 +23,9 @@ The repository also contains datasets, prepared source/target sentence pairs, an
 | `greco_setup/` | GRECO edit combination ([setup and usage](greco_setup/README.md)) |
 | `outputs/` | System predictions in the shared format, see [Outputs](#outputs) |
 | `training/` | Two-stage BART/T5 fine-tuning: data build and checks, training, evaluation ([details](training/README.md)) |
+| `t5_tuning/` | T5 hyperparameter tuning: 21 runs, noise bands, sweeps and final dev_test scores ([results and how to rerun](t5_tuning/README.md)) |
 | `cluster/` | Slurm jobs and setup for the NUS SoC compute cluster ([details](cluster/README.md)) |
-| `tests/` | Unit tests for the GRECO combination and training data code |
+| `tests/` | Unit tests for the GRECO combination, training data and T5 tuning code |
 
 ## Data and formats
 

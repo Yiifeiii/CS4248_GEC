@@ -2,6 +2,48 @@
 
 This records how the T5 hyperparameters were tuned for the GEC project. Every number comes from the run logs and results tables in `t5_tuning/` and `experiments/`. Anything that wasn't run or wasn't recorded is marked as such.
 
+## 0. Handover summary
+
+**Outcome.** Tuning confirmed the group's default T5 settings. 21 runs were made: two noise bands, a stage-2 learning-rate sweep, weight decay, dropout and label smoothing sweeps, a stage-1 learning-rate sweep, and a stage-2 re-run on the best stage-1 model. Once both stages were trained, no change beat the defaults by more than the noise band. The final pipeline is unchanged: the group's stage-1 model `CS4248-GEC/gec-t5-base-s1`, then stage 2 at learning rate 3e-5, weight decay 0.01, dropout 0.1 and label smoothing 0.1.
+
+| Result | Value | Where |
+|---|---|---|
+| Stage-2 noise band, dev_tune (3 seeds) | mean 55.45, range 0.32 | section 4, `results.md` |
+| Best single alternative, stage 2 | lr 5e-5: +0.11 (inside band) | section 5.1 |
+| Stage-1 lr 3e-4 on stage 1 alone | +1.11 on dev_tune | section 5.5, `results-stage1.md` |
+| The same 3e-4 model after stage 2 | mean 54.84, 0.61 *below* the default pipeline | section 5.5, `results-s1lr3e-4.md` |
+| **Final configuration, dev_test (3 seeds)** | **mean 52.53** (52.49 / 52.92 / 52.18) | section 8, `runs/final-dev_test/` |
+
+**Quick check (laptop, about a second, standard-library Python 3 only):**
+
+```bash
+python3 t5_tuning/tune.py collect && python3 -m unittest tests.test_t5_tuning
+```
+
+This rebuilds `results.md` from the committed scores and prints the band and the verdict for each sweep. Retraining anything needs the SoC cluster setup in `cluster/README.md`; then follow section 7.
+
+**What's in this folder**
+
+| Path | Contents |
+|---|---|
+| `README.md` | This document: method, results, code map, how to reproduce |
+| `tune.py` | One CLI for every step: `plan`, `submit`, `preflight`, `verify`, `collect`, `test` (`python3 t5_tuning/tune.py -h`) |
+| `configs/` | The training config of each of the 21 runs (input to `training/finetune.py`) |
+| `manifest.json`, `manifest.md` | Every planned run with its settings. The configs are checked against it. |
+| `runs/<run>/dev_tune.scores.json` | ERRANT and M² scores of each run's best checkpoint on dev_tune |
+| `runs/final-dev_test/seed<N>/dev_test.scores.json` | dev_test scores of the final configuration, one per seed |
+| `results.md`, `results-stage1.md`, `results-s1lr3e-4.md` | Results tables written by `tune.py collect` |
+| `run_one.sh`, `run_test.sh`, `preflight.sh`, `fetch_stage1.sh` | Cluster job scripts (section 6) |
+| `../tests/test_t5_tuning.py` | Tests for the configs and the run checks |
+
+**Not in the repo.** The checkpoints, predictions and Slurm logs stay on cluster scratch (`$CKPT_ROOT/<run>/`, `logs/slurm/`). Only the scores are committed. The group's T5 models are on Hugging Face as `CS4248-GEC/gec-t5-base-s1` and `CS4248-GEC/gec-t5-base-s1s2` (see `experiments/training/README.md`).
+
+**Open items for whoever picks this up**
+
+1. Add references at the `[CITATION]` markers in section 5 before this goes into the report.
+2. Confirm whether anyone looked at dev_test before the final scoring (see the end of section 5.5).
+3. Optional: stage-1 learning rate 1e-3 was never run, since 3e-4 is the top of the grid. Stage-2 learning rate 5e-5 was run with only one seed.
+
 ## 1. Glossary
 
 - **Default settings.** The values already in the group's config files: `training/configs/t5-base.stage1.json` for stage 1 and `training/configs/t5-base.stage2.json` for stage 2. They are fixed numbers, not random values, and they are not the base model. Each sweep changes one of them and keeps the rest at these values. The group chose them before this project, and the repo doesn't record how.
@@ -178,6 +220,21 @@ Source: `t5_tuning/runs/t5-tune.s1.base.lr3e-5.seed42/`, `t5-tune.s1.base.lr1e-4
 The final pipeline is the original one. dev_test was not run for the 3e-4 pipeline.
 
 **Not recorded:** whether dev_test was looked at before the final scoring. Confirm this before the write-up.
+
+## 8. Final result on dev_test
+
+The final configuration (the default settings, on the frozen stage-1 model) was scored once per seed on dev_test with `tune.py test`. The values are correction-level ERRANT percentages.
+
+| Seed | Precision | Recall | F0.5 |
+|---|---|---|---|
+| 42 | 58.07 | 37.92 | 52.49 |
+| 123 | 57.94 | 39.31 | 52.92 |
+| 7 | 57.00 | 38.99 | 52.18 |
+| **Mean** | 57.67 | 38.74 | **52.53** |
+
+Source: `t5_tuning/runs/final-dev_test/seed42/`, `seed123/` and `seed7/`, each `dev_test.scores.json`.
+
+For comparison, the group's shared model `CS4248-GEC/gec-t5-base-s1s2` scores 52.50 on dev_test (`experiments/training/t5-base.s1s2/dev_test.scores.json`). That's within the seed spread above.
 
 ## 6. Where the code is
 
