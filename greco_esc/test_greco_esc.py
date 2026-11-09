@@ -226,8 +226,8 @@ class FullDevTests(unittest.TestCase):
 class TestSetTests(unittest.TestCase):
     """test.sh: every combination, ESC trained on the full dev set, test sets never trained on."""
 
-    def test_the_final_run_is_one_of_the_runs(self):
-        name, k = settings.FINAL_RUN
+    def test_the_best_dev_run_is_one_of_the_runs(self):
+        name, k = settings.BEST_DEV_RUN
         self.assertIn((name, k), {(n, kk) for n, kk, *_ in settings.runs()})
 
     def test_test_sets_share_one_esc_model_per_k_outside_the_dev_folders(self):

@@ -2,14 +2,14 @@
 
 All 1,312 CoNLL-2014 test sentences, scored against `data/test.conll14.m2`, the official two-annotator gold. **M2 F0.5 is CoNLL-2014's official metric.** ERRANT F0.5 is also given so the numbers can be compared with dev and BEA-2019. The outputs come from test jobs 1099945 and 1100522. The second job reran every run whose α changed when the full-dev α were adopted, and runs whose settings did not change were reused. Scores were made with `python -m greco_esc.evaluate conll14` and copied from `runs/conll14/results.{csv,md}` into [`conll14.csv`](conll14.csv). The `runs` folder is not tracked.
 
-Nothing was tuned or trained on CoNLL-2014. ESC was trained once per k on the full BEA-2019 dev set (4,384 sentences). The α values are the full-dev ones in `settings.VOTES`. The best dev model is fixed after the full-dev rerun with the new α (job 1101538); until then the dev leader is GRECO + ESC, k = 3, `rank` 0.4.
+Nothing was tuned or trained on CoNLL-2014. ESC was trained once per k on the full BEA-2019 dev set (4,384 sentences). The α values are the full-dev ones in `settings.VOTES`. The best dev model, chosen on the full dev set without seeing any test score, is GRECO + ESC, k = 3, `rank` 0.4 (60.35 on dev).
 
 ## Models to report
 
 | Model | Run | M2 F0.5 (official) | P / R | ERRANT F0.5 | How it was picked |
 |---|---|---|---|---|---|
 | **Best CoNLL-2014 model** | GRECO alone, k = 2, `rank` 0.2 | **67.98** | 76.06 / 47.72 | 64.02 | highest test M2 |
-| **Best dev model** | to be fixed after the full-dev rerun (job 1101538) | – | – | – | highest full-dev ERRANT F0.5. Until the rerun the dev leader is GRECO + ESC, k = 3, `rank` 0.4: **66.14** M2 (80.43 / 38.67), 64.47 ERRANT |
+| **Best dev model** | GRECO + ESC, k = 3, `rank` 0.4 | **66.14** | 80.43 / 38.67 | 64.47 | highest full-dev ERRANT F0.5 (60.35) |
 | Best GRECO + ESC | GRECO + ESC, k = 5, `system` 0.1 | 66.96 | 81.19 / 39.36 | 64.84 | highest test M2 with ESC |
 | Best ESC alone | ESC, k = 1 | 64.02 | 78.69 / 36.67 | 62.13 | |
 | Best single system | GECToR | 64.03 | 75.02 / 40.37 | 59.94 | |
@@ -46,7 +46,7 @@ k is the number of hypotheses taken from each of BART and T5. GECToR always give
 | 3 | 7 | GRECO, `system` 0.1 | 66.42 | 48.26 | 61.77 | 71.42 | 50.94 | 66.10 |
 | 3 | 7 | GRECO + ESC, no vote | 79.31 | 35.34 | 63.51 | 81.59 | 36.24 | 65.26 |
 | 3 | 7 | GRECO + ESC, `hypothesis` 0.1 | 78.16 | 36.48 | 63.62 | 80.51 | 37.50 | 65.48 |
-| 3 | 7 | GRECO + ESC, `rank` 0.4 (current dev leader) | 78.42 | 37.66 | 64.47 | 80.43 | 38.67 | 66.14 |
+| 3 | 7 | **GRECO + ESC, `rank` 0.4 (best dev model)** | 78.42 | 37.66 | 64.47 | 80.43 | 38.67 | 66.14 |
 | 3 | 7 | GRECO + ESC, `system` 0.1 | 78.57 | 36.15 | 63.63 | 80.73 | 37.13 | 65.38 |
 | 5 | 11 | ESC alone | 78.04 | 33.15 | 61.41 | 80.78 | 34.04 | 63.38 |
 | 5 | 11 | GRECO, no vote | 62.67 | 49.47 | 59.50 | 68.78 | 52.95 | 64.90 |
@@ -71,7 +71,7 @@ k is the number of hypotheses taken from each of BART and T5. GECToR always give
 | 3 | no vote | 65.78 | 65.26 | −0.52 |
 | 3 | `hypothesis` 0.1 | 66.91 | 65.48 | −1.43 |
 | 3 | `system` 0.1 | 66.10 | 65.38 | −0.72 |
-| 3 | `rank` 0.4 | 67.52 | 66.14 (current dev leader) | −1.38 |
+| 3 | `rank` 0.4 | 67.52 | 66.14 (best dev model) | −1.38 |
 | 5 | no vote | 64.90 | 65.88 | +0.98 |
 | 5 | `hypothesis` 0.1 | 65.81 | 66.94 | +1.13 |
 | 5 | `system` 0.1 | 65.01 | **66.96** | +1.95 |
@@ -79,9 +79,9 @@ k is the number of hypotheses taken from each of BART and T5. GECToR always give
 
 ## Findings
 
-1. **The current dev leader (GRECO + ESC, k = 3, `rank` 0.4) scores 66.14 M2 F0.5** (P 80.43 / R 38.67) and 64.47 ERRANT F0.5. That is 2.11 above the best single system, GECToR (64.03 M2).
+1. **The best dev model (GRECO + ESC, k = 3, `rank` 0.4) scores 66.14 M2 F0.5** (P 80.43 / R 38.67) and 64.47 ERRANT F0.5. That is 2.11 above the best single system, GECToR (64.03 M2).
 2. **Every GRECO run, with or without ESC, beats every single system on M2.** The lowest, GRECO alone at k = 5 with no vote, scores 64.90, against 64.03 for GECToR, 63.23 for BART and 63.12 for T5. ESC alone is level with GECToR at k = 1 (64.02) and below it at larger k.
-3. **The best CoNLL-2014 model is GRECO alone, k = 2, `rank` 0.2, at 67.98 M2** (P 76.06 / R 47.72). It is 1.84 above the current dev leader. It was picked by its test score, so it shows the best this setup reaches on CoNLL-2014, not a held-out estimate.
+3. **The best CoNLL-2014 model is GRECO alone, k = 2, `rank` 0.2, at 67.98 M2** (P 76.06 / R 47.72). It is 1.84 above the best dev model. It was picked by its test score, so it shows the best this setup reaches on CoNLL-2014, not a held-out estimate.
 4. **ESC lowers M2 at k = 1 to 3**, by 0.5–2.3 points in every pair, and raises it at k = 5 except with `rank` voting. On ERRANT, ESC raises the score in 13 of the 14 pairs (the one exception is k = 2 `hypothesis`, −0.05). So on CoNLL-2014, whether ESC helps depends on the metric.
 5. **ESC trades recall for precision.** Against GRECO alone with the same voting, ERRANT precision rises by 5–16 points and recall falls by 5–13. F0.5 weights precision more, but on CoNLL-2014's M2 the recall loss is larger than the precision gain at k ≤ 3.
 6. **Voting matters more without ESC.** GRECO alone at k = 5 goes from 64.90 with no vote to 67.28 with `rank` 0.6. With ESC, the vote modes at a given k stay within 1.1 points of each other.

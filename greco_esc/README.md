@@ -2,7 +2,7 @@
 
 This combines our three systems the way the GRECO paper's strongest setup does (Qorib & Ng, 2023): GRECO's quality score plus ESC's edit scores. It runs with and without ESC, and with and without voting. The three systems are the fine-tuned BART and T5 (`s1s2`) and GECToR. Combinations are chosen on BEA-2019 dev and tested on CoNLL-2014 and BEA-2019 test.
 
-**Status:** the dev runs are done (Slurm jobs 1098818 and 1099227). A rerun of the dev runs whose α changed (job 1101538) is queued; the best dev model is fixed from it. The test runs are done for CoNLL-2014 and for BEA-2019 (`test.sh`, jobs 1099945 and 1100522). On Codabench, everything is scored except three BEA-2019 k = 5 runs: GRECO `rank` 0.6, and GRECO + ESC with `system` 0.1 and with `rank` 0.6.
+**Status:** the dev runs are done (Slurm jobs 1098818 and 1099227). Job 1101538 reran the six dev runs whose α changed, and the best dev model is fixed from it. The test runs are done for CoNLL-2014 and for BEA-2019 (`test.sh`, jobs 1099945 and 1100522). On Codabench, everything is scored except three BEA-2019 k = 5 runs: GRECO `rank` 0.6, and GRECO + ESC with `system` 0.1 and with `rank` 0.6.
 
 **Full results, every run, in [`results/`](results/):**
 
@@ -15,10 +15,10 @@ This combines our three systems the way the GRECO paper's strongest setup does (
 
 | Model | Run | Full dev (ERRANT) | BEA-2019 test (ERRANT) | CoNLL-2014 (M2, official) |
 |---|---|---|---|---|
-| **Best dev model** | fixed after the dev rerun (job 1101538); current leader: GRECO + ESC, k = 3, `rank` 0.4 | **60.35** | 77.24 | 66.14 |
+| **Best dev model** | GRECO + ESC, k = 3, `rank` 0.4 | **60.35** | 77.24 | 66.14 |
 | **Best BEA-2019 model** (so far) | GRECO + ESC, k = 2, `system` 0.1 | 60.22 | **77.45** | 66.13 |
-| **Best CoNLL-2014 model** | GRECO alone, k = 2, `rank` 0.2 | rerun pending | 74.83 | **67.98** |
-| Best GRECO alone on BEA-2019 | GRECO, k = 1, vote 0.1 | rerun pending | 76.82 | 67.76 |
+| **Best CoNLL-2014 model** | GRECO alone, k = 2, `rank` 0.2 | 58.59 | 74.83 | **67.98** |
+| Best GRECO alone on BEA-2019 | GRECO, k = 1, vote 0.1 | 59.85 | 76.82 | 67.76 |
 | ESC alone, k = 3 | ESC | 58.71 | 75.88 | 62.48 |
 | Best single system | GECToR | 54.77 | 71.57 | 64.03 |
 
@@ -139,10 +139,10 @@ Upstream `run_combination.py` computes only "hypothesis"; `combine.py` adds "sys
 **Why α was reused, not retuned with ESC.** The α come from the GRECO voting tuning already done on `main` (plain beam search lists, full dev set). They were not tuned again with ESC switched on, and r = 0.7 was not tuned at all. There are three reasons:
 
 - **The tuning already answers the question α is for.** α sets how much GRECO trusts agreement between inputs. It was tuned for exactly these candidate lists (same models, same decoding, same k) on the same dev set the paper tunes on. The GRECO paper likewise reports one vote coefficient and takes r = 0.7 as given rather than retuning them together.
-- **With ESC on, α barely matters.** At r = 0.7, ESC's edit term carries 70 % of the score, and the vote is a small extra term. On the full dev set, every GRECO + ESC run, whatever its α and vote mode, falls between 59.73 and 60.35: within 0.6 points, about the noise between runs. Without ESC, the same α choices move GRECO by up to 3.5 points (k = 5). So a retuned α could gain only a fraction of a point.
+- **With ESC on, α barely matters.** At r = 0.7, ESC's edit term carries 70 % of the score, and the vote is a small extra term. On the full dev set, every GRECO + ESC run, whatever its α and vote mode, falls between 59.59 and 60.35: within 0.8 points, about the noise between runs. Without ESC, the same α choices move GRECO by up to 3.7 points (k = 5). So a retuned α could gain only a fraction of a point.
 - **Retuning with ESC would be costly to do cleanly.** It would mean 10 α values × 3 vote modes × 4 k, each run on both dev halves for cross-fitting: about 240 GRECO runs of 3–8 minutes each, or roughly 20 GPU hours, for the small gain above. Tuning α on the same dev sentences ESC is trained on would also need nested cross-fitting to stay fair. Given the time left in the project, we kept the existing α and record this as a limitation (section 4).
 
-**Earlier runs used the `dev_tune`-only α** (`dev_tune.errant.beam`: k1 0.4, rank 0.4 at every k; hypothesis and system as now). They kept `dev_test` held out. The runs whose α changed (k1 voting, k2 `rank` 0.2, k5 `rank` 0.6) are new runs with new names. Their dev outputs are being made by job 1101538; the old outputs stay on disk. The current dev leader (k3, `rank` 0.4) has the same α under both tunings.
+**Earlier runs used the `dev_tune`-only α** (`dev_tune.errant.beam`: k1 0.4, rank 0.4 at every k; hypothesis and system as now). They kept `dev_test` held out. The runs whose α changed (k1 voting, k2 `rank` 0.2, k5 `rank` 0.6) are new runs with new names. Job 1101538 made their dev outputs with the new α; the old outputs stay on disk. The changes were small (−0.25 to +0.48, see [`results/dev.md`](results/dev.md)), and the best dev model (k3, `rank` 0.4) has the same α under both tunings.
 
 Two tables of these results exist:
 
@@ -235,7 +235,7 @@ rsync -av -e "ssh -J <user>@stujump.comp.nus.edu.sg" --exclude '*.nbest.jsonl' \
 
 `test.sh` runs every combination on CoNLL-2014 (1,312 sentences) and BEA-2019 (4,477): the same 28 GRECO runs and ESC alone at each k as on dev, plus the single systems, in the same tables. Nothing is tuned or trained on a test set. ESC is trained once per k on the full dev set (`dev_tune` + `dev_test`, 4,384 sentences), as the paper trains ESC on BEA-2019 dev.
 
-**The best dev model is chosen on dev.** As in the GRECO paper, it is the run with the highest ERRANT F0.5 on BEA-2019 dev (our full dev set). It is fixed from the dev rerun with the new α (job 1101538); the current leader is GRECO + ESC, k = 3, `rank` vote 0.4 (`settings.FINAL_RUN`, 60.35). Its test scores are the held-out result. The best model on each test set is also reported, labelled as picked on that test set. The paper used ESC only on BEA-2019 and reports GRECO with voting alone on CoNLL-2014; our dev results also show ESC helping ERRANT (60.4 vs 59.9) but not M2 (64.0 vs 65.0).
+**The best dev model is chosen on dev.** As in the GRECO paper, it is the run with the highest ERRANT F0.5 on BEA-2019 dev (our full dev set). It is GRECO + ESC, k = 3, `rank` vote 0.4 (`settings.BEST_DEV_RUN`, 60.35). Its test scores are the held-out result. The best model on each test set is also reported, labelled as picked on that test set. The paper used ESC only on BEA-2019 and reports GRECO with voting alone on CoNLL-2014; our dev results also show ESC helping ERRANT (best 60.35 with ESC vs 59.85 without) but not M2 (63.96 vs 65.19).
 
 Run it after `run.sh` has finished (it trains ESC on `run.sh`'s dev candidates). About 8 hours for both sets, mostly the 56 GRECO runs:
 

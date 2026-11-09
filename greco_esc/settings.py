@@ -56,9 +56,10 @@ TEST_SETS = {
 
 # test.sh runs every combination in runs() on the test sets, plus ESC alone at every k, with ESC
 # trained once per k on the full dev set (dev_tune + dev_test), as the paper does on BEA-2019 dev.
-# The final system was chosen beforehand on the full dev set (= BEA-2019 dev, as in the GRECO
-# paper) by ERRANT F0.5; the other test rows are analysis, not a second round of selection.
-FINAL_RUN = ('greco+esc.rank0.4', 3)  # GRECO + ESC, k = 3, rank vote 0.4: 60.4 on the full dev set
+# The best dev model is the run with the highest ERRANT F0.5 on the full dev set (= BEA-2019 dev,
+# as in the GRECO paper), with the alpha above; it is chosen without looking at any test score.
+# The best model on each test set is reported next to it, labelled as picked on that test set.
+BEST_DEV_RUN = ('greco+esc.rank0.4', 3)  # GRECO + ESC, k = 3, rank vote 0.4: 60.35 on the full dev set
 
 SCORE_RATIO = 0.7  # weight of the ESC edit scores, as in the paper's GRECO + ESC command
 BEAM_SIZE = 16     # paper and upstream README

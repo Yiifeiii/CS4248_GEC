@@ -11,8 +11,8 @@
 #   4. Scores (gec-train): the same tables as on dev. CoNLL-2014 needs data/test.conll14.m2
 #      pulled from Git LFS; BEA-2019 has no public gold, so its outputs are for Codabench
 #
-# The final system (settings.FINAL_RUN) was chosen on the full dev set beforehand; the other rows
-# are analysis. Outputs: greco_esc/runs/<test set>/k<k>/<run>/pred.txt, as on dev.
+# The best dev model (settings.BEST_DEV_RUN) was chosen on the full dev set beforehand; the best
+# model on each test set is reported next to it. Outputs: greco_esc/runs/<test set>/k<k>/<run>/pred.txt, as on dev.
 # GRECO_CKPT picks another GRECO checkpoint (e.g. the fine-tuned one from greco_tuning), and
 # GRECO_TAG names its outputs (runs/<test set>/<tag>/k<k>/<run>; default "released"):
 #   GRECO_CKPT=$CKPT_ROOT/greco.s1.lr2e-5.seed42/checkpoint-<step>/pytorch_model.bin GRECO_TAG=s1 \
