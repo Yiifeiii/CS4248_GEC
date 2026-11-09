@@ -4,7 +4,7 @@ Nothing is tuned on these sets: the checkpoints were chosen on dev_tune and GREC
 
 | Enhancement | Output | CoNLL-14 M2 | CoNLL-14 ERRANT | BEA-19 ERRANT (Codabench) |
 |---|---|---|---|---|
-| 1. curriculum | BART, stage 1 only (no curriculum) | 59.7 (67.6 / 40.7) | 55.2 (62.2 / 38.2) | – |
+| 1. curriculum | BART, stage 1 only (no curriculum) | 59.7 (67.6 / 40.7) | 55.2 (62.2 / 38.2) | 62.3 (64.7 / 54.2) |
 | 1. curriculum | BART, stage 1 + 2 (curriculum) | 62.9 (70.9 / 43.4) | 57.9 (64.8 / 40.5) | – |
 | 1. curriculum | T5, stage 1 only (no curriculum) | 61.7 (72.2 / 39.0) | 57.3 (66.8 / 36.5) | – |
 | 1. curriculum | T5, stage 1 + 2 (curriculum) | 63.0 (69.8 / 45.4) | 57.7 (63.4 / 42.5) | – |

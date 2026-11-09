@@ -1,5 +1,9 @@
 {
-  "bart-base.s1": null,
+  "bart-base.s1": [
+    64.72,
+    54.22,
+    62.31
+  ],
   "bart-base.s1s2": null,
   "t5-base.s1": null,
   "t5-base.s1s2": null,

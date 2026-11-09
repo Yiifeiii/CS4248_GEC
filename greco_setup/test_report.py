@@ -12,7 +12,8 @@ metric) and ERRANT, so it needs errant, Python <= 3.12 and git-lfs's copy of the
 
 BEA-2019 has no public gold. --zips writes one zip per output to outputs/greco/codabench_bea19/
 for Codabench (one file, no folders); its F0.5 scores go into experiments/test/codabench.json
-by name (the script writes a template with the names), and the table then shows them.
+by name, as [P, R, F0.5] from the "Span-level correction" row of the scoring output (or
+just F0.5); the script writes a template with the names, and the table then shows them.
 
 Writes experiments/test/README.md and experiments/test/scores.csv. Outputs not yet produced
 are listed as missing.
@@ -83,7 +84,7 @@ def codabench_scores(rows):
     if not path.exists():
         TEST.mkdir(parents=True, exist_ok=True)
         path.write_text(json.dumps({name: None for name, *_ in rows}, indent=2) + "\n")
-        print(f"wrote {path}: fill in the Codabench F0.5 of each zip (e.g. 59.8)")
+        print(f"wrote {path}: fill in each zip's Codabench span-level correction [P, R, F0.5]")
     return json.loads(path.read_text(encoding="utf-8"))
 
 
@@ -126,14 +127,20 @@ def main():
     for name, label, group, paths in rows:
         s = conll.get(name)
         b = bea.get(name)
+        b = [None, None, b] if not isinstance(b, list) else b  # [P, R, F0.5] or F0.5 alone
+        if b[2] is None:
+            bea_cell = "–"
+        else:
+            bea_cell = f"{b[2]:.1f}" + (f" ({b[0]:.1f} / {b[1]:.1f})" if b[0] is not None else "")
         lines.append(f"| {group} | {label} | {cell(s, 'm2_') if s else 'missing'} | "
-                     f"{cell(s) if s else 'missing'} | {b if b is not None else '–'} |")
-        table.append({"name": name, "group": group, "label": label, "bea19_f0_5": b,
+                     f"{cell(s) if s else 'missing'} | {bea_cell} |")
+        table.append({"name": name, "group": group, "label": label, "bea19_precision": b[0],
+                      "bea19_recall": b[1], "bea19_f0_5": b[2],
                       **({k: s[k] for k in ("m2_precision", "m2_recall", "m2_f0_5", "precision",
                                             "recall", "f0_5")} if s else {})})
     (TEST / "README.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
     fields = ["name", "group", "label", "m2_precision", "m2_recall", "m2_f0_5", "precision", "recall",
-              "f0_5", "bea19_f0_5"]
+              "f0_5", "bea19_precision", "bea19_recall", "bea19_f0_5"]
     with (TEST / "scores.csv").open("w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=fields)
         writer.writeheader()
