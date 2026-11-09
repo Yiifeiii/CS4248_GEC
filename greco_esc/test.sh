@@ -1,21 +1,22 @@
 #!/bin/bash
-# The final run on the test sets, with every setting fixed on dev_test beforehand (settings.py,
-# TEST_RUNS and FINAL_K). Submit from the repository root, after run.sh has finished:
-#   sbatch -J greco-test --time=4:00:00 cluster/job.sbatch greco_esc/test.sh
-#   sbatch -J greco-test --time=4:00:00 cluster/job.sbatch greco_esc/test.sh conll14   # one set only
+# Every GRECO + ESC combination on the test sets, with nothing tuned or trained on them. Submit
+# from the repository root, after run.sh has finished:
+#   sbatch -J greco-test --time=12:00:00 cluster/job.sbatch greco_esc/test.sh
+#   sbatch -J greco-test --time=6:00:00 cluster/job.sbatch greco_esc/test.sh conll14    # one set only
 #
 #   1. Candidates (gec-train): BART and T5 s1s2 5-best, GECToR 1-best, on each test set; M2 files
-#   2. ESC (greco): trained once on the full dev set (dev_tune + dev_test; run.sh's dev candidates),
-#      then edit scores and ESC's own output on each test set
-#   3. GRECO (greco): each run in settings.TEST_RUNS, through combine.py as in run.sh
-#   4. Scores (gec-train): CoNLL-2014 with the M2 scorer and ERRANT (needs data/test.conll14.m2
-#      pulled from Git LFS); BEA-2019 has no public gold, so its outputs are for Codabench
+#   2. ESC (greco): trained once per k on the full dev set (dev_tune + dev_test; run.sh's dev
+#      candidates), then edit scores and ESC's own output on each test set
+#   3. GRECO (greco): every run in settings.runs(), through combine.py, as run.sh does on dev
+#   4. Scores (gec-train): the same tables as on dev. CoNLL-2014 needs data/test.conll14.m2
+#      pulled from Git LFS; BEA-2019 has no public gold, so its outputs are for Codabench
 #
-# Nothing here is tuned on a test set. Outputs: greco_esc/runs/<test set>/<tag>/<run>/pred.txt.
+# The final system (settings.FINAL_RUN) was chosen on the full dev set beforehand; the other rows
+# are analysis. Outputs: greco_esc/runs/<test set>/k<k>/<run>/pred.txt, as on dev.
 # GRECO_CKPT picks another GRECO checkpoint (e.g. the fine-tuned one from greco_tuning), and
-# GRECO_TAG names its outputs (default "released"):
+# GRECO_TAG names its outputs (runs/<test set>/<tag>/k<k>/<run>; default "released"):
 #   GRECO_CKPT=$CKPT_ROOT/greco.s1.lr2e-5.seed42/checkpoint-<step>/pytorch_model.bin GRECO_TAG=s1 \
-#     sbatch -J greco-test --time=4:00:00 cluster/job.sbatch greco_esc/test.sh
+#     sbatch -J greco-test --time=12:00:00 cluster/job.sbatch greco_esc/test.sh
 # Every step skips output that is already complete, so the job can be submitted again.
 set -euo pipefail
 
@@ -69,60 +70,64 @@ for set in "${SETS[@]}"; do
 done
 python -m greco_esc.prepare final_esc "${SETS[@]}"
 
-# 2. ESC, trained on the full dev set
+# 2-3. ESC, trained per k on the full dev set, and GRECO, on each test set
 use greco
-K=$(python3 -c "from greco_esc.settings import FINAL_K; print(FINAL_K)")
-home=$(python3 -m greco_esc.settings esc_home "$K" "${SETS[0]}")
-if [ ! -s "$home/model/model.pt" ]; then
-  step "k$K: training ESC on the full dev set"
-  python external/esc/run.py --train --data_dir "$home/dev/text" --m2_dir "$home/dev/m2" \
-    --model_path "$home/model" --vocab_path "$home/model/vocab.idx"
-fi
+KS=$(python3 -c "from greco_esc.settings import KS; print(*KS)")
+read -r BEAM BATCH RATIO < <(python3 -c "from greco_esc import settings as s; print(s.BEAM_SIZE, s.BATCH_SIZE, s.SCORE_RATIO)")
+GDIR=""
+[ "$TAG" = released ] || GDIR="$TAG/"
+for k in $KS; do
+  home=$(python3 -m greco_esc.settings esc_home "$k" "${SETS[0]}")
+  if [ ! -s "$home/model/model.pt" ]; then
+    step "k$k: training ESC on the full dev set"
+    python external/esc/run.py --train --data_dir "$home/dev/text" --m2_dir "$home/dev/m2" \
+      --model_path "$home/model" --vocab_path "$home/model/vocab.idx"
+  fi
+done
 for set in "${SETS[@]}"; do
   N=$(lines "$(python3 -m greco_esc.settings source "$set")")
-  out=$ROOT/$set/k$K
-  mkdir -p "$out/esc"
-  if [ ! -s "$out/esc.scores.jsonl" ]; then
-    step "$set k$K: ESC edit scores"
-    python external/esc/run.py --score --data_dir "$home/$set/text" --m2_dir "$home/$set/m2" \
-      --model_path "$home/model/model.pt" --vocab_path "$home/model/vocab.idx" \
-      --output_path "$out/esc.scores.raw.jsonl"
-    python -m greco_esc.prepare scores "$K" "$set"
-  fi
-  if [ "$(plines "$out/esc/pred.txt")" -ne "$N" ]; then
-    step "$set k$K: ESC alone"
-    python external/esc/run.py --test --data_dir "$home/$set/text" --m2_dir "$home/$set/m2" \
-      --model_path "$home/model/model.pt" --vocab_path "$home/model/vocab.idx" \
-      --output_path "$out/esc/pred.txt"
-  fi
+  for k in $KS; do
+    home=$(python3 -m greco_esc.settings esc_home "$k" "$set")
+    out=$ROOT/$set/k$k
+    mkdir -p "$out/esc"
+    if [ ! -s "$out/esc.scores.jsonl" ]; then
+      step "$set k$k: ESC edit scores"
+      python external/esc/run.py --score --data_dir "$home/$set/text" --m2_dir "$home/$set/m2" \
+        --model_path "$home/model/model.pt" --vocab_path "$home/model/vocab.idx" \
+        --output_path "$out/esc.scores.raw.jsonl"
+      python -m greco_esc.prepare scores "$k" "$set"
+    fi
+    if [ "$(plines "$out/esc/pred.txt")" -ne "$N" ]; then
+      step "$set k$k: ESC alone"
+      python external/esc/run.py --test --data_dir "$home/$set/text" --m2_dir "$home/$set/m2" \
+        --model_path "$home/model/model.pt" --vocab_path "$home/model/vocab.idx" \
+        --output_path "$out/esc/pred.txt"
+    fi
+  done
 
-  # 3. GRECO; read the runs on fd 3, so the programs inside the loop cannot consume the list
-  read -r BEAM BATCH RATIO < <(python3 -c "from greco_esc import settings as s; print(s.BEAM_SIZE, s.BATCH_SIZE, s.SCORE_RATIO)")
+  # GRECO; read the runs on fd 3, so the programs inside the loop cannot consume the list
   while read -r name k vote esc mode <&3; do
-    dir=$REPO/$ROOT/$set/$TAG/$name
+    dir=$REPO/$ROOT/$set/${GDIR}k$k/$name
     [ "$(plines "$dir/pred.txt")" -eq "$N" ] && continue
-    step "$set: $name ($TAG)"
+    step "$set k$k: $name ($TAG)"
     mkdir -p "$dir"
     inputs=()
     for i in $(python3 -m greco_esc.settings inputs "$k"); do inputs+=("$REPO/$ROOT/$set/m2/$i.m2"); done
     extra=()
-    if [ "$esc" = 1 ]; then
-      [ "$k" = "$K" ] || { echo "$name: ESC runs must use k = $K, the full-dev ESC model's k" >&2; exit 1; }
-      extra=(--edit_scores "$REPO/$out/esc.scores.jsonl" --score_ratio "$RATIO")
-    fi
+    [ "$esc" = 1 ] && extra=(--edit_scores "$REPO/$ROOT/$set/k$k/esc.scores.jsonl" --score_ratio "$RATIO")
     (cd external/greco && python "$REPO/greco_esc/combine.py" --vote_mode "$mode" \
       --model greco --lm_model microsoft/deberta-v3-large \
       --checkpoint "$CKPT" --beam_size "$BEAM" --batch_size "$BATCH" --vote_coef "$vote" \
       ${extra[@]+"${extra[@]}"} --output_path "$dir/pred.txt" --data "${inputs[@]}" > "$dir/log.txt" 2>&1) || {
       tail -n 20 "$dir/log.txt" >&2; exit 1; }
     missing=$(grep -c "edit score for .* is not found" "$dir/log.txt" || true)
-    [ "$missing" -eq 0 ] || { echo "$set $name: $missing edits without an ESC score" >&2; exit 1; }
-  done 3< <(python3 -m greco_esc.settings test_runs)
+    [ "$missing" -eq 0 ] || { echo "$set $name k$k: $missing edits without an ESC score" >&2; exit 1; }
+  done 3< <(python3 -m greco_esc.settings runs)
 done
 
 # 4. Scores
 use gec-train
 for set in "${SETS[@]}"; do
   step "scoring $set"
-  python -m greco_esc.evaluate test "$set" "$TAG"
+  python -m greco_esc.evaluate "$set" "$TAG"
 done

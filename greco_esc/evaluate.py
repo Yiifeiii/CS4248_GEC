@@ -15,12 +15,13 @@ Run in gec-train from the repository root (run.sh does this as its last step):
 
     python3 -m greco_esc.evaluate          # dev_test
     python3 -m greco_esc.evaluate dev      # the full dev set
-    python3 -m greco_esc.evaluate test conll14 [tag]   # test.sh's outputs on a test set
+    python3 -m greco_esc.evaluate conll14 [tag]        # test.sh's outputs on a test set
 
-On a test set (test.sh), the outputs are the single systems, ESC alone and settings.TEST_RUNS
-under runs/<test set>/<tag>/. CoNLL-2014 is scored against data/test.conll14.m2 with the M2 scorer
-(its official metric) and ERRANT, once the file is pulled from Git LFS; BEA-2019 has no public
-gold, so its outputs are listed for Codabench.
+A test set (conll14, bea19) is scored like a dev split, with the same tables, from test.sh's
+outputs. CoNLL-2014 is scored against data/test.conll14.m2 (M2 is its official metric) once the
+file is pulled from Git LFS; BEA-2019 has no public gold, so its outputs are listed for Codabench.
+tag names the GRECO checkpoint's outputs (test.sh's GRECO_TAG); the default, released, keeps
+them at runs/<split>/k<k>/<run>, and any other tag at runs/<split>/<tag>/k<k>/<run>.
 """
 
 import csv
@@ -41,14 +42,15 @@ def row(system, k, mode, vote, esc, inputs, result):
             'm2_p': m['precision'] * 100, 'm2_r': m['recall'] * 100, 'm2_f0_5': m['f0_5'] * 100}
 
 
-def outputs():
+def outputs(tag='released'):
     """(system, k, vote_mode, vote_coef, esc, path) for every output, path relative to runs/<split>."""
+    greco = Path() if tag == 'released' else Path(tag)
     out = [(name, '-', '-', '-', '-', Path('text') / f'{name}.txt') for name in ('bart-1', 't5-1', 'gector-1')]
     for k in settings.KS:
         out.append(('esc', k, '-', '-', 'yes', Path(f'k{k}') / 'esc' / 'pred.txt'))
     for name, k, vote, esc, mode in settings.runs():
         out.append(('greco', k, mode if vote else '-', f'{vote:g}', 'yes' if esc else 'no',
-                    Path(f'k{k}') / name / 'pred.txt'))
+                    greco / f'k{k}' / name / 'pred.txt'))
     return out
 
 
@@ -76,6 +78,8 @@ def m2_blocks(path):
 
 def reference(split):
     """(source path, gold M2 path) for split; for dev, written to runs/dev from the two halves."""
+    if split in settings.TEST_SETS:
+        return settings.TEST_SETS[split]
     if split != settings.FULL_SPLIT:
         return settings.DATA / f'{split}.src', settings.DATA / f'{split}.m2'
     out = settings.ROOT / split
@@ -149,12 +153,24 @@ def mode_table(rows):
     return '\n'.join(lines)
 
 
-def main(split=settings.TEST_SPLIT):
-    from training.metrics import score  # needs ERRANT, so imported only when scoring
+def is_lfs_pointer(path):
+    with open(path, encoding='utf-8', errors='replace') as f:
+        return f.read(40).startswith('version https://git-lfs')
+
+
+def main(split=settings.TEST_SPLIT, tag='released'):
     src, gold = reference(split)
     n = len(read_lines(src))
+    if gold is None or not Path(gold).exists() or is_lfs_pointer(gold):
+        why = 'it has no public gold; submit to Codabench' if gold is None else \
+              f'{gold} is a Git LFS pointer; run `git lfs pull` (see cluster/README.md), then rerun this'
+        print(f'{split} ({n} sentences) is not scored here: {why}. Outputs under {settings.ROOT / split}:')
+        for *_, rel in outputs(tag):
+            print(f'  {rel}' + ('' if (settings.ROOT / split / rel).exists() else '  (missing)'))
+        return
+    from training.metrics import score  # needs ERRANT, so imported only when scoring
     rows, missing = [], []
-    for system, k, mode, vote, esc, rel in outputs():
+    for system, k, mode, vote, esc, rel in outputs(tag):
         hyps = load(split, rel)
         if hyps is None:
             missing.append(rel)
@@ -165,8 +181,9 @@ def main(split=settings.TEST_SPLIT):
         rows.append(row(system, k, mode, vote, esc, inputs, score(src, hyps, gold)))
         print(f"{system:<6} k={k!s:<2} mode={mode:<10} vote={vote:<4} esc={esc:<3} "
               f"ERRANT F0.5 {rows[-1]['errant_f0_5']:.2f}  M2 F0.5 {rows[-1]['m2_f0_5']:.2f}")
-    out = settings.ROOT / split
-    print(f'{split}: {n} sentences')
+    out = settings.ROOT / split / ('' if tag == 'released' else tag)
+    out.mkdir(parents=True, exist_ok=True)
+    print(f'{split}: {n} sentences' + ('' if tag == 'released' else f', GRECO checkpoint {tag}'))
     with open(out / 'results.csv', 'w', newline='', encoding='utf-8') as f:
         writer = csv.DictWriter(f, fieldnames=FIELDS)
         writer.writeheader()
@@ -178,66 +195,8 @@ def main(split=settings.TEST_SPLIT):
     print(f'wrote {out / "results.csv"} and {out / "results.md"}')
 
 
-def test_outputs(test_set, tag):
-    """(label, path) for every output test.sh writes on test_set."""
-    base = settings.ROOT / test_set
-    out = [(name, base / 'text' / f'{name}.txt') for name in ('bart-1', 't5-1', 'gector-1')]
-    out.append((f'esc k{settings.FINAL_K}', base / f'k{settings.FINAL_K}' / 'esc' / 'pred.txt'))
-    out += [(name, base / tag / name / 'pred.txt') for name, *_ in settings.TEST_RUNS]
-    return out
-
-
-def is_lfs_pointer(path):
-    with open(path, encoding='utf-8', errors='replace') as f:
-        return f.read(40).startswith('version https://git-lfs')
-
-
-def main_test(test_set, tag='released'):
-    src, gold = settings.TEST_SETS[test_set]
-    n = len(read_lines(src))
-    outputs = test_outputs(test_set, tag)
-    for label, path in outputs:
-        if not path.exists():
-            sys.exit(f'missing {path}: run greco_esc/test.sh first')
-        if len(read_lines(path)) != n:
-            raise ValueError(f'{path}: {len(read_lines(path))} lines, expected {n}')
-    if gold is None or not gold.exists() or is_lfs_pointer(gold):
-        why = 'it has no public gold; submit to Codabench' if gold is None else \
-              f'{gold} is a Git LFS pointer; run `git lfs pull` (see cluster/README.md), then rerun this'
-        print(f'{test_set} ({n} sentences) is not scored here: {why}. Outputs:')
-        for label, path in outputs:
-            print(f'  {label:<22} {path}')
-        return
-    from training.metrics import score  # needs ERRANT, so imported only when scoring
-    rows = []
-    for label, path in outputs:
-        result = score(src, read_lines(path), gold)
-        e, m = result['errant']['correction'], result['m2']
-        rows.append({'output': label, 'm2_p': m['precision'] * 100, 'm2_r': m['recall'] * 100,
-                     'm2_f0_5': m['f0_5'] * 100, 'errant_p': e['precision'] * 100,
-                     'errant_r': e['recall'] * 100, 'errant_f0_5': e['f0_5'] * 100})
-    lines = [f'{test_set} ({n} sentences), GRECO checkpoint "{tag}". M2 is the official CoNLL-2014 metric.', '',
-             '| Output | M2 F0.5 (P / R) | ERRANT F0.5 (P / R) |', '|---|---|---|']
-    lines += [f"| {r['output']} | {r['m2_f0_5']:.1f} ({r['m2_p']:.1f} / {r['m2_r']:.1f}) | "
-              f"{r['errant_f0_5']:.1f} ({r['errant_p']:.1f} / {r['errant_r']:.1f}) |" for r in rows]
-    out = settings.ROOT / test_set / tag
-    out.mkdir(parents=True, exist_ok=True)
-    with open(out / 'results.csv', 'w', newline='', encoding='utf-8') as f:
-        writer = csv.DictWriter(f, fieldnames=list(rows[0]))
-        writer.writeheader()
-        writer.writerows({k: f'{v:.2f}' if isinstance(v, float) else v for k, v in r.items()} for r in rows)
-    (out / 'results.md').write_text('\n'.join(lines) + '\n', encoding='utf-8')
-    print('\n'.join(lines))
-    print(f'wrote {out / "results.csv"} and {out / "results.md"}')
-
-
 if __name__ == '__main__':
-    if sys.argv[1:2] == ['test']:
-        if len(sys.argv) not in (3, 4) or sys.argv[2] not in settings.TEST_SETS:
-            sys.exit(f'usage: python3 -m greco_esc.evaluate test <{" | ".join(settings.TEST_SETS)}> [tag]')
-        main_test(*sys.argv[2:])
-        sys.exit()
-    splits = (settings.FULL_SPLIT,) + settings.TEST_SPLITS
-    if len(sys.argv) > 2 or sys.argv[1:] and sys.argv[1] not in splits:
-        sys.exit(f'usage: python3 -m greco_esc.evaluate [{" | ".join(splits)}]')
+    splits = (settings.FULL_SPLIT,) + settings.TEST_SPLITS + tuple(settings.TEST_SETS)
+    if len(sys.argv) > 3 or sys.argv[1:] and sys.argv[1] not in splits:
+        sys.exit(f'usage: python3 -m greco_esc.evaluate [{" | ".join(splits)}] [tag]')
     main(*sys.argv[1:])

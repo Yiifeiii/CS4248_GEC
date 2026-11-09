@@ -17,7 +17,7 @@ corrections (target.txt, and the gold M2 as target.m2, which ESC labels the edit
 esc_home is runs/esc/k<k> for dev_test (ESC trained on dev_tune) and runs/esc/k<k>/for-dev_tune
 for dev_tune (ESC trained on dev_test), see settings.esc_home.
 
-final_esc: for the test sets (test.sh), ESC is trained once on the full dev set. Its training folder,
+final_esc: for the test sets (test.sh), ESC is trained once per k on the full dev set. Its training folder,
 runs/esc/final/k<k>/dev/{text,m2}, holds each input, the source, target.txt and target.m2 as
 dev_tune followed by dev_test (written, not linked: the halves are concatenated). Each test set's
 folder, runs/esc/final/k<k>/<test set>, links that set's inputs and source, without gold.
@@ -125,8 +125,12 @@ def m2_text(path):
 
 
 def build_final_esc(test_sets):
-    """ESC folders for the test sets: training on the full dev set (dev_tune + dev_test)."""
-    k = settings.FINAL_K
+    """ESC folders for the test sets, for every k: training on the full dev set (dev_tune + dev_test)."""
+    for k in settings.KS:
+        _build_final_esc(k, test_sets)
+
+
+def _build_final_esc(k, test_sets):
     home = settings.esc_home(k, test_sets[0])
     dev = home / settings.FULL_SPLIT
     for sub in ('text', 'm2'):
