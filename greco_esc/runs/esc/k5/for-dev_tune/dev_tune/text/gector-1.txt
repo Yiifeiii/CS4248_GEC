@@ -1,1 +1,0 @@
-../../../../../dev_tune/text/gector-1.txt

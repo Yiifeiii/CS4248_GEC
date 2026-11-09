@@ -11,5 +11,6 @@ checkpoints/
 # Rebuilt by training/build_data.py (sha256 in data/curriculum/manifest.json)
 data/curriculum/stage1.*
 
-# GRECO + ESC n-best lists (large; pool/*.tgt keeps the 5-best)
-greco_esc/runs/*/pool/*.nbest.jsonl
+# GRECO + ESC outputs: written by the cluster jobs and copied back with rsync. Not tracked,
+# because a tracked file that also exists untracked on the cluster stops `git pull` there.
+greco_esc/runs/

@@ -1,1 +1,0 @@
-../../../../dev_test/text/bart-3.txt
