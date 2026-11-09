@@ -6,6 +6,8 @@
 # input defaults to data/dev.src and name to full/beam; writes outputs/<system>/<name>.tgt.
 # BEA-2019 test set:
 #   sbatch -J nbest-bea19 --time=04:00:00 cluster/job.sbatch cluster/nbest_beam.sh data/test.bea19.src bea19
+# CoNLL-2014 test set:
+#   sbatch -J nbest-conll14 --time=02:00:00 cluster/job.sbatch cluster/nbest_beam.sh data/test.conll14.src conll14
 # Model: $BART_MODEL / $T5_MODEL if set, else $CKPT_ROOT/<run>/best if it exists, else
 # CS4248-GEC/gec-<system>-base-s1s2 from the Hugging Face cache (jobs run offline).
 set -euo pipefail

@@ -18,6 +18,10 @@
 #   sbatch -J greco-bea19 cluster/job.sbatch cluster/greco_tune.sh bea19 --k 1 2 3 5 --tag beam \
 #       --system bart=outputs/bart/bea19.tgt --system t5=outputs/t5/bea19.tgt \
 #       --system gector=outputs/gector/bea19.tgt --best-from outputs/greco/tuning/dev.errant.beam/best.json
+# CoNLL-2014 the same way (split conll14, outputs/<system>/conll14.tgt); scored with the M2
+# scorer and ERRANT when data/test.conll14.m2 is not a Git LFS pointer, else run
+#   python -m greco_setup.score_tuning --split conll14.errant.beam
+# where git-lfs has pulled it.
 # The first argument is the split; the rest go to tune_vote.py (--edits difflib uses the
 # old difflib edits and writes to <split> instead of <split>.errant).
 set -euo pipefail
@@ -50,6 +54,11 @@ OUT_SPLIT="$OUT_SPLIT$TAG$LIMIT"
 SOURCE=data/dev.src
 SCORE=1
 if [ "$SPLIT" = bea19 ]; then SOURCE=data/test.bea19.src; SCORE=0; fi
+if [ "$SPLIT" = conll14 ]; then
+    SOURCE=data/test.conll14.src
+    # The gold M2 is in Git LFS; without git-lfs it is a pointer file, so score locally
+    head -c 8 data/test.conll14.m2 | grep -q '^version' && SCORE=0
+fi
 
 # job.sbatch runs this script in a new bash, which does not inherit the conda function
 set +u
@@ -73,5 +82,5 @@ if [ "$SCORE" = 1 ]; then
     step scoring
     python -m greco_setup.score_tuning --split "$OUT_SPLIT"
 else
-    step "no gold edits for $SPLIT; predictions are in outputs/greco/tuning/$OUT_SPLIT"
+    step "no gold edits for $SPLIT here; predictions are in outputs/greco/tuning/$OUT_SPLIT"
 fi
