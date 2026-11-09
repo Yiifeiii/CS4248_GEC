@@ -2,7 +2,21 @@
 
 This combines our three systems the way the GRECO paper's strongest setup does (Qorib & Ng, 2023): GRECO's quality score plus ESC's edit scores. It runs with and without ESC, and with and without voting. The three systems are the fine-tuned BART and T5 (`s1s2`) and GECToR. Everything is scored on `dev_test`.
 
-**Status:** code and tests are done, but it has not yet run on the cluster. Results will be in `greco_esc/runs/dev_test/results.md`.
+**Status:** the dev runs are done (Slurm jobs 1098818 and 1099227, finished 9 Nov 2026). Full tables are in `runs/dev_test/results.md` and `runs/dev/results.md`. The test-set run (`test.sh`, section 3) has not run yet.
+
+**Results so far** (ERRANT F0.5, with P / R):
+
+| System | `dev_test` | Full dev (cross-fitted) |
+|---|---|---|
+| **GRECO + ESC, k = 3, no vote** (final system) | **58.9** (70.7 / 35.4) | 60.2 (73.0 / 35.5) |
+| GRECO alone, k = 1, `hypothesis` vote 0.4 (best without ESC) | 58.2 (66.8 / 38.5) | 59.9 (68.6 / 39.7) |
+| ESC alone, k = 3 | 57.8 (70.9 / 33.3) | 58.7 (73.0 / 33.0) |
+| Best single system (GECToR) | 52.8 (61.6 / 33.6) | 54.8 (63.8 / 35.0) |
+
+- ESC is what helps. GRECO + ESC stays at 58.6–58.9 for every k, while GRECO alone falls from 58.2 to 53.3 as k grows.
+- With ESC on, voting changes the score by at most 0.8 points, and no vote mode reliably beats no voting.
+- ESC raises precision and lowers recall, as in the paper.
+- ESC's training picked a sensible epoch for every k (section 4).
 
 ## 1. The method
 
@@ -43,7 +57,7 @@ At k, GRECO and ESC both read the 1 + 2k inputs `gector-1, bart-1, t5-1, …, ba
 
 **Splits:** ESC learns its weights on `dev_tune`, which has gold edits. The main results are on `dev_test`. Nothing is tuned on `dev_test`.
 
-**Full dev set (cross-fitting).** The full dev set (`data/dev.src`, 4,384 sentences) is `dev_tune` + `dev_test`, and `data/curriculum/<half>.ids` gives each line's place in it. To score it without ESC seeing a sentence's gold edits, the job also runs every combination on `dev_tune` with ESC trained on `dev_test` (`runs/esc/k<k>/for-dev_tune/`). `evaluate.py dev` then merges each output's two halves back into `dev.src` order and scores them against a reference rebuilt the same way from the halves' M2 files, because `data/dev.m2` is a Git LFS pointer on the cluster. GRECO and ESC handle each sentence on its own, so the merged output is what one run on the full set would give, apart from ESC's training data. The α values were tuned on `dev_tune`, so on the `dev_tune` half they are in-sample: compare full-dev results with other full-dev results, such as `main`'s `dev.errant.beam` table (whose α were tuned on the full dev set itself), not with `dev_test` results.
+**Full dev set (cross-fitting).** The full dev set (`data/dev.src`, 4,384 sentences) is `dev_tune` + `dev_test`, and `data/curriculum/<half>.ids` gives each line's place in it. To score it without ESC seeing a sentence's gold edits, the job also runs every combination on `dev_tune` with ESC trained on `dev_test` (`runs/esc/k<k>/for-dev_tune/`). `evaluate.py dev` then merges each output's two halves back into `dev.src` order and scores them against a reference rebuilt the same way from the halves' M2 files, because `data/dev.m2` is a Git LFS pointer on the cluster. GRECO and ESC handle each sentence on its own, so the merged output is what one run on the full set would give, apart from ESC's training data. The α values are tuned on the full dev set itself (`main`'s `dev.errant.beam`), so they are in-sample on both halves: compare full-dev results with that table, and treat neither dev number as a held-out estimate. Only the test sets are held out.
 
 ### What ESC does, and which ESC each run uses
 
@@ -83,9 +97,9 @@ All settings are in `settings.py`, and the scripts read them from there.
 | BART/T5 decoding | **Plain** beam search, 10 beams, 10 returned; re-ranked by length-normalised teacher-forced log-probability, duplicates removed, top 5 kept | `bart/generate_nbest.py` default `--mode beam`; `bart/export_candidates.py --k 5` |
 | GECToR | Grammarly's `roberta_1_gectorv2.th`, no further training; keep-confidence 0.2, min error probability 0.5, up to 5 iterations | `gector/predict.py` defaults |
 | k (hypotheses per BART/T5) | 1, 2, 3, 5 | As in the `greco-voting` tuning |
-| α (`vote_coef`), `hypothesis` | k1 0.4, k2 0.1, k3 0.1, k5 0.1 | Best α per mode on `dev_tune`, on plain beam search lists: `outputs/greco/tuning/dev_tune.errant.beam/best.json` on `main` |
+| α (`vote_coef`), `hypothesis` | k1 0.1, k2 0.1, k3 0.1, k5 0.1 | Best α per mode on the full dev set (BEA-2019 dev), on plain beam search lists: `outputs/greco/tuning/dev.errant.beam/best.json` on `main` |
 | α, `system` | k2 0.1, k3 0.1, k5 0.1 | same file |
-| α, `rank` | k2 0.4, k3 0.4, k5 0.4 | same file |
+| α, `rank` | k2 0.2, k3 0.4, k5 0.6 | same file |
 | Control α | 0 | No voting |
 | r (`score_ratio`) | 0.7 | Paper (BEA-2019 command) |
 | Beam size, batch size | 16, 16 | Paper; with the attention-mask fix the batch size does not change scores |
@@ -98,7 +112,9 @@ All settings are in `settings.py`, and the scripts read them from there.
 - **system:** the share of systems proposing it.
 - **rank:** weighted by the best rank that proposes it.
 
-Upstream `run_combination.py` computes only "hypothesis"; `combine.py` adds "system" and "rank" (section 1), so all three are run with their own α. The α come from the tuning on **plain** beam search lists (`cluster/nbest_beam.sh` on `main`: the same models, 10 beams, 10 returned, top 5 after re-ranking, as this pipeline), on `dev_tune`, without ESC. The full-dev tuning (`dev.errant.beam`) is not used: it includes `dev_test`, where everything here is scored. The first run of this pipeline used the `hypothesis` α tuned on diverse lists (`dev_tune.errant`), which are the same values.
+Upstream `run_combination.py` computes only "hypothesis"; `combine.py` adds "system" and "rank" (section 1), so all three are run with their own α. The α come from the tuning on **plain** beam search lists (`cluster/nbest_beam.sh` on `main`: the same models, 10 beams, 10 returned, top 5 after re-ranking, as this pipeline), on the **full dev set** (BEA-2019 dev, `dev.errant.beam`), without ESC. That is the paper's practice and keeps the test sets untouched, but it makes the α in-sample on `dev_test` and the full dev set, so dev scores with them are not held-out estimates.
+
+**Earlier runs used the `dev_tune`-only α** (`dev_tune.errant.beam`: k1 0.4, rank 0.4 at every k; hypothesis and system as now). They kept `dev_test` held out, and the dev results in the Status table at the top come from them. The runs whose α changed (k1 voting, k2 `rank` 0.2, k5 `rank` 0.6) are new runs with new names; the old outputs stay on disk but are no longer in the results tables. The final system (k3, `rank` 0.4) has the same α under both tunings.
 
 Two tables of these results exist:
 
@@ -221,10 +237,15 @@ The end-to-end test runs only with `external/esc` and `external/greco` in place 
 ## 4. Differences from the paper and known limits
 
 - **α was tuned without ESC,** on plain beam search lists, with the `greco-voting` branch's own combiner rather than upstream's beam search. It was not retuned with ESC, so the best α with ESC may differ. r = 0.7 is the paper's value and was not tuned either.
-- **Compare with the plain beam tuning, not the diverse one.** `greco-voting`'s `dev_test.errant` results are on diverse lists; the plain beam tuning on `main` (`dev_tune.errant.beam`) uses the same candidates as this pipeline.
+- **Compare with the plain beam tuning, not the diverse one.** `greco-voting`'s `dev_test.errant` results are on diverse lists; the plain beam tuning on `main` (`dev.errant.beam`, whose α are used here) uses the same candidates as this pipeline.
 - **ESC is trained on 2,000 sentences.** The paper used the 4,384 of BEA-2019 dev, and we hold half of that out as `dev_test`. With 11 inputs at k = 5, ESC has 11 × (number of edit types) features from 2,000 sentences.
 - **Each ranked hypothesis is one ESC "system".** `bart-2` gets its own weights, separate from `bart-1`. That is how upstream ESC treats input files. The paper combined 1-best outputs only.
-- **Upstream ESC quirk.** ESC retrains on all the data for as many epochs as the best validation epoch. Epochs are counted from 0, so if the best is epoch 0, the final model is untrained. The log line `Best checkpoint at epoch N` shows the chosen epoch.
+- **Upstream ESC quirk.** ESC retrains on all the data for as many epochs as the best validation epoch. Epochs are counted from 0, so if the best is epoch 0, the final model is untrained. The log line `Best checkpoint at epoch N` shows the chosen epoch. None of the dev runs chose epoch 0:
+
+  | ESC trained on | k = 1 | k = 2 | k = 3 | k = 5 | Slurm log |
+  |---|---|---|---|---|---|
+  | `dev_tune` (scores `dev_test`) | 87 | 90 | 84 | 48 | `greco-esc-1098818.out` |
+  | `dev_test` (scores `dev_tune`) | 47 | 80 | 70 | 47 | `greco-esc-1099227.out` |
 - **Clipping.** ESC probabilities of exactly 0 or 1 are clipped to [10⁻⁶, 1 − 10⁻⁶], because GRECO takes their logarithm (`prepare.py scores`).
 
 ## 5. Code
