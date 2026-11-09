@@ -4,6 +4,14 @@ from transformers import Seq2SeqTrainer
 from transformers.trainer_utils import seed_worker
 
 
+def validate_exposure_config(cfg):
+    if cfg.get('exact_exposure_batches'):
+        if cfg['epochs']!=1 or cfg['grad_accum']<1 or cfg.get('max_steps'):
+            raise ValueError('Exact exposure requires one complete fixed stream')
+        if cfg['errant_eval'].get('patience'):
+            raise ValueError('Early stopping would change example exposure')
+
+
 class ExposureBatchSampler:
     """Split the final update into nonempty microbatches; never pad/drop examples."""
     def __init__(self, size, batch_size, accumulation):

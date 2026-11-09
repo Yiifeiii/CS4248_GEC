@@ -11,7 +11,7 @@ python - "$config" <<'PY'
 from pathlib import Path
 import json,sys,os
 from transformers.utils import cached_file
-from training.build_order_control import sha
+from training.control_data import sha
 cfg=json.loads(Path(sys.argv[1]).read_text());root=Path(os.environ['FOUR_CONTROL_DATA'])
 m=json.loads((root/'manifest.json').read_text());stream=cfg['control_stream']
 for suffix in ('src','tgt'):

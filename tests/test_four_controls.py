@@ -7,13 +7,20 @@ import tempfile
 import unittest
 
 from training.build_four_controls import streams
-from training.exposure_batching import ExposureBatchSampler,ExactExposureTrainer
+from training.exposure_batching import ExposureBatchSampler,ExactExposureTrainer,validate_exposure_config
 
 
 ROOT=Path(__file__).resolve().parents[1]
 
 
 class FourControlsTests(unittest.TestCase):
+    def test_exact_exposure_cannot_be_shortened_by_config(self):
+        cfg=dict(exact_exposure_batches=True,epochs=1,grad_accum=2,errant_eval={'patience':None})
+        validate_exposure_config(cfg)
+        for key,value in [('epochs',3),('grad_accum',0),('max_steps',10)]:
+            bad=dict(cfg,**{key:value})
+            with self.assertRaises(ValueError):validate_exposure_config(bad)
+        with self.assertRaises(ValueError):validate_exposure_config(dict(cfg,errant_eval={'patience':2}))
     def test_matched_and_uniform_exposures_include_overlap_correctly(self):
         a,b,c=('a','A'),('b','B'),('c','c')
         rows,n=streams([a,b,b],[b,c,c])

@@ -1,0 +1,71 @@
+{
+  "run": "four-controls-20261108/t5-2a",
+  "config": {
+    "run": "four-controls-20261108/t5-2a",
+    "init": "google-t5/t5-base",
+    "learning_rate": 0.0001,
+    "train": "${FOUR_CONTROL_DATA}/uniform3/train",
+    "errorful_only": false,
+    "epochs": 1,
+    "batch_size": 64,
+    "grad_accum": 2,
+    "warmup_steps": 1000,
+    "loss_eval_steps": 1000,
+    "save_steps": 1000,
+    "errant_eval": {
+      "steps": 1000,
+      "sentences": 2000,
+      "beams": 5,
+      "patience": null
+    },
+    "dropout": 0.1,
+    "weight_decay": 0.01,
+    "label_smoothing": 0.1,
+    "seed": 42,
+    "save_total_limit": 2,
+    "logging_steps": 50,
+    "output_dir": "${CKPT_ROOT}/four-controls-20261108/t5-2a",
+    "preserve_train_order": true,
+    "exact_exposure_batches": true,
+    "control_stream": "uniform3",
+    "optimization_stage": 1,
+    "logical_epochs": 3
+  },
+  "config_path": "training/configs/four-controls/t5-2a.json",
+  "args": {
+    "config": "training/configs/four-controls/t5-2a.json",
+    "resume": "auto",
+    "output_dir": null,
+    "max_steps": null,
+    "train_limit": null,
+    "dev_limit": null,
+    "errant_steps": null
+  },
+  "init": "google-t5/t5-base",
+  "family": "t5",
+  "prefix": "gec: ",
+  "training_pairs": 1708497,
+  "git_commit": null,
+  "data_manifest_sha256": "8d8b1bb1b0b40d4c6ecac589a7e7467ba5fd5344d3ffd9550c98a4e0ccb515a7",
+  "versions": {
+    "torch": "2.11.0+cu128",
+    "transformers": "4.46.3"
+  },
+  "device": "NVIDIA H100 NVL MIG 3g.47gb",
+  "started": "2026-11-09 03:58:17",
+  "finished": "2026-11-09 04:59:50",
+  "steps": 13348,
+  "best": {
+    "step": 13348,
+    "epoch": 1.0,
+    "beams": 5,
+    "sentences": 2000,
+    "tp": 972.0,
+    "fp": 631.0,
+    "fn": 2449.0,
+    "precision": 0.6064,
+    "recall": 0.2841,
+    "f0_5": 0.4943,
+    "seconds": 55
+  }
+}

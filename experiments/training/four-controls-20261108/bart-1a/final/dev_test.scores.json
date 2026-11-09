@@ -1,0 +1,34 @@
+{
+  "model": "/mnt/scratch/r/raeedaih/cs4248-gec/checkpoints/four-controls-20261108/bart-1a/final",
+  "split": "dev_test",
+  "sentences": 2384,
+  "beams": 5,
+  "prefix": null,
+  "retokenize": false,
+  "git_commit": null,
+  "decode_seconds": 118,
+  "device": "cuda",
+  "errant": {
+    "correction": {
+      "tp": 1345.0,
+      "fp": 1135.0,
+      "fn": 2695.0,
+      "precision": 0.5423,
+      "recall": 0.3329,
+      "f0_5": 0.4817
+    },
+    "detection": {
+      "tp": 1629.0,
+      "fp": 864.0,
+      "fn": 2505.0,
+      "precision": 0.6534,
+      "recall": 0.394,
+      "f0_5": 0.5774
+    }
+  },
+  "m2": {
+    "precision": 0.621,
+    "recall": 0.3587,
+    "f0_5": 0.5418
+  }
+}

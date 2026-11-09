@@ -1,0 +1,34 @@
+{
+  "model": "/mnt/scratch/r/raeedaih/cs4248-gec/checkpoints/four-controls-20261108/t5-1a/best",
+  "split": "dev_test",
+  "sentences": 2384,
+  "beams": 5,
+  "prefix": null,
+  "retokenize": false,
+  "git_commit": null,
+  "decode_seconds": 49,
+  "device": "cuda",
+  "errant": {
+    "correction": {
+      "tp": 1348.0,
+      "fp": 963.0,
+      "fn": 2692.0,
+      "precision": 0.5833,
+      "recall": 0.3337,
+      "f0_5": 0.5074
+    },
+    "detection": {
+      "tp": 1631.0,
+      "fp": 693.0,
+      "fn": 2503.0,
+      "precision": 0.7018,
+      "recall": 0.3945,
+      "f0_5": 0.6072
+    }
+  },
+  "m2": {
+    "precision": 0.6659,
+    "recall": 0.3607,
+    "f0_5": 0.5695
+  }
+}

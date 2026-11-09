@@ -1,0 +1,762 @@
+{
+  "experiment": "four-controls-20261108",
+  "slurm_preflight": 1097381,
+  "slurm_array": 1097382,
+  "all_completed_exit_0": true,
+  "primary_endpoint": "best dev_tune checkpoint; five-beam final evaluation",
+  "unique_training_pairs": 569499,
+  "rows": [
+    {
+      "model": "bart",
+      "control": "1a",
+      "optimization_stage": 1,
+      "stream": "matched",
+      "training_pairs": 1853729,
+      "steps": 14483,
+      "best_step": 10000,
+      "scores": {
+        "best": {
+          "dev_tune": {
+            "errant": {
+              "tp": 1215.0,
+              "fp": 921.0,
+              "fn": 2206.0,
+              "precision": 0.5688,
+              "recall": 0.3552,
+              "f0_5": 0.5077
+            },
+            "m2": {
+              "precision": 0.643,
+              "recall": 0.3825,
+              "f0_5": 0.5659
+            }
+          },
+          "dev_test": {
+            "errant": {
+              "tp": 1390.0,
+              "fp": 1145.0,
+              "fn": 2650.0,
+              "precision": 0.5483,
+              "recall": 0.3441,
+              "f0_5": 0.4901
+            },
+            "m2": {
+              "precision": 0.6309,
+              "recall": 0.3725,
+              "f0_5": 0.554
+            }
+          }
+        },
+        "final": {
+          "dev_tune": {
+            "errant": {
+              "tp": 1180.0,
+              "fp": 922.0,
+              "fn": 2241.0,
+              "precision": 0.5614,
+              "recall": 0.3449,
+              "f0_5": 0.4988
+            },
+            "m2": {
+              "precision": 0.6385,
+              "recall": 0.3722,
+              "f0_5": 0.5586
+            }
+          },
+          "dev_test": {
+            "errant": {
+              "tp": 1345.0,
+              "fp": 1135.0,
+              "fn": 2695.0,
+              "precision": 0.5423,
+              "recall": 0.3329,
+              "f0_5": 0.4817
+            },
+            "m2": {
+              "precision": 0.621,
+              "recall": 0.3587,
+              "f0_5": 0.5418
+            }
+          }
+        }
+      },
+      "curriculum_baseline": {
+        "dev_tune": {
+          "tp": 1336.0,
+          "fp": 900.0,
+          "fn": 2085.0,
+          "precision": 0.5975,
+          "recall": 0.3905,
+          "f0_5": 0.5402
+        },
+        "dev_test": {
+          "tp": 1531.0,
+          "fp": 1121.0,
+          "fn": 2509.0,
+          "precision": 0.5773,
+          "recall": 0.379,
+          "f0_5": 0.5226
+        }
+      },
+      "dev_test_delta_from_baseline_points": -3.25
+    },
+    {
+      "model": "bart",
+      "control": "1b",
+      "optimization_stage": 2,
+      "stream": "matched",
+      "training_pairs": 1853729,
+      "steps": 57930,
+      "best_step": 40000,
+      "scores": {
+        "best": {
+          "dev_tune": {
+            "errant": {
+              "tp": 1015.0,
+              "fp": 717.0,
+              "fn": 2406.0,
+              "precision": 0.586,
+              "recall": 0.2967,
+              "f0_5": 0.4904
+            },
+            "m2": {
+              "precision": 0.6559,
+              "recall": 0.3205,
+              "f0_5": 0.5424
+            }
+          },
+          "dev_test": {
+            "errant": {
+              "tp": 1157.0,
+              "fp": 944.0,
+              "fn": 2883.0,
+              "precision": 0.5507,
+              "recall": 0.2864,
+              "f0_5": 0.4649
+            },
+            "m2": {
+              "precision": 0.6261,
+              "recall": 0.3087,
+              "f0_5": 0.5193
+            }
+          }
+        },
+        "final": {
+          "dev_tune": {
+            "errant": {
+              "tp": 1020.0,
+              "fp": 758.0,
+              "fn": 2401.0,
+              "precision": 0.5737,
+              "recall": 0.2982,
+              "f0_5": 0.4842
+            },
+            "m2": {
+              "precision": 0.6479,
+              "recall": 0.323,
+              "f0_5": 0.5394
+            }
+          },
+          "dev_test": {
+            "errant": {
+              "tp": 1153.0,
+              "fp": 934.0,
+              "fn": 2887.0,
+              "precision": 0.5525,
+              "recall": 0.2854,
+              "f0_5": 0.4654
+            },
+            "m2": {
+              "precision": 0.6265,
+              "recall": 0.3084,
+              "f0_5": 0.5194
+            }
+          }
+        }
+      },
+      "curriculum_baseline": {
+        "dev_tune": {
+          "tp": 1336.0,
+          "fp": 900.0,
+          "fn": 2085.0,
+          "precision": 0.5975,
+          "recall": 0.3905,
+          "f0_5": 0.5402
+        },
+        "dev_test": {
+          "tp": 1531.0,
+          "fp": 1121.0,
+          "fn": 2509.0,
+          "precision": 0.5773,
+          "recall": 0.379,
+          "f0_5": 0.5226
+        }
+      },
+      "dev_test_delta_from_baseline_points": -5.77
+    },
+    {
+      "model": "bart",
+      "control": "2a",
+      "optimization_stage": 1,
+      "stream": "uniform3",
+      "training_pairs": 1708497,
+      "steps": 13348,
+      "best_step": 8000,
+      "scores": {
+        "best": {
+          "dev_tune": {
+            "errant": {
+              "tp": 943.0,
+              "fp": 716.0,
+              "fn": 2478.0,
+              "precision": 0.5684,
+              "recall": 0.2757,
+              "f0_5": 0.4688
+            },
+            "m2": {
+              "precision": 0.6374,
+              "recall": 0.297,
+              "f0_5": 0.5186
+            }
+          },
+          "dev_test": {
+            "errant": {
+              "tp": 1099.0,
+              "fp": 871.0,
+              "fn": 2941.0,
+              "precision": 0.5579,
+              "recall": 0.272,
+              "f0_5": 0.461
+            },
+            "m2": {
+              "precision": 0.6216,
+              "recall": 0.29,
+              "f0_5": 0.5059
+            }
+          }
+        },
+        "final": {
+          "dev_tune": {
+            "errant": {
+              "tp": 985.0,
+              "fp": 815.0,
+              "fn": 2436.0,
+              "precision": 0.5472,
+              "recall": 0.2879,
+              "f0_5": 0.4637
+            },
+            "m2": {
+              "precision": 0.6162,
+              "recall": 0.3093,
+              "f0_5": 0.5142
+            }
+          },
+          "dev_test": {
+            "errant": {
+              "tp": 1157.0,
+              "fp": 975.0,
+              "fn": 2883.0,
+              "precision": 0.5427,
+              "recall": 0.2864,
+              "f0_5": 0.4603
+            },
+            "m2": {
+              "precision": 0.6069,
+              "recall": 0.307,
+              "f0_5": 0.5077
+            }
+          }
+        }
+      },
+      "curriculum_baseline": {
+        "dev_tune": {
+          "tp": 1336.0,
+          "fp": 900.0,
+          "fn": 2085.0,
+          "precision": 0.5975,
+          "recall": 0.3905,
+          "f0_5": 0.5402
+        },
+        "dev_test": {
+          "tp": 1531.0,
+          "fp": 1121.0,
+          "fn": 2509.0,
+          "precision": 0.5773,
+          "recall": 0.379,
+          "f0_5": 0.5226
+        }
+      },
+      "dev_test_delta_from_baseline_points": -6.16
+    },
+    {
+      "model": "bart",
+      "control": "2b",
+      "optimization_stage": 2,
+      "stream": "uniform5",
+      "training_pairs": 2847495,
+      "steps": 88985,
+      "best_step": 68000,
+      "scores": {
+        "best": {
+          "dev_tune": {
+            "errant": {
+              "tp": 950.0,
+              "fp": 753.0,
+              "fn": 2471.0,
+              "precision": 0.5578,
+              "recall": 0.2777,
+              "f0_5": 0.4642
+            },
+            "m2": {
+              "precision": 0.6247,
+              "recall": 0.2993,
+              "f0_5": 0.5131
+            }
+          },
+          "dev_test": {
+            "errant": {
+              "tp": 1078.0,
+              "fp": 930.0,
+              "fn": 2962.0,
+              "precision": 0.5369,
+              "recall": 0.2668,
+              "f0_5": 0.4465
+            },
+            "m2": {
+              "precision": 0.6016,
+              "recall": 0.285,
+              "f0_5": 0.4922
+            }
+          }
+        },
+        "final": {
+          "dev_tune": {
+            "errant": {
+              "tp": 954.0,
+              "fp": 797.0,
+              "fn": 2467.0,
+              "precision": 0.5448,
+              "recall": 0.2789,
+              "f0_5": 0.4576
+            },
+            "m2": {
+              "precision": 0.6141,
+              "recall": 0.2993,
+              "f0_5": 0.5074
+            }
+          },
+          "dev_test": {
+            "errant": {
+              "tp": 1099.0,
+              "fp": 935.0,
+              "fn": 2941.0,
+              "precision": 0.5403,
+              "recall": 0.272,
+              "f0_5": 0.4513
+            },
+            "m2": {
+              "precision": 0.6061,
+              "recall": 0.2903,
+              "f0_5": 0.4978
+            }
+          }
+        }
+      },
+      "curriculum_baseline": {
+        "dev_tune": {
+          "tp": 1336.0,
+          "fp": 900.0,
+          "fn": 2085.0,
+          "precision": 0.5975,
+          "recall": 0.3905,
+          "f0_5": 0.5402
+        },
+        "dev_test": {
+          "tp": 1531.0,
+          "fp": 1121.0,
+          "fn": 2509.0,
+          "precision": 0.5773,
+          "recall": 0.379,
+          "f0_5": 0.5226
+        }
+      },
+      "dev_test_delta_from_baseline_points": -7.61
+    },
+    {
+      "model": "t5",
+      "control": "1a",
+      "optimization_stage": 1,
+      "stream": "matched",
+      "training_pairs": 1853729,
+      "steps": 14483,
+      "best_step": 10000,
+      "scores": {
+        "best": {
+          "dev_tune": {
+            "errant": {
+              "tp": 1171.0,
+              "fp": 728.0,
+              "fn": 2250.0,
+              "precision": 0.6166,
+              "recall": 0.3423,
+              "f0_5": 0.5315
+            },
+            "m2": {
+              "precision": 0.6923,
+              "recall": 0.3659,
+              "f0_5": 0.5875
+            }
+          },
+          "dev_test": {
+            "errant": {
+              "tp": 1348.0,
+              "fp": 963.0,
+              "fn": 2692.0,
+              "precision": 0.5833,
+              "recall": 0.3337,
+              "f0_5": 0.5074
+            },
+            "m2": {
+              "precision": 0.6659,
+              "recall": 0.3607,
+              "f0_5": 0.5695
+            }
+          }
+        },
+        "final": {
+          "dev_tune": {
+            "errant": {
+              "tp": 1155.0,
+              "fp": 746.0,
+              "fn": 2266.0,
+              "precision": 0.6076,
+              "recall": 0.3376,
+              "f0_5": 0.5238
+            },
+            "m2": {
+              "precision": 0.685,
+              "recall": 0.3631,
+              "f0_5": 0.5818
+            }
+          },
+          "dev_test": {
+            "errant": {
+              "tp": 1328.0,
+              "fp": 941.0,
+              "fn": 2712.0,
+              "precision": 0.5853,
+              "recall": 0.3287,
+              "f0_5": 0.5063
+            },
+            "m2": {
+              "precision": 0.6633,
+              "recall": 0.3541,
+              "f0_5": 0.5647
+            }
+          }
+        }
+      },
+      "curriculum_baseline": {
+        "dev_tune": {
+          "tp": 1384.0,
+          "fp": 894.0,
+          "fn": 2037.0,
+          "precision": 0.6076,
+          "recall": 0.4046,
+          "f0_5": 0.5521
+        },
+        "dev_test": {
+          "tp": 1578.0,
+          "fp": 1169.0,
+          "fn": 2462.0,
+          "precision": 0.5744,
+          "recall": 0.3906,
+          "f0_5": 0.525
+        }
+      },
+      "dev_test_delta_from_baseline_points": -1.76
+    },
+    {
+      "model": "t5",
+      "control": "1b",
+      "optimization_stage": 2,
+      "stream": "matched",
+      "training_pairs": 1853729,
+      "steps": 57930,
+      "best_step": 57930,
+      "scores": {
+        "best": {
+          "dev_tune": {
+            "errant": {
+              "tp": 1120.0,
+              "fp": 695.0,
+              "fn": 2301.0,
+              "precision": 0.6171,
+              "recall": 0.3274,
+              "f0_5": 0.5243
+            },
+            "m2": {
+              "precision": 0.6927,
+              "recall": 0.3493,
+              "f0_5": 0.5789
+            }
+          },
+          "dev_test": {
+            "errant": {
+              "tp": 1286.0,
+              "fp": 899.0,
+              "fn": 2754.0,
+              "precision": 0.5886,
+              "recall": 0.3183,
+              "f0_5": 0.5031
+            },
+            "m2": {
+              "precision": 0.6678,
+              "recall": 0.3428,
+              "f0_5": 0.5613
+            }
+          }
+        },
+        "final": {
+          "dev_tune": {
+            "errant": {
+              "tp": 1120.0,
+              "fp": 695.0,
+              "fn": 2301.0,
+              "precision": 0.6171,
+              "recall": 0.3274,
+              "f0_5": 0.5243
+            },
+            "m2": {
+              "precision": 0.6927,
+              "recall": 0.3493,
+              "f0_5": 0.5789
+            }
+          },
+          "dev_test": {
+            "errant": {
+              "tp": 1286.0,
+              "fp": 899.0,
+              "fn": 2754.0,
+              "precision": 0.5886,
+              "recall": 0.3183,
+              "f0_5": 0.5031
+            },
+            "m2": {
+              "precision": 0.6678,
+              "recall": 0.3428,
+              "f0_5": 0.5613
+            }
+          }
+        }
+      },
+      "curriculum_baseline": {
+        "dev_tune": {
+          "tp": 1384.0,
+          "fp": 894.0,
+          "fn": 2037.0,
+          "precision": 0.6076,
+          "recall": 0.4046,
+          "f0_5": 0.5521
+        },
+        "dev_test": {
+          "tp": 1578.0,
+          "fp": 1169.0,
+          "fn": 2462.0,
+          "precision": 0.5744,
+          "recall": 0.3906,
+          "f0_5": 0.525
+        }
+      },
+      "dev_test_delta_from_baseline_points": -2.19
+    },
+    {
+      "model": "t5",
+      "control": "2a",
+      "optimization_stage": 1,
+      "stream": "uniform3",
+      "training_pairs": 1708497,
+      "steps": 13348,
+      "best_step": 13348,
+      "scores": {
+        "best": {
+          "dev_tune": {
+            "errant": {
+              "tp": 972.0,
+              "fp": 631.0,
+              "fn": 2449.0,
+              "precision": 0.6064,
+              "recall": 0.2841,
+              "f0_5": 0.4943
+            },
+            "m2": {
+              "precision": 0.6751,
+              "recall": 0.3047,
+              "f0_5": 0.5431
+            }
+          },
+          "dev_test": {
+            "errant": {
+              "tp": 1100.0,
+              "fp": 871.0,
+              "fn": 2940.0,
+              "precision": 0.5581,
+              "recall": 0.2723,
+              "f0_5": 0.4613
+            },
+            "m2": {
+              "precision": 0.6416,
+              "recall": 0.2954,
+              "f0_5": 0.5198
+            }
+          }
+        },
+        "final": {
+          "dev_tune": {
+            "errant": {
+              "tp": 972.0,
+              "fp": 631.0,
+              "fn": 2449.0,
+              "precision": 0.6064,
+              "recall": 0.2841,
+              "f0_5": 0.4943
+            },
+            "m2": {
+              "precision": 0.6751,
+              "recall": 0.3047,
+              "f0_5": 0.5431
+            }
+          },
+          "dev_test": {
+            "errant": {
+              "tp": 1100.0,
+              "fp": 871.0,
+              "fn": 2940.0,
+              "precision": 0.5581,
+              "recall": 0.2723,
+              "f0_5": 0.4613
+            },
+            "m2": {
+              "precision": 0.6416,
+              "recall": 0.2954,
+              "f0_5": 0.5198
+            }
+          }
+        }
+      },
+      "curriculum_baseline": {
+        "dev_tune": {
+          "tp": 1384.0,
+          "fp": 894.0,
+          "fn": 2037.0,
+          "precision": 0.6076,
+          "recall": 0.4046,
+          "f0_5": 0.5521
+        },
+        "dev_test": {
+          "tp": 1578.0,
+          "fp": 1169.0,
+          "fn": 2462.0,
+          "precision": 0.5744,
+          "recall": 0.3906,
+          "f0_5": 0.525
+        }
+      },
+      "dev_test_delta_from_baseline_points": -6.37
+    },
+    {
+      "model": "t5",
+      "control": "2b",
+      "optimization_stage": 2,
+      "stream": "uniform5",
+      "training_pairs": 2847495,
+      "steps": 88985,
+      "best_step": 80000,
+      "scores": {
+        "best": {
+          "dev_tune": {
+            "errant": {
+              "tp": 981.0,
+              "fp": 665.0,
+              "fn": 2440.0,
+              "precision": 0.596,
+              "recall": 0.2868,
+              "f0_5": 0.4903
+            },
+            "m2": {
+              "precision": 0.666,
+              "recall": 0.3079,
+              "f0_5": 0.5403
+            }
+          },
+          "dev_test": {
+            "errant": {
+              "tp": 1114.0,
+              "fp": 873.0,
+              "fn": 2926.0,
+              "precision": 0.5606,
+              "recall": 0.2757,
+              "f0_5": 0.4646
+            },
+            "m2": {
+              "precision": 0.642,
+              "recall": 0.298,
+              "f0_5": 0.5216
+            }
+          }
+        },
+        "final": {
+          "dev_tune": {
+            "errant": {
+              "tp": 977.0,
+              "fp": 684.0,
+              "fn": 2444.0,
+              "precision": 0.5882,
+              "recall": 0.2856,
+              "f0_5": 0.4853
+            },
+            "m2": {
+              "precision": 0.6609,
+              "recall": 0.3076,
+              "f0_5": 0.5375
+            }
+          },
+          "dev_test": {
+            "errant": {
+              "tp": 1114.0,
+              "fp": 887.0,
+              "fn": 2926.0,
+              "precision": 0.5567,
+              "recall": 0.2757,
+              "f0_5": 0.4625
+            },
+            "m2": {
+              "precision": 0.6382,
+              "recall": 0.2978,
+              "f0_5": 0.5194
+            }
+          }
+        }
+      },
+      "curriculum_baseline": {
+        "dev_tune": {
+          "tp": 1384.0,
+          "fp": 894.0,
+          "fn": 2037.0,
+          "precision": 0.6076,
+          "recall": 0.4046,
+          "f0_5": 0.5521
+        },
+        "dev_test": {
+          "tp": 1578.0,
+          "fp": 1169.0,
+          "fn": 2462.0,
+          "precision": 0.5744,
+          "recall": 0.3906,
+          "f0_5": 0.525
+        }
+      },
+      "dev_test_delta_from_baseline_points": -6.04
+    }
+  ]
+}

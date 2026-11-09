@@ -1,5 +1,7 @@
 # Four controls against one curriculum baseline
 
+**Completed:** all eight controls succeeded. [Results](results.md) · [Numerical results](results.json).
+
 Each model family has one reference: the original BART-base or T5-base two-stage
 curriculum checkpoint. Four new single-stage shuffled controls are compared with
 that same reference. BART starts from facebook/bart-base; T5 starts from
@@ -75,8 +77,7 @@ exposures; its original accumulation rounding is not retroactively changed.
 1A/1B ask whether the complete curriculum recipe beats shuffled training with
 matched nominal exposures under either stage's optimization settings. 2A/2B
 ask whether it beats equal-exposure ordinary training. These are recipe-level
-comparisons, not ordering-only tests. The previous ordering-only experiment is
-separate. This is one seed per configuration; no significance claims are made.
+comparisons, not ordering-only tests. This is one seed per configuration; no significance claims are made.
 
 ## Run and provenance
 
@@ -95,7 +96,7 @@ on its success, at most two concurrent, each requesting one H100-47 for up to12h
 Configs: `training/configs/four-controls/`. Data/checkpoints live on scratch.
 Results: `experiments/training/four-controls-20261108/<family>-<control>/`, with
 separate `best/` and `final/` scores and exposure/initialization provenance.
-No model training is performed on login nodes. No completed scores claimed yet.
+No model training is performed on login nodes. All eight runs are now complete.
 
 ## Submission — 8 November 2026
 
@@ -103,7 +104,7 @@ CPU preflight **1097381**, dependent GPU array **1097382**, at most two tasks
 concurrently. Executed source commit: `1a4c872`. Isolated source snapshot:
 `~/CS4248_GEC_experiments/four-controls/`. Local validation: 34 tests, 33 passed
 and one environment-dependent GRECO integration test skipped; shell syntax and
-whitespace checks passed. Submission is not a completed result.
+whitespace checks passed. All tasks subsequently completed with exit0.
 
 | Array index | Model | Control |
 |---|---|---|

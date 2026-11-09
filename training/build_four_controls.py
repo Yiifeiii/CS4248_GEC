@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 import random
 
-from training.build_order_control import sha
+from training.control_data import sha
 
 
 def streams(stage1,stage2,seed=42):

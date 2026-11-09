@@ -1,0 +1,35 @@
+{
+  "stage_pairs": [
+    561338,
+    33943
+  ],
+  "unique_pairs": 569499,
+  "input_sha256": {
+    "stage1.src": "a139e67e09b56596b7f0cfc75d7217bf02f53761da748f1c38fc9e13af3860f8",
+    "stage1.tgt": "68e912e7abdd52d5bf1414995e9f39ea1ba900f9a25f5095f8014f5ea43b238c",
+    "stage2.src": "cb0356298e0e40d0e915b58be9434072a30528a6f73c63527da7a2188560f046",
+    "stage2.tgt": "00f07004a8b8c7bb40a00242f62abaf982519247e63e15a96d949690e2f0d7c7"
+  },
+  "seed": 42,
+  "dev_test_in_training": false,
+  "streams": {
+    "matched": {
+      "pairs": 1853729,
+      "logical_passes": null,
+      "src_sha256": "06cf97cb99f9f38a1a0dc5f0e599bd215c2748a5b0109a39422e2de1213cc09e",
+      "tgt_sha256": "b6dc3f0be2ae3915473a472fa0b711301c692e4017b1b33452c43d019c398a1d"
+    },
+    "uniform3": {
+      "pairs": 1708497,
+      "logical_passes": 3,
+      "src_sha256": "c391420057fb4102790cab7740eb77ce5ba63a87ba48c20a69c75f7414cc0eda",
+      "tgt_sha256": "f9a3a4166f6207b8b6916e633de143dd781cde66d2a01b1393497a5a9da5a3e4"
+    },
+    "uniform5": {
+      "pairs": 2847495,
+      "logical_passes": 5,
+      "src_sha256": "2101642c2a050f387b5dac3069ef43484dd331ae7e5f5698da10f7498166b151",
+      "tgt_sha256": "337cb6960c6c9b4f38e64b23300baba028c939bcb3c63c3bf1f3db431c013fd9"
+    }
+  }
+}

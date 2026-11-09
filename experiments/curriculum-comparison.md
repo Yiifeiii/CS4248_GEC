@@ -1,28 +1,19 @@
-# Two curriculum-training comparisons
+# Curriculum baseline versus four controls
 
-These experiments answer different questions. Both use BART-base and T5-base,
-with no GRECO, GECToR or longer-trained T5 checkpoint involved.
+The same two-stage curriculum baseline is compared with four single-stage
+shuffled controls for each model.
 
-| Comparison | What changes? | dev_test curriculum gain | Full results |
-|---|---|---|---|
-| Original recipe vs mixed single-stage recipe | Data order, LR schedule, batching, optimizer resets and checkpoint handoff | BART +4.19; T5 +2.71 | [Recipe comparison](mixed-control/results.md) |
-| Matched curriculum vs shuffled stream | Only training-example order within each model pair | BART +2.69; T5 +2.35 | [Ordering comparison](matched-order/results.md) |
+| Setup | Training exposure | Optimization settings | BART dev_test F0.5 | T5 dev_test F0.5 |
+|---|---|---|---:|---:|
+| **Curriculum baseline** | Stage-1 data ×3, then stage-2 data ×5 | Stage 1, then stage 2 | **52.26** | **52.50** |
+| 1A | Matched baseline exposure | Stage 1 throughout | 49.01 | 50.74 |
+| 1B | Matched baseline exposure | Stage 2 throughout | 46.49 | 50.31 |
+| 2A | Every unique training pair ×3 | Stage 1 throughout | 46.10 | 46.13 |
+| 2B | Every unique training pair ×5 | Stage 2 throughout | 44.65 | 46.46 |
 
-The first comparison uses the selected best-dev_tune checkpoints from the two
-recipes and nominally matches example exposure. It favors Dasha's complete recipe
-but cannot attribute the gain to ordering alone.
+All scores use best-dev_tune checkpoints and five-beam ERRANT correction F0.5.
+All controls start from the same original pretrained model, use seed42 and
+exclude dev/test from training. Each configuration has one seed.
 
-The second comparison reruns both sides with matching initialization, exact
-per-example multiplicities, batch size, one continuous optimizer/LR schedule,
-evaluation points and total updates. Its primary endpoint is final weights after
-all 1,853,729 examples, including the last incomplete batch. It favors curriculum
-ordering under the matched recipe for both model families.
-
-The eight rounds in the second comparison are matched-size blocks of a fixed
-exposure stream, not eight complete passes through the combined dataset. Trainer
-executes one physical pass so examples cannot be resampled or silently repeated.
-
-Both comparisons use the same dev_tune/dev_test splits and five-beam ERRANT
-correction F0.5. Each configuration has one seed; the reported gains are observed
-differences, not statistical significance claims. Do not mix endpoints or subtract
-across the two experiment designs to estimate the contribution of another setting.
+[Full results and provenance](four-controls/results.md) ·
+[Exact settings, data construction and commands](four-controls/README.md).
