@@ -14,3 +14,4 @@ data/curriculum/stage1.*
 # GRECO + ESC outputs: written by the cluster jobs and copied back with rsync. Not tracked,
 # because a tracked file that also exists untracked on the cluster stops `git pull` there.
 greco_esc/runs/
+codabench/
