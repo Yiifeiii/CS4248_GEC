@@ -21,6 +21,7 @@ from pathlib import Path
 from unittest import mock
 
 from greco_esc import combine, evaluate, prepare, settings
+from greco_setup.prepare import read_lines
 
 REPO = Path(__file__).resolve().parent.parent
 
@@ -153,6 +154,72 @@ class EscFolderTests(unittest.TestCase):
             self.assertEqual(sorted(p.name for p in (test / 'm2').iterdir()), ['bart-1.m2', 'gector-1.m2', 't5-1.m2'])
             self.assertEqual((train / 'm2' / 'target.m2').read_text(encoding='utf-8'),
                              (data / f'{settings.TRAIN_SPLIT}.m2').read_text(encoding='utf-8'))
+
+
+class CrossFitTests(unittest.TestCase):
+    """The reverse fold (ESC trained on dev_test, scoring dev_tune) used for the full dev set."""
+
+    def test_the_reverse_fold_trains_on_dev_test_and_keeps_the_original_in_place(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            data, root = toy_pool(tmp)
+            with mock.patch.object(settings, 'DATA', data), mock.patch.object(settings, 'ROOT', root), \
+                    mock.patch.object(settings, 'KS', (1,)), contextlib.redirect_stdout(io.StringIO()):
+                prepare.build_esc()
+                train = prepare.esc_dir(1, settings.TEST_SPLIT, settings.TRAIN_SPLIT)
+                test = prepare.esc_dir(1, settings.TRAIN_SPLIT, settings.TRAIN_SPLIT)
+            self.assertEqual(train, root / 'esc' / 'k1' / 'for-dev_tune' / 'dev_test')
+            self.assertEqual((train / 'm2' / 'target.m2').read_text(encoding='utf-8'),
+                             (data / f'{settings.TEST_SPLIT}.m2').read_text(encoding='utf-8'))
+            self.assertFalse((test / 'm2' / 'target.m2').exists())
+            self.assertTrue((root / 'esc' / 'k1' / 'for-dev_tune' / 'model').is_dir())
+            # the dev_test fold is where the first run left it, so its model and outputs are reused
+            self.assertTrue((root / 'esc' / 'k1' / settings.TRAIN_SPLIT / 'm2' / 'target.m2').exists())
+            self.assertFalse((root / 'esc' / 'k1' / settings.TEST_SPLIT / 'm2' / 'target.m2').exists())
+
+    def test_each_split_lists_the_other_as_esc_training(self):
+        out = subprocess.run([sys.executable, '-m', 'greco_esc.settings', 'splits'], cwd=REPO,
+                             capture_output=True, text=True, check=True).stdout.split('\n')
+        self.assertEqual(out[:2], ['dev_test dev_tune', 'dev_tune dev_test'])
+
+
+class FullDevTests(unittest.TestCase):
+    """Merging the dev_tune and dev_test halves back into data/dev.src order."""
+
+    def setUp(self):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        self.data, self.root = Path(tmp.name, 'data'), Path(tmp.name, 'runs')
+        self.data.mkdir()
+        # full dev = s0 .. s4; dev_tune holds 1 and 3, dev_test 0, 2 and 4
+        halves = {settings.TRAIN_SPLIT: [1, 3], settings.TEST_SPLIT: [0, 2, 4]}
+        for half, order in halves.items():
+            (self.data / f'{half}.ids').write_text(''.join(f'{i}\n' for i in order), encoding='utf-8')
+            (self.data / f'{half}.src').write_text(''.join(f's{i}\n' for i in order), encoding='utf-8')
+            write_m2(self.data / f'{half}.m2', [f's{i}' for i in order], [[(0, 1, 'R:NOUN', f'g{i}')] for i in order])
+            pred = self.root / half / 'k1' / 'greco.vote0' / 'pred.txt'
+            pred.parent.mkdir(parents=True)
+            pred.write_text('\n'.join(f'h{i}' for i in order), encoding='utf-8')  # no final newline, as upstream
+        patches = [mock.patch.object(settings, 'DATA', self.data), mock.patch.object(settings, 'ROOT', self.root)]
+        for p in patches:
+            p.start()
+            self.addCleanup(p.stop)
+
+    def test_outputs_and_reference_are_merged_in_dev_order(self):
+        rel = Path('k1') / 'greco.vote0' / 'pred.txt'
+        self.assertEqual(evaluate.load('dev', rel), [f'h{i}' for i in range(5)])
+        src, gold = evaluate.reference('dev')
+        self.assertEqual(read_lines(src), [f's{i}' for i in range(5)])
+        self.assertEqual([b.split('\n')[1].split('|||')[2] for b in evaluate.m2_blocks(gold)],
+                         [f'g{i}' for i in range(5)])
+
+    def test_a_missing_half_makes_the_full_dev_output_missing(self):
+        (self.root / settings.TRAIN_SPLIT / 'k1' / 'greco.vote0' / 'pred.txt').unlink()
+        self.assertIsNone(evaluate.load('dev', Path('k1') / 'greco.vote0' / 'pred.txt'))
+        self.assertIsNotNone(evaluate.load(settings.TEST_SPLIT, Path('k1') / 'greco.vote0' / 'pred.txt'))
+
+    def test_a_half_with_the_wrong_length_fails(self):
+        with self.assertRaises(ValueError):
+            evaluate.merge({settings.TRAIN_SPLIT: ['a'], settings.TEST_SPLIT: ['b', 'c', 'd']})
 
 
 def prepare_dirs(root, k):

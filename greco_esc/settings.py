@@ -4,6 +4,8 @@ The shell scripts read the runs from here, so a setting is changed only in this 
 
     python3 -m greco_esc.settings runs        # one line per GRECO run: name, k, vote_coef, esc, vote_mode
     python3 -m greco_esc.settings inputs 3    # the input names for k = 3, in combination order
+    python3 -m greco_esc.settings splits      # each test split and the split ESC trains on for it
+    python3 -m greco_esc.settings esc_home 3 dev_tune   # ESC's folder for that k and test split
 """
 
 import sys
@@ -13,6 +15,14 @@ ROOT = Path('greco_esc/runs')
 DATA = Path('data/curriculum')
 TRAIN_SPLIT = 'dev_tune'  # ESC learns its edit weights here (the paper trains ESC on BEA-2019 dev)
 TEST_SPLIT = 'dev_test'   # every combination is scored here
+
+# Full dev set (data/dev.src) = dev_tune + dev_test; data/curriculum/<half>.ids gives each line's
+# position in it. For full-dev scores every combination is also run on dev_tune, with ESC
+# trained on dev_test (cross-fitting), so no sentence is scored by an ESC that saw its gold edits.
+FULL_SPLIT = 'dev'
+HALVES = (TRAIN_SPLIT, TEST_SPLIT)
+TEST_SPLITS = (TEST_SPLIT, TRAIN_SPLIT)               # the splits every combination is run on
+ESC_TRAIN = {TEST_SPLIT: TRAIN_SPLIT, TRAIN_SPLIT: TEST_SPLIT}  # ESC's training split per test split
 
 # Candidate systems: our fine-tuned BART and T5 (stage 1 then stage 2), and GECToR
 NBEST = {'bart': 'CS4248-GEC/gec-bart-base-s1s2', 't5': 'CS4248-GEC/gec-t5-base-s1s2'}
@@ -66,8 +76,15 @@ def runs():
     return out
 
 
-def pred_path(k, name):
-    return ROOT / TEST_SPLIT / f'k{k}' / name / 'pred.txt'
+def pred_path(k, name, split=TEST_SPLIT):
+    return ROOT / split / f'k{k}' / name / 'pred.txt'
+
+
+def esc_home(k, test_split=TEST_SPLIT):
+    """ESC's folders and model for scoring test_split at k. The dev_test ones keep their
+    original place (runs/esc/k<k>), so a finished run is reused."""
+    home = ROOT / 'esc' / f'k{k}'
+    return home if test_split == TEST_SPLIT else home / f'for-{test_split}'
 
 
 def main(argv):
@@ -76,8 +93,13 @@ def main(argv):
             print(name, k, f'{vote:g}', int(esc), mode)
     elif argv[:1] == ['inputs'] and len(argv) == 2:
         print(' '.join(inputs(int(argv[1]))))
+    elif argv == ['splits']:
+        for split in TEST_SPLITS:
+            print(split, ESC_TRAIN[split])
+    elif argv[:1] == ['esc_home'] and len(argv) == 3:
+        print(esc_home(int(argv[1]), argv[2]))
     else:
-        sys.exit('usage: python3 -m greco_esc.settings runs | inputs <k>')
+        sys.exit('usage: python3 -m greco_esc.settings runs | inputs <k> | splits | esc_home <k> <split>')
 
 
 if __name__ == '__main__':

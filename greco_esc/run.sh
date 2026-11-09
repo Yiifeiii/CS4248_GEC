@@ -1,14 +1,16 @@
 #!/bin/bash
 # The whole GRECO + ESC pipeline as one cluster job. Submit from the repository root:
-#   sbatch -J greco-esc --time=8:00:00 cluster/job.sbatch greco_esc/run.sh
+#   sbatch -J greco-esc --time=10:00:00 cluster/job.sbatch greco_esc/run.sh
 #
 #   1. Candidates (gec-train): BART and T5 s1s2 5-best, GECToR 1-best, on dev_tune and dev_test
 #   2. M2 files (gec-train): one ERRANT M2 per ranked output; ESC's folders for every k
-#   3. ESC (greco): train on dev_tune for each k; edit scores and ESC's own output on dev_test
+#   3. ESC (greco): train on dev_tune for each k; edit scores and ESC's own output on dev_test.
+#      Then the same the other way round (train on dev_test, score dev_tune), for the full dev set
 #   4. GRECO (greco): official run_combination.py (through combine.py, which adds the "system" and
 #      "rank" vote modes) on dev_test, for every run in settings.py: with and without ESC's edit
 #      scores, with no vote and with the tuned vote_coef of each vote mode
-#   5. Scores (gec-train): ERRANT and M2 against dev_test.m2 (greco_esc/evaluate.py)
+#   5. Scores (gec-train): ERRANT and M2 against dev_test.m2, and on the full dev set
+#      (dev_tune and dev_test outputs merged in data/dev.src order; greco_esc/evaluate.py)
 #
 # Every step skips output that is already complete, so a job cut off by its time limit can be
 # submitted again. Delete a file to redo its step. Needs the one-time setup in the README.
@@ -55,56 +57,63 @@ for split in dev_tune dev_test; do
 done
 python -m greco_esc.prepare esc
 
-# 3. ESC
-use greco
-TEST_N=$(lines data/curriculum/dev_test.src)
-for k in $(python3 -c "from greco_esc.settings import KS; print(*KS)"); do
-  esc=$ROOT/esc/k$k
-  out=$ROOT/dev_test/k$k
-  mkdir -p "$out/esc"
-  if [ ! -s "$esc/model/model.pt" ]; then
-    step "k$k: training ESC on dev_tune"
-    python external/esc/run.py --train --data_dir "$esc/dev_tune/text" --m2_dir "$esc/dev_tune/m2" \
-      --model_path "$esc/model" --vocab_path "$esc/model/vocab.idx"
-  fi
-  if [ ! -s "$out/esc.scores.jsonl" ]; then
-    step "k$k: ESC edit scores on dev_test"
-    python external/esc/run.py --score --data_dir "$esc/dev_test/text" --m2_dir "$esc/dev_test/m2" \
-      --model_path "$esc/model/model.pt" --vocab_path "$esc/model/vocab.idx" \
-      --output_path "$out/esc.scores.raw.jsonl"
-    python -m greco_esc.prepare scores "$k"
-  fi
-  if [ "$(plines "$out/esc/pred.txt")" -ne "$TEST_N" ]; then
-    step "k$k: ESC alone on dev_test"
-    python external/esc/run.py --test --data_dir "$esc/dev_test/text" --m2_dir "$esc/dev_test/m2" \
-      --model_path "$esc/model/model.pt" --vocab_path "$esc/model/vocab.idx" \
-      --output_path "$out/esc/pred.txt"
-  fi
-done
-
-# 4. GRECO
+# 3-4 run on each test split: dev_test (ESC trained on dev_tune) and then dev_tune (ESC trained
+# on dev_test), so that the full dev set can be scored without ESC seeing a sentence's gold edits
 read -r BEAM BATCH RATIO < <(python3 -c "from greco_esc import settings as s; print(s.BEAM_SIZE, s.BATCH_SIZE, s.SCORE_RATIO)")
-# Read the runs on fd 3, so the programs inside the loop cannot consume the list from stdin
-while read -r name k vote esc mode <&3; do
-  dir=$REPO/$ROOT/dev_test/k$k/$name
-  [ "$(plines "$dir/pred.txt")" -eq "$TEST_N" ] && continue
-  step "k$k: $name"
-  mkdir -p "$dir"
-  inputs=()
-  for i in $(python3 -m greco_esc.settings inputs "$k"); do inputs+=("$REPO/$ROOT/dev_test/m2/$i.m2"); done
-  extra=()
-  [ "$esc" = 1 ] && extra=(--edit_scores "$REPO/$ROOT/dev_test/k$k/esc.scores.jsonl" --score_ratio "$RATIO")
-  # combine.py is upstream run_combination.py with the vote counted per --vote_mode
-  (cd external/greco && python "$REPO/greco_esc/combine.py" --vote_mode "$mode" \
-    --model greco --lm_model microsoft/deberta-v3-large \
-    --checkpoint "$CKPT" --beam_size "$BEAM" --batch_size "$BATCH" --vote_coef "$vote" \
-    ${extra[@]+"${extra[@]}"} --output_path "$dir/pred.txt" --data "${inputs[@]}" > "$dir/log.txt" 2>&1) || {
-    tail -n 20 "$dir/log.txt" >&2; exit 1; }
-  missing=$(grep -c "edit score for .* is not found" "$dir/log.txt" || true)
-  [ "$missing" -eq 0 ] || { echo "$name k$k: $missing edits without an ESC score" >&2; exit 1; }
-done 3< <(python3 -m greco_esc.settings runs)
+use greco
+while read -r SPLIT TRAIN <&4; do
+  N=$(lines "data/curriculum/$SPLIT.src")
 
-# 5. Scores
+  # 3. ESC
+  for k in $(python3 -c "from greco_esc.settings import KS; print(*KS)"); do
+    home=$(python3 -m greco_esc.settings esc_home "$k" "$SPLIT")
+    out=$ROOT/$SPLIT/k$k
+    mkdir -p "$out/esc"
+    if [ ! -s "$home/model/model.pt" ]; then
+      step "$SPLIT k$k: training ESC on $TRAIN"
+      python external/esc/run.py --train --data_dir "$home/$TRAIN/text" --m2_dir "$home/$TRAIN/m2" \
+        --model_path "$home/model" --vocab_path "$home/model/vocab.idx"
+    fi
+    if [ ! -s "$out/esc.scores.jsonl" ]; then
+      step "$SPLIT k$k: ESC edit scores"
+      python external/esc/run.py --score --data_dir "$home/$SPLIT/text" --m2_dir "$home/$SPLIT/m2" \
+        --model_path "$home/model/model.pt" --vocab_path "$home/model/vocab.idx" \
+        --output_path "$out/esc.scores.raw.jsonl"
+      python -m greco_esc.prepare scores "$k" "$SPLIT"
+    fi
+    if [ "$(plines "$out/esc/pred.txt")" -ne "$N" ]; then
+      step "$SPLIT k$k: ESC alone"
+      python external/esc/run.py --test --data_dir "$home/$SPLIT/text" --m2_dir "$home/$SPLIT/m2" \
+        --model_path "$home/model/model.pt" --vocab_path "$home/model/vocab.idx" \
+        --output_path "$out/esc/pred.txt"
+    fi
+  done
+
+  # 4. GRECO
+  # Read the runs on fd 3, so the programs inside the loop cannot consume the list from stdin
+  while read -r name k vote esc mode <&3; do
+    dir=$REPO/$ROOT/$SPLIT/k$k/$name
+    [ "$(plines "$dir/pred.txt")" -eq "$N" ] && continue
+    step "$SPLIT k$k: $name"
+    mkdir -p "$dir"
+    inputs=()
+    for i in $(python3 -m greco_esc.settings inputs "$k"); do inputs+=("$REPO/$ROOT/$SPLIT/m2/$i.m2"); done
+    extra=()
+    [ "$esc" = 1 ] && extra=(--edit_scores "$REPO/$ROOT/$SPLIT/k$k/esc.scores.jsonl" --score_ratio "$RATIO")
+    # combine.py is upstream run_combination.py with the vote counted per --vote_mode
+    (cd external/greco && python "$REPO/greco_esc/combine.py" --vote_mode "$mode" \
+      --model greco --lm_model microsoft/deberta-v3-large \
+      --checkpoint "$CKPT" --beam_size "$BEAM" --batch_size "$BATCH" --vote_coef "$vote" \
+      ${extra[@]+"${extra[@]}"} --output_path "$dir/pred.txt" --data "${inputs[@]}" > "$dir/log.txt" 2>&1) || {
+      tail -n 20 "$dir/log.txt" >&2; exit 1; }
+    missing=$(grep -c "edit score for .* is not found" "$dir/log.txt" || true)
+    [ "$missing" -eq 0 ] || { echo "$SPLIT $name k$k: $missing edits without an ESC score" >&2; exit 1; }
+  done 3< <(python3 -m greco_esc.settings runs)
+done 4< <(python3 -m greco_esc.settings splits)
+
+# 5. Scores: dev_test (the main results) and the full dev set (dev_tune + dev_test)
 use gec-train
-step scoring
+step "scoring dev_test"
 python -m greco_esc.evaluate
+step "scoring the full dev set"
+python -m greco_esc.evaluate dev

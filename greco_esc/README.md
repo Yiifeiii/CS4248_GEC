@@ -37,11 +37,13 @@ These are the `greco-voting` branch's definitions (`greco_setup/combine.py` ther
 | 2 | One ERRANT M2 file per ranked output: `gector-1`, `bart-1..5`, `t5-1..5` | `runs/<split>/m2/` |
 | 3 | For each k: train ESC on `dev_tune` with the inputs GRECO combines at that k; score the `dev_test` edits; ESC's own output too | `runs/esc/k<k>/`, `runs/dev_test/k<k>/` |
 | 4 | For each k: GRECO with and without ESC, each with α = 0 and with each vote mode at its tuned α (k = 1: `hypothesis` only) | `runs/dev_test/k<k>/<run>/pred.txt` |
-| 5 | ERRANT and M2 scores against `dev_test.m2` | `runs/dev_test/results.{csv,md}` |
+| 5 | ERRANT and M2 scores on `dev_test`, and on the full dev set (steps 3–4 also run on `dev_tune`, with ESC trained on `dev_test`) | `runs/dev_test/results.{csv,md}`, `runs/dev/results.{csv,md}` |
 
 At k, GRECO and ESC both read the 1 + 2k inputs `gector-1, bart-1, t5-1, …, bart-k, t5-k`, the mini experiment's order. GRECO and ESC read the same M2 files, so ESC has a score for every edit GRECO considers. The job stops if any edit lacks one.
 
-**Splits:** ESC learns its weights on `dev_tune`, which has gold edits. All results are on `dev_test`. Nothing is tuned on `dev_test`.
+**Splits:** ESC learns its weights on `dev_tune`, which has gold edits. The main results are on `dev_test`. Nothing is tuned on `dev_test`.
+
+**Full dev set (cross-fitting).** The full dev set (`data/dev.src`, 4,384 sentences) is `dev_tune` + `dev_test`, and `data/curriculum/<half>.ids` gives each line's place in it. To score it without ESC seeing a sentence's gold edits, the job also runs every combination on `dev_tune` with ESC trained on `dev_test` (`runs/esc/k<k>/for-dev_tune/`). `evaluate.py dev` then merges each output's two halves back into `dev.src` order and scores them against a reference rebuilt the same way from the halves' M2 files, because `data/dev.m2` is a Git LFS pointer on the cluster. GRECO and ESC handle each sentence on its own, so the merged output is what one run on the full set would give, apart from ESC's training data. The α values were tuned on `dev_tune`, so on the `dev_tune` half they are in-sample: compare full-dev results with other full-dev results, such as `main`'s `dev.errant.beam` table (whose α were tuned on the full dev set itself), not with `dev_test` results.
 
 ## 2. Settings
 
@@ -123,13 +125,13 @@ exit; exit
 From `xlogin`:
 
 ```bash
-sbatch -J greco-esc --time=8:00:00 cluster/job.sbatch greco_esc/run.sh
+sbatch -J greco-esc --time=10:00:00 cluster/job.sbatch greco_esc/run.sh
 tail -f logs/slurm/greco-esc-<jobid>.out       # "== <time> <step>" marks each step
 ```
 
 The job skips any step whose output is already complete. If it fails or runs out of time, fix the cause and submit the same command again. Don't `git pull` while it runs, because bash reads the script as it goes.
 
-**Expected time:** about 4 hours from scratch. If the first version of this job (before vote modes) already finished, resubmitting runs only the 12 new `system` and `rank` runs and the scoring: about 1.5 hours.
+**Expected time:** about 7 hours from scratch. If the `dev_test` runs already finished, resubmitting runs only the `dev_tune` half (ESC trained on `dev_test`, 4 ESC models and 28 GRECO runs on 2,000 sentences) and the scoring: about 3 hours. The command above allows 10 hours.
 
 - Candidates: about 30 min for both splits.
 - GRECO: 28 runs of about 3–8 min each, longer at larger k (16 `hypothesis` and no-vote runs, 12 `system` and `rank` runs).
@@ -142,6 +144,8 @@ sacct -j <jobid> --format=JobID,State,ExitCode,Elapsed        # COMPLETED 0:0
 wc -l greco_esc/runs/dev_tune/pool/*.tgt     # bart, t5 10000; gector 2000
 wc -l greco_esc/runs/dev_test/pool/*.tgt     # bart, t5 11920; gector 2384
 ls greco_esc/runs/dev_test/k*/*/pred.txt | wc -l               # 32: 28 GRECO runs and 4 ESC
+ls greco_esc/runs/dev_tune/k*/*/pred.txt | wc -l               # 32 as well
+cat greco_esc/runs/dev/results.md                              # full dev set
 grep -h "Best checkpoint at epoch" logs/slurm/greco-esc-<jobid>.out   # ESC's chosen epoch per k; should not be 0
 cat greco_esc/runs/dev_test/results.md
 ```
@@ -184,7 +188,7 @@ The end-to-end test runs only with `external/esc` and `external/greco` in place 
 | `run.sh` | The cluster job: candidates, M2 files, ESC, GRECO, scores |
 | `combine.py` | Upstream `run_combination.py` with `--vote_mode hypothesis/system/rank` |
 | `prepare.py` | `m2 <split>`: text and M2 per ranked output; `esc`: ESC folders per k; `scores <k>`: checks and clips ESC's scores |
-| `evaluate.py` | Scores every output on `dev_test`; writes `results.csv` and `results.md` |
+| `evaluate.py` | Scores every output on `dev_test` (default), `dev_tune`, or `dev` (both halves merged); writes `runs/<split>/results.{csv,md}` |
 | `test_greco_esc.py` | Tests, including the vote modes on upstream's dataset and the end-to-end ESC → GRECO test |
 
 ## Sources

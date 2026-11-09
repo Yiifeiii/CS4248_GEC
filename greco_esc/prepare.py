@@ -2,7 +2,7 @@
 
     python3 -m greco_esc.prepare m2 <split>     # needs ERRANT (gec-train)
     python3 -m greco_esc.prepare esc            # the ESC folders for every k
-    python3 -m greco_esc.prepare scores <k>     # check and clip ESC's edit scores for GRECO
+    python3 -m greco_esc.prepare scores <k> [split]   # check and clip ESC's edit scores for GRECO
 
 m2: reads greco_esc/runs/<split>/pool/{bart,t5}.tgt (5 lines per source, best first) and
 gector.tgt (one per source). Writes one text file and one ERRANT M2 file per ranked output,
@@ -10,9 +10,11 @@ greco_esc/runs/<split>/{text,m2}/<name>.{txt,m2}: gector-1, bart-1..5, t5-1..5. 
 both read these M2 files, so ESC scores exactly the edits GRECO combines.
 
 esc: ESC treats every file in its data folder as one system and learns a weight for each
-(system, edit type). For each k, greco_esc/runs/esc/k<k>/<split>/{text,m2} links the k inputs
+(system, edit type). For each k and test split, <esc_home>/<split>/{text,m2} links the k inputs
 GRECO combines (settings.inputs), plus the source, and for the training split the gold
 corrections (target.txt, and the gold M2 as target.m2, which ESC labels the edits with).
+esc_home is runs/esc/k<k> for dev_test (ESC trained on dev_tune) and runs/esc/k<k>/for-dev_tune
+for dev_tune (ESC trained on dev_test), see settings.esc_home.
 
 scores: ESC's --score output has one JSON list of [start, end, correction, probability] per
 sentence. GRECO adds log(p) and log(1 - p) for each edit, so a probability of exactly 0 or 1
@@ -82,27 +84,31 @@ def link(target, link_path):
     link_path.symlink_to(os.path.relpath(target, link_path.parent))
 
 
-def esc_dir(k, split):
-    return settings.ROOT / 'esc' / f'k{k}' / split
+def esc_dir(k, split, test_split=None):
+    """ESC's data folder for split, in the folders used to score test_split (default dev_test)."""
+    return settings.esc_home(k, test_split or settings.TEST_SPLIT) / split
 
 
 def build_esc():
     for k in settings.KS:
-        for split in (settings.TRAIN_SPLIT, settings.TEST_SPLIT):
-            out = esc_dir(k, split)
-            for sub in ('text', 'm2'):
-                if (out / sub).exists():
-                    for f in (out / sub).iterdir():
-                        f.unlink()
-            for name in settings.inputs(k):
-                link(settings.ROOT / split / 'text' / f'{name}.txt', out / 'text' / f'{name}.txt')
-                link(settings.ROOT / split / 'm2' / f'{name}.m2', out / 'm2' / f'{name}.m2')
-            link(settings.DATA / f'{split}.src', out / 'text' / 'source.txt')
-            if split == settings.TRAIN_SPLIT:
-                link(settings.DATA / f'{split}.tgt', out / 'text' / 'target.txt')
-                link(settings.DATA / f'{split}.m2', out / 'm2' / 'target.m2')
-        (settings.ROOT / 'esc' / f'k{k}' / 'model').mkdir(parents=True, exist_ok=True)
-    print(f'ESC folders for k = {", ".join(map(str, settings.KS))} in {settings.ROOT / "esc"}')
+        for test_split in settings.TEST_SPLITS:
+            train_split = settings.ESC_TRAIN[test_split]
+            for split in (train_split, test_split):
+                out = esc_dir(k, split, test_split)
+                for sub in ('text', 'm2'):
+                    if (out / sub).exists():
+                        for f in (out / sub).iterdir():
+                            f.unlink()
+                for name in settings.inputs(k):
+                    link(settings.ROOT / split / 'text' / f'{name}.txt', out / 'text' / f'{name}.txt')
+                    link(settings.ROOT / split / 'm2' / f'{name}.m2', out / 'm2' / f'{name}.m2')
+                link(settings.DATA / f'{split}.src', out / 'text' / 'source.txt')
+                if split == train_split:
+                    link(settings.DATA / f'{split}.tgt', out / 'text' / 'target.txt')
+                    link(settings.DATA / f'{split}.m2', out / 'm2' / 'target.m2')
+            (settings.esc_home(k, test_split) / 'model').mkdir(parents=True, exist_ok=True)
+    print(f'ESC folders for k = {", ".join(map(str, settings.KS))} and test splits '
+          f'{", ".join(settings.TEST_SPLITS)} in {settings.ROOT / "esc"}')
 
 
 def clip(raw_lines, n_sources):
@@ -116,9 +122,10 @@ def clip(raw_lines, n_sources):
     return out
 
 
-def fix_scores(k):
-    path = settings.ROOT / settings.TEST_SPLIT / f'k{k}' / 'esc.scores.raw.jsonl'
-    n = len(read_lines(settings.DATA / f'{settings.TEST_SPLIT}.src'))
+def fix_scores(k, split=None):
+    split = split or settings.TEST_SPLIT
+    path = settings.ROOT / split / f'k{k}' / 'esc.scores.raw.jsonl'
+    n = len(read_lines(settings.DATA / f'{split}.src'))
     # ESC writes one JSON list per sentence ('[]' when it has no edits), joined by '\n'
     raw = path.read_text(encoding='utf-8').rstrip('\n').split('\n')
     scores = clip(raw, n)
@@ -132,10 +139,10 @@ def main(argv):
         build_m2(argv[1])
     elif argv == ['esc']:
         build_esc()
-    elif argv[:1] == ['scores'] and len(argv) == 2:
-        fix_scores(int(argv[1]))
+    elif argv[:1] == ['scores'] and len(argv) in (2, 3):
+        fix_scores(int(argv[1]), *argv[2:])
     else:
-        sys.exit('usage: python3 -m greco_esc.prepare m2 <split> | esc | scores <k>')
+        sys.exit('usage: python3 -m greco_esc.prepare m2 <split> | esc | scores <k> [split]')
 
 
 if __name__ == '__main__':
