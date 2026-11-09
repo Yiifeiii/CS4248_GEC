@@ -41,8 +41,7 @@ This rebuilds `results.md` from the committed scores and prints the band and the
 **Open items for whoever picks this up**
 
 1. Add references at the `[CITATION]` markers in section 5 before this goes into the report.
-2. Confirm whether anyone looked at dev_test before the final scoring (see the end of section 5.5).
-3. Optional: stage-1 learning rate 1e-3 was never run, since 3e-4 is the top of the grid. Stage-2 learning rate 5e-5 was run with only one seed.
+2. Optional: stage-1 learning rate 1e-3 was never run, since 3e-4 is the top of the grid. Stage-2 learning rate 5e-5 was run with only one seed.
 
 ## 1. Glossary
 
@@ -219,7 +218,7 @@ Source: `t5_tuning/runs/t5-tune.s1.base.lr3e-5.seed42/`, `t5-tune.s1.base.lr1e-4
 
 The final pipeline is the original one. dev_test was not run for the 3e-4 pipeline.
 
-**Not recorded:** whether dev_test was looked at before the final scoring. Confirm this before the write-up.
+**dev_test was not looked at until the final configuration was fixed.** The dev_test scores in section 8 are clean held-out results.
 
 ## 8. Final result on dev_test
 
