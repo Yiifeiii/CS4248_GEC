@@ -45,6 +45,34 @@ At k, GRECO and ESC both read the 1 + 2k inputs `gector-1, bart-1, t5-1, …, ba
 
 **Full dev set (cross-fitting).** The full dev set (`data/dev.src`, 4,384 sentences) is `dev_tune` + `dev_test`, and `data/curriculum/<half>.ids` gives each line's place in it. To score it without ESC seeing a sentence's gold edits, the job also runs every combination on `dev_tune` with ESC trained on `dev_test` (`runs/esc/k<k>/for-dev_tune/`). `evaluate.py dev` then merges each output's two halves back into `dev.src` order and scores them against a reference rebuilt the same way from the halves' M2 files, because `data/dev.m2` is a Git LFS pointer on the cluster. GRECO and ESC handle each sentence on its own, so the merged output is what one run on the full set would give, apart from ESC's training data. The α values were tuned on `dev_tune`, so on the `dev_tune` half they are in-sample: compare full-dev results with other full-dev results, such as `main`'s `dev.errant.beam` table (whose α were tuned on the full dev set itself), not with `dev_test` results.
 
+### What ESC does, and which ESC each run uses
+
+**Purpose.** GRECO judges a whole candidate sentence: how good does it read? It cannot know which of our systems is reliable for which kind of error. ESC adds that, one edit at a time. It learns how far to trust each input for each error type, and gives every proposed edit a probability of being correct. GRECO + ESC ranks candidate sentences by both: GRECO's sentence score, and ESC's probabilities for the edits the sentence applies or skips.
+
+**What ESC learns.** One weight for each (input, ERRANT error type) pair, by logistic regression. Each ranked output is its own input, so `bart-1` and `bart-4` are weighed separately. ESC therefore learns things like:
+
+- GECToR's spelling fixes (`R:SPELL`) are usually right.
+- An article insertion (`M:DET`) that only `t5-3` proposes is usually wrong.
+
+For a new edit, ESC adds up the weights of the inputs that proposed it, for that edit's type, and turns the sum into a probability. It does not read the words or the rest of the sentence: it knows who proposed an edit and what kind of edit it is, not whether the edit fits. That is GRECO's job.
+
+**How ESC is trained.** On our systems' outputs, not on the data they were trained on. For each sentence of a dev split, every edit any input proposes becomes one example, labelled right if it is in the gold M2 and wrong if not. The log shows these counts as `Label distribution: [wrong, right]`. ESC holds back a fifth of the examples to choose the number of epochs (`Best checkpoint at epoch N`), then retrains on all of them for that many epochs.
+
+**Why dev and not the training set.** BART and T5 were fine-tuned on the training data, and GECToR's released model was trained on W&I+LOCNESS train. On those sentences the systems are unrealistically accurate, so an ESC trained there would trust them too much. ESC has to learn from sentences the systems have not seen, as on the test sets. The ESC paper trains on BEA-2019 dev for the same reason.
+
+**One ESC per k.** At each k, GRECO combines a different set of 1 + 2k inputs, so ESC has 162, 270, 378 or 594 features (inputs × 54 error types). An edit that `bart-2` to `bart-5` did not propose means something at k = 5 (the lower beams disagreed) and nothing at k = 1 (they are not inputs). A model trained for one k would be wrong for another, so each k has its own.
+
+**Never scored on its own training sentences.** ESC learns from gold edits, so scoring a sentence with an ESC that was trained on it would be scoring with the answers. Each set of results therefore uses an ESC trained on other sentences:
+
+| Results on | ESC trained on | ESC model | Trained by |
+|---|---|---|---|
+| `dev_test` (2,384) | `dev_tune` (2,000) | `runs/esc/k<k>/model` | `run.sh` |
+| `dev_tune` half of the full dev set | `dev_test` (2,384) | `runs/esc/k<k>/for-dev_tune/model` | `run.sh` |
+| Full dev set (4,384) | each half by the model trained on the other half (cross-fitting; the two rows above) | | |
+| CoNLL-2014 and BEA-2019 test | the full dev set (4,384) | `runs/esc/final/k<k>/model` | `test.sh` |
+
+The test sets can use all of dev because none of their sentences is in it; the full-dev model is the one the paper's setup corresponds to (ESC trained on BEA-2019 dev). That makes 4 × 3 = 12 small ESC models in all, each trained in about a minute.
+
 ## 2. Settings
 
 All settings are in `settings.py`, and the scripts read them from there.
