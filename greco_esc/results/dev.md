@@ -1,6 +1,6 @@
 # Full dev set results (BEA-2019 dev)
 
-All 4,384 sentences of BEA-2019 dev (`data/dev.src` = `dev_tune` + `dev_test`), scored with ERRANT F0.5, the BEA-2019 metric. M2 is also given. The outputs come from jobs 1098818, 1099227 and 1101538. The last one reran the six runs whose α changed when the full-dev α were adopted. Scores are from `python -m greco_esc.evaluate dev`, copied from `runs/dev/results.{csv,md}` into [`dev.csv`](dev.csv). Every run uses the same settings as on the test sets.
+All 4,384 sentences of BEA-2019 dev (`data/dev.src` = `dev_tune` + `dev_test`), scored with ERRANT F0.5, the BEA-2019 metric, which is what we report on dev. (The M2 scores are also in `dev.csv` but are not used.) The outputs come from jobs 1098818, 1099227 and 1101538. The last one reran the six runs whose α changed when the full-dev α were adopted. Scores are from `python -m greco_esc.evaluate dev`, copied from `runs/dev/results.{csv,md}` into [`dev.csv`](dev.csv). Every run uses the same settings as on the test sets.
 
 **This is the set the best dev model is chosen on: the run with the highest full-dev ERRANT F0.5, picked without looking at any test score.**
 
@@ -23,43 +23,43 @@ The best dev model's test scores are the unbiased, held-out result. The best BEA
 
 k is the number of hypotheses taken from each of BART and T5. GECToR always gives its 1-best, so there are 1 + 2k inputs. At k = 1 the three vote modes give the same output, so only `hypothesis` is run.
 
-| k | Inputs | System | ERRANT P | ERRANT R | ERRANT F0.5 | M2 P | M2 R | M2 F0.5 |
-|---|---|---|---|---|---|---|---|---|
-| - | 1 | bart-1 (single system) | 58.61 | 38.49 | 53.07 | 66.59 | 41.52 | 59.42 |
-| - | 1 | t5-1 (single system) | 58.87 | 39.83 | 53.74 | 67.12 | 43.08 | 60.38 |
-| - | 1 | gector-1 (single system) | 63.81 | 34.96 | 54.77 | 70.24 | 36.49 | 59.28 |
-| 1 | 3 | ESC alone | 71.74 | 34.67 | 59.10 | 75.97 | 35.38 | 61.79 |
-| 1 | 3 | GRECO, no vote | 66.80 | 40.61 | 59.17 | 74.36 | 43.20 | 64.98 |
-| 1 | 3 | GRECO, `hypothesis` 0.1 | 67.84 | 40.68 | 59.85 | 74.76 | 43.12 | 65.19 |
-| 1 | 3 | GRECO + ESC, no vote | 72.20 | 36.35 | 60.31 | 77.12 | 37.41 | 63.61 |
-| 1 | 3 | GRECO + ESC, `hypothesis` 0.1 | 72.18 | 36.20 | 60.21 | 77.10 | 37.33 | 63.56 |
-| 2 | 5 | ESC alone | 73.15 | 33.27 | 59.00 | 77.57 | 34.03 | 61.76 |
-| 2 | 5 | GRECO, no vote | 62.42 | 43.63 | 57.47 | 69.83 | 46.51 | 63.47 |
-| 2 | 5 | GRECO, `hypothesis` 0.1 | 63.20 | 43.53 | 57.96 | 70.02 | 46.20 | 63.47 |
-| 2 | 5 | GRECO, `rank` 0.2 *(best CoNLL-2014)* | 64.64 | 42.65 | 58.59 | 71.11 | 45.09 | 63.75 |
-| 2 | 5 | GRECO, `system` 0.1 | 63.37 | 44.16 | 58.30 | 70.26 | 46.83 | 63.87 |
-| 2 | 5 | GRECO + ESC, no vote | 72.93 | 35.21 | 60.06 | 78.03 | 36.48 | 63.55 |
-| 2 | 5 | GRECO + ESC, `hypothesis` 0.1 | 72.34 | 35.69 | 60.02 | 77.51 | 37.07 | 63.62 |
-| 2 | 5 | GRECO + ESC, `rank` 0.2 | 72.43 | 35.85 | 60.16 | 77.56 | 37.26 | 63.77 |
-| 2 | 5 | GRECO + ESC, `system` 0.1 *(best BEA-2019)* | 72.72 | 35.69 | 60.22 | 77.78 | 36.98 | 63.72 |
-| 3 | 7 | ESC alone | 72.95 | 32.97 | 58.71 | 77.62 | 33.95 | 61.74 |
-| 3 | 7 | GRECO, no vote | 60.00 | 45.03 | 56.26 | 67.61 | 48.32 | 62.61 |
-| 3 | 7 | GRECO, `hypothesis` 0.1 | 60.79 | 45.03 | 56.82 | 67.92 | 48.20 | 62.78 |
-| 3 | 7 | GRECO, `rank` 0.4 | 63.98 | 42.33 | 58.04 | 70.54 | 44.68 | 63.22 |
-| 3 | 7 | GRECO, `system` 0.1 | 61.00 | 45.87 | 57.22 | 68.00 | 48.81 | 63.04 |
-| 3 | 7 | GRECO + ESC, no vote | 72.97 | 35.46 | 60.23 | 78.04 | 36.83 | 63.77 |
-| 3 | 7 | GRECO + ESC, `hypothesis` 0.1 | 72.09 | 36.24 | 60.18 | 77.24 | 37.71 | 63.85 |
-| **3** | **7** | **GRECO + ESC, `rank` 0.4 (best dev model)** | **71.88** | **36.76** | **60.35** | **76.90** | **38.22** | **63.96** |
-| 3 | 7 | GRECO + ESC, `system` 0.1 | 72.56 | 36.00 | 60.31 | 77.55 | 37.34 | 63.81 |
-| 5 | 11 | ESC alone | 72.81 | 32.98 | 58.65 | 77.67 | 34.04 | 61.82 |
-| 5 | 11 | GRECO, no vote | 56.23 | 45.88 | 53.81 | 64.37 | 49.57 | 60.74 |
-| 5 | 11 | GRECO, `hypothesis` 0.1 | 57.37 | 46.45 | 54.80 | 64.99 | 49.80 | 61.25 |
-| 5 | 11 | GRECO, `rank` 0.6 | 63.25 | 42.17 | 57.50 | 69.91 | 44.51 | 62.75 |
-| 5 | 11 | GRECO, `system` 0.1 | 57.14 | 46.92 | 54.76 | 64.86 | 50.33 | 61.32 |
-| 5 | 11 | GRECO + ESC, no vote | 71.97 | 36.00 | 59.98 | 77.27 | 37.54 | 63.77 |
-| 5 | 11 | GRECO + ESC, `hypothesis` 0.1 | 70.39 | 37.43 | 59.85 | 75.62 | 39.10 | 63.72 |
-| 5 | 11 | GRECO + ESC, `rank` 0.6 | 69.76 | 37.64 | 59.59 | 74.95 | 39.32 | 63.45 |
-| 5 | 11 | GRECO + ESC, `system` 0.1 | 70.96 | 36.74 | 59.81 | 76.12 | 38.30 | 63.57 |
+| k | Inputs | System | ERRANT P | ERRANT R | ERRANT F0.5 |
+|---|---|---|---|---|---|
+| - | 1 | bart-1 (single system) | 58.61 | 38.49 | 53.07 |
+| - | 1 | t5-1 (single system) | 58.87 | 39.83 | 53.74 |
+| - | 1 | gector-1 (single system) | 63.81 | 34.96 | 54.77 |
+| 1 | 3 | ESC alone | 71.74 | 34.67 | 59.10 |
+| 1 | 3 | GRECO, no vote | 66.80 | 40.61 | 59.17 |
+| 1 | 3 | GRECO, `hypothesis` 0.1 | 67.84 | 40.68 | 59.85 |
+| 1 | 3 | GRECO + ESC, no vote | 72.20 | 36.35 | 60.31 |
+| 1 | 3 | GRECO + ESC, `hypothesis` 0.1 | 72.18 | 36.20 | 60.21 |
+| 2 | 5 | ESC alone | 73.15 | 33.27 | 59.00 |
+| 2 | 5 | GRECO, no vote | 62.42 | 43.63 | 57.47 |
+| 2 | 5 | GRECO, `hypothesis` 0.1 | 63.20 | 43.53 | 57.96 |
+| 2 | 5 | GRECO, `rank` 0.2 *(best CoNLL-2014)* | 64.64 | 42.65 | 58.59 |
+| 2 | 5 | GRECO, `system` 0.1 | 63.37 | 44.16 | 58.30 |
+| 2 | 5 | GRECO + ESC, no vote | 72.93 | 35.21 | 60.06 |
+| 2 | 5 | GRECO + ESC, `hypothesis` 0.1 | 72.34 | 35.69 | 60.02 |
+| 2 | 5 | GRECO + ESC, `rank` 0.2 | 72.43 | 35.85 | 60.16 |
+| 2 | 5 | GRECO + ESC, `system` 0.1 *(best BEA-2019)* | 72.72 | 35.69 | 60.22 |
+| 3 | 7 | ESC alone | 72.95 | 32.97 | 58.71 |
+| 3 | 7 | GRECO, no vote | 60.00 | 45.03 | 56.26 |
+| 3 | 7 | GRECO, `hypothesis` 0.1 | 60.79 | 45.03 | 56.82 |
+| 3 | 7 | GRECO, `rank` 0.4 | 63.98 | 42.33 | 58.04 |
+| 3 | 7 | GRECO, `system` 0.1 | 61.00 | 45.87 | 57.22 |
+| 3 | 7 | GRECO + ESC, no vote | 72.97 | 35.46 | 60.23 |
+| 3 | 7 | GRECO + ESC, `hypothesis` 0.1 | 72.09 | 36.24 | 60.18 |
+| **3** | **7** | **GRECO + ESC, `rank` 0.4 (best dev model)** | **71.88** | **36.76** | **60.35** |
+| 3 | 7 | GRECO + ESC, `system` 0.1 | 72.56 | 36.00 | 60.31 |
+| 5 | 11 | ESC alone | 72.81 | 32.98 | 58.65 |
+| 5 | 11 | GRECO, no vote | 56.23 | 45.88 | 53.81 |
+| 5 | 11 | GRECO, `hypothesis` 0.1 | 57.37 | 46.45 | 54.80 |
+| 5 | 11 | GRECO, `rank` 0.6 | 63.25 | 42.17 | 57.50 |
+| 5 | 11 | GRECO, `system` 0.1 | 57.14 | 46.92 | 54.76 |
+| 5 | 11 | GRECO + ESC, no vote | 71.97 | 36.00 | 59.98 |
+| 5 | 11 | GRECO + ESC, `hypothesis` 0.1 | 70.39 | 37.43 | 59.85 |
+| 5 | 11 | GRECO + ESC, `rank` 0.6 | 69.76 | 37.64 | 59.59 |
+| 5 | 11 | GRECO + ESC, `system` 0.1 | 70.96 | 36.74 | 59.81 |
 
 ## The α rerun (job 1101538)
 
@@ -82,8 +82,7 @@ None of them overtook the best dev model, which has the same α (0.4) under both
 2. **GRECO + ESC is flat across k**, at 59.59–60.35 for all 14 GRECO + ESC rows. GRECO alone falls as k grows, from 59.85 at k = 1 to 53.81–57.50 at k = 5. More hypotheses give GRECO more wrong edits to choose from, and ESC filters them out.
 3. **ESC's gain grows with k**: +0.4 to +1.1 at k = 1, +1.6 to +2.6 at k = 2, +2.3 to +4.0 at k = 3 and +2.1 to +6.2 at k = 5.
 4. **All GRECO + ESC rows beat ESC alone** (58.65–59.10) and every single system (BART 53.07, T5 53.74, GECToR 54.77).
-5. **On M2, ESC does not help on dev either.** The best M2 score is GRECO alone, k = 1, vote 0.1 (65.19), against 63.96 for the best dev model. This agrees with the CoNLL-2014 M2 results.
-6. **The top runs are within noise of each other.** The best dev model is the highest, but five other GRECO + ESC rows are within 0.15 of it: k = 1 no vote (60.31), k = 3 `system` (60.31), k = 3 no vote (60.23), k = 2 `system` (60.22) and k = 1 vote 0.1 (60.21).
+5. **The top runs are within noise of each other.** The best dev model is the highest, but five other GRECO + ESC rows are within 0.15 of it: k = 1 no vote (60.31), k = 3 `system` (60.31), k = 3 no vote (60.23), k = 2 `system` (60.22) and k = 1 vote 0.1 (60.21).
 
 ## Dev against the test sets
 
@@ -121,11 +120,11 @@ Every run, on all three sets. BEA-2019 test is ERRANT F0.5 from Codabench. For C
 | GRECO, k5, no vote | 53.81 | 67.26 | 64.90 | 59.50 |
 | GRECO, k5, `hypothesis` 0.1 | 54.80 | 69.58 | 65.81 | 61.04 |
 | GRECO, k5, `system` 0.1 | 54.76 | 68.97 | 65.01 | 60.37 |
-| GRECO, k5, `rank` 0.6 | 57.50 | pending | 67.28 | 63.35 |
+| GRECO, k5, `rank` 0.6 | 57.50 | not submitted | 67.28 | 63.35 |
 | GRECO + ESC, k5, no vote | 59.98 | 76.74 | 65.88 | 63.96 |
 | GRECO + ESC, k5, `hypothesis` 0.1 | 59.85 | 76.80 | 66.94 | 64.64 |
-| GRECO + ESC, k5, `system` 0.1 | 59.81 | pending | 66.96 | 64.84 |
-| GRECO + ESC, k5, `rank` 0.6 | 59.59 | pending | 66.91 | 64.74 |
+| GRECO + ESC, k5, `system` 0.1 | 59.81 | 76.85 | 66.96 | 64.84 |
+| GRECO + ESC, k5, `rank` 0.6 | 59.59 | 76.73 | 66.91 | 64.74 |
 
 **What carries over from dev to BEA-2019 test.** The patterns all carry over:
 
@@ -134,9 +133,9 @@ Every run, on all three sets. BEA-2019 test is ERRANT F0.5 from Codabench. For C
 - `rank` voting helps GRECO alone most.
 - Every GRECO + ESC run beats ESC alone and the single systems.
 
-Only the order of the near-tied top runs changes. k = 2 `system` 0.1 was 0.13 behind the best dev model on dev and is 0.21 ahead of it on test.
+Only the order of the near-tied top runs changes. k = 2 `system` 0.1 was 0.13 behind the best dev model on dev and is 0.21 ahead of it on test. This is within noise and still supports the top-k hypothesis; see [`bea19.md`](bea19.md#why-k--2-beats-k--3-on-bea-2019-test).
 
-**What carries over to CoNLL-2014.** On ERRANT the pattern partly holds: ESC helps in 13 of 14 pairs. On M2, the official metric, GRECO alone is best and ESC lowers the score at k ≤ 3. Dev M2 showed the same (finding 5).
+**What carries over to CoNLL-2014.** On ERRANT the pattern partly holds: ESC helps in 13 of 14 pairs. On M2, the official metric, GRECO alone is best and ESC lowers the score at k ≤ 3.
 
 ## Why dev and test results can differ
 

@@ -8,7 +8,7 @@ Nothing was tuned or trained on the test set. ESC was trained once per k on the 
 
 | Model | Run | BEA-2019 test | How it was picked |
 |---|---|---|---|
-| **Best BEA-2019 model (so far)** | GRECO + ESC, k = 2, `system` 0.1 | **77.45** | highest test score; two GRECO + ESC k = 5 runs are still pending |
+| **Best BEA-2019 model** | GRECO + ESC, k = 2, `system` 0.1 | **77.45** | highest BEA-2019 test score of all 35 submissions |
 | **Best dev model** | GRECO + ESC, k = 3, `rank` 0.4 | **77.24** | highest full-dev ERRANT F0.5 (60.35), chosen without seeing test scores |
 | Best GRECO alone | GRECO, k = 1, vote 0.1 | 76.82 | highest test score without ESC |
 | Best ESC alone | ESC, k = 2 | 76.33 | |
@@ -37,7 +37,7 @@ k is the number of hypotheses taken from each of BART and T5. GECToR always cont
 | 2 | 5 | GRECO | `rank` 0.2 | 74.83 |
 | 2 | 5 | GRECO + ESC | no vote | 77.11 |
 | 2 | 5 | GRECO + ESC | `hypothesis` 0.1 | 77.33 |
-| **2** | **5** | **GRECO + ESC** | **`system` 0.1** | **77.45** *(best BEA-2019 so far)* |
+| **2** | **5** | **GRECO + ESC** | **`system` 0.1** | **77.45** *(best BEA-2019)* |
 | 2 | 5 | GRECO + ESC | `rank` 0.2 | 77.28 |
 | 3 | 7 | ESC alone | – | 75.88 |
 | 3 | 7 | GRECO | no vote | 70.22 |
@@ -52,11 +52,11 @@ k is the number of hypotheses taken from each of BART and T5. GECToR always cont
 | 5 | 11 | GRECO | no vote | 67.26 |
 | 5 | 11 | GRECO | `hypothesis` 0.1 | 69.58 |
 | 5 | 11 | GRECO | `system` 0.1 | 68.97 |
-| 5 | 11 | GRECO | `rank` 0.6 | pending |
+| 5 | 11 | GRECO | `rank` 0.6 | not submitted |
 | 5 | 11 | GRECO + ESC | no vote | 76.74 |
 | 5 | 11 | GRECO + ESC | `hypothesis` 0.1 | 76.80 |
-| 5 | 11 | GRECO + ESC | `system` 0.1 | pending |
-| 5 | 11 | GRECO + ESC | `rank` 0.6 | pending |
+| 5 | 11 | GRECO + ESC | `system` 0.1 | 76.85 |
+| 5 | 11 | GRECO + ESC | `rank` 0.6 | 76.73 |
 
 ## GRECO alone vs GRECO + ESC
 
@@ -74,17 +74,31 @@ k is the number of hypotheses taken from each of BART and T5. GECToR always cont
 | 3 | `rank` 0.4 | 74.56 | 77.24 | +2.68 |
 | 5 | no vote | 67.26 | 76.74 | +9.48 |
 | 5 | `hypothesis` 0.1 | 69.58 | 76.80 | +7.22 |
-| 5 | `system` 0.1 | 68.97 | pending | |
-| 5 | `rank` 0.6 | pending | pending | |
+| 5 | `system` 0.1 | 68.97 | 76.85 | +7.88 |
+| 5 | `rank` 0.6 | not submitted | 76.73 | |
 
 ## Findings
 
-1. **Every GRECO + ESC run beats every single system by more than 5 points.** All twelve scored so far are between 76.74 and 77.45, against 71.57 for GECToR, 69.91 for T5 and 69.24 for BART. Even ESC alone (75.57–76.33) is 4.0–4.8 above GECToR.
-2. **ESC is what makes the combination work on BEA-2019.** At every k and with every voting setting, GRECO + ESC beats GRECO alone, by +0.3–1.0 at k = 1, +2.4–4.3 at k = 2, +2.7–6.6 at k = 3 and +7.2–9.5 at k = 5 (so far). The more hypotheses GRECO sees, the more ESC adds. Every GRECO + ESC run also beats ESC alone.
-3. **GRECO alone gets worse as k grows, and drops below GECToR.** Its best score is 76.82 at k = 1, 74.83 at k = 2 and 74.56 at k = 3, and at most 69.58 at k = 5 so far. At k = 3 with no vote (70.22) and at every k = 5 run so far, GRECO alone is below GECToR on its own. More hypotheses give the beam search more wrong edits to choose from. With ESC, the score stays flat across k: 76.74–76.80 at k = 5 so far, against 77.16–77.17 at k = 1.
+1. **Every GRECO + ESC run beats every single system by more than 5 points.** All 14 are between 76.73 and 77.45, against 71.57 for GECToR, 69.91 for T5 and 69.24 for BART. Even ESC alone (75.57–76.33) is 4.0–4.8 above GECToR.
+2. **ESC is what makes the combination work on BEA-2019.** At every k and with every voting setting, GRECO + ESC beats GRECO alone, by +0.3–1.0 at k = 1, +2.4–4.3 at k = 2, +2.7–6.6 at k = 3 and +7.2–9.5 at k = 5. The more hypotheses GRECO sees, the more ESC adds. Every GRECO + ESC run also beats ESC alone.
+3. **GRECO alone gets worse as k grows, and drops below GECToR.** Its best score is 76.82 at k = 1, 74.83 at k = 2 and 74.56 at k = 3, and at most 69.58 at k = 5. At k = 3 with no vote (70.22) and at every k = 5 run submitted, GRECO alone is below GECToR on its own. More hypotheses give the beam search more wrong edits to choose from. With ESC, the score stays flat across k: 76.73–76.85 at k = 5, against 77.16–77.17 at k = 1.
 4. **`rank` voting is the best voting for GRECO alone at larger k.** At k = 3 it scores 74.56, against 70.22 without voting and about 71.9 for `hypothesis` and `system`. It trusts each system's 1-best more than its lower-ranked hypotheses. With ESC on, the vote modes are within 0.5 of each other.
-5. **The top GRECO + ESC runs are within noise.** The best (k = 2 `system`, 77.45) and the best dev model (k = 3 `rank`, 77.24) are 0.21 apart. On dev the order was reversed by 0.13. See [`dev.md`](dev.md) for why dev and test can differ.
+5. **The top GRECO + ESC runs are within noise.** The best (k = 2 `system`, 77.45) and the best dev model (k = 3 `rank`, 77.24) are 0.21 apart, and on dev the order was reversed by 0.13. See [Why k = 2 beats k = 3](#why-k--2-beats-k--3-on-bea-2019-test) below.
 6. **The test set ranks the runs as the full dev set did.** On dev, GRECO + ESC was flat across k, GRECO alone fell with k, and rank voting helped most without ESC. All three hold here.
+
+## Why k = 2 beats k = 3 on BEA-2019 test
+
+The best dev model (k = 3, `rank` 0.4) and the best BEA-2019 model (k = 2, `system` 0.1) differ by **0.21** on BEA-2019 test (77.24 vs 77.45). That is too small to mean that k = 2 is better:
+
+- **The lead flips between dev and test.** On dev, k = 3 was ahead by 0.13 (60.35 vs 60.22). BEA-2019 dev and test are both W&I+LOCNESS. When a lead this small changes sign between two samples of the same kind of text, that is what random variation looks like.
+- **It is inside the spread of near-identical runs.** The six best GRECO + ESC runs on BEA-2019 test (k = 1, 2 and 3) are all within 0.3 of each other (77.16–77.45). On a few thousand sentences, F0.5 moves by a few tenths when the sentences are resampled, so their order is partly chance. No significance test was run: BEA-2019's test gold is hidden, so a paired bootstrap is only possible on dev.
+- **The model is chosen on dev,** as the GRECO paper does. Switching to k = 2 because of this gap would be tuning on the test set.
+
+**It still supports the top-k hypothesis: combining more than each system's 1-best helps, once ESC filters the extra edits.**
+
+- **Both winners use k > 1.** On BEA-2019 test, the best k = 2 and k = 3 GRECO + ESC runs (77.45 and 77.24) are both above the best k = 1 run (77.17). On dev, the best k = 3 run (60.35) is above the best k = 1 run (60.31).
+- **Without ESC, extra hypotheses hurt.** GRECO alone is best at k = 1 (76.82 on BEA-2019 test) and falls to at most 74.83 at k = 2, 74.56 at k = 3 and 69.58 at k = 5. With ESC, every k from 2 to 5 stays within about 0.7 (76.73–77.45). ESC is what makes the extra hypotheses usable.
+- **The gain over k = 1 is modest:** +0.07 to +0.28 on BEA-2019 test, +0.04 on dev. So the claim the results support is "k > 1 with ESC is at least as good as k = 1, and slightly better", not a large gain.
 
 ## Reproducing
 
@@ -92,4 +106,10 @@ k is the number of hypotheses taken from each of BART and T5. GECToR always cont
 sbatch -J greco-test --time=12:00:00 cluster/job.sbatch greco_esc/test.sh bea19
 ```
 
-Then zip `runs/bea19/k<k>/<run>/pred.txt` (one `.txt` of 4,477 lines per zip) and upload it under **My Submissions** on the BEA-2019 Codabench task. The zips submitted here are in `codabench/` (not tracked).
+Then pack every output for Codabench and upload each zip under **My Submissions** on the BEA-2019 Codabench task:
+
+```bash
+python3 -m greco_esc.codabench     # writes codabench/bea19_k<k>_<run>.zip, one 4,477-line .txt each
+```
+
+The zips submitted here are in `codabench/` (not tracked).
