@@ -1,6 +1,6 @@
 # Full dev set results (BEA-2019 dev)
 
-All 4,384 sentences of BEA-2019 dev (`data/dev.src` = `dev_tune` + `dev_test`), scored with ERRANT, the BEA-2019 metric. M2 is also given. Jobs 1098818 and 1099227 produced these; `python -m greco_esc.evaluate dev` scored them. The table is copied from `runs/dev/results.{csv,md}` into [`dev.csv`](dev.csv). **This is the set the final system was chosen on:** GRECO + ESC, k = 3, `rank` 0.4, at 60.35 ERRANT F0.5, the highest row.
+All 4,384 sentences of BEA-2019 dev (`data/dev.src` = `dev_tune` + `dev_test`), scored with ERRANT, the BEA-2019 metric. M2 is also given. Jobs 1098818 and 1099227 produced these; `python -m greco_esc.evaluate dev` scored them. The table is copied from `runs/dev/results.{csv,md}` into [`dev.csv`](dev.csv). **This is the set the best dev model is chosen on:** the run with the highest full-dev ERRANT F0.5. These numbers are from before the switch to the new α, and a rerun with the new α (job 1101538) is under way. The best dev model will be fixed from that rerun. Until then the dev leader is GRECO + ESC, k = 3, `rank` 0.4, at 60.35.
 
 **How ESC is kept off its own training sentences (cross-fitting).** ESC learns from gold edits, so no sentence is scored by an ESC trained on it. Each `dev_test` sentence (2,384) is scored with ESC trained on `dev_tune` (2,000), and each `dev_tune` sentence with ESC trained on `dev_test`. The two halves of each output are then merged back into `dev.src` order and scored together.
 
@@ -51,8 +51,8 @@ All 4,384 sentences of BEA-2019 dev (`data/dev.src` = `dev_tune` + `dev_test`), 
 1. **GRECO + ESC is flat across k**, at 59.73–60.35 for all 14 GRECO + ESC rows. GRECO alone falls as k grows, from 59.86 at k = 1 to 53.81–57.30 at k = 5. More hypotheses give GRECO more wrong edits to choose from, and ESC filters them out.
 2. **ESC's gain grows with k**: about +1 at k = 1 with no vote, +2 to +4 at k = 3, and +2.5 to +6 at k = 5. With k = 1 and `hypothesis` 0.4 it is slightly negative (−0.13).
 3. **All GRECO + ESC rows beat ESC alone** (58.65–59.10) and the best single system, GECToR (54.77).
-4. **On M2, ESC does not help on dev either.** The best M2 score is GRECO alone, k = 1, no vote (64.98), against 63.96 for the final system. This agrees with the CoNLL-2014 M2 results.
-5. **The top runs are within noise of each other.** The final system was the highest, but four other GRECO + ESC rows are within 0.15 of it and effectively tied: k = 1 no vote (60.31), k = 3 `system` (60.31), k = 3 no vote (60.23) and k = 2 `system` (60.22).
+4. **On M2, ESC does not help on dev either.** The best M2 score is GRECO alone, k = 1, no vote (64.98), against 63.96 for the dev leader. This agrees with the CoNLL-2014 M2 results.
+5. **The top runs are within noise of each other.** The dev leader (k = 3 `rank` 0.4) was the highest, but four other GRECO + ESC rows are within 0.15 of it and effectively tied: k = 1 no vote (60.31), k = 3 `system` (60.31), k = 3 no vote (60.23) and k = 2 `system` (60.22).
 
 ## Dev against the test sets
 
@@ -67,7 +67,7 @@ Runs with the same settings on all three sets (the α differences above leave ou
 | GRECO, k2, `system` 0.1 | 58.30 | 73.95 | 67.62 | 63.61 |
 | GRECO + ESC, k2, no vote | 60.06 | 77.11 | 65.73 | 63.64 |
 | GRECO + ESC, k2, `hypothesis` 0.1 | 60.02 | 77.33 | 66.06 | 63.87 |
-| GRECO + ESC, k2, `system` 0.1 | 60.22 | **77.45** | 66.13 | 63.90 |
+| **GRECO + ESC, k2, `system` 0.1 (best BEA-2019 so far)** | 60.22 | **77.45** | 66.13 | 63.90 |
 | GRECO, k3, no vote | 56.26 | 70.22 | 65.78 | 61.01 |
 | GRECO, k3, `hypothesis` 0.1 | 56.82 | 71.92 | 66.91 | 62.74 |
 | GRECO, k3, `system` 0.1 | 57.22 | 71.79 | 66.10 | 61.77 |
@@ -75,10 +75,10 @@ Runs with the same settings on all three sets (the α differences above leave ou
 | GRECO + ESC, k3, no vote | 60.23 | 76.77 | 65.26 | 63.51 |
 | GRECO + ESC, k3, `hypothesis` 0.1 | 60.18 | 76.89 | 65.48 | 63.62 |
 | GRECO + ESC, k3, `system` 0.1 | 60.31 | 77.09 | 65.38 | 63.63 |
-| **GRECO + ESC, k3, `rank` 0.4 (final)** | **60.35** | 77.24 | 66.14 | 64.47 |
-| GRECO, k5, no vote | 53.81 | pending | 64.90 | 59.50 |
-| GRECO, k5, `hypothesis` 0.1 | 54.80 | pending | 65.81 | 61.04 |
-| GRECO, k5, `system` 0.1 | 54.76 | pending | 65.01 | 60.37 |
+| **GRECO + ESC, k3, `rank` 0.4 (current dev leader)** | **60.35** | 77.24 | 66.14 | 64.47 |
+| GRECO, k5, no vote | 53.81 | 67.26 | 64.90 | 59.50 |
+| GRECO, k5, `hypothesis` 0.1 | 54.80 | 69.58 | 65.81 | 61.04 |
+| GRECO, k5, `system` 0.1 | 54.76 | 68.97 | 65.01 | 60.37 |
 | GRECO + ESC, k5, no vote | 59.98 | pending | 65.88 | 63.96 |
 | GRECO + ESC, k5, `hypothesis` 0.1 | 59.85 | pending | 66.94 | 64.64 |
 | GRECO + ESC, k5, `system` 0.1 | 59.81 | pending | 66.96 | 64.84 |
@@ -86,6 +86,9 @@ Runs with the same settings on all three sets (the α differences above leave ou
 | ESC alone, k2 | 59.00 | 76.33 | 63.78 | 61.85 |
 | ESC alone, k3 | 58.71 | 75.88 | 62.48 | 60.69 |
 | ESC alone, k5 | 58.65 | 75.57 | 63.38 | 61.41 |
+| BART (single system) | 53.07 | 69.24 | 63.23 | 58.05 |
+| T5 (single system) | 53.74 | 69.91 | 63.12 | 57.89 |
+| GECToR (single system) | 54.77 | 71.57 | 64.03 | 59.94 |
 
 **What carries over from dev to BEA-2019 test.** The patterns all carry over:
 
@@ -94,14 +97,14 @@ Runs with the same settings on all three sets (the α differences above leave ou
 - `rank` voting helps GRECO alone most.
 - Every GRECO + ESC run beats ESC alone.
 
-Only the order of the near-tied top runs changes. k = 2 `system` 0.1 was 0.13 behind the final system on dev and is 0.21 ahead of it on test.
+Only the order of the near-tied top runs changes. k = 2 `system` 0.1 was 0.13 behind the dev leader on dev and is 0.21 ahead of it on test.
 
 **What carries over to CoNLL-2014.** On ERRANT the pattern partly holds: ESC helps in 13 of 14 pairs. On M2, the official metric, GRECO alone is best and ESC lowers the score at k ≤ 3. Dev M2 showed the same (finding 4).
 
 ## Why dev and test results can differ
 
-1. **Different sentences and references.** Dev and BEA-2019 test are both W&I+LOCNESS, but they come from different writers. The test references are hidden on Codabench. CoNLL-2014 is a different corpus (NUCLE essays) with different annotators, guidelines and an M2 metric. Absolute scores are not comparable across sets: every BEA-2019 test row is 14–17.5 points above its dev row, ESC alone and GRECO alone included, so the gap comes from the data and its references, not from the combination. Compare how runs rank within a set, not raw numbers across sets.
-2. **The choices were made on dev, so dev flatters them.** α was tuned on the full dev set, and the final system was the highest of 28 combinations on it. The best of many close runs on a set is usually a little lucky on that set (the "winner's curse"), so its dev score overstates what it gets elsewhere. The test sets are the unbiased check.
+1. **Different sentences and references.** Dev and BEA-2019 test are both W&I+LOCNESS, but they come from different writers. The test references are hidden on Codabench. CoNLL-2014 is a different corpus (NUCLE essays) with different annotators, guidelines and an M2 metric. Absolute scores are not comparable across sets: every BEA-2019 test row is 13.5–17.5 points above its dev row, single systems, ESC alone and GRECO alone included, so the gap comes from the data and its references, not from the combination. Compare how runs rank within a set, not raw numbers across sets.
+2. **The choices were made on dev, so dev flatters them.** α was tuned on the full dev set, and the dev leader was the highest of 28 combinations on it. The best of many close runs on a set is usually a little lucky on that set (the "winner's curse"), so its dev score overstates what it gets elsewhere. The test sets are the unbiased check.
 3. **Differences between the top runs are within noise.** The leading GRECO + ESC rows differ by 0.1–0.3 on both dev and test. On a few thousand sentences, F0.5 moves by more than that when the sentences are resampled, so the order among them can flip between sets, as k = 2 and k = 3 did.
 4. **ESC was trained on more data for the test sets.** For dev scores (cross-fitting), each ESC learned from one half, 2,000 or 2,384 sentences. For the test sets, ESC learned from all 4,384. A better-trained ESC is one plausible reason ESC's gain on BEA-2019 test is larger than on dev at k ≥ 2 (k = 3 no vote: +3.97 on dev, +6.55 on test).
 5. **Three runs used different α** (see above), so k = 1 voting, k = 2 `rank` and k = 5 `rank` cannot be compared row for row between dev and test.
