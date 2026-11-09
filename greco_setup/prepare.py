@@ -22,6 +22,7 @@ tokenization as the source.
 """
 
 import argparse
+import hashlib
 import json
 from pathlib import Path
 
@@ -44,21 +45,62 @@ def read_system(spec, n_sources):
     return name, [lines[i * k:(i + 1) * k] for i in range(n_sources)]
 
 
-def build(sources, systems, k=None):
-    """One combine.py record per source sentence, with proposals from every system."""
+def build(sources, systems, k=None, edits=None):
+    """One combine.py record per source sentence, with proposals from every system.
+
+    A system's repeated hypotheses are kept once, at their best rank: export_candidates.py
+    pads short n-best lists with copies of the top hypothesis, which would otherwise
+    count as extra votes. edits maps a system name to its precomputed edits (as from
+    read_edits), aligned with its hypotheses; those proposals then carry the edits
+    instead of the sentence, so combine.py does not align them itself.
+    """
+    if edits is not None and (not isinstance(edits, dict)
+                              or not all(name in edits for name, _ in systems)):
+        raise ValueError("edits must map every system name to its precomputed edits")
+    edits = edits or {}
     records = []
     for i, source in enumerate(sources):
         proposals = []
         for name, hypotheses in systems:
+            seen = set()
             for rank, sentence in enumerate(hypotheses[i][:k], 1):
                 # Some generators return an empty string; combine.py rejects those
-                if sentence.strip():
+                if not sentence.strip() or sentence in seen:
+                    continue
+                seen.add(sentence)
+                if name in edits:
+                    proposals.append({"system": name, "rank": rank, "edits": edits[name][i][rank - 1]})
+                else:
                     proposals.append({"system": name, "rank": rank, "sentence": sentence})
         if not proposals:
             # No usable hypothesis: proposing the source itself means "no edits"
-            proposals.append({"system": "source", "rank": 0, "sentence": source})
+            proposals.append({"system": "source", "rank": 1, "sentence": source})
         records.append({"source": source, "proposals": proposals})
     return records
+
+
+def file_hash(path):
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def edits_path(path):
+    """Where extract_edits.py stores the ERRANT edits of a prediction file."""
+    return Path(path).with_suffix(".errant.jsonl")
+
+
+def read_edits(spec, n_sources):
+    """The ERRANT edits of NAME=PATH, split into k lists per source sentence like read_system."""
+    name, _, path = spec.partition("=")
+    source = edits_path(path)
+    if not source.is_file():
+        raise ValueError(f"{source} missing; run python -m greco_setup.extract_edits (needs errant)")
+    with source.open(encoding="utf-8") as f:
+        header = json.loads(f.readline())
+        lines = [json.loads(line) for line in f]
+    if header.get("sha256") != file_hash(path) or len(lines) % n_sources:
+        raise ValueError(f"{source} is out of date for {path}; rerun greco_setup.extract_edits")
+    k = len(lines) // n_sources
+    return name, [lines[i * k:(i + 1) * k] for i in range(n_sources)]
 
 
 def collect(results):
