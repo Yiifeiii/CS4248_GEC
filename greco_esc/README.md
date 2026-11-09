@@ -161,13 +161,14 @@ rsync -av -e "ssh -J <user>@stujump.comp.nus.edu.sg" --exclude '*.nbest.jsonl' \
 
 ### Test sets (final run)
 
-`test.sh` runs the final system on CoNLL-2014 (1,312 sentences) and BEA-2019 (4,477). Every setting is fixed on `dev_test` beforehand (`settings.py`), and nothing is tuned or trained on a test set:
+`test.sh` runs the final system on CoNLL-2014 (1,312 sentences) and BEA-2019 (4,477). As in the GRECO paper, the system is chosen on BEA-2019 dev (our full dev set) with ERRANT, then each test set is scored with its official metric. Nothing is tuned or trained on a test set:
 
 | What | Setting | Why |
 |---|---|---|
-| Final system | GRECO + ESC, k = 3, no voting (`greco+esc.k3.vote0`) | Best on `dev_test` (58.9); voting made no difference with ESC |
-| Comparison | GRECO alone, k = 1, `hypothesis` vote 0.4 (`greco.k1.vote0.4`) | Best without ESC on `dev_test` (58.2) |
-| Also scored | ESC alone (k = 3), BART, T5 and GECToR top-1 | Baselines |
+| Final system | GRECO + ESC, k = 3, `rank` vote 0.4 (`greco+esc.k3.rank0.4`) | Best ERRANT F0.5 on the full dev set (60.4) |
+| Also scored | ESC alone (k = 3), BART, T5 and GECToR top-1 | Baselines; they need no extra GRECO run |
+
+The paper used ESC only on BEA-2019; on CoNLL-2014 it reports GRECO with voting alone. Our dev results agree that ESC helps ERRANT (60.4 vs 59.9) but not M2 (64.0 vs 65.0), so expect GRECO + ESC on CoNLL-2014 to be below what GRECO alone would score there.
 | ESC training data | The full dev set, `dev_tune` + `dev_test` (4,384 sentences) | The test sentences are separate, so all of dev can be used, as the paper trains ESC on BEA-2019 dev |
 
 Run it after `run.sh` has finished (it trains ESC on `run.sh`'s dev candidates). About 1–1.5 hours:
@@ -180,7 +181,7 @@ sbatch -J greco-test --time=4:00:00 cluster/job.sbatch greco_esc/test.sh conll14
 **Scoring.**
 
 - **CoNLL-2014** is scored with the M2 scorer, its official metric, and ERRANT, into `runs/conll14/<tag>/results.md`. `data/test.conll14.m2` is in Git LFS, so pull it first (`conda install -c conda-forge git-lfs && git lfs install && git lfs pull`, see `cluster/README.md`). Without it, the job still writes the outputs and says where they are. Rescore later with `python -m greco_esc.evaluate test conll14`.
-- **BEA-2019** has no public gold. Submit `runs/bea19/released/greco+esc.k3.vote0/pred.txt` to the BEA-2019 Codabench task.
+- **BEA-2019** has no public gold. Submit `runs/bea19/released/greco+esc.k3.rank0.4/pred.txt` to the BEA-2019 Codabench task.
 
 **Fine-tuned GRECO.** `GRECO_CKPT` sets another GRECO checkpoint, and `GRECO_TAG` names its outputs (default `released`). Choose the checkpoint on dev first: run `run.sh` with it, then test the one that does better on `dev_test`.
 
@@ -212,7 +213,7 @@ The end-to-end test runs only with `external/esc` and `external/greco` in place 
 | `setup.sh` | Clones ESC at `cdefd3b` into `external/esc` and installs scikit-learn |
 | `run.sh` | The cluster job: candidates, M2 files, ESC, GRECO, scores |
 | `combine.py` | Upstream `run_combination.py` with `--vote_mode hypothesis/system/rank` |
-| `test.sh` | The final run on CoNLL-2014 and BEA-2019: ESC trained on the full dev set, the settings in `TEST_RUNS` |
+| `test.sh` | The final run on CoNLL-2014 and BEA-2019: ESC trained on the full dev set, the system in `TEST_RUNS` |
 | `prepare.py` | `m2 <split>`: text and M2 per ranked output; `esc`: ESC folders per k; `scores <k>`: checks and clips ESC's scores |
 | `evaluate.py` | Scores every output on `dev_test` (default), `dev_tune`, or `dev` (both halves merged); writes `runs/<split>/results.{csv,md}` |
 | `test_greco_esc.py` | Tests, including the vote modes on upstream's dataset and the end-to-end ESC → GRECO test |

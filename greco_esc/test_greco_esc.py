@@ -226,7 +226,7 @@ class TestSetTests(unittest.TestCase):
     """test.sh: settings fixed on dev, ESC trained on the full dev set, test sets never trained on."""
 
     def test_the_test_runs_are_fixed_and_their_esc_uses_the_full_dev_model(self):
-        self.assertEqual(settings.TEST_RUNS[0], ('greco+esc.k3.vote0', 3, 0, True, 'hypothesis'))
+        self.assertEqual(settings.TEST_RUNS, [('greco+esc.k3.rank0.4', 3, 0.4, True, 'rank')])
         for name, k, vote, esc, mode in settings.TEST_RUNS:
             if esc:
                 self.assertEqual(k, settings.FINAL_K, name)

@@ -52,14 +52,13 @@ TEST_SETS = {
     'bea19': (Path('data/test.bea19.src'), None),
 }
 
-# What test.sh runs on the test sets, all fixed on dev_test beforehand (runs/dev_test/results.md):
-# (name, k, vote_coef, esc, vote_mode). The final system is GRECO + ESC at k = 3 without voting
-# (58.9, the best; voting made no difference with ESC). Next to it, the best GRECO without ESC
-# (k = 1, vote 0.4: 58.2). ESC alone at k = 3 and the three single systems are scored as well.
-# ESC is trained once on the full dev set (dev_tune + dev_test), as the paper does on BEA-2019 dev.
+# What test.sh runs on the test sets: (name, k, vote_coef, esc, vote_mode). One system, chosen
+# beforehand as the best ERRANT F0.5 on the full dev set (= BEA-2019 dev, as in the GRECO paper;
+# runs/dev/results.md): GRECO + ESC at k = 3 with rank voting, alpha 0.4 (60.4). ESC alone at
+# k = 3 and the three single systems are scored as well. ESC is trained once on the full dev set
+# (dev_tune + dev_test), as the paper does on BEA-2019 dev.
 TEST_RUNS = [
-    ('greco+esc.k3.vote0', 3, 0, True, 'hypothesis'),
-    ('greco.k1.vote0.4', 1, 0.4, False, 'hypothesis'),
+    ('greco+esc.k3.rank0.4', 3, 0.4, True, 'rank'),
 ]
 FINAL_K = 3  # k of the full-dev ESC model, used by the final system and by ESC alone
 
