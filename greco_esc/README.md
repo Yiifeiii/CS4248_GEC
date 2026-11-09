@@ -2,7 +2,7 @@
 
 This combines our three systems the way the GRECO paper's strongest setup does (Qorib & Ng, 2023): GRECO's quality score plus ESC's edit scores. It runs with and without ESC, and with and without voting. The three systems are the fine-tuned BART and T5 (`s1s2`) and GECToR. Combinations are chosen on BEA-2019 dev and tested on CoNLL-2014 and BEA-2019 test.
 
-**Status:** the dev runs are done (Slurm jobs 1098818 and 1099227). A rerun of the dev runs whose α changed (job 1101538) is queued; the best dev model is fixed from it. The test runs are done for CoNLL-2014 and for BEA-2019 (`test.sh`, jobs 1099945 and 1100522). On Codabench, everything is scored except five BEA-2019 k = 5 runs: GRECO `rank` 0.6 and the four GRECO + ESC runs.
+**Status:** the dev runs are done (Slurm jobs 1098818 and 1099227). A rerun of the dev runs whose α changed (job 1101538) is queued; the best dev model is fixed from it. The test runs are done for CoNLL-2014 and for BEA-2019 (`test.sh`, jobs 1099945 and 1100522). On Codabench, everything is scored except three BEA-2019 k = 5 runs: GRECO `rank` 0.6, and GRECO + ESC with `system` 0.1 and with `rank` 0.6.
 
 **Full results, every run, in [`results/`](results/):**
 
@@ -69,6 +69,17 @@ At k, GRECO and ESC both read the 1 + 2k inputs `gector-1, bart-1, t5-1, …, ba
 **Splits:** ESC learns its weights on `dev_tune`, which has gold edits. The main results are on `dev_test`. Nothing is tuned on `dev_test`.
 
 **Full dev set (cross-fitting).** The full dev set (`data/dev.src`, 4,384 sentences) is `dev_tune` + `dev_test`, and `data/curriculum/<half>.ids` gives each line's place in it. To score it without ESC seeing a sentence's gold edits, the job also runs every combination on `dev_tune` with ESC trained on `dev_test` (`runs/esc/k<k>/for-dev_tune/`). `evaluate.py dev` then merges each output's two halves back into `dev.src` order and scores them against a reference rebuilt the same way from the halves' M2 files, because `data/dev.m2` is a Git LFS pointer on the cluster. GRECO and ESC handle each sentence on its own, so the merged output is what one run on the full set would give, apart from ESC's training data. The α values are tuned on the full dev set itself (`main`'s `dev.errant.beam`), so they are in-sample on both halves: compare full-dev results with that table, and treat neither dev number as a held-out estimate. Only the test sets are held out.
+
+*Why the split is needed.* ESC is trained on gold corrections: it sees our systems' edits on dev sentences and learns which of them the gold accepts. The dev set is the only labelled data we have system outputs for. An ESC trained on all of dev and scored on all of dev would be marked on sentences whose answers it has already seen, and its score would be inflated. So the full dev set is scored in two pieces:
+
+| Half | Sentences | ESC trained on |
+|---|---|---|
+| `dev_test` | 2,384 | `dev_tune` |
+| `dev_tune` | 2,000 | `dev_test` |
+
+Every sentence is then scored by an ESC that never saw its gold edits. That is why the job log shows each run twice, once per half. It is one experiment on 4,384 sentences, done in two pieces. GRECO is not trained here, so only ESC needs this. The test sets need no split, because ESC never sees them: there it is trained once on the whole dev set.
+
+*How the halves become one score.* The two scores are not averaged. The two halves' predictions are put back into `dev.src` order using the `.ids` files, giving one 4,384-line output. ERRANT then scores that output once against the full reference. It counts true positives, false positives and false negatives over all sentences and computes one P, R and F0.5 from those totals. The result is the same as if one system had produced all 4,384 outputs, and each half counts in proportion to its number of edits. As a check, subtracting the `dev_tune` counts from the full-dev counts gives exactly the `dev_test` score (58.2 at k = 1).
 
 ### What ESC does, and which ESC each run uses
 

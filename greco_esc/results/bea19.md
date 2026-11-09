@@ -8,7 +8,7 @@ Nothing was tuned or trained on the test set. ESC was trained once per k on the 
 
 | Model | Run | BEA-2019 test | How it was picked |
 |---|---|---|---|
-| **Best BEA-2019 model (so far)** | GRECO + ESC, k = 2, `system` 0.1 | **77.45** | highest test score; four GRECO + ESC k = 5 runs are still pending |
+| **Best BEA-2019 model (so far)** | GRECO + ESC, k = 2, `system` 0.1 | **77.45** | highest test score; two GRECO + ESC k = 5 runs are still pending |
 | **Best dev model** | to be fixed after the full-dev rerun (job 1101538) | – | highest full-dev ERRANT F0.5. Until the rerun the dev leader is GRECO + ESC, k = 3, `rank` 0.4, which scores **77.24** here |
 | Best GRECO alone | GRECO, k = 1, vote 0.1 | 76.82 | highest test score without ESC |
 | Best ESC alone | ESC, k = 2 | 76.33 | |
@@ -53,8 +53,8 @@ k is the number of hypotheses taken from each of BART and T5. GECToR always cont
 | 5 | 11 | GRECO | `hypothesis` 0.1 | 69.58 |
 | 5 | 11 | GRECO | `system` 0.1 | 68.97 |
 | 5 | 11 | GRECO | `rank` 0.6 | pending |
-| 5 | 11 | GRECO + ESC | no vote | pending |
-| 5 | 11 | GRECO + ESC | `hypothesis` 0.1 | pending |
+| 5 | 11 | GRECO + ESC | no vote | 76.74 |
+| 5 | 11 | GRECO + ESC | `hypothesis` 0.1 | 76.80 |
 | 5 | 11 | GRECO + ESC | `system` 0.1 | pending |
 | 5 | 11 | GRECO + ESC | `rank` 0.6 | pending |
 
@@ -72,16 +72,16 @@ k is the number of hypotheses taken from each of BART and T5. GECToR always cont
 | 3 | `hypothesis` 0.1 | 71.92 | 76.89 | +4.97 |
 | 3 | `system` 0.1 | 71.79 | 77.09 | +5.30 |
 | 3 | `rank` 0.4 | 74.56 | 77.24 | +2.68 |
-| 5 | no vote | 67.26 | pending | |
-| 5 | `hypothesis` 0.1 | 69.58 | pending | |
+| 5 | no vote | 67.26 | 76.74 | +9.48 |
+| 5 | `hypothesis` 0.1 | 69.58 | 76.80 | +7.22 |
 | 5 | `system` 0.1 | 68.97 | pending | |
 | 5 | `rank` 0.6 | pending | pending | |
 
 ## Findings
 
-1. **Every GRECO + ESC run beats every single system by more than 5 points.** All ten scored so far are between 76.77 and 77.45, against 71.57 for GECToR, 69.91 for T5 and 69.24 for BART. Even ESC alone (75.57–76.33) is 4.0–4.8 above GECToR.
-2. **ESC is what makes the combination work on BEA-2019.** At every k and with every voting setting, GRECO + ESC beats GRECO alone, by +0.3–1.0 at k = 1, +2.4–4.3 at k = 2 and +2.7–6.6 at k = 3. Every GRECO + ESC run also beats ESC alone.
-3. **GRECO alone gets worse as k grows, and drops below GECToR.** Its best score is 76.82 at k = 1, 74.83 at k = 2 and 74.56 at k = 3, and at most 69.58 at k = 5 so far. At k = 3 with no vote (70.22) and at every k = 5 run so far, GRECO alone is below GECToR on its own. More hypotheses give the beam search more wrong edits to choose from. With ESC, the score stays flat across k.
+1. **Every GRECO + ESC run beats every single system by more than 5 points.** All twelve scored so far are between 76.74 and 77.45, against 71.57 for GECToR, 69.91 for T5 and 69.24 for BART. Even ESC alone (75.57–76.33) is 4.0–4.8 above GECToR.
+2. **ESC is what makes the combination work on BEA-2019.** At every k and with every voting setting, GRECO + ESC beats GRECO alone, by +0.3–1.0 at k = 1, +2.4–4.3 at k = 2, +2.7–6.6 at k = 3 and +7.2–9.5 at k = 5 (so far). The more hypotheses GRECO sees, the more ESC adds. Every GRECO + ESC run also beats ESC alone.
+3. **GRECO alone gets worse as k grows, and drops below GECToR.** Its best score is 76.82 at k = 1, 74.83 at k = 2 and 74.56 at k = 3, and at most 69.58 at k = 5 so far. At k = 3 with no vote (70.22) and at every k = 5 run so far, GRECO alone is below GECToR on its own. More hypotheses give the beam search more wrong edits to choose from. With ESC, the score stays flat across k: 76.74–76.80 at k = 5 so far, against 77.16–77.17 at k = 1.
 4. **`rank` voting is the best voting for GRECO alone at larger k.** At k = 3 it scores 74.56, against 70.22 without voting and about 71.9 for `hypothesis` and `system`. It trusts each system's 1-best more than its lower-ranked hypotheses. With ESC on, the vote modes are within 0.5 of each other.
 5. **The top GRECO + ESC runs are within noise.** The best (k = 2 `system`, 77.45) and the current dev leader (k = 3 `rank`, 77.24) are 0.21 apart. On dev the order was reversed by 0.13. See [`dev.md`](dev.md) for why dev and test can differ.
 6. **The test set ranks the runs as the full dev set did.** On dev, GRECO + ESC was flat across k, GRECO alone fell with k, and rank voting helped most without ESC. All three hold here.
