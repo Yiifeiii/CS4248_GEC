@@ -18,13 +18,24 @@ Stage 1, from the public T5 base model (a learning-rate sweep only):
     python t5_tuning/tune.py submit --stage 1 --phase 1 [--run]
     python t5_tuning/tune.py collect --stage 1
 
-Every run is trained and then scored on dev_tune only (t5_tuning/run_one.sh). dev_test is never read.
+Every run is trained and then scored on dev_tune only (t5_tuning/run_one.sh). dev_test is never read
+until the final configuration is fixed.
+
+Checks and the final dev_test scoring:
+    python t5_tuning/tune.py preflight [--stage 1] [--phase 1] [--tag T]   # CPU, before any GPU run; submit runs it
+    python t5_tuning/tune.py verify --run <run> [--run ...]               # on a finished run; run_one.sh calls it
+    python t5_tuning/tune.py test [--stage 1] [--tag T] [--lr 3e-5] [--run]   # dev_test once per seed of the final config
 """
 
 import argparse
+import hashlib
 import json
+import math
+import os
 import statistics
 import subprocess
+import sys
+import time
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -33,6 +44,14 @@ CONFIGS = HERE / 'configs'
 RUNS = HERE / 'runs'
 MANIFEST = HERE / 'manifest.json'
 MANIFEST_TABLE = HERE / 'manifest.md'
+
+PREFLIGHT = HERE / 'preflight.json'
+DATA_MANIFEST = ROOT / 'data' / 'curriculum' / 'manifest.json'
+REFERENCE_RUN = ROOT / 'experiments' / 'training' / 't5-base.s1s2' / 'run_info.json'  # versions of the recorded runs
+CHECKSUMS = ROOT / 'experiments' / 'training' / 'checkpoints.sha256'
+STAGE1_REPO, STAGE1_HASH_KEY = 'CS4248-GEC/gec-t5-base-s1', 't5-base.s1/best/model.safetensors'
+SPLIT_SIZES = {'dev_tune': 2000, 'dev_test': 2384}
+CONFIG_FIELDS = {'learning_rate': 'lr', 'weight_decay': 'wd', 'dropout': 'dropout', 'label_smoothing': 'ls'}
 
 SEEDS = [42, 123, 7]                     # the noise-floor seeds
 GRID = {'wd': ['0', '0.01', '0.1'], 'dropout': ['0', '0.1', '0.3'], 'ls': ['0', '0.1', '0.2']}
@@ -49,6 +68,7 @@ STAGES = {
         'default': {'lr': '1e-4', 'wd': '0.01', 'dropout': '0.1', 'ls': '0.1'},
         'lr_grid': ['3e-5', '1e-4', '3e-4'],
         'results': HERE / 'results-stage1.md',
+        'data': 'stage1',                # its key in data/curriculum/manifest.json
     },
     2: {
         'base_config': ROOT / 'training' / 'configs' / 't5-base.stage2.json',
@@ -57,6 +77,7 @@ STAGES = {
         'default': {'lr': '3e-5', 'wd': '0.01', 'dropout': '0.1', 'ls': '0.1'},
         'lr_grid': ['1e-5', '3e-5', '5e-5'],
         'results': HERE / 'results.md',
+        'data': 'stage2',
     },
 }
 
@@ -135,13 +156,30 @@ def plan(args):
 
 
 def submit(args):
-    for row in load_manifest().values():
-        if row.get('stage', 2) != args.stage or row.get('tag') != args.tag or row['phase'] != args.phase:
-            continue
+    """Submit the CPU preflight, then every unscored run of the phase, each depending on the preflight."""
+    pending = []
+    for row in selected(args.stage, args.phase, args.tag):
         if (RUNS / row['run'] / 'dev_tune.scores.json').exists():
             print(f"skip {row['run']}: already scored")
-            continue
-        cmd = ['sbatch', '-J', row['run'], 'cluster/job.sbatch', 't5_tuning/run_one.sh', row['config']]
+        else:
+            pending.append(row)
+    if not pending:
+        print('nothing to submit')
+        return
+
+    scope = ['--stage', str(args.stage), '--phase', str(args.phase)] + (['--tag', args.tag] if args.tag else [])
+    check = ['sbatch', '--parsable', '-J', 't5-tune-preflight', '--partition=normal', '--gpus=0',
+             '--cpus-per-task=4', '--mem-per-cpu=6000', '--time=00:45:00',
+             'cluster/job.sbatch', 't5_tuning/preflight.sh', *scope]
+    if args.run:
+        job = subprocess.run(check, check=True, cwd=ROOT, capture_output=True, text=True).stdout.strip().split(';')[0]
+        print(f'preflight job {job}')
+    else:
+        print(' '.join(check))
+        job = '<preflight job id>'
+    for row in pending:
+        cmd = ['sbatch', f'--dependency=afterok:{job}', '--kill-on-invalid-dep=yes',
+               '-J', row['run'], 'cluster/job.sbatch', 't5_tuning/run_one.sh', row['config']]
         if args.run:
             subprocess.run(cmd, check=True, cwd=ROOT)
         else:
@@ -252,6 +290,236 @@ def collect(args):
     print(f'\ntable written to {results_path}')
 
 
+def selected(stage=None, phase=None, tag=None, runs=None):
+    """Manifest rows matching the filters; runs, if given, picks rows by name instead."""
+    manifest = load_manifest()
+    if runs:
+        missing = [r for r in runs if r not in manifest]
+        if missing:
+            raise SystemExit(f'not in the manifest: {", ".join(missing)}')
+        return [manifest[r] for r in runs]
+    return [r for r in manifest.values()
+            if (stage is None or r.get('stage', 2) == stage) and r.get('tag') == tag
+            and (phase is None or r['phase'] == phase)]
+
+
+def sha256(path):
+    digest = hashlib.sha256()
+    with open(path, 'rb') as f:
+        for block in iter(lambda: f.read(8 << 20), b''):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def recorded_versions():
+    return json.loads(REFERENCE_RUN.read_text(encoding='utf-8'))['versions']
+
+
+def start_model(row):
+    """The model a run starts from: its own init, its stage's, or the base config's."""
+    cfg = STAGES[row['stage']]
+    return (row.get('init') or cfg['init']
+            or json.loads(cfg['base_config'].read_text(encoding='utf-8'))['init'])
+
+
+def same(a, b):
+    """Config values match: numbers by value (1e-05 == 0.00001), everything else exactly."""
+    try:
+        return float(a) == float(b)
+    except (TypeError, ValueError):
+        return a == b
+
+
+def config_problems(row, path=None):
+    """Differences between a run's config file and its manifest row."""
+    path = path or ROOT / row['config']
+    if not path.exists():
+        return [f"{row['config']} is missing"]
+    cfg = json.loads(path.read_text(encoding='utf-8'))
+    problems = [f'{key} is {cfg.get(key)}, the manifest says {row[field]}'
+                for key, field in CONFIG_FIELDS.items() if not same(cfg.get(key), row[field])]
+    expected = {'run': row['run'], 'seed': row['seed'], 'init': start_model(row),
+                'output_dir': f"${{CKPT_ROOT}}/{row['run']}"}
+    problems += [f'{key} is {cfg.get(key)!r}, expected {value!r}'
+                 for key, value in expected.items() if cfg.get(key) != value]
+    return problems
+
+
+def model_problems(model):
+    """Problems finding a starting model offline, and checking the stage-1 model's recorded hash."""
+    if model.startswith(('$', '/')):
+        path = Path(os.path.expandvars(model))
+        return [] if (path / 'config.json').exists() else [f'starting model {model} not found ({path})']
+    from huggingface_hub import snapshot_download
+    try:
+        folder = Path(snapshot_download(model, local_files_only=True))
+    except Exception as error:
+        return [f'{model} is not in the Hugging Face cache ({type(error).__name__}); download it first']
+    if model != STAGE1_REPO:
+        return []
+    expected = next((line.split()[0] for line in CHECKSUMS.read_text(encoding='utf-8').splitlines()
+                     if line.split()[1] == STAGE1_HASH_KEY), None)
+    actual = sha256(folder / 'model.safetensors')
+    return [] if actual == expected else [f'{model}: sha256 {actual} differs from the recorded {expected}']
+
+
+def preflight(args):
+    """Checks before any GPU run: configs, software versions and starting models. Writes preflight.json."""
+    import torch
+    import transformers
+    rows = selected(args.stage, args.phase, args.tag)
+    if not rows:
+        raise SystemExit('no planned runs match; run tune.py plan first')
+    failures = [f"{row['run']}: {p}" for row in rows for p in config_problems(row)]
+    versions = {'torch': torch.__version__, 'transformers': transformers.__version__}
+    if versions != recorded_versions():
+        failures.append(f'software versions {versions} differ from the recorded runs {recorded_versions()} '
+                        f'({REFERENCE_RUN.relative_to(ROOT)})')
+    for model in sorted({start_model(row) for row in rows}):
+        failures += model_problems(model)
+    report('preflight', failures, [])
+    PREFLIGHT.write_text(json.dumps({
+        'checked': time.strftime('%Y-%m-%d %H:%M:%S'), 'runs': [r['run'] for r in rows], 'versions': versions,
+        'data_manifest_sha256': sha256(DATA_MANIFEST), 'start_models': sorted({start_model(r) for r in rows}),
+    }, indent=2) + '\n', encoding='utf-8')
+    print(f'preflight passed for {len(rows)} runs; recorded in {PREFLIGHT.relative_to(ROOT)}')
+
+
+def stability(log_history, spike=2.0):
+    """The trainer_state.json check. Failures: a non-finite loss or gradient norm.
+    Warnings: after the first tenth of the run, a loss above spike x the lowest so far, or no decrease overall."""
+    losses = [(entry['step'], entry['loss']) for entry in log_history if 'loss' in entry]
+    grads = [entry['grad_norm'] for entry in log_history if 'grad_norm' in entry]
+    failures, warnings = [], []
+    if not losses:
+        return ['no training loss in trainer_state.json'], []
+    bad = [step for step, loss in losses if not math.isfinite(loss)]
+    if bad:
+        failures.append(f'non-finite training loss at step {bad[0]}')
+    if any(not math.isfinite(g) for g in grads):
+        failures.append('non-finite gradient norm')
+    lowest = math.inf
+    for i, (step, loss) in enumerate(losses):
+        if not math.isfinite(loss):
+            continue
+        if i >= len(losses) // 10 and loss > spike * lowest:
+            warnings.append(f'loss spike at step {step}: {loss:.3f}, over {spike}x the lowest so far ({lowest:.3f})')
+            break
+        lowest = min(lowest, loss)
+    if math.isfinite(losses[-1][1]) and losses[-1][1] >= losses[0][1]:
+        warnings.append(f'training loss did not decrease ({losses[0][1]:.3f} to {losses[-1][1]:.3f})')
+    return failures, warnings
+
+
+def count_lines(path):
+    with open(path, encoding='utf-8') as f:
+        return sum(1 for _ in f)
+
+
+def run_problems(row, ckpt_root, results=RUNS):
+    """Checks on one finished run against its config. Returns (failures, warnings)."""
+    failures = []
+    out = results / row['run']
+    if not (out / 'dev_tune.scores.json').exists():
+        failures.append('dev_tune.scores.json is missing')
+    pred = out / 'dev_tune.pred'
+    if not pred.exists():
+        failures.append('dev_tune.pred is missing')
+    elif count_lines(pred) != SPLIT_SIZES['dev_tune']:
+        failures.append(f"dev_tune.pred has {count_lines(pred)} lines, expected {SPLIT_SIZES['dev_tune']}")
+
+    info_path = ckpt_root / row['run'] / 'run_info.json'
+    if not info_path.exists():
+        return failures + [f'{info_path} is missing'], []
+    info = json.loads(info_path.read_text(encoding='utf-8'))
+    if 'finished' not in info:
+        failures.append('training did not finish (run_info.json has no "finished" time)')
+    config = json.loads((ROOT / row['config']).read_text(encoding='utf-8'))
+    trained = info.get('config', {})
+    failures += [f'trained with {key}={trained.get(key)!r}, the config says {value!r}'
+                 for key, value in config.items() if key != 'output_dir' and trained.get(key) != value]
+    pairs = json.loads(DATA_MANIFEST.read_text(encoding='utf-8'))[STAGES[row['stage']]['data']]['pairs']
+    if info.get('training_pairs') != pairs:
+        failures.append(f"trained on {info.get('training_pairs')} pairs, the data manifest has {pairs}")
+    if info.get('data_manifest_sha256') != sha256(DATA_MANIFEST):
+        failures.append('trained on a different build of data/curriculum (data manifest hash differs)')
+    if info.get('versions') != recorded_versions():
+        failures.append(f"trained with {info.get('versions')}, the recorded runs used {recorded_versions()}")
+
+    state = ckpt_root / row['run'] / 'trainer_state.json'
+    if not state.exists():
+        return failures + ['trainer_state.json is missing'], []
+    stable_failures, warnings = stability(json.loads(state.read_text(encoding='utf-8'))['log_history'])
+    return failures + stable_failures, warnings
+
+
+def report(name, failures, warnings):
+    for w in warnings:
+        print(f'  warning: {w}')
+    for f in failures:
+        print(f'  FAIL: {f}')
+    if failures:
+        sys.exit(f'{name}: {len(failures)} check(s) failed')
+
+
+def ckpt_root():
+    if not os.environ.get('CKPT_ROOT'):
+        raise SystemExit('CKPT_ROOT is not set; run this on the cluster, where cluster/job.sbatch sets it')
+    return Path(os.environ['CKPT_ROOT'])
+
+
+def verify(args):
+    """Check finished runs against their configs; writes runs/<run>/verified.json for each."""
+    rows = selected(args.stage, None, args.tag, args.run)
+    root, failed = ckpt_root(), []
+    for row in rows:
+        failures, warnings = run_problems(row, root)
+        (RUNS / row['run']).mkdir(parents=True, exist_ok=True)
+        (RUNS / row['run'] / 'verified.json').write_text(json.dumps({
+            'checked': time.strftime('%Y-%m-%d %H:%M:%S'), 'failures': failures, 'warnings': warnings,
+        }, indent=2) + '\n', encoding='utf-8')
+        print(f"{row['run']}: {'FAILED' if failures else 'ok'}")
+        for w in warnings:
+            print(f'  warning: {w}')
+        for f in failures:
+            print(f'  FAIL: {f}')
+        if failures:
+            failed.append(row['run'])
+    if failed:
+        sys.exit(f'verify: {len(failed)} run(s) failed: {", ".join(failed)}')
+
+
+def final_dir(stage, tag):
+    """Where the final dev_test scores go; untagged stage 2 keeps the original final-dev_test/."""
+    if tag:
+        return RUNS / f'final-dev_test-{tag}'
+    return RUNS / ('final-dev_test' if stage == 2 else 'final-dev_test-s1')
+
+
+def test(args):
+    """Score the final configuration's seed runs on dev_test, once each, only if they passed verify."""
+    lr = args.lr or STAGES[args.stage]['default']['lr']
+    rows = [r for r in selected(args.stage, None, args.tag)
+            if r['param'] == 'base' and r['lr'] == lr and r['seed'] in SEEDS]
+    if not rows:
+        raise SystemExit(f'no seed runs at lr {lr}; the final configuration is the default settings at a learning rate')
+    for row in sorted(rows, key=lambda r: SEEDS.index(r['seed'])):
+        out = final_dir(args.stage, args.tag) / f"seed{row['seed']}"
+        if (out / 'dev_test.scores.json').exists():
+            print(f"skip {row['run']}: {out.relative_to(ROOT)} already scored; dev_test is scored once")
+            continue
+        verified = RUNS / row['run'] / 'verified.json'
+        if not verified.exists() or json.loads(verified.read_text(encoding='utf-8'))['failures']:
+            print(f"skip {row['run']}: it has not passed tune.py verify")
+            continue
+        cmd = ['sbatch', '-J', f"test-{row['run']}", 'cluster/job.sbatch', 't5_tuning/run_test.sh',
+               row['run'], str(out.relative_to(ROOT))]
+        if args.run:
+            subprocess.run(cmd, check=True, cwd=ROOT)
+        else:
+            print(' '.join(cmd))
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = parser.add_subparsers(dest='command', required=True)
@@ -275,6 +543,25 @@ def main():
     p.add_argument('--stage', type=int, choices=[1, 2], default=2)
     p.add_argument('--tag', help='collect only the runs planned under this tag')
     p.set_defaults(func=collect)
+
+    p = sub.add_parser('preflight', help='check configs, software versions and starting models before GPU runs')
+    p.add_argument('--stage', type=int, choices=[1, 2])
+    p.add_argument('--phase', type=int, choices=[1, 2])
+    p.add_argument('--tag')
+    p.set_defaults(func=preflight)
+
+    p = sub.add_parser('verify', help='check finished runs against their configs (on the cluster)')
+    p.add_argument('--run', action='append', help='a run name; repeat for several (default: all matching runs)')
+    p.add_argument('--stage', type=int, choices=[1, 2])
+    p.add_argument('--tag')
+    p.set_defaults(func=verify)
+
+    p = sub.add_parser('test', help='score the final configuration on dev_test, once per seed')
+    p.add_argument('--stage', type=int, choices=[1, 2], default=2)
+    p.add_argument('--tag')
+    p.add_argument('--lr', help='the learning rate of the final configuration (default: the stage default)')
+    p.add_argument('--run', action='store_true', help='submit; without this, only print the commands')
+    p.set_defaults(func=test)
 
     args = parser.parse_args()
     args.func(args)

@@ -1,0 +1,26 @@
+{
+  "run": "t5-tune.dropout0.3.lr3e-5.seed42",
+  "init": "CS4248-GEC/gec-t5-base-s1",
+  "learning_rate": 3e-05,
+  "train": "data/curriculum/stage2",
+  "errorful_only": false,
+  "epochs": 5,
+  "batch_size": 32,
+  "grad_accum": 1,
+  "warmup_steps": 100,
+  "loss_eval_steps": 500,
+  "save_steps": 500,
+  "errant_eval": {
+    "steps": "epoch",
+    "sentences": 2000,
+    "beams": 5,
+    "patience": 2
+  },
+  "dropout": 0.3,
+  "weight_decay": 0.01,
+  "label_smoothing": 0.1,
+  "seed": 42,
+  "save_total_limit": 2,
+  "logging_steps": 50,
+  "output_dir": "${CKPT_ROOT}/t5-tune.dropout0.3.lr3e-5.seed42"
+}

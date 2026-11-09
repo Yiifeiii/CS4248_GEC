@@ -185,19 +185,35 @@ The final pipeline is the original one. dev_test was not run for the 3e-4 pipeli
 |---|---|---|
 | Fetch and check the stage-1 model | `t5_tuning/fetch_stage1.sh` | Downloads `CS4248-GEC/gec-t5-base-s1` and checks its sha256 against `experiments/training/checkpoints.sha256` |
 | Plan runs and write configs | `t5_tuning/tune.py plan` | Writes one JSON config per run into `t5_tuning/configs/`, and updates `manifest.json` and `manifest.md` |
-| Submit runs | `t5_tuning/tune.py submit` | Calls `sbatch cluster/job.sbatch t5_tuning/run_one.sh <config>` |
-| Train and score one run | `t5_tuning/run_one.sh` | Calls `training/finetune.py` for training, then `training/evaluate.py --split dev_tune` for scoring. It doesn't score dev_test. |
+| Submit runs | `t5_tuning/tune.py submit` | Submits the preflight as a CPU job, then each unscored run with `sbatch cluster/job.sbatch t5_tuning/run_one.sh <config>`, depending on the preflight passing |
+| Check before any GPU run | `t5_tuning/preflight.sh`, `t5_tuning/tune.py preflight` | CPU job. Runs `training.check_data` and the tests, then checks every config against `manifest.json`, the torch and transformers versions against the recorded runs (`experiments/training/t5-base.s1s2/run_info.json`), that each starting model is cached, and the stage-1 model's sha256. Writes `preflight.json`. |
+| Train and score one run | `t5_tuning/run_one.sh` | Calls `training/finetune.py` for training, then `training/evaluate.py --split dev_tune` for scoring, then `tune.py verify` on the run. It doesn't score dev_test. |
+| Check a finished run | `t5_tuning/tune.py verify` | Compares the run with its config: the settings it trained with, the training-pair count and data manifest hash, the software versions, 2,000 dev_tune predictions, and the stability check below. Writes `runs/<run>/verified.json`; exits non-zero on any failure. |
+| Stability check | Part of `tune.py verify`, on `trainer_state.json` | Fails on a non-finite loss or gradient norm. Warns on a loss spike above twice the lowest loss so far, after the first tenth of the run, or a loss that doesn't fall. Runs on every run. |
 | Collect and judge results | `t5_tuning/tune.py collect` | Reads `t5_tuning/runs/<run>/dev_tune.scores.json`, computes the band, applies the rule in section 4, and writes `results.md`, `results-stage1.md` or `results-<tag>.md` |
-| Final dev_test scoring | A direct call to `training/evaluate.py --split dev_test`, as in section 7 | Not wrapped in `tune.py`, so dev_test is read only when it's run deliberately |
-| Stability check | A short Python check of `trainer_state.json` | Not in the repo. Run once, on the stage-1 3e-4 run. |
+| Final dev_test scoring | `t5_tuning/tune.py test`, `t5_tuning/run_test.sh` | Submits dev_test scoring for the final configuration's three seed runs. Only runs that passed `verify` are scored, and a seed that already has dev_test scores is skipped, so dev_test is scored once. |
+| Tests | `tests/test_t5_tuning.py` | Every committed config matches its manifest row; the run and stability checks catch changed settings, versions, short predictions, unfinished runs, non-finite losses and spikes |
 
 Earlier helper scripts (`band.py`, `lr_sweep.py`, `submit_band.sh`) were deleted and replaced by `tune.py`.
 
 Results files: `t5_tuning/results.md` (stage 2, untagged), `t5_tuning/results-stage1.md` (stage 1), and `t5_tuning/results-<tag>.md` for tagged runs, such as `results-s1lr3e-4.md` for the stage-2 re-run on the 3e-4 stage-1 model.
 
+`manifest.json`, `manifest.md` and `configs/` cover all 21 runs. They were rebuilt with the `plan` commands in section 7, which reproduce the five previously committed configs byte for byte. `collect` on the committed scores reproduces every number in sections 4 and 5.
+
 ## 7. How to reproduce
 
 Run these from the repo root. Steps 1 to 3 are one-time setup.
+
+**Without the cluster**, the results tables can be rebuilt from the committed scores:
+
+```bash
+python3 t5_tuning/tune.py collect                   # stage 2: band 55.45 / 0.16 / 0.32 and each sweep
+python3 t5_tuning/tune.py collect --stage 1         # stage 1: band 46.69 / 0.19 / 0.35
+python3 t5_tuning/tune.py collect --tag s1lr3e-4    # stage 2 on the 3e-4 stage-1 model: band 54.84 / 0.21 / 0.38
+python3 -m unittest tests.test_t5_tuning
+```
+
+**On the cluster**, each `submit --run` below first submits a CPU preflight job, `t5-tune-preflight`, and every training run waits for it to pass (`afterok`). If the preflight fails, the training runs are cancelled before they start; its log in `logs/slurm/` names each failed check. Each training run then verifies itself at the end (`tune.py verify`); a failed check fails the job, and `runs/<run>/verified.json` lists what failed. Without `--run`, `submit` and `test` only print the `sbatch` commands.
 
 1. **Build and copy the stage-1 data** (laptop, then cluster). `python3 -m training.build_data` builds `data/curriculum/stage1.*`. It needs `git lfs fetch origin 3e50997` first; see the "From scratch" and "Data" sections of `training/README.md`. Copy the three files to `data/curriculum/` on the cluster with `rsync`. The stage-2 data and dev splits are committed.
 2. **Cache the base models** (compute node): `bash cluster/download_models.sh`. Stage 1 needs `google-t5/t5-base`, and jobs run offline.
@@ -226,11 +242,10 @@ Run these from the repo root. Steps 1 to 3 are one-time setup.
    python3 t5_tuning/tune.py submit --phase 1 --tag s1lr3e-4 --run
    python3 t5_tuning/tune.py collect --tag s1lr3e-4
    ```
-8. **dev_test** for a chosen configuration, once per seed:
+8. **dev_test** for the final configuration, once per seed, after its three seed runs have passed `verify`:
    ```bash
-   for s in 42 123 7; do
-     python -m training.evaluate --model $CKPT_ROOT/<run>/best --split dev_test \
-       --out t5_tuning/runs/final-dev_test/seed$s
-   done
+   python3 t5_tuning/tune.py test --run                # stage 2, default settings at lr 3e-5
    ```
-   Run this on a GPU node after `conda activate gec-train`, and set `CKPT_ROOT` to the scratch checkpoint folder.
+   For another stage, tag or learning rate, add `--stage`, `--tag` or `--lr`. Scores go to `runs/final-dev_test/seed<seed>/` (with `-s1` or `-<tag>` for other stages and tags). `run_test.sh` refuses a folder that already has dev_test scores and checks there are 2,384 predictions.
+
+To check runs that finished before these checks existed, run `python3 t5_tuning/tune.py verify --stage 2` on a compute node with `CKPT_ROOT` set (as `cluster/job.sbatch` does). It needs the runs' `run_info.json` and `trainer_state.json` from scratch, and their `dev_tune.pred` in `t5_tuning/runs/`.
