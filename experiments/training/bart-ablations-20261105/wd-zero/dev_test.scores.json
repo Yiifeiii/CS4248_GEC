@@ -1,0 +1,34 @@
+{
+  "model": "/mnt/scratch/r/raeedaih/cs4248-gec/checkpoints/bart-ablations-20261105/wd-zero/best",
+  "split": "dev_test",
+  "sentences": 2384,
+  "beams": 5,
+  "prefix": null,
+  "retokenize": false,
+  "git_commit": null,
+  "decode_seconds": 118,
+  "device": "cuda",
+  "errant": {
+    "correction": {
+      "tp": 1521.0,
+      "fp": 1135.0,
+      "fn": 2519.0,
+      "precision": 0.5727,
+      "recall": 0.3765,
+      "f0_5": 0.5186
+    },
+    "detection": {
+      "tp": 1838.0,
+      "fp": 833.0,
+      "fn": 2296.0,
+      "precision": 0.6881,
+      "recall": 0.4446,
+      "f0_5": 0.6202
+    }
+  },
+  "m2": {
+    "precision": 0.6566,
+    "recall": 0.4083,
+    "f0_5": 0.5854
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "model": "CS4248-GEC/gec-bart-base-s1",
+  "snapshot": "/mnt/scratch/r/raeedaih/cs4248-gec/hf_cache/hub/models--CS4248-GEC--gec-bart-base-s1/snapshots/dd54dfe29a9ad541df7233604ae6f0dc27c259fa",
+  "weights_sha256": "40b41277a8bf99c76009d5b6b7939fbdb3d118593bc87d64381e72da507e8986",
+  "ablation": "bart-ablations-20261105",
+  "versions": {
+    "torch": "2.11.0+cu128",
+    "transformers": "4.46.3"
+  },
+  "baseline_reference": "experiments/training/bart-base.s1s2/run_info.json"
+}

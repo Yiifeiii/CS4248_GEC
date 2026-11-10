@@ -1,0 +1,411 @@
+{
+  "experiment": "bart-decoding-20261106",
+  "retrieved_on": "2026-11-06",
+  "split": "dev_tune",
+  "sentences": 2000,
+  "model": "CS4248-GEC/gec-bart-base-s1s2",
+  "checkpoint_sha256": "6d81a325ad27046c2d7594b09ec3fb5e6c8624b55e4ef30bc0c122b123c01bf9",
+  "sources_sha256": "1489cd243cb805f089036964ad0fb3331f23c5be038f6eee9563c549184f02f1",
+  "gold_sha256": "84ead856cbe3a26af5eeea63b49ff17a364aea81512452d0b778ed955c2499dd",
+  "weights_updated": false,
+  "combination": false,
+  "slurm_array": 1081371,
+  "all_tasks_completed_exit_0": true,
+  "rows": [
+    {
+      "setup": {
+        "name": "beam5",
+        "mode": "beam",
+        "beams": 5,
+        "groups": 1,
+        "penalty": 0.0
+      },
+      "candidate_top1_errant": {
+        "tp": 1334.0,
+        "fp": 903.0,
+        "fn": 2087.0,
+        "precision": 0.5963,
+        "recall": 0.3899,
+        "f0_5": 0.5393
+      },
+      "candidate_pools": [
+        {
+          "k": 1,
+          "sources": 2000,
+          "mean_unique_candidates": 1.0,
+          "sources_with_full_k": 2000,
+          "gold_edits_covered": 1334,
+          "gold_edits_total": 3421,
+          "gold_edit_coverage": 0.3899444606840105,
+          "pooled_candidate_edits": 2237,
+          "mean_pairwise_token_dissimilarity": null
+        },
+        {
+          "k": 3,
+          "sources": 2000,
+          "mean_unique_candidates": 3.0,
+          "sources_with_full_k": 2000,
+          "gold_edits_covered": 1840,
+          "gold_edits_total": 3421,
+          "gold_edit_coverage": 0.5378544285296697,
+          "pooled_candidate_edits": 5695,
+          "mean_pairwise_token_dissimilarity": 0.09735154794591354
+        },
+        {
+          "k": 5,
+          "sources": 2000,
+          "mean_unique_candidates": 4.9445,
+          "sources_with_full_k": 1900,
+          "gold_edits_covered": 2022,
+          "gold_edits_total": 3421,
+          "gold_edit_coverage": 0.5910552470038001,
+          "pooled_candidate_edits": 8940,
+          "mean_pairwise_token_dissimilarity": 0.11107902893674829
+        }
+      ],
+      "generation_wall_seconds": 300.33,
+      "standard_one_best_errant": {
+        "tp": 1334.0,
+        "fp": 901.0,
+        "fn": 2087.0,
+        "precision": 0.5969,
+        "recall": 0.3899,
+        "f0_5": 0.5396
+      }
+    },
+    {
+      "setup": {
+        "name": "beam10",
+        "mode": "beam",
+        "beams": 10,
+        "groups": 1,
+        "penalty": 0.0
+      },
+      "candidate_top1_errant": {
+        "tp": 1335.0,
+        "fp": 894.0,
+        "fn": 2086.0,
+        "precision": 0.5989,
+        "recall": 0.3902,
+        "f0_5": 0.5411
+      },
+      "candidate_pools": [
+        {
+          "k": 1,
+          "sources": 2000,
+          "mean_unique_candidates": 1.0,
+          "sources_with_full_k": 2000,
+          "gold_edits_covered": 1335,
+          "gold_edits_total": 3421,
+          "gold_edit_coverage": 0.39023677287342884,
+          "pooled_candidate_edits": 2229,
+          "mean_pairwise_token_dissimilarity": null
+        },
+        {
+          "k": 3,
+          "sources": 2000,
+          "mean_unique_candidates": 3.0,
+          "sources_with_full_k": 2000,
+          "gold_edits_covered": 1832,
+          "gold_edits_total": 3421,
+          "gold_edit_coverage": 0.5355159310143233,
+          "pooled_candidate_edits": 5676,
+          "mean_pairwise_token_dissimilarity": 0.09711841221342335
+        },
+        {
+          "k": 5,
+          "sources": 2000,
+          "mean_unique_candidates": 4.9425,
+          "sources_with_full_k": 1900,
+          "gold_edits_covered": 2029,
+          "gold_edits_total": 3421,
+          "gold_edit_coverage": 0.5931014323297281,
+          "pooled_candidate_edits": 8819,
+          "mean_pairwise_token_dissimilarity": 0.1095835377130412
+        }
+      ],
+      "generation_wall_seconds": 314.18,
+      "standard_one_best_errant": {
+        "tp": 1332.0,
+        "fp": 891.0,
+        "fn": 2089.0,
+        "precision": 0.5992,
+        "recall": 0.3894,
+        "f0_5": 0.5409
+      }
+    },
+    {
+      "setup": {
+        "name": "beam20",
+        "mode": "beam",
+        "beams": 20,
+        "groups": 1,
+        "penalty": 0.0
+      },
+      "candidate_top1_errant": {
+        "tp": 1334.0,
+        "fp": 895.0,
+        "fn": 2087.0,
+        "precision": 0.5985,
+        "recall": 0.3899,
+        "f0_5": 0.5407
+      },
+      "candidate_pools": [
+        {
+          "k": 1,
+          "sources": 2000,
+          "mean_unique_candidates": 1.0,
+          "sources_with_full_k": 2000,
+          "gold_edits_covered": 1334,
+          "gold_edits_total": 3421,
+          "gold_edit_coverage": 0.3899444606840105,
+          "pooled_candidate_edits": 2229,
+          "mean_pairwise_token_dissimilarity": null
+        },
+        {
+          "k": 3,
+          "sources": 2000,
+          "mean_unique_candidates": 3.0,
+          "sources_with_full_k": 2000,
+          "gold_edits_covered": 1838,
+          "gold_edits_total": 3421,
+          "gold_edit_coverage": 0.5372698041508331,
+          "pooled_candidate_edits": 5670,
+          "mean_pairwise_token_dissimilarity": 0.09668038872411945
+        },
+        {
+          "k": 5,
+          "sources": 2000,
+          "mean_unique_candidates": 4.947,
+          "sources_with_full_k": 1908,
+          "gold_edits_covered": 2035,
+          "gold_edits_total": 3421,
+          "gold_edit_coverage": 0.594855305466238,
+          "pooled_candidate_edits": 8832,
+          "mean_pairwise_token_dissimilarity": 0.10973534043429078
+        }
+      ],
+      "generation_wall_seconds": 344.3,
+      "standard_one_best_errant": {
+        "tp": 1332.0,
+        "fp": 892.0,
+        "fn": 2089.0,
+        "precision": 0.5989,
+        "recall": 0.3894,
+        "f0_5": 0.5407
+      }
+    },
+    {
+      "setup": {
+        "name": "groups2-p05",
+        "mode": "diverse",
+        "beams": 10,
+        "groups": 2,
+        "penalty": 0.5
+      },
+      "candidate_top1_errant": {
+        "tp": 1334.0,
+        "fp": 902.0,
+        "fn": 2087.0,
+        "precision": 0.5966,
+        "recall": 0.3899,
+        "f0_5": 0.5394
+      },
+      "candidate_pools": [
+        {
+          "k": 1,
+          "sources": 2000,
+          "mean_unique_candidates": 1.0,
+          "sources_with_full_k": 2000,
+          "gold_edits_covered": 1334,
+          "gold_edits_total": 3421,
+          "gold_edit_coverage": 0.3899444606840105,
+          "pooled_candidate_edits": 2236,
+          "mean_pairwise_token_dissimilarity": null
+        },
+        {
+          "k": 3,
+          "sources": 2000,
+          "mean_unique_candidates": 2.999,
+          "sources_with_full_k": 1998,
+          "gold_edits_covered": 1840,
+          "gold_edits_total": 3421,
+          "gold_edit_coverage": 0.5378544285296697,
+          "pooled_candidate_edits": 5699,
+          "mean_pairwise_token_dissimilarity": 0.09741509553411211
+        },
+        {
+          "k": 5,
+          "sources": 2000,
+          "mean_unique_candidates": 4.9075,
+          "sources_with_full_k": 1850,
+          "gold_edits_covered": 2023,
+          "gold_edits_total": 3421,
+          "gold_edit_coverage": 0.5913475591932184,
+          "pooled_candidate_edits": 8874,
+          "mean_pairwise_token_dissimilarity": 0.10649027259614696
+        }
+      ],
+      "generation_wall_seconds": 3436.36
+    },
+    {
+      "setup": {
+        "name": "groups5-p05",
+        "mode": "diverse",
+        "beams": 10,
+        "groups": 5,
+        "penalty": 0.5
+      },
+      "candidate_top1_errant": {
+        "tp": 1330.0,
+        "fp": 892.0,
+        "fn": 2091.0,
+        "precision": 0.5986,
+        "recall": 0.3888,
+        "f0_5": 0.5403
+      },
+      "candidate_pools": [
+        {
+          "k": 1,
+          "sources": 2000,
+          "mean_unique_candidates": 1.0,
+          "sources_with_full_k": 2000,
+          "gold_edits_covered": 1330,
+          "gold_edits_total": 3421,
+          "gold_edit_coverage": 0.38877521192633735,
+          "pooled_candidate_edits": 2222,
+          "mean_pairwise_token_dissimilarity": null
+        },
+        {
+          "k": 3,
+          "sources": 2000,
+          "mean_unique_candidates": 2.8495,
+          "sources_with_full_k": 1710,
+          "gold_edits_covered": 1781,
+          "gold_edits_total": 3421,
+          "gold_edit_coverage": 0.5206080093539901,
+          "pooled_candidate_edits": 5770,
+          "mean_pairwise_token_dissimilarity": 0.09513005305145406
+        },
+        {
+          "k": 5,
+          "sources": 2000,
+          "mean_unique_candidates": 3.789,
+          "sources_with_full_k": 639,
+          "gold_edits_covered": 1868,
+          "gold_edits_total": 3421,
+          "gold_edit_coverage": 0.5460391698333821,
+          "pooled_candidate_edits": 7395,
+          "mean_pairwise_token_dissimilarity": 0.1011236278715618
+        }
+      ],
+      "generation_wall_seconds": 382.99
+    },
+    {
+      "setup": {
+        "name": "groups2-p01",
+        "mode": "diverse",
+        "beams": 10,
+        "groups": 2,
+        "penalty": 0.1
+      },
+      "candidate_top1_errant": {
+        "tp": 1334.0,
+        "fp": 901.0,
+        "fn": 2087.0,
+        "precision": 0.5969,
+        "recall": 0.3899,
+        "f0_5": 0.5396
+      },
+      "candidate_pools": [
+        {
+          "k": 1,
+          "sources": 2000,
+          "mean_unique_candidates": 1.0,
+          "sources_with_full_k": 2000,
+          "gold_edits_covered": 1334,
+          "gold_edits_total": 3421,
+          "gold_edit_coverage": 0.3899444606840105,
+          "pooled_candidate_edits": 2235,
+          "mean_pairwise_token_dissimilarity": null
+        },
+        {
+          "k": 3,
+          "sources": 2000,
+          "mean_unique_candidates": 2.9905,
+          "sources_with_full_k": 1981,
+          "gold_edits_covered": 1840,
+          "gold_edits_total": 3421,
+          "gold_edit_coverage": 0.5378544285296697,
+          "pooled_candidate_edits": 5674,
+          "mean_pairwise_token_dissimilarity": 0.09450319979149939
+        },
+        {
+          "k": 5,
+          "sources": 2000,
+          "mean_unique_candidates": 4.4645,
+          "sources_with_full_k": 1173,
+          "gold_edits_covered": 2016,
+          "gold_edits_total": 3421,
+          "gold_edit_coverage": 0.5893013738672903,
+          "pooled_candidate_edits": 7999,
+          "mean_pairwise_token_dissimilarity": 0.09059742033669703
+        }
+      ],
+      "generation_wall_seconds": 338.58
+    },
+    {
+      "setup": {
+        "name": "groups2-p10",
+        "mode": "diverse",
+        "beams": 10,
+        "groups": 2,
+        "penalty": 1.0
+      },
+      "candidate_top1_errant": {
+        "tp": 1334.0,
+        "fp": 903.0,
+        "fn": 2087.0,
+        "precision": 0.5963,
+        "recall": 0.3899,
+        "f0_5": 0.5393
+      },
+      "candidate_pools": [
+        {
+          "k": 1,
+          "sources": 2000,
+          "mean_unique_candidates": 1.0,
+          "sources_with_full_k": 2000,
+          "gold_edits_covered": 1334,
+          "gold_edits_total": 3421,
+          "gold_edit_coverage": 0.3899444606840105,
+          "pooled_candidate_edits": 2237,
+          "mean_pairwise_token_dissimilarity": null
+        },
+        {
+          "k": 3,
+          "sources": 2000,
+          "mean_unique_candidates": 2.9995,
+          "sources_with_full_k": 1999,
+          "gold_edits_covered": 1840,
+          "gold_edits_total": 3421,
+          "gold_edit_coverage": 0.5378544285296697,
+          "pooled_candidate_edits": 5697,
+          "mean_pairwise_token_dissimilarity": 0.09730449559829248
+        },
+        {
+          "k": 5,
+          "sources": 2000,
+          "mean_unique_candidates": 4.9365,
+          "sources_with_full_k": 1893,
+          "gold_edits_covered": 2022,
+          "gold_edits_total": 3421,
+          "gold_edit_coverage": 0.5910552470038001,
+          "pooled_candidate_edits": 8933,
+          "mean_pairwise_token_dissimilarity": 0.11002470657930452
+        }
+      ],
+      "generation_wall_seconds": 354.64
+    }
+  ]
+}

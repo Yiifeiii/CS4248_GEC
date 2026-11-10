@@ -1,5 +1,7 @@
 # CS4248: Grammatical Error Correction
 
+See [BART hyperparameter experiments](experiments/ablations/README.md) for training/beam-search scripts and completed F-scores.
+
 Completed experiments: [four controls per model against the original curriculum baseline](experiments/four-controls/README.md).
 
 Results: [BART/T5 curriculum baseline versus four controls](experiments/curriculum-comparison.md).
@@ -10,7 +12,7 @@ This project investigates whether combining alternative corrections from multipl
 
 A standalone [manual GRECO combination workflow](greco_setup/README.md) accepts manually entered BART/T5 sentences or edits. It includes conflict-aware beam search, an adapter for the official GRECO scorer, examples, and setup instructions. Candidate generation can be tested without model dependencies; pretrained inference requires a separate Python 3.10 environment and downloaded weights.
 
-The repository also contains datasets, prepared source/target sentence pairs, an M2-to-parallel conversion script, an error statistics script, and the bundled NUS M² scorer. [Two-stage fine-tuning](training/README.md) of `facebook/bart-base` and `t5-base` is set up: stage 1 on all four corpora (errorful sentences), stage 2 on W&I train including correct sentences, with jobs for the [SoC cluster](cluster/README.md). Agreement features and the proposed ablations remain planned work.
+The repository also contains datasets, prepared source/target sentence pairs, an M2-to-parallel conversion script, an error statistics script, and the bundled NUS M² scorer. [Two-stage fine-tuning](training/README.md) of `facebook/bart-base` and `t5-base` is set up: stage 1 on all four corpora (errorful sentences), stage 2 on W&I train including correct sentences, with jobs for the [SoC cluster](cluster/README.md). The [BART stage-2 hyperparameter ablations](experiments/training/bart-ablations-20261105/README.md) document the nine-run sweep and its provenance; agreement features remain planned work.
 
 ## Repository structure
 

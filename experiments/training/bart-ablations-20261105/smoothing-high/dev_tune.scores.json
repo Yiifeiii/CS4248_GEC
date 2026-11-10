@@ -1,0 +1,34 @@
+{
+  "model": "/mnt/scratch/r/raeedaih/cs4248-gec/checkpoints/bart-ablations-20261105/smoothing-high/best",
+  "split": "dev_tune",
+  "sentences": 2000,
+  "beams": 5,
+  "prefix": null,
+  "retokenize": false,
+  "git_commit": null,
+  "decode_seconds": 271,
+  "device": "cuda",
+  "errant": {
+    "correction": {
+      "tp": 1280.0,
+      "fp": 831.0,
+      "fn": 2141.0,
+      "precision": 0.6063,
+      "recall": 0.3742,
+      "f0_5": 0.5394
+    },
+    "detection": {
+      "tp": 1506.0,
+      "fp": 610.0,
+      "fn": 1992.0,
+      "precision": 0.7117,
+      "recall": 0.4305,
+      "f0_5": 0.6295
+    }
+  },
+  "m2": {
+    "precision": 0.6789,
+    "recall": 0.4019,
+    "f0_5": 0.5967
+  }
+}

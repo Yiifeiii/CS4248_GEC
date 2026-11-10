@@ -19,3 +19,10 @@ outputs/greco/codabench_bea19/
 # because a tracked file that also exists untracked on the cluster stops `git pull` there.
 greco_esc/runs/
 codabench/
+
+.venv-train/
+# Generated experiment artifacts; curated results live under experiments/.
+outputs/
+experiments/training/bart-ablations-20261105/*/*.pred
+experiments/training/bart-ablations-20261105/*/trainer_state.json
+experiments/training/bart-ablations-20261105/*/errant_eval.json

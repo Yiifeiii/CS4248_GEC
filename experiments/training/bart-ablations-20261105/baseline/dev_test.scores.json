@@ -1,0 +1,34 @@
+{
+  "model": "/mnt/scratch/r/raeedaih/cs4248-gec/checkpoints/bart-ablations-20261105/baseline/best",
+  "split": "dev_test",
+  "sentences": 2384,
+  "beams": 5,
+  "prefix": null,
+  "retokenize": false,
+  "git_commit": null,
+  "decode_seconds": 120,
+  "device": "cuda",
+  "errant": {
+    "correction": {
+      "tp": 1531.0,
+      "fp": 1121.0,
+      "fn": 2509.0,
+      "precision": 0.5773,
+      "recall": 0.379,
+      "f0_5": 0.5226
+    },
+    "detection": {
+      "tp": 1843.0,
+      "fp": 825.0,
+      "fn": 2291.0,
+      "precision": 0.6908,
+      "recall": 0.4458,
+      "f0_5": 0.6224
+    }
+  },
+  "m2": {
+    "precision": 0.6603,
+    "recall": 0.4105,
+    "f0_5": 0.5887
+  }
+}

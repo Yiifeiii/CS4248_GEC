@@ -1,5 +1,7 @@
 # Running the fine-tuning on the SoC compute cluster
 
+See [BART hyperparameter experiments](../experiments/ablations/README.md) for grouped training/beam-search scripts, completed F-scores, and reproduction commands.
+
 These instructions follow the course's `SoC_Cluster_Guide.pdf` and the [Unofficial SoC Cluster Guide](https://github.com/isaacNingLee/Unofficial_SoC_Cluster_Guide). The official pages (hardware, job priority) need an SoC login. They take precedence wherever they differ from this guide.
 
 **Rules:**
