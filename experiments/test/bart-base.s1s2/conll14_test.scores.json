@@ -1,0 +1,11 @@
+{
+  "model": "CS4248-GEC/gec-bart-base-s1s2",
+  "split": "conll14_test",
+  "sentences": 1312,
+  "beams": 5,
+  "prefix": null,
+  "retokenize": false,
+  "git_commit": "79f64dd2c06c7c3be534be9cd55473b1431530fd",
+  "decode_seconds": 244,
+  "device": "cuda"
+}
