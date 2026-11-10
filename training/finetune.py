@@ -35,6 +35,7 @@ from transformers.trainer_utils import get_last_checkpoint
 from training.common import (CURRICULUM, MAX_TOKENS, PREFIX, ROOT, decode, expand, family, git_commit,
                              pick_device, read_lines, write_lines)
 from training.metrics import m2_subset, score
+from training.exposure_batching import ExactExposureTrainer, validate_exposure_config
 
 DROPOUT_KEY = {'bart': 'dropout', 't5': 'dropout_rate'}
 
@@ -131,6 +132,9 @@ def main():
     parser.add_argument('--errant-steps', type=int, help='override errant_eval.steps')
     args = parser.parse_args()
     cfg = json.loads(args.config.read_text())
+    validate_exposure_config(cfg)
+    if cfg.get('exact_exposure_batches') and (args.max_steps or args.train_limit):
+        raise ValueError('Fixed exposure streams cannot be shortened; use the tiny offline tests')
     out = Path(expand(args.output_dir or cfg['output_dir']))
     out.mkdir(parents=True, exist_ok=True)
     init = expand(cfg['init'])
@@ -168,7 +172,7 @@ def main():
         optim='adamw_torch', learning_rate=cfg['learning_rate'], weight_decay=cfg['weight_decay'],
         lr_scheduler_type='linear', warmup_steps=cfg['warmup_steps'],
         label_smoothing_factor=cfg['label_smoothing'],
-        bf16=cuda and torch.cuda.is_bf16_supported(), group_by_length=True,
+        bf16=cuda and torch.cuda.is_bf16_supported(), group_by_length=not cfg.get('exact_exposure_batches', False),
         eval_strategy='steps', eval_steps=cfg['loss_eval_steps'],
         save_strategy='steps', save_steps=cfg['save_steps'], save_total_limit=cfg['save_total_limit'],
         logging_steps=cfg.get('logging_steps', 50), report_to='none', remove_unused_columns=False,
@@ -178,7 +182,8 @@ def main():
     if args.errant_steps:
         errant_cfg['steps'] = args.errant_steps
     callback = ErrantEval(errant_cfg, tokenizer, out, dev_src, dev_m2)
-    trainer = Seq2SeqTrainer(
+    trainer_class = ExactExposureTrainer if cfg.get('exact_exposure_batches') else Seq2SeqTrainer
+    trainer = trainer_class(
         model=model, args=training_args, train_dataset=train_set, eval_dataset=loss_set,
         data_collator=DataCollatorForSeq2Seq(tokenizer, model=model, label_pad_token_id=-100),
         processing_class=tokenizer, callbacks=[callback])

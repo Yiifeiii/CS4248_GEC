@@ -1,5 +1,9 @@
 # CS4248: Grammatical Error Correction
 
+Completed experiments: [four controls per model against the original curriculum baseline](experiments/four-controls/README.md).
+
+Results: [BART/T5 curriculum baseline versus four controls](experiments/curriculum-comparison.md).
+
 This project investigates whether combining alternative corrections from multiple grammatical error correction (GEC) systems improves precision, recall, and coverage of rare error types. The planned approach pools the top-k hypotheses from BART and T5 with GECToR's best correction, then combines their edits using GRECO.
 
 ## Current status

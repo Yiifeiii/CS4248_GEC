@@ -1,0 +1,71 @@
+{
+  "run": "four-controls-20261108/bart-1b",
+  "config": {
+    "run": "four-controls-20261108/bart-1b",
+    "init": "facebook/bart-base",
+    "learning_rate": 1e-05,
+    "train": "${FOUR_CONTROL_DATA}/matched/train",
+    "errorful_only": false,
+    "epochs": 1,
+    "batch_size": 32,
+    "grad_accum": 1,
+    "warmup_steps": 100,
+    "loss_eval_steps": 4000,
+    "save_steps": 4000,
+    "errant_eval": {
+      "steps": 4000,
+      "sentences": 2000,
+      "beams": 5,
+      "patience": null
+    },
+    "dropout": 0.1,
+    "weight_decay": 0.01,
+    "label_smoothing": 0.1,
+    "seed": 42,
+    "save_total_limit": 2,
+    "logging_steps": 50,
+    "output_dir": "${CKPT_ROOT}/four-controls-20261108/bart-1b",
+    "preserve_train_order": true,
+    "exact_exposure_batches": true,
+    "control_stream": "matched",
+    "optimization_stage": 2,
+    "logical_epochs": null
+  },
+  "config_path": "training/configs/four-controls/bart-1b.json",
+  "args": {
+    "config": "training/configs/four-controls/bart-1b.json",
+    "resume": "auto",
+    "output_dir": null,
+    "max_steps": null,
+    "train_limit": null,
+    "dev_limit": null,
+    "errant_steps": null
+  },
+  "init": "facebook/bart-base",
+  "family": "bart",
+  "prefix": "",
+  "training_pairs": 1853729,
+  "git_commit": null,
+  "data_manifest_sha256": "8d8b1bb1b0b40d4c6ecac589a7e7467ba5fd5344d3ffd9550c98a4e0ccb515a7",
+  "versions": {
+    "torch": "2.11.0+cu128",
+    "transformers": "4.46.3"
+  },
+  "device": "NVIDIA H100 NVL MIG 3g.47gb",
+  "started": "2026-11-08 23:19:40",
+  "finished": "2026-11-09 00:53:11",
+  "steps": 57930,
+  "best": {
+    "step": 40000,
+    "epoch": 0.69,
+    "beams": 5,
+    "sentences": 2000,
+    "tp": 1015.0,
+    "fp": 719.0,
+    "fn": 2406.0,
+    "precision": 0.5854,
+    "recall": 0.2967,
+    "f0_5": 0.49,
+    "seconds": 41
+  }
+}
