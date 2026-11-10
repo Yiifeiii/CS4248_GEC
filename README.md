@@ -1,6 +1,10 @@
 # CS4248: Grammatical Error Correction
 
-See [BART hyperparameter experiments](experiments/ablations/README.md) for grouped training/beam-search scripts, completed F-scores, and reproduction commands.
+See [BART hyperparameter experiments](experiments/ablations/README.md) for training/beam-search scripts and completed F-scores.
+
+Completed experiments: [four controls per model against the original curriculum baseline](experiments/four-controls/README.md).
+
+Results: [BART/T5 curriculum baseline versus four controls](experiments/curriculum-comparison.md).
 
 This project investigates whether combining alternative corrections from multiple grammatical error correction (GEC) systems improves precision, recall, and coverage of rare error types. The planned approach pools the top-k hypotheses from BART and T5 with GECToR's best correction, then combines their edits using GRECO.
 
@@ -25,8 +29,9 @@ The repository also contains datasets, prepared source/target sentence pairs, an
 | `greco_setup/` | GRECO edit combination ([setup and usage](greco_setup/README.md)) |
 | `outputs/` | System predictions in the shared format, see [Outputs](#outputs) |
 | `training/` | Two-stage BART/T5 fine-tuning: data build and checks, training, evaluation ([details](training/README.md)) |
+| `t5_tuning/` | T5 hyperparameter tuning: 21 runs, noise bands, sweeps and final dev_test scores ([results and how to rerun](t5_tuning/README.md)) |
 | `cluster/` | Slurm jobs and setup for the NUS SoC compute cluster ([details](cluster/README.md)) |
-| `tests/` | Unit tests for the GRECO combination and training data code |
+| `tests/` | Unit tests for the GRECO combination, training data and T5 tuning code |
 
 ## Data and formats
 

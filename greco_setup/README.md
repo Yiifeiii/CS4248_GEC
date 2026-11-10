@@ -59,7 +59,7 @@ The input is one JSON object or a list of objects, each with `source` and a none
 
 Offsets refer to the **original source tokens**, starting at zero, with an exclusive end. Equal start/end means insertion; an empty replacement means deletion. Conflicting edits within one proposal are rejected. Conflicting alternatives from different proposals remain in the pool but cannot be applied together. Insertions on a replacement boundary are allowed; insertions strictly inside a replaced span are rejected.
 
-Sentence proposals are converted with Python's token-level `SequenceMatcher`. This is a simple alignment for manual development, **not ERRANT linguistic edit extraction**. Adjacent differences may form a single edit; use explicit offsets when you need precise pooling boundaries. Later, the generators can produce this same input schema, ideally with ERRANT-derived edits.
+Sentence proposals are converted with Python's token-level `SequenceMatcher`, which can merge adjacent differences into one edit and split the same correction differently in different hypotheses. For experiments, give explicit ERRANT edits instead: `python -m greco_setup.extract_edits` (in an environment with errant, e.g. gec-train) writes `<prediction file>.errant.jsonl` next to each prediction file, and `tune_vote.py` uses them by default (`--edits errant`). These are the same edit units ERRANT scores against the gold M2. Insertions that ERRANT splits at one position (`their` → `his or her`: +his, +or, their→her) are joined in order (+"his or"), because `combine.py` treats insertions at one position as alternatives.
 
 Multiple BART/T5 hypotheses are supported by adding more proposal objects. The `system` and `rank` fields are descriptive metadata; this version does not add voting/agreement weights or GECToR-specific behavior.
 
@@ -77,7 +77,7 @@ python -m greco_setup.combine --input outputs/greco/dev30.input.json --output ou
 python3 -m greco_setup.prepare collect --input outputs/greco/dev30.output.json --output outputs/greco/dev30.tgt
 ```
 
-`--k` keeps only the top-k hypotheses per system (the k = 1, 3, 5 ablation) and leaves 1-best systems unchanged. Empty hypotheses are skipped. `collect` writes one best sentence per line, aligned with the source, ready for ERRANT or the M² scorer.
+`--k` keeps only the top-k hypotheses per system (the k = 1, 3, 5 ablation) and leaves 1-best systems unchanged. Empty hypotheses are skipped, and a hypothesis a system repeats (`export_candidates.py` pads short n-best lists with copies of the top one) is kept once, at its best rank, so it does not add votes. Search never produces an empty sentence (deletions from different hypotheses could otherwise remove every token). `collect` writes one best sentence per line, aligned with the source, ready for ERRANT or the M² scorer.
 
 ## Search and output
 
@@ -88,6 +88,46 @@ The output contains `best_sentence`, pooled edits, and the surviving candidates 
 ```bash
 python3 -m unittest discover -s tests -v
 ```
+
+## Voting
+
+`--vote-coef α` (default 0, no voting) ranks candidates by log Q + α · log V, the paper's voting bias (Qorib & Ng, 2023, Eq. 10). V is the average support of the candidate's edits; `--vote-mode` sets how support is counted:
+
+| Mode | Support of an edit | Note |
+| --- | --- | --- |
+| `hypothesis` | share of all hypotheses containing it | What official `run_combination.py` does when each ranked hypothesis is an input file |
+| `system` | share of systems with at least one hypothesis containing it | The paper's count(e) / c: a system repeating an edit across its beams votes once |
+| `rank` | Σ over systems of 1 / (best rank containing it), ÷ number of systems | A system's top-beam edits keep the same vote at any k; edits only in lower beams count less |
+
+At k = 1 the three modes are identical. As in the official code, the unchanged sentence gets one voter's share (1/hypotheses or 1/systems), so V is never 0. `--score-cache PATH` stores GRECO scores in a JSON-lines file; they depend only on (source, candidate), so runs with different vote settings reuse them.
+
+### Tuning α on dev_tune
+
+`tune_vote.py` runs every (k, mode, α) on `data/curriculum/dev_tune.ids` (α ∈ {0, 0.1, …, 0.9}, the paper's grid plus 0). `score_tuning.py` scores them with ERRANT and writes the best α per (k, mode) to `best.json`; `tune_vote.py --best-from` then runs only those settings on `dev_test`. `cluster/greco_tune.sh` first extracts the ERRANT edits, then runs GRECO and the scoring. On the cluster:
+
+```bash
+bash cluster/setup_greco_env.sh                                  # once, on a compute node
+sbatch -J greco-tune cluster/job.sbatch cluster/greco_tune.sh dev_tune
+sbatch -J greco-test-set cluster/job.sbatch cluster/greco_tune.sh dev_test --best-from outputs/greco/tuning/dev_tune.errant/best.json
+```
+
+Plain beam search lists instead of diverse ones: `cluster/nbest_beam.sh` writes `outputs/{bart,t5}/full/beam.tgt`, and `--tag beam --system bart=outputs/bart/full/beam.tgt --system t5=outputs/t5/full/beam.tgt --system gector=outputs/gector/dev.tgt` runs the tuning on them into `<split>.errant.beam` (see the header of `cluster/greco_tune.sh`).
+
+### BEA-2019 test set
+
+`data/test.bea19.src` (4,477 sentences) has no public gold edits, so nothing is tuned or scored on it: GRECO runs the settings tuned on the full dev set, and the predictions are scored by submitting them to Codabench. In order (GECToR also runs locally, see `gector/README.md`):
+
+```bash
+gector/.venv/bin/python gector/predict.py --input data/test.bea19.src --output outputs/gector/bea19.tgt
+sbatch -J nbest-bea19 --time=04:00:00 cluster/job.sbatch cluster/nbest_beam.sh data/test.bea19.src bea19
+sbatch -J greco-bea19 cluster/job.sbatch cluster/greco_tune.sh bea19 --k 1 2 3 5 --tag beam \
+    --system bart=outputs/bart/bea19.tgt --system t5=outputs/t5/bea19.tgt --system gector=outputs/gector/bea19.tgt \
+    --best-from outputs/greco/tuning/dev.errant.beam/best.json
+```
+
+Predictions: `outputs/greco/tuning/bea19.errant.beam/k<k>/<mode>/alpha<a>.tgt`, one corrected sentence per line, tokenized like the source.
+
+Results: `outputs/greco/tuning/<split>.errant/scores.csv`. `outputs/greco/tuning/dev_tune/` holds the earlier run with difflib edits and without the duplicate and empty-sentence fixes (`--edits difflib` writes there). The score cache (`outputs/greco/tuning/score_cache.jsonl`) is not committed; it is keyed by sentence, so the ERRANT runs reuse the scores of the difflib run.
 
 ## Sources
 

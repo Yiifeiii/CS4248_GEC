@@ -42,6 +42,11 @@ class CombinationTests(unittest.TestCase):
         self.assertEqual({c["sentence"] for c in result["candidates"]},
                          {"He eat .", "He eats .", "He ate ."})
 
+    def test_deletions_never_empty_the_sentence(self):
+        # "Sara" and "." from two hypotheses delete one token each; both together leave nothing
+        result = combine("Sara .", [Edit(0, 1, ()), Edit(1, 2, ())])
+        self.assertEqual({c["sentence"] for c in result["candidates"]}, {"Sara .", ".", "Sara"})
+
     def test_unchanged_and_invalid_scores(self):
         class Scorer:
             def score(self, source, candidates):

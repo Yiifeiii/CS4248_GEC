@@ -1,0 +1,17 @@
+{
+  "k1": {
+    "hypothesis": 0.2,
+    "rank": 0.2,
+    "system": 0.2
+  },
+  "k3": {
+    "hypothesis": 0.2,
+    "rank": 0.3,
+    "system": 0.2
+  },
+  "k5": {
+    "hypothesis": 0.1,
+    "rank": 0.5,
+    "system": 0.1
+  }
+}
