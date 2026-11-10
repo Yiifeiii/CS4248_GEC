@@ -1,0 +1,34 @@
+{
+  "model": "/mnt/scratch/h/haleema/cs4248-gec/checkpoints/t5-tune.s1lr3e-4.base.lr3e-5.seed42/best",
+  "split": "dev_tune",
+  "sentences": 2000,
+  "beams": 5,
+  "prefix": null,
+  "retokenize": false,
+  "git_commit": "de15c7ad4c8abd53e6c9f2680afcdb8fbd6f22bf",
+  "decode_seconds": 43,
+  "device": "cuda",
+  "errant": {
+    "correction": {
+      "tp": 1366.0,
+      "fp": 886.0,
+      "fn": 2055.0,
+      "precision": 0.6066,
+      "recall": 0.3993,
+      "f0_5": 0.5495
+    },
+    "detection": {
+      "tp": 1626.0,
+      "fp": 630.0,
+      "fn": 1872.0,
+      "precision": 0.7207,
+      "recall": 0.4648,
+      "f0_5": 0.6493
+    }
+  },
+  "m2": {
+    "precision": 0.6818,
+    "recall": 0.4305,
+    "f0_5": 0.6105
+  }
+}

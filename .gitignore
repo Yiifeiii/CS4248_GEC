@@ -11,6 +11,8 @@ checkpoints/
 # Rebuilt by training/build_data.py (sha256 in data/curriculum/manifest.json)
 data/curriculum/stage1.*
 outputs/greco/tuning/score_cache.jsonl
+# Old T5 tuning results moved aside before a rerun (see t5_tuning/README.md, section 7)
+t5_tuning/past_runs/
 outputs/greco/codabench_bea19/
 
 # GRECO + ESC outputs: written by the cluster jobs and copied back with rsync. Not tracked,

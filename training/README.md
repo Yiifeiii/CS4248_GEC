@@ -64,6 +64,10 @@ FCE dev is training data here. Our evaluation set is the separate W&I+LOCNESS de
 
 The defaults are the minimum that training needs:
 - **Over 128 T5 tokens:** 151 pairs dropped in stage 1 and 53 in stage 2. Truncating them would cut the source and target at different points. The same pairs are dropped for BART, so both models see identical data.
+  - This is 0.03% of the 561,489 non-empty stage-1 pairs, and 0.16% of the 33,943 stage-2 pairs left after cleaning.
+  - The filter applies only to training data. The dev sets are not filtered, so their over-limit pairs are still scored: 2 of 2,000 in `dev_tune` and 5 of 2,384 in `dev_test`.
+  - So the cost is a small loss of long training examples, not of evaluation data. The effect on scores has not been measured.
+  - Counted with the same rule as `build_data.py`. The tokenizer used (from `vennify/t5-base-grammar-correction`) reproduces the 151 stage-1 figure exactly, which supports that it matches the T5 tokenizer used in training.
 - **Empty target** (a whole-sentence deletion such as "now ," → ""): 46 dropped in stage 1 and 4 in stage 2.
 - **Only edit is `UNK`:** 308 dropped in stage 2. An error was marked but not corrected, so these "correct" targets still contain the error.
 
