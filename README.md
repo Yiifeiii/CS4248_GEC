@@ -8,6 +8,39 @@ Results: [BART/T5 curriculum baseline versus four controls](experiments/curricul
 
 This project investigates whether combining alternative corrections from multiple grammatical error correction (GEC) systems improves precision, recall, and coverage of rare error types. The planned approach pools the top-k hypotheses from BART and T5 with GECToR's best correction, then combines their edits using GRECO.
 
+## Run the project
+
+Run commands from the repository root. The complete, maintained runbook is in
+[`docs/running.md`](docs/running.md); the short version is:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements-train.txt
+python -m unittest discover -s tests -v
+```
+
+Prepared data is already available under `data/`. If the M2 files are Git LFS
+pointers, run `git lfs install && git lfs pull` before conversion or gold
+evaluation. For model inference, use the model-specific instructions for
+[GECToR](gector/README.md), [BART/T5](docs/running.md#4-run-inference), and
+[GRECO](greco_setup/README.md). GPU training and ablations run through the
+[SoC cluster workflow](cluster/README.md); preview jobs with:
+
+```bash
+bash cluster/ablations/training/submit.sh --dry-run
+```
+
+See the [experiment index](docs/experiments.md) to find the canonical result
+and reproduction instructions for each study.
+
+The source tree is organized under [`src/gec/`](src/gec/), reusable configs
+under [`configs/`](configs/), and curated result navigation under
+[`results/`](results/). Compatibility links preserve the historical commands
+such as `python -m training.finetune`. See the [private Hugging Face model
+guide](docs/running.md#9-use-private-hugging-face-models) before using the
+team's checkpoints.
+
 ## Current status
 
 A standalone [manual GRECO combination workflow](greco_setup/README.md) accepts manually entered BART/T5 sentences or edits. It includes conflict-aware beam search, an adapter for the official GRECO scorer, examples, and setup instructions. Candidate generation can be tested without model dependencies; pretrained inference requires a separate Python 3.10 environment and downloaded weights.
@@ -27,7 +60,7 @@ The repository also contains datasets, prepared source/target sentence pairs, an
 | `t5/` | T5 top-k generation and retokenization of its output |
 | `gector/` | Grammarly's pretrained GECToR ([setup and usage](gector/README.md)) |
 | `greco_setup/` | GRECO edit combination ([setup and usage](greco_setup/README.md)) |
-| `outputs/` | System predictions in the shared format, see [Outputs](#outputs) |
+| `outputs/` | Generated system predictions in the shared format; ignored for new local artifacts |
 | `training/` | Two-stage BART/T5 fine-tuning: data build and checks, training, evaluation ([details](training/README.md)) |
 | `t5_tuning/` | T5 hyperparameter tuning: 21 runs, noise bands, sweeps and final dev_test scores ([results and how to rerun](t5_tuning/README.md)) |
 | `cluster/` | Slurm jobs and setup for the NUS SoC compute cluster ([details](cluster/README.md)) |
