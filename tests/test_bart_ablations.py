@@ -11,7 +11,7 @@ from training.dropout import configure_dropout
 
 
 ROOT = Path(__file__).resolve().parents[1]
-CONFIGS = ROOT / 'training/configs/bart-ablations-20261105'
+CONFIGS = ROOT / 'configs/training/bart-ablations-20261105'
 CHANGES = {
     'baseline': {},
     'lr-low': {'learning_rate': 5e-6},
@@ -72,7 +72,7 @@ class AblationDesignTests(unittest.TestCase):
     def test_baseline_retains_original_stage2_recipe(self):
         reference = json.loads((ROOT / 'experiments/training/bart-base.s1s2/run_info.json').read_text())
         original = reference['config']
-        self.assertEqual(original, json.loads((ROOT / 'training/configs/bart-base.stage2.json').read_text()))
+        self.assertEqual(original, json.loads((ROOT / 'configs/training/bart-base.stage2.json').read_text()))
         baseline = configs()['baseline']
         for key, value in original.items():
             if key not in ('run', 'init', 'output_dir'):

@@ -26,9 +26,9 @@
     "logging_steps": 50,
     "output_dir": "${CKPT_ROOT}/bart-base.long.s1"
   },
-  "config_path": "training/configs/bart-base.long.stage1.json",
+  "config_path": "configs/training/bart-base.long.stage1.json",
   "args": {
-    "config": "training/configs/bart-base.long.stage1.json",
+    "config": "configs/training/bart-base.long.stage1.json",
     "resume": "auto",
     "output_dir": null,
     "max_steps": null,

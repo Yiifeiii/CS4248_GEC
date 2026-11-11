@@ -1,8 +1,8 @@
 """Fine-tune BART or T5 for one stage of the two-stage curriculum.
 
-    python -m training.finetune --config training/configs/bart-base.stage1.json [--resume auto]
+    python -m training.finetune --config configs/training/bart-base.stage1.json [--resume auto]
 
-The config (see training/configs/) names the starting weights, the stage data and
+The config (see configs/training/) names the starting weights, the stage data and
 the hyperparameters. Paths may use ${VARS}: CKPT_ROOT is where checkpoints go
 (cluster: /mnt/scratch/..., see cluster/README.md). Writes to <output_dir>:
   checkpoint-*/        Trainer checkpoints for resuming (the last save_total_limit)

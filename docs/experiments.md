@@ -4,8 +4,9 @@ This index separates the project's research records from generated runtime
 files. The existing directory names are retained so current links and scripts
 continue to work.
 
-Implementation now lives under `src/gec/`; configuration files live under
-`configs/`. The old top-level package and config paths are compatibility links.
+Implementation remains in the existing component directories so current
+imports, tests, and cluster jobs continue to work. All reusable experiment
+configurations now live under `configs/`.
 
 | Area | Location | Purpose |
 |---|---|---|
@@ -18,15 +19,6 @@ Implementation now lives under `src/gec/`; configuration files live under
 | Test results | [`experiments/test/`](../experiments/test/) | CoNLL-2014 and BEA-2019 evaluation |
 | Overall comparison | [`experiments/curriculum-comparison.md`](../experiments/curriculum-comparison.md) | Curriculum and control comparison |
 
-The old package paths are compatibility links:
-
-```text
-training/    -> src/gec/training/
-bart/        -> src/gec/bart/
-t5/          -> src/gec/t5/
-greco_setup/ -> src/gec/greco_setup/
-greco_esc/   -> src/gec/greco_esc/
-```
 
 ## Provenance rule
 

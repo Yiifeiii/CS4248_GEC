@@ -123,7 +123,7 @@ curated scores are retained to prevent accidental duplicate training.
 
 | File type | Location | Tracked? |
 |---|---|---|
-| Source code and tests | `src/gec/`, `tests/` | yes |
+| Source code and tests | component directories, `tests/` | yes |
 | Reusable configs | `configs/training/`, `configs/t5_tuning/` | yes |
 | Curated experiment scores and notes | `experiments/` | yes |
 | Predictions and n-best files | `outputs/` or `artifacts/` | no |
@@ -195,3 +195,29 @@ of the selected model in the experiment metadata. Do not record the token or
 copy the private weights into this repository. Team members who lack access
 should receive access through the Hugging Face organization rather than through
 an exported credential.
+
+### Give an external professor access
+
+Choose one of these options, in order of convenience:
+
+1. **Gated public model repository — recommended if the models may be shared
+   for academic review.** Create a separate gated model repository for each
+   checkpoint, enable access requests, and set manual approval if you want to
+   approve your professor explicitly. Send the model URL to your professor;
+   they create or use their own Hugging Face account and request access. You
+   approve the request from the model's settings page. Access is granted to
+   individual users, not automatically to an entire organization.
+2. **Private repository with read access.** Ask your team's Hugging Face
+   organization admin to invite your professor's Hugging Face username as a
+   read-only organization member, or grant read access through the relevant
+   resource group. This keeps the repository private, but the professor must
+   have a Hugging Face account and be explicitly added.
+3. **Public repository.** If there are no confidentiality, licensing, or
+   publication restrictions, make a release checkpoint public. This is the
+   simplest option for a reviewer and requires no team membership.
+
+For a professor who only needs to inspect or reproduce the work, publish a
+separate review release containing the model card, training commit, config,
+evaluation scores, and inference example. Keep private development checkpoints
+in the team repository. Do not send a shared team token: Hugging Face read
+tokens are user credentials and should remain personal and revocable.

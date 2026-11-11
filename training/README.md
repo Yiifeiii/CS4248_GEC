@@ -94,7 +94,7 @@ Both models read and write text tokenized like the corpora (`It 's`, `do n't`), 
 
 T5's vocabulary can't encode 45 characters in our data, including `` ` ^ ~ < { } `` and accented letters, and NFKC-normalizes others (`…` → `...`). So "São" comes back as "So". `training/common.py:restore_from_source` aligns T5's output with the source and copies the original tokens back where the output simply copied them. `check_data` confirms that this reproduces every dev and stage-2 sentence; 316 of them would differ without it.
 
-`training/configs/` has one config per stage and model. `init` is the starting weights; stage 2 starts from `${CKPT_ROOT}/<model>.s1/best`.
+`configs/training/` has one config per stage and model. `init` is the starting weights; stage 2 starts from `${CKPT_ROOT}/<model>.s1/best`.
 
 | | BART s1 | T5 s1 | BART s2 | T5 s2 |
 |---|---|---|---|---|
@@ -149,7 +149,7 @@ On any machine (CPU or Apple GPU), this takes a few minutes:
 
 ```bash
 export CKPT_ROOT=/tmp/gec-smoke HF_HUB_OFFLINE=0
-python -m training.finetune --config training/configs/bart-base.stage1.json --output-dir /tmp/gec-smoke/bart \
+python -m training.finetune --config configs/training/bart-base.stage1.json --output-dir /tmp/gec-smoke/bart \
     --max-steps 12 --train-limit 500 --dev-limit 16 --errant-steps 6
 python -m training.evaluate --model /tmp/gec-smoke/bart/best --split dev_tune --limit 8 --out /tmp/gec-smoke/eval
 ```

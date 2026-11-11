@@ -1,10 +1,7 @@
-# Configuration layout
+# Configuration notes
 
-Configurations now have a canonical home under this directory:
-
-- `configs/training/`: BART/T5 training, controls, and decoding configs.
-- `configs/t5_tuning/`: T5 tuning configs and manifests.
-
-Compatibility links remain at `training/configs/` and `t5_tuning/configs/`, so
-existing commands, tests, and cluster jobs continue to work. New configs should
-be added here and referenced by their canonical path where possible.
+Training configurations live in `configs/training/`, and T5 tuning
+configurations live in `configs/t5_tuning/`. The old scattered config
+directories have been removed; scripts, tests, and documentation now use these
+canonical paths. Use environment variables for private Hugging Face model
+identifiers rather than committing credentials or checkpoint files.

@@ -34,12 +34,15 @@ bash cluster/ablations/training/submit.sh --dry-run
 See the [experiment index](docs/experiments.md) to find the canonical result
 and reproduction instructions for each study.
 
-The source tree is organized under [`src/gec/`](src/gec/), reusable configs
-under [`configs/`](configs/), and curated result navigation under
-[`results/`](results/). Compatibility links preserve the historical commands
-such as `python -m training.finetune`. See the [private Hugging Face model
+The source remains in the component directories (`training/`, `bart/`, `t5/`,
+`greco_setup/`, and `greco_esc/`), with curated result navigation under
+[`results/`](results/). See the [private Hugging Face model
 guide](docs/running.md#9-use-private-hugging-face-models) before using the
 team's checkpoints.
+
+For external review, use a gated model repository or grant the professor
+read-only access; the options are documented in the [reviewer access
+guide](docs/running.md#give-an-external-professor-access).
 
 ## Current status
 
@@ -62,6 +65,7 @@ The repository also contains datasets, prepared source/target sentence pairs, an
 | `greco_setup/` | GRECO edit combination ([setup and usage](greco_setup/README.md)) |
 | `outputs/` | Generated system predictions in the shared format; ignored for new local artifacts |
 | `training/` | Two-stage BART/T5 fine-tuning: data build and checks, training, evaluation ([details](training/README.md)) |
+| `configs/` | Canonical BART/T5 training, ablation, decoding, and tuning configurations |
 | `t5_tuning/` | T5 hyperparameter tuning: 21 runs, noise bands, sweeps and final dev_test scores ([results and how to rerun](t5_tuning/README.md)) |
 | `cluster/` | Slurm jobs and setup for the NUS SoC compute cluster ([details](cluster/README.md)) |
 | `tests/` | Unit tests for the GRECO combination, training data and T5 tuning code |

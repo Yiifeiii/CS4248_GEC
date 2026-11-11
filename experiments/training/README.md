@@ -86,8 +86,8 @@ The five main models are private repositories in the [CS4248-GEC](https://huggin
 Submit:
 
 ```bash
-g1=$(sbatch --parsable -J bart-base.gtrecipe.s1 cluster/job.sbatch cluster/train.sh training/configs/bart-base.gtrecipe.stage1.json)
-sbatch -J bart-base.gtrecipe.s1s2 --dependency=afterok:$g1 cluster/job.sbatch cluster/train.sh training/configs/bart-base.gtrecipe.stage2.json
+g1=$(sbatch --parsable -J bart-base.gtrecipe.s1 cluster/job.sbatch cluster/train.sh configs/training/bart-base.gtrecipe.stage1.json)
+sbatch -J bart-base.gtrecipe.s1s2 --dependency=afterok:$g1 cluster/job.sbatch cluster/train.sh configs/training/bart-base.gtrecipe.stage2.json
 ```
 
 ## Results

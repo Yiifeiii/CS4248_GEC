@@ -26,9 +26,9 @@
     "logging_steps": 50,
     "output_dir": "${CKPT_ROOT}/t5-base.s1"
   },
-  "config_path": "training/configs/t5-base.stage1.json",
+  "config_path": "configs/training/t5-base.stage1.json",
   "args": {
-    "config": "training/configs/t5-base.stage1.json",
+    "config": "configs/training/t5-base.stage1.json",
     "resume": "auto",
     "output_dir": null,
     "max_steps": null,

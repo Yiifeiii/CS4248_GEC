@@ -21,7 +21,7 @@ for evaluation. No dev_test sentences or annotations are used for this sweep.
 | 5 | `groups2-p01` | 10 | 2 | 0.1 |
 | 6 | `groups2-p10` | 10 | 2 | 1.0 |
 
-The [config](../../training/configs/bart-decoding-20261106.json) fixes the model
+The [config](../../configs/training/bart-decoding-20261106.json) fixes the model
 weight hash, five returned sequences, length penalty 1, no-repeat n-gram size 0,
 batch size 4, and batch token budget 400. Decoding is deterministic beam search,
 without sampling. Group counts divide evenly into the total beam count.

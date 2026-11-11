@@ -45,7 +45,7 @@ This rebuilds `results.md` from the committed scores and prints the band and the
 
 ## 1. Glossary
 
-- **Default settings.** The values already in the group's config files: `training/configs/t5-base.stage1.json` for stage 1 and `training/configs/t5-base.stage2.json` for stage 2. They are fixed numbers, not random values, and they are not the base model. Each sweep changes one of them and keeps the rest at these values. The group chose them before this project, and the repo doesn't record how.
+- **Default settings.** The values already in the group's config files: `configs/training/t5-base.stage1.json` for stage 1 and `configs/training/t5-base.stage2.json` for stage 2. They are fixed numbers, not random values, and they are not the base model. Each sweep changes one of them and keeps the rest at these values. The group chose them before this project, and the repo doesn't record how.
 - **Default run.** A training run with the default settings. Its seed is 42 unless stated otherwise.
 - **Reference.** The run a candidate is compared with. For the learning-rate and regularization sweeps, it's the seed-42 default run.
 - **Base model.** The pretrained `google-t5/t5-base` weights from Hugging Face. Stage 1 starts from it. It's a different thing from the default settings.
@@ -80,7 +80,7 @@ These are the default settings the sweeps start from:
 | Epochs | 3 | Up to 5, with early stopping (patience 2) |
 | Seed | 42 | 42 |
 
-Source: `training/configs/t5-base.stage1.json` and `training/configs/t5-base.stage2.json`.
+Source: `configs/training/t5-base.stage1.json` and `configs/training/t5-base.stage2.json`.
 
 ## 3. Process
 
@@ -240,7 +240,7 @@ For comparison, the group's shared model `CS4248-GEC/gec-t5-base-s1s2` scores 52
 | Step | File | What it does |
 |---|---|---|
 | Fetch and check the stage-1 model | `t5_tuning/fetch_stage1.sh` | Downloads `CS4248-GEC/gec-t5-base-s1` and checks its sha256 against `experiments/training/checkpoints.sha256` |
-| Plan runs and write configs | `t5_tuning/tune.py plan` | Writes one JSON config per run into `t5_tuning/configs/`, and updates `manifest.json` and `manifest.md` |
+| Plan runs and write configs | `t5_tuning/tune.py plan` | Writes one JSON config per run into `configs/t5_tuning/`, and updates `manifest.json` and `manifest.md` |
 | Submit runs | `t5_tuning/tune.py submit` | Submits the preflight as a CPU job, then each unscored run with `sbatch cluster/job.sbatch t5_tuning/run_one.sh <config>`, depending on the preflight passing |
 | Check before any GPU run | `t5_tuning/preflight.sh`, `t5_tuning/tune.py preflight` | CPU job. Runs `training.check_data` and the tests, then checks every config against `manifest.json`, the torch and transformers versions against the recorded runs (`experiments/training/t5-base.s1s2/run_info.json`), that each starting model is cached, and the stage-1 model's sha256. Writes `preflight.json`. |
 | Train and score one run | `t5_tuning/run_one.sh` | Calls `training/finetune.py` for training, then `training/evaluate.py --split dev_tune` for scoring, then `tune.py verify` on the run. It doesn't score dev_test. |

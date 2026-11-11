@@ -21,7 +21,7 @@ This extension was chosen after the original results had been inspected. Compare
 settings using dev_tune and describe further dev_test comparisons as exploratory;
 do not claim the extension was a preplanned held-out experiment.
 
-The [configuration README](../../../training/configs/bart-ablations-20261105/README.md#follow-up-three-005-values)
+The [configuration README](../../../configs/training/bart-ablations-20261105/README.md#follow-up-three-005-values)
 contains the preview/submission commands. Selecting `runs-005.txt` submits only
 these three tasks, with a fresh preflight dependency and at most two concurrent
 GPU jobs.

@@ -12,7 +12,7 @@ Each variant changes one hyperparameter; these are not cumulative changes.
 
 The complete numerical grid and launch instructions are in the
 [ablation index](../../ablations/README.md).
-The [ordered run list](../../../training/configs/bart-ablations-20261105/runs.txt)
+The [ordered run list](../../../configs/training/bart-ablations-20261105/runs.txt)
 maps each Slurm array index to a config.
 
 ## Questions and runs

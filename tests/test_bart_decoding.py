@@ -10,7 +10,7 @@ from training.candidate_quality import pool_metrics
 
 
 ROOT = Path(__file__).resolve().parents[1]
-CONFIG = ROOT / 'training/configs/bart-decoding-20261106.json'
+CONFIG = ROOT / 'configs/training/bart-decoding-20261106.json'
 
 
 class CandidateCoverageTests(unittest.TestCase):

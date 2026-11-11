@@ -93,7 +93,7 @@ dependencies, exact historical software versions, tests and source data, then
 builds the streams and records pretrained weight hashes. Eight GPU jobs depend
 on its success, at most two concurrent, each requesting one H100-47 for up to12h.
 
-Configs: `training/configs/four-controls/`. Data/checkpoints live on scratch.
+Configs: `configs/training/four-controls/`. Data/checkpoints live on scratch.
 Results: `experiments/training/four-controls-20261108/<family>-<control>/`, with
 separate `best/` and `final/` scores and exposure/initialization provenance.
 No model training is performed on login nodes. All eight runs are now complete.

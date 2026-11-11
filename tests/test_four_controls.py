@@ -47,8 +47,8 @@ class FourControlsTests(unittest.TestCase):
         optimization=('learning_rate','batch_size','grad_accum','warmup_steps','weight_decay','dropout','label_smoothing','seed')
         for family in ('bart','t5'):
             for slug,stage,stream in [('1a',1,'matched'),('1b',2,'matched'),('2a',1,'uniform3'),('2b',2,'uniform5')]:
-                cfg=json.loads((ROOT/f'training/configs/four-controls/{family}-{slug}.json').read_text())
-                old=json.loads((ROOT/f'training/configs/{family}-base.stage{stage}.json').read_text())
+                cfg=json.loads((ROOT/f'configs/training/four-controls/{family}-{slug}.json').read_text())
+                old=json.loads((ROOT/f'configs/training/{family}-base.stage{stage}.json').read_text())
                 for key in optimization:self.assertEqual(cfg[key],old[key],key)
                 self.assertEqual(cfg['control_stream'],stream)
                 self.assertEqual(cfg['epochs'],1)
