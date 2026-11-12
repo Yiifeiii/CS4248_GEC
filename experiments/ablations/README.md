@@ -11,7 +11,7 @@ decoding changes search on a frozen checkpoint. These are single-seed experiment
 
 ## Training hyperparameters
 
-Each configuration starts independently from Dasha's identical stage-1 checkpoint.
+Each configuration starts independently from the same stage-1 checkpoint, `CS4248-GEC/gec-bart-base-s1`.
 The baseline retains learning rate 1e-5, weight decay 0.01, dropout 0.1 and label
 smoothing 0.1. Everything else follows the recorded stage-2 recipe: linear learning
 rate schedule, 100 warmup steps, up to five epochs, seed 42, batch 32, checkpoint

@@ -1,7 +1,5 @@
 # Running the fine-tuning on the SoC compute cluster
 
-See [BART hyperparameter experiments](../experiments/ablations/README.md) for grouped training/beam-search scripts, completed F-scores, and reproduction commands.
-
 These instructions follow the course's `SoC_Cluster_Guide.pdf` and the [Unofficial SoC Cluster Guide](https://github.com/isaacNingLee/Unofficial_SoC_Cluster_Guide). The official pages (hardware, job priority) need an SoC login. They take precedence wherever they differ from this guide.
 
 **Rules:**
@@ -26,9 +24,7 @@ exit; exit
 ```
 
 **Cloning:**
-- The repository is private, and GitHub no longer accepts passwords. When `git clone` asks for a password, paste a [personal access token](https://github.com/settings/tokens) (classic, `repo` scope).
-- SSH to GitHub (ports 22 and 443) hangs from the cluster, so use the HTTPS URL above.
-- To avoid re-entering the token, run `git config --global credential.helper store` once. This stores the token in plain text in `~/.git-credentials`.
+- SSH to GitHub (ports 22 and 443) hangs from the cluster, so use the HTTPS URL above. The repository is public, so no GitHub login is needed to clone it.
 - To use a branch that isn't merged yet, add `-b <branch>` to the clone command, or run `git checkout <branch>` afterwards.
 
 **If logging in hangs** (Ctrl-C shows a conda traceback): the block that `conda init` adds to `~/.bashrc` starts Python on every login, which is very slow on xlogin. Replace it with a line that only defines the `conda` command:

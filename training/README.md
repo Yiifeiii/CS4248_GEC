@@ -1,11 +1,5 @@
 # Two-stage fine-tuning of BART and T5
 
-See [BART hyperparameter experiments](../experiments/ablations/README.md) for grouped training/beam-search scripts, completed F-scores, and reproduction commands.
-
-For the nine BART-only stage-2 hyperparameter ablations, see the
-[configuration grid and launch instructions](configs/bart-ablations-20261105/README.md)
-and the [submitted experiment log](../experiments/training/bart-ablations-20261105/README.md).
-
 We fine-tune `facebook/bart-base` and `google-t5/t5-base` from their pretrained (not GEC-trained) weights in two stages:
 
 1. **Stage 1:** all four BEA-2019 training corpora (FCE, Lang-8, NUCLE, W&I+LOCNESS), errorful sentences only.
@@ -15,7 +9,7 @@ The stage-1 checkpoints are kept, so stage 1 alone (`*.s1`) can be compared with
 
 How to run the jobs on the SoC cluster is in [`cluster/README.md`](../cluster/README.md).
 
-The results of every run so far, the findings, and the trained models on Hugging Face (`CS4248-GEC/*`) are in [`experiments/training/README.md`](../experiments/training/README.md).
+The results of every run, the findings, and the trained models on Hugging Face (`CS4248-GEC/*`) are in [`experiments/training/README.md`](../experiments/training/README.md). Studies built on this training are the [BART stage-2 hyperparameter ablations and decoding study](../experiments/ablations/README.md) (12 ablation runs), the [four curriculum controls](../experiments/four-controls/README.md) and the [T5 tuning](../t5_tuning/README.md).
 
 ## From scratch, end to end
 
@@ -95,7 +89,7 @@ Both models read and write text tokenized like the corpora (`It 's`, `do n't`), 
 
 T5's vocabulary can't encode 45 characters in our data, including `` ` ^ ~ < { } `` and accented letters, and NFKC-normalizes others (`…` → `...`). So "São" comes back as "So". `training/common.py:restore_from_source` aligns T5's output with the source and copies the original tokens back where the output simply copied them. `check_data` confirms that this reproduces every dev and stage-2 sentence; 316 of them would differ without it.
 
-`configs/training/` has one config per stage and model. `init` is the starting weights; stage 2 starts from `${CKPT_ROOT}/<model>.s1/best`.
+The configs for the main runs are `configs/training/<model>.stage1.json` and `<model>.stage2.json` (all configs are described in [`configs/README.md`](../configs/README.md)). `init` is the starting weights; stage 2 starts from `${CKPT_ROOT}/<model>.s1/best`.
 
 | | BART s1 | T5 s1 | BART s2 | T5 s2 |
 |---|---|---|---|---|
@@ -112,7 +106,7 @@ T5's vocabulary can't encode 45 characters in our data, including `` ` ^ ~ < { }
 
 The best checkpoint is the one with the highest dev_tune ERRANT F0.5. BART generation always sets `no_repeat_ngram_size=0`, because bart-base inherits 3 from its summarization defaults, which would forbid copying repeated phrases.
 
-The epoch counts are starting values. Run the 200-step pilot first (`cluster/pilot.sh`) and adjust them to the measured speed.
+On new hardware, the 200-step pilot (`cluster/pilot.sh`) measures training speed and memory before a full run.
 
 ### Longer runs and the matched control (`*.long.*` configs)
 

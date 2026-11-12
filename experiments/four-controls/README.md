@@ -91,7 +91,7 @@ bash cluster/submit_four_controls.sh --submit
 Array order: BART 1A/1B/2A/2B, then T5 1A/1B/2A/2B. CPU preflight verifies
 dependencies, exact historical software versions, tests and source data, then
 builds the streams and records pretrained weight hashes. Eight GPU jobs depend
-on its success, at most two concurrent, each requesting one H100-47 for up to12h.
+on its success, at most two concurrent, each requesting one H100-47 for up to 12 h.
 
 Configs: `configs/training/four-controls/`. Data/checkpoints live on scratch.
 Results: `experiments/training/four-controls-20261108/<family>-<control>/`, with
@@ -104,7 +104,7 @@ CPU preflight **1097381**, dependent GPU array **1097382**, at most two tasks
 concurrently. Executed source commit: `1a4c872`. Isolated source snapshot:
 `~/CS4248_GEC_experiments/four-controls/`. Local validation: 34 tests, 33 passed
 and one environment-dependent GRECO integration test skipped; shell syntax and
-whitespace checks passed. All tasks subsequently completed with exit0.
+whitespace checks passed. All tasks subsequently completed with exit code 0.
 
 | Array index | Model | Control |
 |---|---|---|

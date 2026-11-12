@@ -10,7 +10,7 @@ task.
 For data preparation, tests, and the training utilities:
 
 ```bash
-# Use Python 3.11 or 3.12. Python 3.13+ is not supported by the training stack.
+# Use Python 3.11 or 3.12 (3.13 removed lib2to3, which the M2 scorer conversion needs).
 python3.12 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
@@ -54,24 +54,44 @@ The generated stage-1 files are intentionally ignored and are verified by
 
 ## 4. Run inference
 
-The exact model/checkpoint arguments depend on the checkpoint location. The
-existing model-specific instructions are the canonical references:
+**BART and T5, 1-best.** `training.evaluate` corrects a split with a trained
+model (a checkpoint folder or a Hugging Face ID), writes `<split>.pred`, and
+scores it where references exist. Splits: `dev_tune`, `dev_test`,
+`conll14_test` and `bea19_test` (BEA-2019 has no public references, so only
+the predictions are written):
 
-- BART generation and n-best exports: [`bart/`](../bart/)
-- T5 generation and retokenization: [`t5/`](../t5/)
-- GECToR setup and prediction: [`gector/README.md`](../gector/README.md)
+```bash
+python -m training.evaluate --model CS4248-GEC/gec-bart-base-s1s2 \
+  --split conll14_test bea19_test --out outputs/review/bart-s1s2
+```
 
-All predictions should use the shared output convention:
-`outputs/<system>/<split>.tgt`. Keep n-best candidates in consecutive groups,
-with the best candidate first. This is the format consumed by GRECO.
+**BART and T5, n-best lists for GRECO.** `bart/generate_nbest.py` works for both
+models (it adds T5's `gec: ` prefix itself). `bart/export_candidates.py` then
+writes the shared `.tgt` format below:
 
-For GECToR, after running `bash gector/setup.sh`, an example is:
+```bash
+python bart/generate_nbest.py --model CS4248-GEC/gec-t5-base-s1s2 \
+  --input data/dev.src --output outputs/t5/dev.nbest.jsonl --num_beams 10 --num_return 10
+python bart/export_candidates.py --nbest outputs/t5/dev.nbest.jsonl --out outputs/t5/dev.tgt --k 5
+```
+
+Without `--output`, `generate_nbest.py --text "She go to school ."` prints the
+candidates for one sentence. The `t5/` folder holds T5 output retokenization and
+early pilot scripts on the pretrained `vennify/t5-base-grammar-correction`, not
+our fine-tuned models.
+
+**GECToR.** After running `bash gector/setup.sh`:
 
 ```bash
 gector/.venv/bin/python gector/predict.py \
   --input data/dev.src \
   --output outputs/gector/dev.tgt
 ```
+
+All predictions for GRECO use the shared output convention
+`outputs/<system>/<split>.tgt`: k consecutive lines per source sentence, best
+candidate first, tokenized like the source. See the
+[main README](../README.md#outputs).
 
 ## 5. Combine systems
 
@@ -87,19 +107,27 @@ in the component READMEs and `cluster/greco_tune.sh`.
 
 ## 6. Evaluate predictions
 
-Development and experiment evaluation is performed by the existing training
-and GRECO scripts. Test-set results and their provenance are documented in
-[`experiments/test/README.md`](../experiments/test/README.md).
-
-For the legacy CoNLL-2014 M2 scorer:
+`training.evaluate` (section 4) already reports ERRANT and M2 scores for every
+split with public references. To score any other prediction file against a gold
+M2 file, use ERRANT's own commands, installed with `requirements-train.txt`:
 
 ```bash
-python2 m2scorer/scripts/m2scorer.py \
-  predictions.txt data/test.conll14.m2
+errant_parallel -orig data/test.conll14.src -cor predictions.txt -out predictions.m2
+errant_compare -hyp predictions.m2 -ref data/test.conll14.m2
 ```
 
-ERRANT evaluation requires the ERRANT environment described by the relevant
-component README.
+CoNLL-2014's official metric is the bundled M2 scorer. It is Python 2 code;
+`training.evaluate` runs it under Python 3 automatically, and to run it by hand
+use a Python 2 environment:
+
+```bash
+python2 m2scorer/scripts/m2scorer.py predictions.txt data/test.conll14.m2
+```
+
+BEA-2019 test has no public references: submit predictions to its Codabench
+task. Test-set results and their provenance are in
+[`experiments/test/README.md`](../experiments/test/README.md) and
+[`greco_esc/results/`](../greco_esc/README.md#results).
 
 ## 7. Run training and ablations on the cluster
 

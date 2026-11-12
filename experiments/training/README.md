@@ -1,10 +1,6 @@
 # Fine-tuning experiments
 
-The [BART stage-2 hyperparameter ablations submitted on 5 November 2026](bart-ablations-20261105/README.md)
-record nine independent runs, their baseline controls, Slurm jobs, validation,
-and result-collection procedure. The historical BART/T5 results below are unchanged.
-
-This is a log of the BART/T5 fine-tuning runs: what each one tests, its config, and its results. The code and the procedure are in [`training/README.md`](../../training/README.md) and [`cluster/README.md`](../../cluster/README.md).
+This is a log of the BART/T5 fine-tuning runs: what each one tests, its config, and its results. The code and the procedure are in [`training/README.md`](../../training/README.md) and [`cluster/README.md`](../../cluster/README.md). The later BART stage-2 hyperparameter ablations (12 runs) are recorded in [`bart-ablations-20261105/`](bart-ablations-20261105/README.md), and the four curriculum controls in [`experiments/four-controls/`](../four-controls/README.md) (their per-run files are in `four-controls-20261108/`).
 
 Each run's folder (`<run>/`) is written by `cluster/train.sh` and holds:
 - the config

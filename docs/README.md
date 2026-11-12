@@ -1,17 +1,17 @@
 # Documentation
 
-This directory contains the user-facing guides for the project. Existing
-component READMEs remain beside their code so that historical links and
-experiment commands continue to work.
+Guides for running the project and finding its results. Each component also has
+its own README beside its code (for example [`training/`](../training/README.md)
+or [`greco_esc/`](../greco_esc/README.md)).
 
 - [Running the project](running.md): local setup, inference, evaluation,
   combination, tests, and cluster training.
-- [Experiment index](experiments.md): where to find baselines, ablations,
-  controls, decoding studies, and test-set results.
-- [Public Hugging Face models](running.md#9-use-the-public-team-models):
-  token-free downloading and inference guidance for reviewers.
+- [Public Hugging Face models](running.md#9-use-the-public-team-models): how to
+  download and run the trained BART and T5 models, with no account or token.
+- [Experiment index](experiments.md): where each study's write-up and results are.
+- [Headline results](../results/README.md): a one-page summary of the main numbers.
 
-Generated predictions, checkpoints, logs, caches, and local scratch files are
-not part of the source of truth. They should be written to ignored directories
-such as `outputs/`, `checkpoints/`, `logs/`, or `artifacts/`. Curated scores,
-configs, manifests, and experiment notes belong under `experiments/`.
+Results are committed as scores, write-ups and, under `experiments/`, the
+predictions they were computed from. Checkpoints, n-best lists, logs and other
+generated files are not committed; they go to git-ignored directories such as
+`outputs/`, `checkpoints/` and `logs/`.
