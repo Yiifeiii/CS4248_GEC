@@ -69,6 +69,9 @@ for set in "${SETS[@]}"; do
   fi
 done
 python -m greco_esc.prepare final_esc "${SETS[@]}"
+# The trained ESC models are committed (greco_esc/esc_weights); put them in place so ESC is
+# not retrained. GRECO_ESC_RETRAIN=1 trains from scratch instead.
+python -m greco_esc.prepare restore_esc
 
 # 2-3. ESC, trained per k on the full dev set, and GRECO, on each test set
 use greco

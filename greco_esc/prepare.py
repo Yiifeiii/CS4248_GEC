@@ -25,10 +25,20 @@ folder, runs/esc/final/k<k>/<test set>, links that set's inputs and source, with
 scores: ESC's --score output has one JSON list of [start, end, correction, probability] per
 sentence. GRECO adds log(p) and log(1 - p) for each edit, so a probability of exactly 0 or 1
 would stop it; those are clipped to [1e-6, 1 - 1e-6].
+
+restore_esc: puts the trained ESC models committed in greco_esc/esc_weights/ (model.pt and
+vocab.idx, a few KB each, checked against SHA256SUMS) into runs/esc/<same path>/model/, so run.sh
+and test.sh find them and skip training. A model already in place is left alone. Set
+GRECO_ESC_RETRAIN=1 to skip this and train ESC from scratch instead.
+
+save_esc: the reverse, for whoever retrains: copies every trained model from runs/esc/ into
+esc_weights/ and rewrites SHA256SUMS.
 """
 
+import hashlib
 import json
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -184,8 +194,61 @@ def fix_scores(k, split=None):
     print(f'k{k}: {sum(len(s) for s in scores)} edit scores for {n} sentences in {out}')
 
 
+WEIGHTS = Path('greco_esc/esc_weights')
+WEIGHT_FILES = ('model.pt', 'vocab.idx')
+
+
+def sha256(path):
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def committed_models():
+    """{relative ESC home, e.g. final/k3: its folder in esc_weights}."""
+    return {d.relative_to(WEIGHTS).as_posix(): d for d in sorted(WEIGHTS.rglob('*'))
+            if d.is_dir() and all((d / f).is_file() for f in WEIGHT_FILES)}
+
+
+def restore_esc():
+    if os.environ.get('GRECO_ESC_RETRAIN') == '1':
+        print('GRECO_ESC_RETRAIN=1: not restoring the committed ESC models; ESC will be trained')
+        return
+    sums = dict(reversed(line.split(maxsplit=1)) for line in
+                (WEIGHTS / 'SHA256SUMS').read_text(encoding='utf-8').splitlines() if line.strip())
+    restored = 0
+    for rel, src in committed_models().items():
+        dst = settings.ROOT / 'esc' / rel / 'model'
+        if (dst / 'model.pt').is_file() and (dst / 'model.pt').stat().st_size > 0:
+            continue
+        for f in WEIGHT_FILES:
+            if sha256(src / f) != sums.get(f'{rel}/{f}'):
+                sys.exit(f'{src / f}: checksum differs from {WEIGHTS / "SHA256SUMS"}')
+        dst.mkdir(parents=True, exist_ok=True)
+        for f in WEIGHT_FILES:
+            shutil.copyfile(src / f, dst / f)
+        restored += 1
+    print(f'restored {restored} committed ESC models from {WEIGHTS} into {settings.ROOT / "esc"}')
+
+
+def save_esc():
+    lines = []
+    for model in sorted((settings.ROOT / 'esc').rglob('model/model.pt')):
+        home = model.parent.parent
+        rel = home.relative_to(settings.ROOT / 'esc').as_posix()
+        out = WEIGHTS / rel
+        out.mkdir(parents=True, exist_ok=True)
+        for f in WEIGHT_FILES:
+            shutil.copyfile(model.parent / f, out / f)
+            lines.append(f'{sha256(out / f)}  {rel}/{f}')
+    (WEIGHTS / 'SHA256SUMS').write_text('\n'.join(lines) + '\n', encoding='utf-8')
+    print(f'saved {len(lines) // 2} ESC models to {WEIGHTS}')
+
+
 def main(argv):
-    if argv[:1] == ['m2'] and len(argv) == 2:
+    if argv == ['restore_esc']:
+        restore_esc()
+    elif argv == ['save_esc']:
+        save_esc()
+    elif argv[:1] == ['m2'] and len(argv) == 2:
         build_m2(argv[1])
     elif argv == ['esc']:
         build_esc()
@@ -195,7 +258,7 @@ def main(argv):
         build_final_esc(argv[1:])
     else:
         sys.exit('usage: python3 -m greco_esc.prepare m2 <split> | esc | scores <k> [split] '
-                 '| final_esc <test set>...')
+                 '| final_esc <test set>... | restore_esc | save_esc')
 
 
 if __name__ == '__main__':
