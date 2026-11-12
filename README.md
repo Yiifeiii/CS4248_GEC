@@ -14,7 +14,8 @@ Run commands from the repository root. The complete, maintained runbook is in
 [`docs/running.md`](docs/running.md); the short version is:
 
 ```bash
-python3 -m venv .venv
+# Use Python 3.11 or 3.12 (the pinned training dependencies do not support 3.14).
+python3.12 -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements-train.txt
 python -m unittest discover -s tests -v
