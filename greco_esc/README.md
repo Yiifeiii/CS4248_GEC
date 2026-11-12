@@ -38,7 +38,7 @@ This combines our three systems the way the GRECO paper's strongest setup does (
 - [`results/conll14.md`](results/conll14.md): CoNLL-2014 test, M2 (official) and ERRANT, with P / R.
 - `results/{dev,conll14}.csv`: the raw scores, one row per output, copied from `runs/` (which is not tracked).
 
-To reproduce every number, follow [section 3](#3-how-to-run) from the top.
+**Run the models yourself:** after the one-time setup, `bash greco_esc/predict.sh --split conll14_test --preset best-dev --out <dir>` runs the main result. See [Run a trained combination](#run-a-trained-combination) for every k, vote and preset. To reproduce every number, follow [section 3](#3-how-to-run) from the top.
 
 ## 1. The method
 
@@ -170,6 +170,48 @@ The difflib-edit tuning in `outputs/greco/tuning/dev_tune/` is an earlier run, r
 ## 3. How to run
 
 Run everything from the repository root (`~/CS4248_GEC` on the cluster). Jobs go through `cluster/job.sbatch`, which runs offline on an H100.
+
+### Run a trained combination
+
+After the [one-time setup](#one-time-setup), one command runs any combination on a split or on your own file. It uses the trained ESC models committed in [`esc_weights/`](esc_weights/), the public BART and T5 models on Hugging Face, and the released GRECO checkpoint, so nothing is trained. It writes `pred.txt`, one corrected sentence per line, and, where the split has public gold, `scores.json` with ERRANT and M2 precision, recall and F0.5. It needs one GPU; on the SoC cluster, put `sbatch -J greco-predict --time=3:00:00 cluster/job.sbatch` in front of it.
+
+**The three reported models:**
+
+```bash
+# Main result: GRECO + ESC, k = 3, rank vote 0.4 (chosen on BEA-2019 dev)
+bash greco_esc/predict.sh --split conll14_test --preset best-dev --out outputs/review/greco-esc-best-dev
+
+# Highest on BEA-2019 test: GRECO + ESC, k = 2, system vote 0.1
+bash greco_esc/predict.sh --split bea19_test --preset best-bea19 --out outputs/review/greco-esc-best-bea19
+
+# Highest on CoNLL-2014 test: GRECO alone, k = 2, rank vote 0.2
+bash greco_esc/predict.sh --split conll14_test --preset best-conll14 --out outputs/review/greco-best-conll14
+```
+
+**Any other combination.** Set k, the vote and ESC yourself:
+
+```bash
+bash greco_esc/predict.sh --split dev_test --k 5 --vote_mode hypothesis --vote_coef 0.1 --out outputs/review/k5-hyp
+bash greco_esc/predict.sh --split dev_test --k 1 --vote_coef 0 --no-esc --out outputs/review/k1-greco-alone
+```
+
+| Option | Values | Default |
+|---|---|---|
+| `--split` | `dev_tune`, `dev_test`, `conll14_test`, `bea19_test`, or a path to a file of tokenized sentences | required |
+| `--preset` | `best-dev`, `best-bea19`, `best-conll14` (sets the four options below) | none |
+| `--k` | 1, 2, 3 or 5: hypotheses taken from each of BART and T5 | 3 |
+| `--vote_mode`, `--vote_coef` | `hypothesis`, `system` or `rank`, and its α (0 = no vote); the α used in the results are in [section 2](#2-settings) | `rank`, 0.4 |
+| `--no-esc` | GRECO alone, without ESC's edit scores | ESC on |
+| `--limit N` | only the first N sentences, for a quick check | all |
+
+**Which ESC model is used.** Each split is scored with an ESC model that never saw its gold edits, as in the results: `dev_test` uses `esc_weights/k<k>` (trained on `dev_tune`), `dev_tune` uses `esc_weights/k<k>/for-dev_tune` (trained on `dev_test`), and CoNLL-2014, BEA-2019 and your own files use `esc_weights/final/k<k>` (trained on the full dev set).
+
+**Scoring.**
+- **CoNLL-2014** needs its gold M2 from Git LFS: run `git lfs pull --include data/test.conll14.m2` first.
+- **BEA-2019 test** has no public gold. Zip `pred.txt` and submit it to the BEA-2019 Codabench task.
+- **The expected scores** are in [`results/`](results/). For example, `--split conll14_test --preset best-dev` should give 66.14 M2 F0.5 and 64.47 ERRANT F0.5. A different GPU may decode a few sentences differently, so expect a match within a few tenths of a point.
+
+**A quick check first:** add `--limit 20` to run 20 sentences in a few minutes before a full split.
 
 ### Reproduce every number, in order
 
@@ -330,6 +372,7 @@ The end-to-end test runs only with `external/esc` and `external/greco` in place 
 | `run.sh` | The cluster job: candidates, M2 files, ESC, GRECO, scores |
 | `combine.py` | Upstream `run_combination.py` with `--vote_mode hypothesis/system/rank` |
 | `test.sh` | Every combination on CoNLL-2014 and BEA-2019, with ESC trained on the full dev set |
+| `predict.sh`, `predict.py` | Run one combination (any k, vote, with or without ESC) on a split or a file, with the committed ESC models |
 | `prepare.py` | `m2 <split>`: text and M2 per ranked output; `esc`: ESC folders per k; `scores <k>`: checks and clips ESC's scores; `restore_esc` / `save_esc`: the committed ESC models |
 | `esc_weights/` | The 12 trained ESC models and their checksums |
 | `codabench.py` | Zips each finished BEA-2019 output for Codabench |

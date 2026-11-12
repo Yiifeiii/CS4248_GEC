@@ -226,6 +226,36 @@ class FullDevTests(unittest.TestCase):
 class TestSetTests(unittest.TestCase):
     """test.sh: every combination, ESC trained on the full dev set, test sets never trained on."""
 
+    def test_predict_presets_are_the_three_reported_models(self):
+        from greco_esc import predict
+        runs = {(n, k): (v, e, m) for n, k, v, e, m in settings.runs()}
+        self.assertEqual(settings.PRESETS['best-dev'], settings.BEST_DEV_RUN)
+        for name, (run, k) in settings.PRESETS.items():
+            self.assertIn((run, k), runs, name)
+        self.assertEqual(runs[settings.PRESETS['best-conll14']][1], False)  # no ESC on CoNLL-2014
+
+    def test_predict_never_scores_a_split_with_an_esc_trained_on_it(self):
+        from greco_esc import predict
+        self.assertEqual(predict.esc_model('dev_test', 3).as_posix(), 'greco_esc/esc_weights/k3')
+        self.assertEqual(predict.esc_model('dev_tune', 3).as_posix(), 'greco_esc/esc_weights/k3/for-dev_tune')
+        for split in ('conll14_test', 'bea19_test', 'my_file.txt'):
+            self.assertEqual(predict.esc_model(split, 5).as_posix(), 'greco_esc/esc_weights/final/k5')
+        for k in settings.KS:
+            for split in ('dev_test', 'dev_tune', 'conll14_test'):
+                self.assertTrue((predict.esc_model(split, k) / 'model.pt').is_file())
+
+    def test_predict_limit_cuts_source_and_gold_together(self):
+        import tempfile
+        from greco_esc import predict
+        with tempfile.TemporaryDirectory() as tmp:
+            import contextlib, io
+            with contextlib.redirect_stdout(io.StringIO()):
+                predict.write_inputs('dev_test', Path(tmp), 4)
+            sources = Path(tmp, 'source.txt').read_text(encoding='utf-8').splitlines()
+            gold = [b.split('\n')[0][2:] for b in Path(tmp, 'gold.m2').read_text(encoding='utf-8').strip().split('\n\n')]
+            self.assertEqual(len(sources), 4)
+            self.assertEqual(gold, sources)
+
     def test_every_esc_model_is_committed_with_its_checksum(self):
         from greco_esc import prepare
         homes = {f'final/k{k}' for k in settings.KS} | {f'k{k}' for k in settings.KS} \

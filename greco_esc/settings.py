@@ -61,6 +61,13 @@ TEST_SETS = {
 # The best model on each test set is reported next to it, labelled as picked on that test set.
 BEST_DEV_RUN = ('greco+esc.rank0.4', 3)  # GRECO + ESC, k = 3, rank vote 0.4: 60.35 on the full dev set
 
+# The three models to report (README, "Results"), by name for predict.sh --preset:
+PRESETS = {
+    'best-dev': BEST_DEV_RUN,                    # main result: chosen on BEA-2019 dev
+    'best-bea19': ('greco+esc.system0.1', 2),    # highest on BEA-2019 test (77.45)
+    'best-conll14': ('greco.rank0.2', 2),        # highest on CoNLL-2014 test (67.98 M2), no ESC
+}
+
 SCORE_RATIO = 0.7  # weight of the ESC edit scores, as in the paper's GRECO + ESC command
 BEAM_SIZE = 16     # paper and upstream README
 BATCH_SIZE = 16    # paper and upstream README; scores do not depend on it with the attention-mask fix
