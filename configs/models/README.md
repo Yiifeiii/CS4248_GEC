@@ -1,28 +1,22 @@
-# Model references
+# Released models
 
-The team's released model repositories are public, so users can download them
-without a Hugging Face account or token. The canonical IDs are listed in
-[`public_models.json`](public_models.json).
+The project's five main BART and T5 models are published on Hugging Face in the
+[CS4248-GEC](https://huggingface.co/CS4248-GEC) organization. The repositories
+are public: downloading them needs no Hugging Face account or token. Their IDs
+are also listed in [`public_models.json`](public_models.json).
 
-Model weights do not belong in Git. Store the public Hugging Face repository ID
-in configs and let `transformers` download the files into its local cache.
+| Hugging Face repository | Training | dev_test F0.5 |
+|---|---|---|
+| [`CS4248-GEC/gec-bart-base-s1`](https://huggingface.co/CS4248-GEC/gec-bart-base-s1) | BART-base, stage 1 only | 43.8 |
+| [`CS4248-GEC/gec-bart-base-s1s2`](https://huggingface.co/CS4248-GEC/gec-bart-base-s1s2) | BART-base, stage 1 + stage 2 | 52.3 |
+| [`CS4248-GEC/gec-t5-base-s1`](https://huggingface.co/CS4248-GEC/gec-t5-base-s1) | T5-base, stage 1 only | 46.4 |
+| [`CS4248-GEC/gec-t5-base-s1s2`](https://huggingface.co/CS4248-GEC/gec-t5-base-s1s2) | T5-base, stage 1 + stage 2 | 52.5 |
+| [`CS4248-GEC/gec-t5-base-long-s1s2`](https://huggingface.co/CS4248-GEC/gec-t5-base-long-s1s2) | T5-base, longer stage 1 + longer stage 2 | 53.2 (best) |
 
-Training configs already support environment-variable expansion for `init`, so
-a local model override can use:
+Stage 1 trains on BEA-2019 data; stage 2 continues on W&I train. Each model
+card lists the training details and scores. The runs that produced them are
+recorded in [`experiments/training/`](../../experiments/training/README.md),
+and their configs are in [`configs/training/`](../training/).
 
-```json
-{
-  "init": "${HF_BART_MODEL}"
-}
-```
-
-Then set the value at runtime:
-
-```bash
-export HF_BART_MODEL="CS4248-GEC/gec-bart-base-s1s2"
-python -m training.finetune --config configs/training/my-bart.json
-```
-
-Public repositories do not need a token. Never commit a token, a local
-Hugging Face cache, or the checkpoint files. See
+To download and run them, see
 [`docs/running.md`](../../docs/running.md#9-use-the-public-team-models).

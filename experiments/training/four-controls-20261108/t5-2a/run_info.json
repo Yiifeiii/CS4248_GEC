@@ -31,9 +31,9 @@
     "optimization_stage": 1,
     "logical_epochs": 3
   },
-  "config_path": "configs/training/four-controls/t5-2a.json",
+  "config_path": "training/configs/four-controls/t5-2a.json",
   "args": {
-    "config": "configs/training/four-controls/t5-2a.json",
+    "config": "training/configs/four-controls/t5-2a.json",
     "resume": "auto",
     "output_dir": null,
     "max_steps": null,

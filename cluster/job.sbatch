@@ -5,7 +5,7 @@
 #
 # The first argument is the pipeline script; the rest are passed on to it.
 # Submit from the repository root, naming the job after the run:
-#   sbatch -J bart-base.s1 cluster/job.sbatch cluster/train.sh training/configs/bart-base.stage1.json
+#   sbatch -J bart-base.s1 cluster/job.sbatch cluster/train.sh configs/training/bart-base.stage1.json
 #
 # --time is a starting value: check the partition limit with `sinfo -o "%P %l"`
 # and override it per job (sbatch --time=...). Training resumes from its last

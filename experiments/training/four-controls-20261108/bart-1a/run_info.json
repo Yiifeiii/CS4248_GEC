@@ -31,9 +31,9 @@
     "optimization_stage": 1,
     "logical_epochs": null
   },
-  "config_path": "configs/training/four-controls/bart-1a.json",
+  "config_path": "training/configs/four-controls/bart-1a.json",
   "args": {
-    "config": "configs/training/four-controls/bart-1a.json",
+    "config": "training/configs/four-controls/bart-1a.json",
     "resume": "auto",
     "output_dir": null,
     "max_steps": null,

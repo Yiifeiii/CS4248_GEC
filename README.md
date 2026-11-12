@@ -40,9 +40,8 @@ The source remains in the component directories (`training/`, `bart/`, `t5/`,
 [`results/`](results/). The released model IDs are listed in
 [`configs/models/public_models.json`](configs/models/public_models.json).
 
-The [public model runbook](docs/running.md#9-use-the-public-team-models) lets
-your professor download and run the models without a Hugging Face account or
-token.
+The trained BART and T5 models are public on Hugging Face and can be downloaded
+and run without an account or token; see [`configs/models/`](configs/models/README.md).
 
 ## Current status
 
@@ -214,25 +213,6 @@ Planned external components:
 
 The group will implement fine-tuning, n-best generation, edit pooling, agreement features, and analysis scripts. These external model integrations are planned dependencies and are not bundled in this repository, apart from the existing M² scorer.
 
-### 4. Breakdown of work
-
-| Responsibility | Allocation |
-| --- | --- |
-| Fine-tune baseline models and lead comparative evaluation | Haleema |
-| Implement and test enhancements and ablations | Raeeda, Yifei |
-| Lead report writing and consolidate results | One member |
-| Contribute report sections and the final presentation | All members |
-
-Work will proceed concurrently, with report writing alongside model development.
-
-### 5. Schedule
-
-| Dates | Planned work |
-| --- | --- |
-| 1–7 October | Run baseline models |
-| 8 October–4 November | Develop and tune enhanced n-best models; write the report in parallel |
-| 5–12 November | Final model evaluation and presentation video filming |
-
 ## References
 
 - Bryant, C., Felice, M., & Briscoe, T. (2017). Automatic annotation and evaluation of error types for grammatical error correction. ACL, 793–805. https://doi.org/10.18653/v1/P17-1074
@@ -247,3 +227,9 @@ Work will proceed concurrently, with report writing alongside model development.
 - Raina, V., & Gales, M. (2023). Minimum Bayes' risk decoding for system combination of grammatical error correction systems. IJCNLP-AACL, Volume 2, 105–112. https://doi.org/10.18653/v1/2023.ijcnlp-short.12
 
 For use of the bundled M² scorer, its README requests citation of Dahlmeier, D., & Ng, H. T. (2012), *Better Evaluation for Grammatical Error Correction*, NAACL-HLT.
+
+## AI declaration
+
+AI coding agents were used to help write and debug code in this repository. The
+research ideas, experiment design and core parts of the work are the group's own,
+and every result reported here comes from experiments the group designed and ran.

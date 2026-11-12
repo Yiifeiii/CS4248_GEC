@@ -137,48 +137,40 @@ curated scores are retained to prevent accidental duplicate training.
 
 ## 9. Use the public team models
 
-The released checkpoints in `configs/models/public_models.json` are public.
-Your professor does not need a Hugging Face account, login, or token.
+The five trained BART and T5 models are public on Hugging Face, so no account,
+login or token is needed. What each model is and how it scores is listed in
+[`configs/models/README.md`](../configs/models/README.md).
 
-Install the inference dependencies:
+Set up the environment from [step 1](#1-install-a-local-environment). Every
+script in this repository accepts a Hugging Face ID wherever it accepts a
+checkpoint directory. The first run downloads the model into the local Hugging
+Face cache (`~/.cache/huggingface` by default) and later runs reuse it.
 
-```bash
-python3.12 -m venv .venv-review
-source .venv-review/bin/activate
-python -m pip install -r requirements-train.txt
-```
-
-Run BART or T5 directly by public model ID. The first run downloads the model
-into the local Hugging Face cache; later runs reuse it:
+To correct and score the dev_test split:
 
 ```bash
-python -m training.evaluate \
-  --model CS4248-GEC/gec-bart-base-s1s2 \
-  --split dev_test \
-  --out outputs/review/bart-s1s2
-
 python -m training.evaluate \
   --model CS4248-GEC/gec-t5-base-s1s2 \
   --split dev_test \
   --out outputs/review/t5-s1s2
 ```
 
-The long T5 checkpoint is also available:
+Replace the model ID with any of the five. This writes `dev_test.pred` (one
+corrected sentence per line) and `dev_test.scores.json` to the `--out`
+directory. The scripts add T5's `gec: ` prefix and restore characters that
+T5's vocabulary cannot encode, so the output is ready for ERRANT, the M2 scorer
+or Codabench. To produce n-best lists for GRECO, use
+`bart/generate_nbest.py --model <ID>`, which works for both BART and T5.
 
-```bash
-python -m training.evaluate \
-  --model CS4248-GEC/gec-t5-base-long-s1s2 \
-  --split dev_test \
-  --out outputs/review/t5-long-s1s2
-```
-
-To download all released checkpoints in advance, use:
+To download all five models in advance, for example on a machine that will
+later run offline:
 
 ```bash
 bash scripts/download_public_models.sh
 ```
 
-For a reproducible review, record the model ID, GitHub commit, evaluation
-split, and command used. Do not copy model weights, caches, or tokens into
-GitHub. If the public repositories are later made private or gated, these
-commands will require Hugging Face authentication.
+This needs the `hf` command from `huggingface_hub`, which `requirements-train.txt`
+installs as a dependency of `transformers`. A single model can be fetched with
+`hf download CS4248-GEC/<repo>`. On the NUS SoC cluster, jobs run offline, so
+download on a compute node with `HF_HOME` set to the scratch cache; see
+[`cluster/README.md`](../cluster/README.md).

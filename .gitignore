@@ -31,6 +31,9 @@ artifacts/
 *.bin
 *.ckpt
 *.pred
+# Predictions recorded with an experiment's scores stay trackable (bea19_test.pred is
+# the only record behind its Codabench score). The ablation rule below still excludes those.
+!experiments/**/*.pred
 *.nbest.jsonl
 
 # GRECO + ESC outputs: written by the cluster jobs and copied back with rsync. Not tracked,
