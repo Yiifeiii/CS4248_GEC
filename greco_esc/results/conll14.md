@@ -83,7 +83,7 @@ k is the number of hypotheses taken from each of BART and T5. GECToR always give
 2. **Every GRECO run, with or without ESC, beats every single system on M2.** The lowest, GRECO alone at k = 5 with no vote, scores 64.90, against 64.03 for GECToR, 63.23 for BART and 63.12 for T5. ESC alone is level with GECToR at k = 1 (64.02) and below it at larger k.
 3. **The best CoNLL-2014 model is GRECO alone, k = 2, `rank` 0.2, at 67.98 M2** (P 76.06 / R 47.72). It is 1.84 above the best dev model. It was picked by its test score, so it shows the best this setup reaches on CoNLL-2014, not a held-out estimate.
 4. **ESC lowers M2 at k = 1 to 3**, by 0.5–2.3 points in every pair, and raises it at k = 5 except with `rank` voting. On ERRANT, ESC raises the score in 13 of the 14 pairs (the one exception is k = 2 `hypothesis`, −0.05). So on CoNLL-2014, whether ESC helps depends on the metric.
-5. **ESC trades recall for precision.** Against GRECO alone with the same voting, ERRANT precision rises by 5–16 points and recall falls by 5–13. F0.5 weights precision more, but on CoNLL-2014's M2 the recall loss is larger than the precision gain at k ≤ 3.
+5. **ESC trades recall for precision, as on BEA-2019.** Against GRECO alone with the same voting, ERRANT precision rises by 5–16 points and recall falls by 5–13 (on BEA-2019 dev: +4.3–15.7 and −4.3–10.2, [`dev.md`](dev.md)). F0.5 weights precision more, but on CoNLL-2014's M2 the recall loss is larger than the precision gain at k ≤ 3.
 6. **Voting matters more without ESC.** GRECO alone at k = 5 goes from 64.90 with no vote to 67.28 with `rank` 0.6. With ESC, the vote modes at a given k stay within 1.1 points of each other.
 
 ## Why ESC helps on BEA-2019 but not on CoNLL-2014 M2

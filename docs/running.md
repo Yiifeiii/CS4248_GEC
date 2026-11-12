@@ -105,6 +105,21 @@ Use `--with-gector` when `outputs/gector/dev30.tgt` is available. For the
 official GRECO scorer, tuning, and GRECO + ESC evaluation, follow the commands
 in the component READMEs and `cluster/greco_tune.sh`.
 
+**GRECO + ESC, the main result.** After the one-time setup in
+[`greco_esc/README.md`](../greco_esc/README.md#one-time-setup), `predict.sh`
+runs one combination on a split or a file with the committed ESC models, and
+writes `pred.txt` and, where there is public gold, `scores.json`:
+
+```bash
+bash greco_esc/predict.sh --split conll14_test --preset best-dev \
+  --out outputs/review/greco-esc-best-dev
+```
+
+`--preset` is `best-dev` (the main result), `best-bea19` or `best-conll14`.
+Instead, `--k 1|2|3|5 --vote_mode hypothesis|system|rank --vote_coef <alpha>`
+and `--no-esc` choose any other combination. It needs one GPU. See
+[Run a trained combination](../greco_esc/README.md#run-a-trained-combination).
+
 ## 6. Evaluate predictions
 
 `training.evaluate` (section 4) already reports ERRANT and M2 scores for every

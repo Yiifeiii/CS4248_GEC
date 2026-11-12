@@ -81,6 +81,7 @@ None of them overtook the best dev model, which has the same α (0.4) under both
 1. **The best dev model is GRECO + ESC, k = 3, `rank` 0.4, at 60.35** (P 71.88 / R 36.76), 5.6 points above GECToR (54.77).
 2. **GRECO + ESC is flat across k**, at 59.59–60.35 for all 14 GRECO + ESC rows. GRECO alone falls as k grows, from 59.85 at k = 1 to 53.81–57.50 at k = 5. More hypotheses give GRECO more wrong edits to choose from, and ESC filters them out.
 3. **ESC's gain grows with k**: +0.4 to +1.1 at k = 1, +1.6 to +2.6 at k = 2, +2.3 to +4.0 at k = 3 and +2.1 to +6.2 at k = 5.
+   **It trades recall for precision.** Against GRECO alone with the same voting, precision rises by 4.3–15.7 points and recall falls by 4.3–10.2. ESC skips edits it gives a low probability, including some correct ones. The trade is largest at large k, where the extra hypotheses add the most wrong edits. The same trade appears on CoNLL-2014 ([`conll14.md`](conll14.md)).
 4. **All GRECO + ESC rows beat ESC alone** (58.65–59.10) and every single system (BART 53.07, T5 53.74, GECToR 54.77).
 5. **The top runs are close together.** The best dev model is the highest, and five other GRECO + ESC rows are within 0.15 of it: k = 1 no vote (60.31), k = 3 `system` (60.31), k = 3 no vote (60.23), k = 2 `system` (60.22) and k = 1 vote 0.1 (60.21).
 

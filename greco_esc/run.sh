@@ -56,6 +56,9 @@ for split in dev_tune dev_test; do
   fi
 done
 python -m greco_esc.prepare esc
+# The trained ESC models are committed (greco_esc/esc_weights); put them in place so ESC is
+# not retrained. GRECO_ESC_RETRAIN=1 trains from scratch instead.
+python -m greco_esc.prepare restore_esc
 
 # 3-4 run on each test split: dev_test (ESC trained on dev_tune) and then dev_tune (ESC trained
 # on dev_test), so that the full dev set can be scored without ESC seeing a sentence's gold edits
