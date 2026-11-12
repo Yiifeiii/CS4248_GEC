@@ -3,17 +3,38 @@ __pycache__/
 *.pyc
 *.log
 .venv/
+.venv-*/
 .venv-greco/
+**/.venv/
 external/
-models/
+/models/
+/gector/models/
 logs/
 checkpoints/
+.pytest_cache/
+__pycache__/
+*.egg-info/
 # Rebuilt by training/build_data.py (sha256 in data/curriculum/manifest.json)
 data/curriculum/stage1.*
 outputs/greco/tuning/score_cache.jsonl
 # Old T5 tuning results moved aside before a rerun (see t5_tuning/README.md, section 7)
 t5_tuning/past_runs/
 outputs/greco/codabench_bea19/
+
+# Local scratch and generated artifacts. Curated scores and experiment notes
+# under experiments/ remain tracked; these paths are safe to recreate.
+check/
+tmp/
+output/
+artifacts/
+*.safetensors
+*.bin
+*.ckpt
+*.pred
+# Predictions recorded with an experiment's scores stay trackable (bea19_test.pred is
+# the only record behind its Codabench score). The ablation rule below still excludes those.
+!experiments/**/*.pred
+*.nbest.jsonl
 
 # GRECO + ESC outputs: written by the cluster jobs and copied back with rsync. Not tracked,
 # because a tracked file that also exists untracked on the cluster stops `git pull` there.

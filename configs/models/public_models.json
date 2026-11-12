@@ -1,0 +1,11 @@
+{
+  "bart": {
+    "stage1": "CS4248-GEC/gec-bart-base-s1",
+    "stage2": "CS4248-GEC/gec-bart-base-s1s2"
+  },
+  "t5": {
+    "stage1": "CS4248-GEC/gec-t5-base-s1",
+    "stage2": "CS4248-GEC/gec-t5-base-s1s2",
+    "long_stage2": "CS4248-GEC/gec-t5-base-long-s1s2"
+  }
+}

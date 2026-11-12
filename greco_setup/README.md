@@ -1,6 +1,13 @@
-# Manual GRECO combination
+# GRECO combination
 
-This standalone entry point accepts manual BART/T5 proposals. Neither generator needs to be installed. It pools their edits, searches compatible combinations, uses the official GRECO model to score each beam expansion, and returns the best surviving sentence.
+This folder combines corrections from several GEC systems with GRECO (Qorib & Ng, 2023). It pools the systems' edits, searches compatible combinations, uses the official GRECO model to score each beam expansion, and returns the best surviving sentence. It covers:
+
+- combining hand-written proposals ([below](#provide-manual-input)), with no generator installed;
+- building the input from system output files ([From system output files](#from-system-output-files));
+- voting between systems, and tuning the vote weight α on dev ([Voting](#voting));
+- running the tuned settings on CoNLL-2014 and BEA-2019 test ([BEA-2019 test set](#bea-2019-test-set)).
+
+The test-set scores of these runs are in [`experiments/test/README.md`](../experiments/test/README.md). The project's final combination, which adds ESC edit scores to GRECO, is in [`greco_esc/`](../greco_esc/README.md).
 
 ## Try candidate generation now
 
@@ -23,7 +30,7 @@ Dry-run mode enumerates combinations, sets scores and `best_sentence` to null, a
 
 ## Install the real scorer
 
-Use a separate **Python 3.10** environment. The official dependency versions date from 2022 and do not support the Python 3.14 interpreter found in this checkout. A Linux machine with a CUDA GPU is recommended for DeBERTa-v3-large; CPU inference is supported but resource intensive. Installation also downloads the large GRECO checkpoint and, on first scoring, the DeBERTa backbone/tokenizer. Allow several GB of disk and memory.
+Use a separate **Python 3.10** environment. The official dependency versions date from 2022 and do not install on newer Python versions. A Linux machine with a CUDA GPU is recommended for DeBERTa-v3-large; CPU inference is supported but resource intensive. Installation also downloads the large GRECO checkpoint and, on first scoring, the DeBERTa backbone/tokenizer. Allow several GB of disk and memory.
 
 ```bash
 python3.10 -m venv .venv-greco
@@ -39,7 +46,7 @@ For a compatible CUDA installation, use `--device cuda`. Match the PyTorch insta
 
 If the checkpoint download is interrupted, rerun `bash greco_setup/setup.sh` in the same environment. The download resumes from `models/greco/checkpoint.bin.partial`; keep that file. The script renames it to `checkpoint.bin` only after curl completes successfully.
 
-The real scorer setup and pretrained inference have not been validated on the local Python 3.14 environment. Core edit combination and CLI behavior are covered by the tests below. If dependencies are already installed elsewhere, pass `--greco-repo /path/to/greco --checkpoint /path/to/checkpoint.bin`.
+Core edit combination and CLI behavior are covered by the tests below. If dependencies are already installed elsewhere, pass `--greco-repo /path/to/greco --checkpoint /path/to/checkpoint.bin`.
 
 ## Provide manual input
 
@@ -61,7 +68,7 @@ Offsets refer to the **original source tokens**, starting at zero, with an exclu
 
 Sentence proposals are converted with Python's token-level `SequenceMatcher`, which can merge adjacent differences into one edit and split the same correction differently in different hypotheses. For experiments, give explicit ERRANT edits instead: `python -m greco_setup.extract_edits` (in an environment with errant, e.g. gec-train) writes `<prediction file>.errant.jsonl` next to each prediction file, and `tune_vote.py` uses them by default (`--edits errant`). These are the same edit units ERRANT scores against the gold M2. Insertions that ERRANT splits at one position (`their` → `his or her`: +his, +or, their→her) are joined in order (+"his or"), because `combine.py` treats insertions at one position as alternatives.
 
-Multiple BART/T5 hypotheses are supported by adding more proposal objects. The `system` and `rank` fields are descriptive metadata; this version does not add voting/agreement weights or GECToR-specific behavior.
+Multiple BART/T5 hypotheses are supported by adding more proposal objects. The `system` and `rank` fields are what [voting](#voting) counts; without `--vote-coef`, they are descriptive metadata only.
 
 ## From system output files
 
@@ -129,14 +136,6 @@ Predictions: `outputs/greco/tuning/bea19.errant.beam/k<k>/<mode>/alpha<a>.tgt`, 
 
 Results: `outputs/greco/tuning/<split>.errant/scores.csv`. `outputs/greco/tuning/dev_tune/` holds the earlier run with difflib edits and without the duplicate and empty-sentence fixes (`--edits difflib` writes there). The score cache (`outputs/greco/tuning/score_cache.jsonl`) is not committed; it is keyed by sentence, so the ERRANT runs reuse the scores of the difflib run.
 
-## Sources
-
-- [Official GRECO code](https://github.com/nusnlp/greco), pinned to `8e509aaacf4e5ec3276d3427371471fd82a7f58b`; the adapter uses `models.GRECO.score(source, hypotheses)` and loads the released state dictionary strictly.
-- [Released checkpoint](https://huggingface.co/nusnlp/GRECO).
-- Qorib & Ng (2023), [System Combination via Quality Estimation for Grammatical Error Correction](https://aclanthology.org/2023.emnlp-main.785/).
-
-Upstream GRECO code has its own GPL license in `external/greco/LICENSE.txt`.
-
 ## BART/T5/GECToR dev30 pilot
 
 Run `python -m greco_setup.run_pilot` in the GRECO environment from the repo root.
@@ -193,7 +192,7 @@ with `vote_coef` 0.4 (the paper's value) and 0 as a control. Results are in
 | 3 | 7 | 70.0 / 38.4 / 60.1 | 64.9 | 61.4 / 37.0 / 54.2 | 58.7 |
 | 5 | 11 | 55.1 / 37.0 / 50.2 | 55.1 | 57.7 / 41.1 / 53.4 | 58.2 |
 
-Voting raises precision and F0.5 at k=3 (the best result so far), but not at k=5:
+Voting raises precision and F0.5 at k=3 (the best of these dev30 runs), but not at k=5:
 votes are counted per hypothesis, so BART's and T5's near-duplicate beams cast five
 votes each while GECToR casts one. The vote-0 control matches `combine.py`'s outputs on
 all 30 sentences at k=1 and 29 of 30 at k=3 and k=5.
@@ -212,6 +211,13 @@ The existing `bart-t5-dev30` results were produced before the outputs were
 unified. Rerunning reproduces the BART input exactly; 2 of 150 T5 lines differ
 because spaCy now separates a `?"` the old normalization left joined.
 
-Commit the runner, documentation, and pilot outputs for reproducibility.
-The output directory is not ignored by Git; prediction files, input records,
-full results, and the manifest can be versioned together.
+The pilot's committed files in `outputs/greco/` stay tracked. `outputs/` is
+otherwise git-ignored, so new outputs written there are not committed by default.
+
+## Sources
+
+- [Official GRECO code](https://github.com/nusnlp/greco), pinned to `8e509aaacf4e5ec3276d3427371471fd82a7f58b`; the adapter uses `models.GRECO.score(source, hypotheses)` and loads the released state dictionary strictly.
+- [Released checkpoint](https://huggingface.co/nusnlp/GRECO).
+- Qorib & Ng (2023), [System Combination via Quality Estimation for Grammatical Error Correction](https://aclanthology.org/2023.emnlp-main.785/).
+
+Upstream GRECO code has its own GPL license in `external/greco/LICENSE.txt`.

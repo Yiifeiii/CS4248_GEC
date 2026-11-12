@@ -4,5 +4,5 @@ outputs/**/*.m2 -filter -diff -merge text
 data/curriculum/*.m2 -filter -diff -merge text
 cluster/*.sh text eol=lf
 cluster/*.sbatch text eol=lf
-training/configs/bart-ablations-20261105/* text eol=lf
+configs/training/bart-ablations-20261105/* text eol=lf
 cluster/ablations/**/*.sh text eol=lf

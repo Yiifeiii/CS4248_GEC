@@ -1,6 +1,6 @@
 # Completed curriculum controls
 
-All eight tasks in array **1097382** completed successfully (exit0). The CPU preflight **1097381** passed.
+All eight tasks in array **1097382** completed successfully (exit code 0). The CPU preflight **1097381** passed.
 
 Each control is compared with the same original two-stage curriculum baseline for its model family.
 

@@ -16,7 +16,7 @@ def save(path, data):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--config', type=Path, default=Path('training/configs/bart-decoding-20261106.json'))
+    parser.add_argument('--config', type=Path, default=Path('configs/training/bart-decoding-20261106.json'))
     parser.add_argument('--index', type=int, required=True)
     parser.add_argument('--out', type=Path, default=Path('outputs/bart-decoding-20261106'))
     args = parser.parse_args()

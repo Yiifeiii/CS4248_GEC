@@ -40,7 +40,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
-CONFIGS = HERE / 'configs'
+CONFIGS = ROOT / 'configs' / 't5_tuning'
 RUNS = HERE / 'runs'
 MANIFEST = HERE / 'manifest.json'
 MANIFEST_TABLE = HERE / 'manifest.md'
@@ -62,7 +62,7 @@ PHASE2_PARAMS = ['wd', 'dropout', 'ls']
 # runs already on the cluster keep their names.
 STAGES = {
     1: {
-        'base_config': ROOT / 'training' / 'configs' / 't5-base.stage1.json',
+        'base_config': ROOT / 'configs' / 'training' / 't5-base.stage1.json',
         'init': None,                    # keep the base config's init (google-t5/t5-base)
         'prefix': 't5-tune.s1',
         'default': {'lr': '1e-4', 'wd': '0.01', 'dropout': '0.1', 'ls': '0.1'},
@@ -71,7 +71,7 @@ STAGES = {
         'data': 'stage1',                # its key in data/curriculum/manifest.json
     },
     2: {
-        'base_config': ROOT / 'training' / 'configs' / 't5-base.stage2.json',
+        'base_config': ROOT / 'configs' / 'training' / 't5-base.stage2.json',
         'init': 'CS4248-GEC/gec-t5-base-s1',   # the frozen stage-1 model
         'prefix': 't5-tune',
         'default': {'lr': '3e-5', 'wd': '0.01', 'dropout': '0.1', 'ls': '0.1'},

@@ -6,20 +6,20 @@ were retrieved and validated on 6 November 2026. Curated per-run scores are
 versioned; raw predictions and training histories remain local/on the cluster.
 
 Nine independent BART-only runs test learning rate, weight decay, dropout, and
-label smoothing during stage-2 adaptation. The reference is Dasha's recorded
+label smoothing during stage-2 adaptation. The reference is the original
 `bart-base.s1s2` recipe, rerun alongside the variants in the same environment.
 Each variant changes one hyperparameter; these are not cumulative changes.
 
 The complete numerical grid and launch instructions are in the
 [ablation index](../../ablations/README.md).
-The [ordered run list](../../../training/configs/bart-ablations-20261105/runs.txt)
+The [ordered run list](../../../configs/training/bart-ablations-20261105/runs.txt)
 maps each Slurm array index to a config.
 
 ## Questions and runs
 
 | Array task | Config | Difference from baseline | Question |
 |---|---|---|---|
-| `1075239_0` | `baseline` | None | Reproduce Dasha's recipe in this sweep's environment |
+| `1075239_0` | `baseline` | None | Reproduce the original recipe in this sweep's environment |
 | `1075239_1` | `lr-low` | LR 1e-5 → 5e-6 | Do smaller updates improve adaptation? |
 | `1075239_2` | `lr-high` | LR 1e-5 → 2e-5 | Do larger updates improve adaptation? |
 | `1075239_3` | `wd-zero` | Weight decay 0.01 → 0 | Is weight decay helping? |
@@ -38,7 +38,7 @@ why configuring all three preserves the baseline while making "no dropout" real.
 ## Fixed training and evaluation procedure
 
 - **Starting weights:** every run independently loads
-  `CS4248-GEC/gec-bart-base-s1`, Dasha's completed stage-1 BART model. No run starts
+  `CS4248-GEC/gec-bart-base-s1`, the group's stage-1 BART model. No run starts
   from the finished stage-2 model, another ablation, or the 200-step pilot.
 - **Training data:** the same 33,943 W&I stage-2 pairs, including 11,262 unchanged
   pairs, with the committed preprocessing, token-length limit, order, and hashes.
@@ -54,7 +54,7 @@ why configuring all three preserves the baseline while making "no dropout" real.
   training lengths despite the common five-epoch maximum.
 - **Final reporting:** decode the best checkpoint with 5 beams on dev_tune and
   dev_test (2,384 sentences), reporting ERRANT P/R/F0.5 and M2 P/R/F0.5. This
-  matches Dasha's reporting pipeline. Only dev_tune informs checkpoint and
+  matches the reporting pipeline of the original runs. Only dev_tune informs checkpoint and
   hyperparameter selection; dev_test is for the final comparison.
 
 No generator beam/group sweep, GRECO training, GECToR changes, or T5 training is
@@ -71,8 +71,8 @@ part of this experiment.
 - Training array: **1075239**, indices 0–8, at most two running concurrently.
 - Per training task: one H100-47 request, eight CPUs, 64,000 MB total requested
   host memory, `gpu-long`, four-hour time limit. Actual GPU assignment is recorded
-  in each task's `run_info.json`; hardware can differ from Dasha's historical run.
-- Software checked against Dasha's recorded versions: PyTorch **2.11.0+cu128**,
+  in each task's `run_info.json`; hardware can differ from the original `bart-base.s1s2` run.
+- Software checked against the versions recorded for the original runs: PyTorch **2.11.0+cu128**,
   Transformers **4.46.3**.
 - Stage-1 weights checked against the recorded SHA-256:
   `40b41277a8bf99c76009d5b6b7939fbdb3d118593bc87d64381e72da507e8986`.
@@ -87,7 +87,7 @@ outputs have separate paths.
 
 Both local validation and cluster preflight ran **29 tests: 28 passed and one
 GRECO integration test skipped** because it requires its separate environment.
-The tests check the grid against Dasha's recorded config, single-factor changes,
+The tests check the grid against the original stage-2 config, single-factor changes,
 noncolliding output paths, backward-compatible dropout behaviour, actual BART
 dropout propagation, and preview-only submission by default. Tiny offline BART
 tests also run two CPU updates per recipe and save/reload each model; those are
@@ -123,16 +123,9 @@ and summaries with reported results. Never resume a
 changed config into the same checkpoint folder or label the two-update smoke-test
 outputs as ablation results.
 
-## Results status
+## Results
 
-**As of 5 November 2026, 00:42:31 Asia/Singapore:** preflight passed, baseline
-task 0 was running, and tasks 1–8 were pending resources. There were no completed
-ablation results to report at that check. This is a timestamped snapshot, not a
-live status indicator.
-
-When results are collected, compare each variant against the rerun baseline using
-dev_tune, reporting P/R/F0.5, differences in F0.5 points, selected epoch/step, and
-runtime. Report dev_test as the held-out comparison. Dasha's historical 52.3
-dev_test F0.5 is a reference rather than a guaranteed bit-for-bit target. These
-are single-seed stage-2 experiments; small gains need replication, and conclusions
-do not establish optimal settings for stage 1 or every writing domain.
+All twelve runs (these nine and the three follow-ups) are compared with the rerun
+baseline in [results-all-12.md](results-all-12.md), on dev_tune and on dev_test as the
+held-out comparison. The original `bart-base.s1s2` run's 52.3 dev_test F0.5 is a
+reference.

@@ -8,5 +8,5 @@ and [all ablation workflows](../../../experiments/ablations/README.md).
 
 ```bash
 bash cluster/ablations/training/submit.sh --dry-run
-bash cluster/ablations/training/submit.sh --dry-run training/configs/bart-ablations-20261105/runs-005.txt
+bash cluster/ablations/training/submit.sh --dry-run configs/training/bart-ablations-20261105/runs-005.txt
 ```

@@ -2,7 +2,7 @@
 
 This records how the T5 hyperparameters were tuned for the GEC project. Every number comes from the run logs and results tables in `t5_tuning/` and `experiments/`. Anything that wasn't run or wasn't recorded is marked as such.
 
-## 0. Handover summary
+## 0. Summary
 
 **Outcome.** Tuning confirmed the group's default T5 settings. 21 runs were made: two noise bands, a stage-2 learning-rate sweep, weight decay, dropout and label smoothing sweeps, a stage-1 learning-rate sweep, and a stage-2 re-run on the best stage-1 model. Once both stages were trained, no change beat the defaults by more than the noise band. The final pipeline is unchanged: the group's stage-1 model `CS4248-GEC/gec-t5-base-s1`, then stage 2 at learning rate 3e-5, weight decay 0.01, dropout 0.1 and label smoothing 0.1.
 
@@ -28,7 +28,7 @@ This rebuilds `results.md` from the committed scores and prints the band and the
 |---|---|
 | `README.md` | This document: method, results, code map, how to reproduce |
 | `tune.py` | One CLI for every step: `plan`, `submit`, `preflight`, `verify`, `collect`, `test` (`python3 t5_tuning/tune.py -h`) |
-| `configs/` | The training config of each of the 21 runs (input to `training/finetune.py`) |
+| `../configs/t5_tuning/` | The training config of each of the 21 runs (input to `training/finetune.py`), written by `tune.py plan` |
 | `manifest.json`, `manifest.md` | Every planned run with its settings. The configs are checked against it. |
 | `runs/<run>/dev_tune.scores.json` | ERRANT and M² scores of each run's best checkpoint on dev_tune |
 | `runs/final-dev_test/seed<N>/dev_test.scores.json` | dev_test scores of the final configuration, one per seed |
@@ -36,16 +36,13 @@ This rebuilds `results.md` from the committed scores and prints the band and the
 | `run_one.sh`, `run_test.sh`, `preflight.sh`, `fetch_stage1.sh` | Cluster job scripts (section 6) |
 | `../tests/test_t5_tuning.py` | Tests for the configs and the run checks |
 
-**Not in the repo.** The checkpoints, predictions and Slurm logs stay on cluster scratch (`$CKPT_ROOT/<run>/`, `logs/slurm/`). Only the scores are committed. The group's T5 models are on Hugging Face as `CS4248-GEC/gec-t5-base-s1` and `CS4248-GEC/gec-t5-base-s1s2` (see `experiments/training/README.md`).
+**Not in the repo.** The checkpoints, predictions and Slurm logs stay on cluster scratch (`$CKPT_ROOT/<run>/`, `logs/slurm/`). Only the scores are committed. The group's T5 models are public on Hugging Face as `CS4248-GEC/gec-t5-base-s1`, `CS4248-GEC/gec-t5-base-s1s2` and `CS4248-GEC/gec-t5-base-long-s1s2` (see [`configs/models/README.md`](../configs/models/README.md)).
 
-**Open items for whoever picks this up**
-
-1. Add references at the `[CITATION]` markers in section 5 before this goes into the report.
-2. Optional: stage-1 learning rate 1e-3 was never run, since 3e-4 is the top of the grid. Stage-2 learning rate 5e-5 was run with only one seed.
+**Not run.** Stage-1 learning rate 1e-3 was never run, since 3e-4 is the top of the grid. Stage-2 learning rate 5e-5 was run with only one seed.
 
 ## 1. Glossary
 
-- **Default settings.** The values already in the group's config files: `training/configs/t5-base.stage1.json` for stage 1 and `training/configs/t5-base.stage2.json` for stage 2. They are fixed numbers, not random values, and they are not the base model. Each sweep changes one of them and keeps the rest at these values. The group chose them before this project, and the repo doesn't record how.
+- **Default settings.** The values already in the group's config files: `configs/training/t5-base.stage1.json` for stage 1 and `configs/training/t5-base.stage2.json` for stage 2. They are fixed numbers, not random values, and they are not the base model. Each sweep changes one of them and keeps the rest at these values. The group chose them before this project, and the repo doesn't record how.
 - **Default run.** A training run with the default settings. Its seed is 42 unless stated otherwise.
 - **Reference.** The run a candidate is compared with. For the learning-rate and regularization sweeps, it's the seed-42 default run.
 - **Base model.** The pretrained `google-t5/t5-base` weights from Hugging Face. Stage 1 starts from it. It's a different thing from the default settings.
@@ -80,7 +77,7 @@ These are the default settings the sweeps start from:
 | Epochs | 3 | Up to 5, with early stopping (patience 2) |
 | Seed | 42 | 42 |
 
-Source: `training/configs/t5-base.stage1.json` and `training/configs/t5-base.stage2.json`.
+Source: `configs/training/t5-base.stage1.json` and `configs/training/t5-base.stage2.json`.
 
 ## 3. Process
 
@@ -106,7 +103,7 @@ A value is chosen only if it beats the reference by more than the noise band. Ot
 
 Source: `t5_tuning/runs/t5-tune.base.lr3e-5.seed42/`, `seed123/` and `seed7/`, each `dev_tune.scores.json`.
 
-- **Mean** 55.45. **Range** 0.32, which is the band used for every decision. **Sample standard deviation** 0.16, which I computed from these three values.
+- **Mean** 55.45. **Range** 0.32, which is the band used for every decision. **Sample standard deviation** 0.16, computed from these three values.
 - **How precise that is:** with three values, the true standard deviation could be about half to six times 0.16 (a 95% interval), which is roughly 0.08 to 1.0.
 - **Rule:** a difference from the reference is noise when its absolute size is at most 0.32 F0.5. A candidate is chosen only if it beats the reference by more than 0.32. A smaller gain keeps the default and calls for a second seed before it's reported.
 - **Caveat:** each candidate is compared with the seed-42 default run (55.61), the highest of the three seeds. Against the three-seed mean (55.45), every delta shifts by 0.16. Negative deltas get smaller and positive deltas get larger. For example, weight decay 0.1 is −0.36 against the seed-42 run but −0.20 against the mean. It's outside the band in one comparison and inside it in the other.
@@ -123,7 +120,7 @@ Each subsection gives why the setting was varied, the values, the results and th
 
 ### 5.1 Stage-2 learning rate
 
-- **Why vary it:** the learning rate sets the size of each weight update. Stage 2 has 33,943 pairs and starts from a model that has already learned the task. A rate that's too high can overwrite that learning, and one that's too low can leave the model undertrained. [CITATION]
+- **Why vary it:** the learning rate sets the size of each weight update. Stage 2 has 33,943 pairs and starts from a model that has already learned the task. A rate that's too high can overwrite that learning, and one that's too low can leave the model undertrained.
 - **Values:** `{1e-5, 3e-5, 5e-5}`, with 3e-5 as the default in the middle. The grid isn't evenly spaced on a log scale: 1e-5 is a factor of 3 below the default, and 5e-5 is a factor of 1.7 above it.
 - **Results** (dev_tune F0.5):
 
@@ -139,7 +136,7 @@ Source: `t5_tuning/runs/t5-tune.base.lr1e-5.seed42/`, `t5-tune.base.lr3e-5.seed4
 
 ### 5.2 Stage-2 weight decay
 
-- **Why vary it:** weight decay pulls each weight slightly toward zero on every update, which can limit overfitting. [CITATION]
+- **Why vary it:** weight decay pulls each weight slightly toward zero on every update, which can limit overfitting.
 - **Values:** `{0, 0.01, 0.1}`, with 0.01 as the default. The grid includes no decay (0) and a tenfold larger value (0.1).
 - **Results** (dev_tune F0.5):
 
@@ -155,7 +152,7 @@ Source: `t5_tuning/runs/t5-tune.wd0.lr3e-5.seed42/`, `t5-tune.base.lr3e-5.seed42
 
 ### 5.3 Stage-2 dropout
 
-- **Why vary it:** dropout randomly switches off part of the network during training, which regularizes the model. Too much dropout slows learning. [CITATION]
+- **Why vary it:** dropout randomly switches off part of the network during training, which regularizes the model. Too much dropout slows learning.
 - **Values:** `{0, 0.1, 0.3}`, with 0.1 as the default.
 - **Results** (dev_tune F0.5):
 
@@ -172,7 +169,7 @@ Source: `t5_tuning/runs/t5-tune.dropout0.lr3e-5.seed42/`, `t5-tune.base.lr3e-5.s
 
 ### 5.4 Stage-2 label smoothing
 
-- **Why vary it:** label smoothing replaces the single correct target with a softer distribution, so the model isn't trained to be fully certain. [CITATION]
+- **Why vary it:** label smoothing replaces the single correct target with a softer distribution, so the model isn't trained to be fully certain.
 - **Values:** `{0, 0.1, 0.2}`, with 0.1 as the default.
 - **Results** (dev_tune F0.5):
 
@@ -220,27 +217,12 @@ The final pipeline is the original one. dev_test was not run for the 3e-4 pipeli
 
 **dev_test was not looked at until the final configuration was fixed.** The dev_test scores in section 8 are clean held-out results.
 
-## 8. Final result on dev_test
-
-The final configuration (the default settings, on the frozen stage-1 model) was scored once per seed on dev_test with `tune.py test`. The values are correction-level ERRANT percentages.
-
-| Seed | Precision | Recall | F0.5 |
-|---|---|---|---|
-| 42 | 58.07 | 37.92 | 52.49 |
-| 123 | 57.94 | 39.31 | 52.92 |
-| 7 | 57.00 | 38.99 | 52.18 |
-| **Mean** | 57.67 | 38.74 | **52.53** |
-
-Source: `t5_tuning/runs/final-dev_test/seed42/`, `seed123/` and `seed7/`, each `dev_test.scores.json`.
-
-For comparison, the group's shared model `CS4248-GEC/gec-t5-base-s1s2` scores 52.50 on dev_test (`experiments/training/t5-base.s1s2/dev_test.scores.json`). That's within the seed spread above.
-
 ## 6. Where the code is
 
 | Step | File | What it does |
 |---|---|---|
 | Fetch and check the stage-1 model | `t5_tuning/fetch_stage1.sh` | Downloads `CS4248-GEC/gec-t5-base-s1` and checks its sha256 against `experiments/training/checkpoints.sha256` |
-| Plan runs and write configs | `t5_tuning/tune.py plan` | Writes one JSON config per run into `t5_tuning/configs/`, and updates `manifest.json` and `manifest.md` |
+| Plan runs and write configs | `t5_tuning/tune.py plan` | Writes one JSON config per run into `configs/t5_tuning/`, and updates `manifest.json` and `manifest.md` |
 | Submit runs | `t5_tuning/tune.py submit` | Submits the preflight as a CPU job, then each unscored run with `sbatch cluster/job.sbatch t5_tuning/run_one.sh <config>`, depending on the preflight passing |
 | Check before any GPU run | `t5_tuning/preflight.sh`, `t5_tuning/tune.py preflight` | CPU job. Runs `training.check_data` and the tests, then checks every config against `manifest.json`, the torch and transformers versions against the recorded runs (`experiments/training/t5-base.s1s2/run_info.json`), that each starting model is cached, and the stage-1 model's sha256. Writes `preflight.json`. |
 | Train and score one run | `t5_tuning/run_one.sh` | Calls `training/finetune.py` for training, then `training/evaluate.py --split dev_tune` for scoring, then `tune.py verify` on the run. It doesn't score dev_test. |
@@ -254,7 +236,7 @@ Earlier helper scripts (`band.py`, `lr_sweep.py`, `submit_band.sh`) were deleted
 
 Results files: `t5_tuning/results.md` (stage 2, untagged), `t5_tuning/results-stage1.md` (stage 1), and `t5_tuning/results-<tag>.md` for tagged runs, such as `results-s1lr3e-4.md` for the stage-2 re-run on the 3e-4 stage-1 model.
 
-`manifest.json`, `manifest.md` and `configs/` cover all 21 runs. They were rebuilt with the `plan` commands in section 7, which reproduce the five previously committed configs byte for byte. `collect` on the committed scores reproduces every number in sections 4 and 5.
+`manifest.json`, `manifest.md` and `configs/t5_tuning/` cover all 21 runs. They were rebuilt with the `plan` commands in section 7, which reproduce the five previously committed configs byte for byte. `collect` on the committed scores reproduces every number in sections 4 and 5.
 
 ## 7. How to reproduce
 
@@ -273,7 +255,7 @@ python3 -m unittest tests.test_t5_tuning
 
 1. **Build and copy the stage-1 data** (laptop, then cluster). `python3 -m training.build_data` builds `data/curriculum/stage1.*`. It needs `git lfs fetch origin 3e50997` first; see the "From scratch" and "Data" sections of `training/README.md`. Copy the three files to `data/curriculum/` on the cluster with `rsync`. The stage-2 data and dev splits are committed.
 2. **Cache the base models** (compute node): `bash cluster/download_models.sh`. Stage 1 needs `google-t5/t5-base`, and jobs run offline.
-3. **Cache the frozen stage-1 model** (compute node): `hf auth login` first, with a token from an account in the `CS4248-GEC` organization (see `experiments/training/README.md`), then `bash t5_tuning/fetch_stage1.sh`. It must print "sha256 matches".
+3. **Cache the frozen stage-1 model** (compute node): run `bash t5_tuning/fetch_stage1.sh`. The released `CS4248-GEC/gec-t5-base-s1` checkpoint is public and the script must print "sha256 matches".
 4. **Noise band and stage-2 learning-rate sweep:**
    ```bash
    python3 t5_tuning/tune.py plan --phase 1
@@ -328,3 +310,18 @@ To rerun a single experiment instead, move only its folder, for example `mv t5_t
 **`past_runs/` is in `.gitignore`, so it is never committed.** The original results are already in git history. If you want the new results to replace them, commit the new `runs/` and note in this README that the numbers changed.
 
 To check runs that finished before these checks existed, run `python3 t5_tuning/tune.py verify --stage 2` on a compute node with `CKPT_ROOT` set (as `cluster/job.sbatch` does). It needs the runs' `run_info.json` and `trainer_state.json` from scratch, and their `dev_tune.pred` in `t5_tuning/runs/`.
+
+## 8. Final result on dev_test
+
+The final configuration (the default settings, on the frozen stage-1 model) was scored once per seed on dev_test with `tune.py test`. The values are correction-level ERRANT percentages.
+
+| Seed | Precision | Recall | F0.5 |
+|---|---|---|---|
+| 42 | 58.07 | 37.92 | 52.49 |
+| 123 | 57.94 | 39.31 | 52.92 |
+| 7 | 57.00 | 38.99 | 52.18 |
+| **Mean** | 57.67 | 38.74 | **52.53** |
+
+Source: `t5_tuning/runs/final-dev_test/seed42/`, `seed123/` and `seed7/`, each `dev_test.scores.json`.
+
+For comparison, the group's shared model `CS4248-GEC/gec-t5-base-s1s2` scores 52.50 on dev_test (`experiments/training/t5-base.s1s2/dev_test.scores.json`). That's within the seed spread above.

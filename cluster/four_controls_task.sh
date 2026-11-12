@@ -5,7 +5,7 @@ index="${SLURM_ARRAY_TASK_ID:?Array index required}"
 [[ "$index" =~ ^[0-7]$ ]] || exit 2
 slug="${runs[$index]}"
 export FOUR_CONTROL_DATA="$CKPT_ROOT/four-controls-data-20261108"
-config="training/configs/four-controls/$slug.json"
+config="configs/training/four-controls/$slug.json"
 out="experiments/training/four-controls-20261108/$slug"
 python - "$config" <<'PY'
 from pathlib import Path
