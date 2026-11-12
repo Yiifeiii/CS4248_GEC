@@ -2,7 +2,7 @@
 # Train one run, score its best checkpoint on dev_tune only, then check the run against its config
 # (tune.py verify: config, data, versions, prediction count, loss curve).
 # Called by cluster/job.sbatch from the repository root:
-#   sbatch -J <run> cluster/job.sbatch t5_tuning/run_one.sh t5_tuning/configs/<run>.json
+#   sbatch -J <run> cluster/job.sbatch t5_tuning/run_one.sh configs/t5_tuning/<run>.json
 # Unlike cluster/train.sh, this does not score dev_test, so dev_test stays untouched.
 set -euo pipefail
 

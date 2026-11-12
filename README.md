@@ -1,18 +1,25 @@
 # CS4248: Grammatical Error Correction
 
-See [BART hyperparameter experiments](experiments/ablations/README.md) for training/beam-search scripts and completed F-scores.
-
-Completed experiments: [four controls per model against the original curriculum baseline](experiments/four-controls/README.md).
-
-Results: [BART/T5 curriculum baseline versus four controls](experiments/curriculum-comparison.md).
-
 This project investigates whether combining alternative corrections from multiple grammatical error correction (GEC) systems improves precision, recall, and coverage of rare error types. The planned approach pools the top-k hypotheses from BART and T5 with GECToR's best correction, then combines their edits using GRECO.
+
+**Main result:** combining our fine-tuned BART and T5 with GECToR using GRECO and ESC edit scores reaches **77.24 ERRANT F0.5 on BEA-2019 test** and **66.14 M2 F0.5 on CoNLL-2014 test**, against 71.57 and 64.03 for the best single system (GECToR). See the [headline results](results/README.md), the [GRECO + ESC write-up](greco_esc/README.md), and the [experiment index](docs/experiments.md) for every study.
+
+## Run the project
+
+Setup, tests, data, inference, evaluation, combination and cluster training are all in the runbook, [`docs/running.md`](docs/running.md). Run every command from the repository root.
+
+## Use the trained models
+
+Our five trained BART and T5 models are public on Hugging Face, so no account or token is needed. [`configs/models/README.md`](configs/models/README.md) lists which model is which and how each scores, and [`docs/running.md`](docs/running.md#9-use-the-public-team-models) shows how to download and run them.
 
 ## Current status
 
-A standalone [manual GRECO combination workflow](greco_setup/README.md) accepts manually entered BART/T5 sentences or edits. It includes conflict-aware beam search, an adapter for the official GRECO scorer, examples, and setup instructions. Candidate generation can be tested without model dependencies; pretrained inference requires a separate Python 3.10 environment and downloaded weights.
+All planned experiments are complete and scored:
 
-The repository also contains datasets, prepared source/target sentence pairs, an M2-to-parallel conversion script, an error statistics script, and the bundled NUS M² scorer. [Two-stage fine-tuning](training/README.md) of `facebook/bart-base` and `t5-base` is set up: stage 1 on all four corpora (errorful sentences), stage 2 on W&I train including correct sentences, with jobs for the [SoC cluster](cluster/README.md). The [BART stage-2 hyperparameter ablations](experiments/training/bart-ablations-20261105/README.md) document the nine-run sweep and its provenance; agreement features remain planned work.
+- **Two-stage fine-tuning** of `facebook/bart-base` and `google-t5/t5-base` ([`training/`](training/README.md)): stage 1 on all four BEA-2019 corpora (errorful sentences), stage 2 on W&I train including correct sentences. 12 runs, including longer training and a matched control ([results](experiments/training/README.md)); the five main models are public on Hugging Face.
+- **Studies of that training:** four single-stage controls against the curriculum ([results](experiments/four-controls/README.md)), 12 BART stage-2 hyperparameter ablations and a BART decoding study ([results](experiments/ablations/README.md)), and 21 T5 tuning runs ([results](t5_tuning/README.md)).
+- **GECToR:** Grammarly's pretrained model, run on dev and both test sets ([`gector/`](gector/README.md)).
+- **System combination:** GRECO with three voting schemes and k = 1, 2, 3, 5 hypotheses per system ([`greco_setup/`](greco_setup/README.md)), then GRECO with ESC edit scores ([`greco_esc/`](greco_esc/README.md)). Both are scored on CoNLL-2014 test and on BEA-2019 test through Codabench ([test results](experiments/test/README.md)).
 
 ## Repository structure
 
@@ -23,15 +30,22 @@ The repository also contains datasets, prepared source/target sentence pairs, an
 | `error_type_stats.py` | Count sentences and edits by error type (needs the original corpus M2 files, see below) |
 | `error_type_counts.csv` | Existing error-type counts by corpus |
 | `m2scorer/` | Bundled NUS MaxMatch scorer, supporting scripts, examples, and license |
-| `bart/` | BART n-best generation, export to the shared output format, n-best statistics |
-| `t5/` | T5 top-k generation and retokenization of its output |
-| `gector/` | Grammarly's pretrained GECToR ([setup and usage](gector/README.md)) |
-| `greco_setup/` | GRECO edit combination ([setup and usage](greco_setup/README.md)) |
-| `outputs/` | System predictions in the shared format, see [Outputs](#outputs) |
 | `training/` | Two-stage BART/T5 fine-tuning: data build and checks, training, evaluation ([details](training/README.md)) |
+| `configs/` | Training, ablation, decoding and tuning configs, and the released model IDs ([details](configs/README.md)) |
+| `bart/` | n-best generation for BART and T5, export to the shared output format, n-best statistics |
+| `t5/` | T5 output retokenization, and early pilot scripts on a pretrained T5 |
+| `gector/` | Grammarly's pretrained GECToR ([setup and usage](gector/README.md)) |
+| `greco_setup/` | GRECO edit combination, voting and tuning ([setup and usage](greco_setup/README.md)) |
+| `greco_esc/` | GRECO + ESC combination: the main results ([details](greco_esc/README.md)) |
 | `t5_tuning/` | T5 hyperparameter tuning: 21 runs, noise bands, sweeps and final dev_test scores ([results and how to rerun](t5_tuning/README.md)) |
+| `experiments/` | Per-run scores, predictions and write-ups of every training study and the test sets |
+| `results/` | [Summary of the headline results](results/README.md) |
+| `docs/` | [Runbook](docs/running.md) and [experiment index](docs/experiments.md) |
+| `outputs/` | System predictions in the shared format (see [Outputs](#outputs)); new files here are git-ignored |
 | `cluster/` | Slurm jobs and setup for the NUS SoC compute cluster ([details](cluster/README.md)) |
-| `tests/` | Unit tests for the GRECO combination, training data and T5 tuning code |
+| `scripts/` | Helper to download the released models |
+| `tests/` | Unit tests for training, data, T5 tuning, the ablations and the GRECO combination |
+| `requirements-train.txt`, `requirements-bart.txt` | Python dependencies for training/evaluation and for BART n-best generation |
 
 ## Data and formats
 
@@ -81,7 +95,7 @@ Every system writes its predictions to `outputs/<system>/<split>.tgt` in one sha
 
 ### Retrieve M2 annotations
 
-The repository tracks `*.m2` through Git LFS. In the inspected checkout, the dataset M2 files are pointer files rather than downloaded annotations. With Git LFS installed, retrieve them before conversion or gold evaluation:
+The repository tracks `*.m2` through Git LFS. Without Git LFS, a clone contains small pointer files instead of the annotations. With Git LFS installed, retrieve them before conversion or gold evaluation:
 
 ```bash
 git lfs install
@@ -121,7 +135,7 @@ The script prints corpus summaries and writes JSON statistics. It does not curre
 
 The bundled scorer accepts tokenized predictions, one sentence per line, and gold M2 annotations. Predictions must follow the gold sentence order and tokenization conventions.
 
-The scorer is legacy Python 2 code and is not directly compatible with Python 3. In a compatible Python 2 environment, run from the repository root:
+The scorer is legacy Python 2 code. The project's own evaluation (`training/evaluate.py`, via `training/metrics.py`) runs it under Python 3.11 or 3.12 by converting a temporary copy, so the bundled files stay unchanged. To run it by hand, use a Python 2 environment, from the repository root:
 
 ```bash
 python2 m2scorer/scripts/m2scorer.py predictions.txt data/test.conll14.m2
@@ -177,25 +191,6 @@ Planned external components:
 
 The group will implement fine-tuning, n-best generation, edit pooling, agreement features, and analysis scripts. These external model integrations are planned dependencies and are not bundled in this repository, apart from the existing M² scorer.
 
-### 4. Breakdown of work
-
-| Responsibility | Allocation |
-| --- | --- |
-| Fine-tune baseline models and lead comparative evaluation | Haleema |
-| Implement and test enhancements and ablations | Raeeda, Yifei |
-| Lead report writing and consolidate results | One member |
-| Contribute report sections and the final presentation | All members |
-
-Work will proceed concurrently, with report writing alongside model development.
-
-### 5. Schedule
-
-| Dates | Planned work |
-| --- | --- |
-| 1–7 October | Run baseline models |
-| 8 October–4 November | Develop and tune enhanced n-best models; write the report in parallel |
-| 5–12 November | Final model evaluation and presentation video filming |
-
 ## References
 
 - Bryant, C., Felice, M., & Briscoe, T. (2017). Automatic annotation and evaluation of error types for grammatical error correction. ACL, 793–805. https://doi.org/10.18653/v1/P17-1074
@@ -210,3 +205,9 @@ Work will proceed concurrently, with report writing alongside model development.
 - Raina, V., & Gales, M. (2023). Minimum Bayes' risk decoding for system combination of grammatical error correction systems. IJCNLP-AACL, Volume 2, 105–112. https://doi.org/10.18653/v1/2023.ijcnlp-short.12
 
 For use of the bundled M² scorer, its README requests citation of Dahlmeier, D., & Ng, H. T. (2012), *Better Evaluation for Grammatical Error Correction*, NAACL-HLT.
+
+## AI declaration
+
+AI coding agents were used to help write and debug code in this repository. The
+research ideas, experiment design and core parts of the work are the group's own,
+and every result reported here comes from experiments the group designed and ran.

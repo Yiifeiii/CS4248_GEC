@@ -115,12 +115,24 @@ def main():
         return f"{s[prefix + 'f0_5']*100:.1f} ({s[prefix + 'precision']*100:.1f} / {s[prefix + 'recall']*100:.1f})"
 
     lines = ["# Test-set results", "",
-             "Nothing is tuned on these sets: the checkpoints were chosen on dev_tune and GRECO's "
-             "vote coefficients α on the full W&I+LOCNESS dev set (outputs/greco/tuning/dev.errant.beam). "
-             "F0.5 (P / R). CoNLL-2014 (1,312 sentences) is scored with the M2 scorer, its official "
-             "metric, and ERRANT; BEA-2019 (4,477) with ERRANT on Codabench. Single BART and T5 "
-             "rows are beam-5 1-best (training.evaluate); GRECO pools the top-k of 10-beam lists "
-             "(cluster/nbest_beam.sh). Written by greco_setup/test_report.py.", "",
+             "Single models and GRECO combinations on CoNLL-2014 test (1,312 sentences) and BEA-2019 "
+             "test (4,477), as F0.5 (P / R). CoNLL-2014 is scored with the M2 scorer, its official "
+             "metric, and with ERRANT. BEA-2019 has no public references, so it is scored with ERRANT "
+             "on its Codabench task.", "",
+             "Nothing is tuned on these sets: the checkpoints were chosen on dev_tune, and GRECO's "
+             "vote coefficients α on the full W&I+LOCNESS dev set "
+             "(`outputs/greco/tuning/dev.errant.beam`).", "",
+             "The rows build up the project's three enhancements:", "",
+             "1. **curriculum:** BART and T5 after stage 1 only and after stage 1 + stage 2, decoded "
+             "with beam 5, 1-best (`training.evaluate`).",
+             "2. **GRECO k = 1:** GRECO combining the 1-best of BART, T5 and GECToR. GECToR alone is "
+             "listed here as the strongest single system to compare with.",
+             "3. **larger k:** GRECO pooling the top k of BART's and T5's 10-beam lists "
+             "(`cluster/nbest_beam.sh`) with GECToR's 1-best, under each vote mode.", "",
+             "The final combination adds ESC edit scores to GRECO; its results are in "
+             "[`greco_esc/`](../../greco_esc/README.md). Its single-system rows differ slightly from "
+             "the BART and T5 rows here because they come from the 10-beam lists, not beam-5 1-best.",
+             "", "Written by `greco_setup/test_report.py`.", "",
              "| Enhancement | Output | CoNLL-14 M2 | CoNLL-14 ERRANT | BEA-19 ERRANT (Codabench) |",
              "|---|---|---|---|---|"]
     table = []

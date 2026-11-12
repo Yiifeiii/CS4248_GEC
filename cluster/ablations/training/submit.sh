@@ -6,7 +6,7 @@ cd "$(dirname "$0")/../../.."
 mode="${1:---dry-run}"
 [[ "$mode" == --dry-run || "$mode" == --submit ]] || {
     echo "Usage: bash cluster/ablations/training/submit.sh [--dry-run|--submit] [run-list]" >&2; exit 2; }
-config_dir=training/configs/bart-ablations-20261105
+config_dir=configs/training/bart-ablations-20261105
 run_list="${2:-$config_dir/runs.txt}"
 runs=()
 while IFS= read -r slug; do runs+=("$slug"); done < "$run_list"

@@ -1,7 +1,5 @@
 # Running the fine-tuning on the SoC compute cluster
 
-See [BART hyperparameter experiments](../experiments/ablations/README.md) for grouped training/beam-search scripts, completed F-scores, and reproduction commands.
-
 These instructions follow the course's `SoC_Cluster_Guide.pdf` and the [Unofficial SoC Cluster Guide](https://github.com/isaacNingLee/Unofficial_SoC_Cluster_Guide). The official pages (hardware, job priority) need an SoC login. They take precedence wherever they differ from this guide.
 
 **Rules:**
@@ -26,9 +24,7 @@ exit; exit
 ```
 
 **Cloning:**
-- The repository is private, and GitHub no longer accepts passwords. When `git clone` asks for a password, paste a [personal access token](https://github.com/settings/tokens) (classic, `repo` scope).
-- SSH to GitHub (ports 22 and 443) hangs from the cluster, so use the HTTPS URL above.
-- To avoid re-entering the token, run `git config --global credential.helper store` once. This stores the token in plain text in `~/.git-credentials`.
+- SSH to GitHub (ports 22 and 443) hangs from the cluster, so use the HTTPS URL above. The repository is public, so no GitHub login is needed to clone it.
 - To use a branch that isn't merged yet, add `-b <branch>` to the clone command, or run `git checkout <branch>` afterwards.
 
 **If logging in hangs** (Ctrl-C shows a conda traceback): the block that `conda init` adds to `~/.bashrc` starts Python on every login, which is very slow on xlogin. Replace it with a line that only defines the `conda` command:
@@ -90,8 +86,8 @@ Set `--time` below the partition limit. If a job hits it, submit it again: `fine
 **1. Pilot (about 15 minutes each):** 200 steps with the real batch size, to measure speed and memory.
 
 ```bash
-sbatch -J pilot-bart --time=00:30:00 cluster/job.sbatch cluster/pilot.sh training/configs/bart-base.stage1.json
-sbatch -J pilot-t5   --time=00:30:00 cluster/job.sbatch cluster/pilot.sh training/configs/t5-base.stage1.json
+sbatch -J pilot-bart --time=00:30:00 cluster/job.sbatch cluster/pilot.sh configs/training/bart-base.stage1.json
+sbatch -J pilot-t5   --time=00:30:00 cluster/job.sbatch cluster/pilot.sh configs/training/t5-base.stage1.json
 ```
 
 The logs show `train_steps_per_second` and the peak GPU memory. Stage 1 is about 13,200 steps (3 epochs). Choose `--time` from those numbers, or lower `epochs` in the config.
@@ -99,19 +95,19 @@ The logs show `train_steps_per_second` and the peak GPU memory. Stage 1 is about
 **2. Stage 1, both models in parallel, then stage 2 once its stage 1 has succeeded.** These are the default configs: 3 epochs of stage 1 and up to 5 of stage 2, about 1 h + 0.5 h per model. The `long` runs below are a separate experiment. Paste each block whole: if the terminal breaks a line, `sbatch` gets the config as a separate command.
 
 ```bash
-b1=$(sbatch --parsable -J bart-base.s1 cluster/job.sbatch cluster/train.sh training/configs/bart-base.stage1.json)
-t1=$(sbatch --parsable -J t5-base.s1   cluster/job.sbatch cluster/train.sh training/configs/t5-base.stage1.json)
-sbatch -J bart-base.s1s2 --dependency=afterok:$b1 cluster/job.sbatch cluster/train.sh training/configs/bart-base.stage2.json
-sbatch -J t5-base.s1s2   --dependency=afterok:$t1 cluster/job.sbatch cluster/train.sh training/configs/t5-base.stage2.json
+b1=$(sbatch --parsable -J bart-base.s1 cluster/job.sbatch cluster/train.sh configs/training/bart-base.stage1.json)
+t1=$(sbatch --parsable -J t5-base.s1   cluster/job.sbatch cluster/train.sh configs/training/t5-base.stage1.json)
+sbatch -J bart-base.s1s2 --dependency=afterok:$b1 cluster/job.sbatch cluster/train.sh configs/training/bart-base.stage2.json
+sbatch -J t5-base.s1s2   --dependency=afterok:$t1 cluster/job.sbatch cluster/train.sh configs/training/t5-base.stage2.json
 ```
 
 **Longer runs and the matched control** (see `training/README.md`):
 
 ```bash
 for m in bart-base t5-base; do
-  s1=$(sbatch --parsable -J $m.long.s1 cluster/job.sbatch cluster/train.sh training/configs/$m.long.stage1.json)
-  sbatch -J $m.long.s1s2   --dependency=afterok:$s1 cluster/job.sbatch cluster/train.sh training/configs/$m.long.stage2.json
-  sbatch -J $m.long.s1cont --dependency=afterok:$s1 cluster/job.sbatch cluster/train.sh training/configs/$m.long.stage1cont.json
+  s1=$(sbatch --parsable -J $m.long.s1 cluster/job.sbatch cluster/train.sh configs/training/$m.long.stage1.json)
+  sbatch -J $m.long.s1s2   --dependency=afterok:$s1 cluster/job.sbatch cluster/train.sh configs/training/$m.long.stage2.json
+  sbatch -J $m.long.s1cont --dependency=afterok:$s1 cluster/job.sbatch cluster/train.sh configs/training/$m.long.stage1cont.json
 done
 ```
 

@@ -11,7 +11,7 @@ decoding changes search on a frozen checkpoint. These are single-seed experiment
 
 ## Training hyperparameters
 
-Each configuration starts independently from Dasha's identical stage-1 checkpoint.
+Each configuration starts independently from the same stage-1 checkpoint, `CS4248-GEC/gec-bart-base-s1`.
 The baseline retains learning rate 1e-5, weight decay 0.01, dropout 0.1 and label
 smoothing 0.1. Everything else follows the recorded stage-2 recipe: linear learning
 rate schedule, 100 warmup steps, up to five epochs, seed 42, batch 32, checkpoint
@@ -35,7 +35,7 @@ The follow-ups were chosen after the first results were inspected, so their
 held-out comparisons are exploratory. Small differences need additional seeds.
 
 - [Launch, task and preflight scripts](../../cluster/ablations/training/)
-- [Configurations and fixed array orders](../../training/configs/bart-ablations-20261105/)
+- [Configurations and fixed array orders](../../configs/training/bart-ablations-20261105/)
 - [Design, controls and provenance](../training/bart-ablations-20261105/README.md)
 - [Machine-readable results](../training/bart-ablations-20261105/summary-all-12.json)
 - Implementation: `training/finetune.py`, `training/dropout.py`.
@@ -58,7 +58,7 @@ F0.5**. A candidate pool has no single correction output until a selection rule
 is supplied. The results document reports this distinction explicitly.
 
 - [Launch and task scripts](../../cluster/ablations/decoding/)
-- [Search configuration](../../training/configs/bart-decoding-20261106.json)
+- [Search configuration](../../configs/training/bart-decoding-20261106.json)
 - [Design and scoring definitions](../bart-decoding-20261106/README.md)
 - [Machine-readable results](../bart-decoding-20261106/results-summary.json)
 - Implementation: `training/bart_decoding_ablation.py`, `training/candidate_quality.py`.
@@ -70,7 +70,7 @@ Run from the repository root. Preview commands never submit Slurm jobs.
 
 ```bash
 bash cluster/ablations/training/submit.sh --dry-run
-bash cluster/ablations/training/submit.sh --dry-run training/configs/bart-ablations-20261105/runs-005.txt
+bash cluster/ablations/training/submit.sh --dry-run configs/training/bart-ablations-20261105/runs-005.txt
 bash cluster/ablations/decoding/submit.sh --dry-run
 HF_HUB_OFFLINE=1 python -m unittest discover -s tests -v
 ```

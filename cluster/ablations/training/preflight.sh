@@ -16,7 +16,7 @@ import transformers
 reference = json.loads(Path('experiments/training/bart-base.s1s2/run_info.json').read_text())
 versions = dict(torch=torch.__version__, transformers=transformers.__version__)
 assert versions == reference['versions'], (versions, reference['versions'])
-baseline = json.loads(Path('training/configs/bart-ablations-20261105/baseline.json').read_text())
+baseline = json.loads(Path('configs/training/bart-ablations-20261105/baseline.json').read_text())
 for key, value in reference['config'].items():
     if key not in ('run', 'init', 'output_dir'):
         assert baseline[key] == value, f'Historical baseline mismatch: {key}'

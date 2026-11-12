@@ -2,7 +2,7 @@
 # Called by job.sbatch once per task in the selected ablation run list.
 set -euo pipefail
 
-config_dir=training/configs/bart-ablations-20261105
+config_dir=configs/training/bart-ablations-20261105
 runs=()
 run_list="${BART_ABLATION_RUN_LIST:-$config_dir/runs.txt}"
 while IFS= read -r slug; do runs+=("$slug"); done < "$run_list"

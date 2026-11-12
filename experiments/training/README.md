@@ -1,10 +1,6 @@
 # Fine-tuning experiments
 
-The [BART stage-2 hyperparameter ablations submitted on 5 November 2026](bart-ablations-20261105/README.md)
-record nine independent runs, their baseline controls, Slurm jobs, validation,
-and result-collection procedure. The historical BART/T5 results below are unchanged.
-
-This is a log of the BART/T5 fine-tuning runs: what each one tests, its config, and its results. The code and the procedure are in [`training/README.md`](../../training/README.md) and [`cluster/README.md`](../../cluster/README.md).
+This is a log of the BART/T5 fine-tuning runs: what each one tests, its config, and its results. The code and the procedure are in [`training/README.md`](../../training/README.md) and [`cluster/README.md`](../../cluster/README.md). The later BART stage-2 hyperparameter ablations (12 runs) are recorded in [`bart-ablations-20261105/`](bart-ablations-20261105/README.md), and the four curriculum controls in [`experiments/four-controls/`](../four-controls/README.md) (their per-run files are in `four-controls-20261108/`).
 
 Each run's folder (`<run>/`) is written by `cluster/train.sh` and holds:
 - the config
@@ -18,7 +14,7 @@ The checkpoints are not in git. They are on the cluster's scratch disk; copies o
 
 ## Getting the trained models
 
-The five main models are private repositories in the [CS4248-GEC](https://huggingface.co/CS4248-GEC) organization on Hugging Face. Each has a model card with its training details, scores and usage.
+The five main models are public repositories in the [CS4248-GEC](https://huggingface.co/CS4248-GEC) organization on Hugging Face. Each has a model card with its training details, scores and usage.
 
 | Hugging Face repository | Run | dev_test F0.5 |
 |---|---|---|
@@ -28,20 +24,11 @@ The five main models are private repositories in the [CS4248-GEC](https://huggin
 | [`CS4248-GEC/gec-t5-base-s1s2`](https://huggingface.co/CS4248-GEC/gec-t5-base-s1s2) | `t5-base.s1s2` | 52.5 |
 | [`CS4248-GEC/gec-t5-base-long-s1s2`](https://huggingface.co/CS4248-GEC/gec-t5-base-long-s1s2) | `t5-base.long.s1s2` | 53.2 (best) |
 
-**Access:**
-- You need to be a member of the organization. Log in once with `hf auth login`, using a token with read access.
-- Every script in this repo then takes the repository name wherever it takes a checkpoint folder, for example:
-
-  ```bash
-  python -m training.evaluate --model CS4248-GEC/gec-t5-base-s1s2 --split dev_test --out check/
-  python bart/generate_nbest.py --model CS4248-GEC/gec-bart-base-s1s2 ...
-  ```
-- The scripts add T5's `gec: ` prefix and restore the characters T5 drops, so the `.pred` files they write are ready for ERRANT, the M2 scorer or Codabench.
-- **On the cluster**, jobs run offline: download first on a compute node with `hf download CS4248-GEC/<repo>` (`HF_HOME` must be the scratch cache), or copy the folder over.
+The repositories are public: no Hugging Face account, login or token is needed. To download and run them, see [`docs/running.md`](../../docs/running.md#9-use-the-public-team-models).
 
 **Verifying a model:**
 1. **Same file:** `checkpoints.sha256` lists the sha256 of every run's `model.safetensors`, including the 7 runs that aren't uploaded. With the models in `checkpoints/<run>/best/`, run `cd checkpoints && shasum -a 256 -c ../experiments/training/checkpoints.sha256`. The Hugging Face page of each `model.safetensors` shows the same sha256.
-2. **Same scores:** run `training.evaluate` on `dev_test` as above, then compare `check/dev_test.scores.json` with `<run>/dev_test.scores.json` here. Hardware other than the H100 with bf16 may decode a few sentences differently, so expect a match within a few tenths of a point.
+2. **Same scores:** run `python -m training.evaluate --model CS4248-GEC/<repo> --split dev_test --out check/`, then compare `check/dev_test.scores.json` with `<run>/dev_test.scores.json` here. Hardware other than the H100 with bf16 may decode a few sentences differently, so expect a match within a few tenths of a point.
 
 **How results are reported:**
 - **Primary:** ERRANT P/R/F0.5 on `dev_test`, the 2,384 W&I+LOCNESS dev sentences never used for choosing checkpoints, decoded with beam 5.
@@ -86,8 +73,8 @@ The five main models are private repositories in the [CS4248-GEC](https://huggin
 Submit:
 
 ```bash
-g1=$(sbatch --parsable -J bart-base.gtrecipe.s1 cluster/job.sbatch cluster/train.sh training/configs/bart-base.gtrecipe.stage1.json)
-sbatch -J bart-base.gtrecipe.s1s2 --dependency=afterok:$g1 cluster/job.sbatch cluster/train.sh training/configs/bart-base.gtrecipe.stage2.json
+g1=$(sbatch --parsable -J bart-base.gtrecipe.s1 cluster/job.sbatch cluster/train.sh configs/training/bart-base.gtrecipe.stage1.json)
+sbatch -J bart-base.gtrecipe.s1s2 --dependency=afterok:$g1 cluster/job.sbatch cluster/train.sh configs/training/bart-base.gtrecipe.stage2.json
 ```
 
 ## Results
