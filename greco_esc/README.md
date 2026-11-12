@@ -195,7 +195,7 @@ The α are not tuned here: they come from the GRECO voting tuning on `main` (`ou
 
 - **Deterministic by design.** Beam search decoding, GECToR and GRECO's scoring have no sampling, and upstream ESC fixes its seed (`--seed 0`) for its train/validation split and training. Floating-point differences between GPUs can still move a score by a few hundredths.
 - **Needs access to:**
-  - the `CS4248-GEC` Hugging Face organisation, for the BART and T5 models;
+- the public `CS4248-GEC` Hugging Face repositories, for the BART and T5 models;
   - the SoC cluster, or an equivalent Slurm GPU node: `cluster/job.sbatch` and the `HF_HOME` path are written for SoC;
   - a Codabench account on the BEA-2019 task, for BEA-2019 test scores.
 - **Pinned dependencies.** Upstream GRECO is at `8e509aa` and ESC at `cdefd3b`; the GRECO checkpoint is the released one. The α come from `outputs/greco/tuning/dev.errant.beam/best.json` on `main` and are copied into `settings.py`.
@@ -226,9 +226,8 @@ bash greco_setup/setup.sh
 pip install "pyarrow==14.0.2"
 pip install torch==2.1.2 --index-url https://download.pytorch.org/whl/cu121
 
-# 4. Models in the cache (account in the CS4248-GEC organisation)
+# 4. Models in the cache (public repositories; no login required)
 conda activate gec-train
-hf auth login
 hf download CS4248-GEC/gec-bart-base-s1s2
 hf download CS4248-GEC/gec-t5-base-s1s2
 hf download microsoft/deberta-v3-large

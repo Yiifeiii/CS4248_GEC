@@ -37,13 +37,12 @@ and reproduction instructions for each study.
 
 The source remains in the component directories (`training/`, `bart/`, `t5/`,
 `greco_setup/`, and `greco_esc/`), with curated result navigation under
-[`results/`](results/). See the [private Hugging Face model
-guide](docs/running.md#9-use-private-hugging-face-models) before using the
-team's checkpoints.
+[`results/`](results/). The released model IDs are listed in
+[`configs/models/public_models.json`](configs/models/public_models.json).
 
-For external review, use a gated model repository or grant the professor
-read-only access; the options are documented in the [reviewer access
-guide](docs/running.md#give-an-external-professor-access).
+The [public model runbook](docs/running.md#9-use-the-public-team-models) lets
+your professor download and run the models without a Hugging Face account or
+token.
 
 ## Current status
 

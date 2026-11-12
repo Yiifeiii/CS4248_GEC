@@ -1,8 +1,8 @@
 #!/bin/bash
 # Download the frozen stage-1 T5 model (CS4248-GEC/gec-t5-base-s1) into the scratch
 # Hugging Face cache, then check its hash against experiments/training/checkpoints.sha256.
-# Run on a compute node from the repository root, after `hf auth login` with an
-# account that is a member of the CS4248-GEC organization:
+# Run on a compute node from the repository root. The released checkpoint is
+# public, so no Hugging Face login or token is required:
 #   salloc -t 30 && srun --pty bash
 #   conda activate gec-train && bash t5_tuning/fetch_stage1.sh
 set -euo pipefail

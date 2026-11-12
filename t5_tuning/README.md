@@ -273,7 +273,7 @@ python3 -m unittest tests.test_t5_tuning
 
 1. **Build and copy the stage-1 data** (laptop, then cluster). `python3 -m training.build_data` builds `data/curriculum/stage1.*`. It needs `git lfs fetch origin 3e50997` first; see the "From scratch" and "Data" sections of `training/README.md`. Copy the three files to `data/curriculum/` on the cluster with `rsync`. The stage-2 data and dev splits are committed.
 2. **Cache the base models** (compute node): `bash cluster/download_models.sh`. Stage 1 needs `google-t5/t5-base`, and jobs run offline.
-3. **Cache the frozen stage-1 model** (compute node): `hf auth login` first, with a token from an account in the `CS4248-GEC` organization (see `experiments/training/README.md`), then `bash t5_tuning/fetch_stage1.sh`. It must print "sha256 matches".
+3. **Cache the frozen stage-1 model** (compute node): run `bash t5_tuning/fetch_stage1.sh`. The released `CS4248-GEC/gec-t5-base-s1` checkpoint is public and the script must print "sha256 matches".
 4. **Noise band and stage-2 learning-rate sweep:**
    ```bash
    python3 t5_tuning/tune.py plan --phase 1

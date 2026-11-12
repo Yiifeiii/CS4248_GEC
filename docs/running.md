@@ -10,11 +10,15 @@ task.
 For data preparation, tests, and the training utilities:
 
 ```bash
-python3 -m venv .venv
+# Use Python 3.11 or 3.12. Python 3.13+ is not supported by the training stack.
+python3.12 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install -r requirements-train.txt
 python -m spacy download en_core_web_sm
+
+# Confirm that this exact interpreter has the training dependency.
+python -c "import sys, transformers; print(sys.executable); print(transformers.__version__)"
 ```
 
 The pretrained GECToR workflow uses its own environment and setup script; see
@@ -131,93 +135,50 @@ curated scores are retained to prevent accidental duplicate training.
 | Slurm logs | `logs/` | no |
 | Local environments and scratch | `.venv*`, `check/`, `tmp/`, `output/` | no |
 
-## 9. Use private Hugging Face models
+## 9. Use the public team models
 
-Do not commit private model weights, access tokens, or Hugging Face cache
-directories. A repository can safely contain the private model identifier, for
-example `your-team/gec-bart-stage2`, while each user authenticates locally.
+The released checkpoints in `configs/models/public_models.json` are public.
+Your professor does not need a Hugging Face account, login, or token.
 
-### Interactive development
-
-Install the Hub CLI and authenticate once on the machine that will run the
-model:
+Install the inference dependencies:
 
 ```bash
-python -m pip install -U huggingface_hub
-hf auth login
-hf auth whoami
+python3.12 -m venv .venv-review
+source .venv-review/bin/activate
+python -m pip install -r requirements-train.txt
 ```
 
-The token is stored by the Hugging Face client, not in Git. Then download the
-team checkpoints into the normal cache:
+Run BART or T5 directly by public model ID. The first run downloads the model
+into the local Hugging Face cache; later runs reuse it:
 
 ```bash
-bash scripts/fetch_hf_models.sh \
-  YOUR_ORG/gec-bart-base-s1s2 \
-  YOUR_ORG/gec-t5-base-s1s2
+python -m training.evaluate \
+  --model CS4248-GEC/gec-bart-base-s1s2 \
+  --split dev_test \
+  --out outputs/review/bart-s1s2
+
+python -m training.evaluate \
+  --model CS4248-GEC/gec-t5-base-s1s2 \
+  --split dev_test \
+  --out outputs/review/t5-s1s2
 ```
 
-Use the private repository ID as the `init` or model name in a config, or use
-environment expansion to keep the team-specific name out of a shared config:
+The long T5 checkpoint is also available:
 
 ```bash
-export HF_BART_MODEL="YOUR_ORG/gec-bart-base-s1s2"
-export HF_T5_MODEL="YOUR_ORG/gec-t5-base-s1s2"
+python -m training.evaluate \
+  --model CS4248-GEC/gec-t5-base-long-s1s2 \
+  --split dev_test \
+  --out outputs/review/t5-long-s1s2
 ```
 
-The training code expands `${VARS}` in `init`, so a config can contain
-`"init": "${HF_BART_MODEL}"`. You can also pass a local snapshot path when a
-job must run offline. The account used for
-`hf auth login` must have at least read access to the private organization and
-repositories.
-
-### Cluster jobs and CI
-
-For a cluster or CI job, create a read-only Hugging Face token with the minimum
-required repository permissions, store it in the scheduler/CI secret store,
-and expose it only at runtime:
+To download all released checkpoints in advance, use:
 
 ```bash
-export HF_TOKEN="$HUGGINGFACE_READ_TOKEN"
-export HF_HOME="/path/to/private/hf_cache"
+bash scripts/download_public_models.sh
 ```
 
-Run the download on a network-enabled node before setting offline mode. The
-training jobs can then use the cached snapshot without receiving the token.
-Never put `HF_TOKEN=...` in a config, shell script, Slurm submission command,
-README, notebook, or commit. If a token is ever exposed, revoke it immediately
-and create a replacement.
-
-### Reproducibility
-
-Record the private model repository ID, revision or commit SHA, and a checksum
-of the selected model in the experiment metadata. Do not record the token or
-copy the private weights into this repository. Team members who lack access
-should receive access through the Hugging Face organization rather than through
-an exported credential.
-
-### Give an external professor access
-
-Choose one of these options, in order of convenience:
-
-1. **Gated public model repository — recommended if the models may be shared
-   for academic review.** Create a separate gated model repository for each
-   checkpoint, enable access requests, and set manual approval if you want to
-   approve your professor explicitly. Send the model URL to your professor;
-   they create or use their own Hugging Face account and request access. You
-   approve the request from the model's settings page. Access is granted to
-   individual users, not automatically to an entire organization.
-2. **Private repository with read access.** Ask your team's Hugging Face
-   organization admin to invite your professor's Hugging Face username as a
-   read-only organization member, or grant read access through the relevant
-   resource group. This keeps the repository private, but the professor must
-   have a Hugging Face account and be explicitly added.
-3. **Public repository.** If there are no confidentiality, licensing, or
-   publication restrictions, make a release checkpoint public. This is the
-   simplest option for a reviewer and requires no team membership.
-
-For a professor who only needs to inspect or reproduce the work, publish a
-separate review release containing the model card, training commit, config,
-evaluation scores, and inference example. Keep private development checkpoints
-in the team repository. Do not send a shared team token: Hugging Face read
-tokens are user credentials and should remain personal and revocable.
+For a reproducible review, record the model ID, GitHub commit, evaluation
+split, and command used. Do not copy model weights, caches, or tokens into
+GitHub. If the public repositories are later made private or gated, these
+commands will require Hugging Face authentication.

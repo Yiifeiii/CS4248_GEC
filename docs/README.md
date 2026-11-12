@@ -8,8 +8,8 @@ experiment commands continue to work.
   combination, tests, and cluster training.
 - [Experiment index](experiments.md): where to find baselines, ablations,
   controls, decoding studies, and test-set results.
-- [Private Hugging Face models](running.md#9-use-private-hugging-face-models):
-  authentication, downloading, and configuration guidance.
+- [Public Hugging Face models](running.md#9-use-the-public-team-models):
+  token-free downloading and inference guidance for reviewers.
 
 Generated predictions, checkpoints, logs, caches, and local scratch files are
 not part of the source of truth. They should be written to ignored directories
